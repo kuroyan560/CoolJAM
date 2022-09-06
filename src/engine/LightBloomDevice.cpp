@@ -3,29 +3,42 @@
 #include"GaussianBlur.h"
 #include"DrawFunc2D.h"
 
-std::shared_ptr<ComputePipeline>LightBloomDevice::s_pipeline;
+std::shared_ptr<ComputePipeline>LightBloomDevice::s_filterPipeline;
+std::shared_ptr<ComputePipeline>LightBloomDevice::s_combinePipeline;
 
 void LightBloomDevice::GeneratePipeline()
 {
-	//シェーダー
-	auto cs = D3D12App::Instance()->CompileShader("resource/engine/LightBloom.hlsl", "CSmain", "cs_6_4");
-
-	//ルートパラメータ
-	std::vector<RootParam>rootParams =
 	{
-		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"フラクタルパーリンノイズ生成情報"),
-		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_SRV,"エミッシブマップ"),
-		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,"加工後エミッシブマップ"),
-	};
+		//シェーダー
+		auto cs = D3D12App::Instance()->CompileShader("resource/engine/LightBloom.hlsl", "Filter", "cs_6_4");
+		//ルートパラメータ
+		std::vector<RootParam>rootParams =
+		{
+			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"ライトブルーム設定"),
+			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_SRV,"エミッシブマップ"),
+			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,"加工後エミッシブマップ"),
+		};
+		//パイプライン生成
+		s_filterPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,false) });
+	}
+	{
+		//シェーダー
+		auto cs = D3D12App::Instance()->CompileShader("resource/engine/LightBloom.hlsl", "Combine", "cs_6_4");
+		//ルートパラメータ
+		std::vector<RootParam>rootParams;
+		for (int i = 0; i < BLUR_COUNT; ++i)
+			rootParams.emplace_back(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, "ボケ画像");
+		rootParams.emplace_back(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, "加工後エミッシブマップ");
 
-	//パイプライン生成
-	s_pipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,false) });
+		//パイプライン生成
+		s_combinePipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,true) });
+	}
 }
 
 LightBloomDevice::LightBloomDevice()
 {
 	//パイプライン生成
-	if (!s_pipeline)GeneratePipeline();
+	if (!s_filterPipeline)GeneratePipeline();
 
 	//ウィンドウサイズ取得
 	const auto winSize = WinApp::Instance()->GetExpandWinSize().Int();
@@ -37,7 +50,8 @@ LightBloomDevice::LightBloomDevice()
 	m_constBuff = D3D12App::Instance()->GenerateConstantBuffer(sizeof(LightBloomConfig), 1, &m_config, "LgihtBloom - Config - ConstantBuffer");
 
 	//ガウシアンブラー
-	m_gaussianBlur = std::make_shared<GaussianBlur>(winSize, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	for (int i = 0; i < BLUR_COUNT; ++i)
+		m_gaussianBlurs[i] = std::make_shared<GaussianBlur>(winSize, DXGI_FORMAT_R32G32B32A32_FLOAT);
 }
 
 void LightBloomDevice::Draw(std::weak_ptr<RenderTarget>EmissiveMap, std::weak_ptr<RenderTarget>Target)
@@ -45,23 +59,31 @@ void LightBloomDevice::Draw(std::weak_ptr<RenderTarget>EmissiveMap, std::weak_pt
 	auto emissiveMap = EmissiveMap.lock();
 
 	//エミッシブマップをしきい値などに応じて加工
-	KuroEngine::Instance()->Graphics().SetComputePipeline(s_pipeline);
-	static const int DIV = 32;
-	Vec3<int>threadNum = { emissiveMap->GetGraphSize().x / DIV,emissiveMap->GetGraphSize().y / DIV,1 };
+	KuroEngine::Instance()->Graphics().SetComputePipeline(s_filterPipeline);
+	Vec3<int>threadNum = { emissiveMap->GetGraphSize().x / THREAD_DIV,emissiveMap->GetGraphSize().y / THREAD_DIV,1 };
+
 	KuroEngine::Instance()->Graphics().Dispatch(threadNum,
 		{
 			{m_constBuff,CBV},
-			{emissiveMap,SRV},
+			{emissiveMap,SRV,D3D12_RESOURCE_STATE_COMMON},
 			{m_processedEmissiveMap,UAV}
 		});
 
 	//エミッシブマップにブラーをかける
-	m_gaussianBlur->Register(m_processedEmissiveMap);
+	m_gaussianBlurs[0]->Register(m_processedEmissiveMap);
+	for (int i = 1; i < BLUR_COUNT; ++i)m_gaussianBlurs[i]->Register(m_gaussianBlurs[i - 1]->GetResultTex());
 
-	KuroEngine::Instance()->Graphics().SetRenderTargets({ Target.lock() });
+	//ブラー合成
+	KuroEngine::Instance()->Graphics().SetComputePipeline(s_combinePipeline);
+	std::vector<RegisterDescriptorData>descDatas;
+	for (int i = 0; i < BLUR_COUNT; ++i)
+		descDatas.emplace_back(m_gaussianBlurs[i]->GetResultTex(), SRV, D3D12_RESOURCE_STATE_COMMON);
+	descDatas.emplace_back(m_processedEmissiveMap, UAV);
+	KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
 
 	//結果を描画
-	m_gaussianBlur->DrawResult(AlphaBlendMode_Add);
+	KuroEngine::Instance()->Graphics().SetRenderTargets({ Target.lock() });
+	DrawFunc2D::DrawGraph({ 0,0 }, m_processedEmissiveMap, 1.0f, AlphaBlendMode_Add);
 }
 
 void LightBloomDevice::SetOutputColorRate(const Vec3<float>& RGBrate)
@@ -78,5 +100,6 @@ void LightBloomDevice::SetBrightThreshold(const float& Threshold)
 
 void LightBloomDevice::SetBlurPower(const float& BlurPower)
 {
-	m_gaussianBlur->SetBlurPower(BlurPower);
+	for (int i = 0; i < BLUR_COUNT; ++i)
+		m_gaussianBlurs[i]->SetBlurPower(BlurPower);
 }

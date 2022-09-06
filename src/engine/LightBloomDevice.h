@@ -2,6 +2,7 @@
 #include"Vec.h"
 #include<memory>
 #include<vector>
+#include<array>
 class ComputePipeline;
 class RenderTarget;
 class TextureBuffer;
@@ -20,7 +21,9 @@ struct LightBloomConfig
 class LightBloomDevice
 {
 private:
-	static std::shared_ptr<ComputePipeline>s_pipeline;
+	static const int THREAD_DIV = 8;
+	static std::shared_ptr<ComputePipeline>s_filterPipeline;
+	static std::shared_ptr<ComputePipeline>s_combinePipeline;
 	void GeneratePipeline();
 
 private:
@@ -31,8 +34,10 @@ private:
 	std::shared_ptr<TextureBuffer>m_processedEmissiveMap;
 	//設定情報送信用
 	std::shared_ptr<ConstantBuffer>m_constBuff;
+
+	static const int BLUR_COUNT = 4;
 	//ガウシアンブラー
-	std::shared_ptr<GaussianBlur>m_gaussianBlur;
+	std::array<std::shared_ptr<GaussianBlur>, BLUR_COUNT>m_gaussianBlurs;
 
 public:
 	LightBloomDevice();

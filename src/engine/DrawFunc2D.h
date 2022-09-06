@@ -84,7 +84,7 @@ public:
 	/// <param name="Tex">テクスチャ</param>
 	/// <param name="Alpha">アルファ</param>
 	/// <param name="BlendMode">ブレンドモード</param>
-	static void DrawGraph(const Vec2<float>& LeftUpPos, const std::shared_ptr<TextureBuffer>& Tex,const float& Alpha = 1.0f, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans, const Vec2<bool>& Miror = { false,false });
+	static void DrawGraph(const Vec2<float>& LeftUpPos, const std::shared_ptr<TextureBuffer>& Tex, const float& Alpha = 1.0f, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans, const Vec2<bool>& Miror = { false,false });
 
 	/// <summary>
 	/// 拡大縮小描画

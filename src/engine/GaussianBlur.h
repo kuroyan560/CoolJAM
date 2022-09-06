@@ -2,14 +2,15 @@
 #include<memory>
 #include<wrl.h>
 #include"D3D12Data.h"
+#include<array>
 
 class GaussianBlur
 {
 private:
+	static const int THREAD_DIV = 8;
+	static enum PROCESS { X_BLUR, Y_BLUR, FINAL, PROCESS_NUM };
 	static const int s_weightNum = 8;
-	static std::shared_ptr<ComputePipeline>s_xBlurPipeline;	//横ブラー
-	static std::shared_ptr<ComputePipeline>s_yBlurPipeline;	//縦ブラー
-	static std::shared_ptr<ComputePipeline>s_finalPipeline;		//各ブラーテクスチャ合成
+	static std::array<std::shared_ptr<ComputePipeline>, PROCESS_NUM>s_csPipeline;
 	static void GeneratePipeline();
 
 private:
@@ -20,15 +21,8 @@ private:
 	std::shared_ptr<ConstantBuffer>m_weightConstBuff;
 	//テクスチャ情報の定数バッファ
 	std::shared_ptr<ConstantBuffer>m_texInfoConstBuff;
-
-	//横ブラーの結果
-	std::shared_ptr<TextureBuffer>m_xBlurResult;
-
-	//縦ブラーの結果
-	std::shared_ptr<TextureBuffer>m_yBlurResult;
-
-	//最終結果
-	std::shared_ptr<TextureBuffer>m_finalResult;
+	//ブラーの結果
+	std::array<std::shared_ptr<TextureBuffer>, PROCESS_NUM>m_blurResult;
 
 public:
 	//ソース画像 & 結果描画先設定、ぼかし強さ
@@ -41,7 +35,7 @@ public:
 	void Register(const std::shared_ptr<TextureBuffer>& SourceTex);
 
 	//結果のテクスチャ取得
-	std::shared_ptr<TextureBuffer>& GetResultTex() { return m_finalResult; }
+	std::shared_ptr<TextureBuffer>& GetResultTex() { return m_blurResult[FINAL]; }
 
 	//ウィンドウサイズで結果を描画
 	void DrawResult(const AlphaBlendMode& AlphaBlend);

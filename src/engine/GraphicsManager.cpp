@@ -82,6 +82,13 @@ void GraphicsManager::SetRenderTargets(const std::vector<std::shared_ptr<RenderT
 {
 	if (!m_renderCommands.empty())StackRenderCommands();	//Zバッファ＆透過するかどうかでソートしてグラフィックスコマンドリストに一括スタック
 	m_gCommands.emplace_back(std::make_shared<SetRenderTargetsCommand>(ConvertToWeakPtrArray(RTs), DS));
+
+	//最新のレンダーターゲットのフォーマットを記録しておく
+	m_recentRenderTargetFormat.clear();
+	for (auto& rt : RTs)
+	{
+		m_recentRenderTargetFormat.emplace_back(rt->GetDesc().Format);
+	}
 }
 
 void GraphicsManager::SetGraphicsPipeline(const std::shared_ptr<GraphicsPipeline>& Pipeline)
@@ -217,15 +224,18 @@ void GraphicsManager::CommandsExcute(const Microsoft::WRL::ComPtr<ID3D12Graphics
 		StackRenderCommands();
 	}
 
+	int cmdIdx = 0;
 	for (auto itr = m_gCommands.begin(); itr != m_gCommands.end(); ++itr)
 	{
 		(*itr)->Execute(CmdList);
+		cmdIdx++;
 	}
 
 	//コマンドリストクリア
 	m_gCommands.clear();
 	m_recentPipelineType = NONE;
 	m_recentPipelineHandle = -1;
+	m_recentRenderTargetFormat.clear();
 }
 
 void GraphicsManager::CopyTex::Execute(const ComPtr<ID3D12GraphicsCommandList>& CmdList)
@@ -239,4 +249,11 @@ void GraphicsManager::ExcuteIndirectCommand::Execute(const ComPtr<ID3D12Graphics
 	if (auto buff = m_idxBuff.lock())buff->SetView(CmdList);
 
 	m_indirectDevice.lock()->Execute(CmdList, m_cmdBuff.lock(), m_argBufferOffset);
+}
+
+const DXGI_FORMAT& GraphicsManager::GetRecentRenderTargetFormat(const int& Idx)
+{
+	assert(!m_recentRenderTargetFormat.empty());
+	assert(m_recentRenderTargetFormat[Idx] != DXGI_FORMAT_UNKNOWN);
+	return m_recentRenderTargetFormat[Idx];
 }

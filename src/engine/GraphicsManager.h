@@ -170,6 +170,9 @@ private:
 	//最後にセットされたパイプラインハンドル
 	int m_recentPipelineHandle = -1;
 
+	//最後にセットされたレンダーターゲットのフォーマット
+	std::vector<DXGI_FORMAT>m_recentRenderTargetFormat;
+
 	//Zバッファ、透過するかどうかでソート
 	void StackRenderCommands();
 
@@ -226,4 +229,7 @@ public:
 
 	//コマンドリスト全実行
 	void CommandsExcute(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& CmdList);
+
+	//最後にセットされたレンダーターゲットのフォーマット
+	const DXGI_FORMAT& GetRecentRenderTargetFormat(const int& Idx);
 };

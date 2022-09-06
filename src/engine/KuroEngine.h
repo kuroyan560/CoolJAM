@@ -137,6 +137,9 @@ public:
 	//グラフィックスマネージャゲッタ
 	GraphicsManager &Graphics() { return m_gManager; }
 
+	//FPS管理ゲッタ
+	const float& GetFps()const;
+
 	//平行投影行列定数バッファ
 	const std::shared_ptr<ConstantBuffer> &GetParallelMatProjBuff()
 	{

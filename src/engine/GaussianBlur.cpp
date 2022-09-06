@@ -2,13 +2,11 @@
 #include"KuroEngine.h"
 #include"DrawFunc2D.h"
 
-std::shared_ptr<ComputePipeline>GaussianBlur::s_xBlurPipeline;	
-std::shared_ptr<ComputePipeline>GaussianBlur::s_yBlurPipeline;	
-std::shared_ptr<ComputePipeline>GaussianBlur::s_finalPipeline;
+std::array<std::shared_ptr<ComputePipeline>, GaussianBlur::PROCESS_NUM>GaussianBlur::s_csPipeline;
 
 void GaussianBlur::GeneratePipeline()
 {
-    if (!s_xBlurPipeline)
+    if (!s_csPipeline[X_BLUR])
     {
         std::vector<RootParam>rootParam =
         {
@@ -18,12 +16,12 @@ void GaussianBlur::GeneratePipeline()
             RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,"描き込み先バッファ")
         };
 
-        auto cs = D3D12App::Instance()->CompileShader("resource/engine/GaussianBlur.hlsl", "XBlur", "cs_6_4");
-        s_xBlurPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParam, { WrappedSampler(false, true) });
-        cs = D3D12App::Instance()->CompileShader("resource/engine/GaussianBlur.hlsl", "YBlur", "cs_6_4");
-        s_yBlurPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParam, { WrappedSampler(false, true) });
-        cs = D3D12App::Instance()->CompileShader("resource/engine/GaussianBlur.hlsl", "Final", "cs_6_4");
-        s_finalPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParam, { WrappedSampler(false, true) });
+        std::array<std::string, PROCESS_NUM>entoryPoint = { "XBlur","YBlur","Final" };
+        for (int processIdx = 0; processIdx < PROCESS_NUM; ++processIdx)
+        {
+            auto cs = D3D12App::Instance()->CompileShader("resource/engine/GaussianBlur.hlsl", entoryPoint[processIdx], "cs_6_4");
+            s_csPipeline[processIdx] = D3D12App::Instance()->GenerateComputePipeline(cs, rootParam, { WrappedSampler(false, true) });
+        }
     }
 }
 
@@ -49,11 +47,11 @@ GaussianBlur::GaussianBlur(const Vec2<int>& Size, const DXGI_FORMAT& Format, con
     m_texInfoConstBuff = D3D12App::Instance()->GenerateConstantBuffer(sizeof(TexInfo), 1, &texInfo, "GaussianBlur - TexInfo");
 
     //縦横ブラーの結果描画先
-    m_xBlurResult = D3D12App::Instance()->GenerateTextureBuffer(texInfo.xBlurTexSize, Format, "HorizontalBlur");
-    m_yBlurResult = D3D12App::Instance()->GenerateTextureBuffer(texInfo.yBlurTexSize, Format, "VerticalBlur");
+    m_blurResult[X_BLUR] = D3D12App::Instance()->GenerateTextureBuffer(texInfo.xBlurTexSize, Format, "HorizontalBlur");
+    m_blurResult[Y_BLUR] = D3D12App::Instance()->GenerateTextureBuffer(texInfo.yBlurTexSize, Format, "VerticalBlur");
 
     //最終合成結果描画先
-    m_finalResult = D3D12App::Instance()->GenerateTextureBuffer(texInfo.sourceTexSize, Format, "GaussianBlur");
+    m_blurResult[FINAL] = D3D12App::Instance()->GenerateTextureBuffer(texInfo.sourceTexSize, Format, "GaussianBlur");
 }
 
 void GaussianBlur::SetBlurPower(const float& BlurPower)
@@ -81,60 +79,43 @@ void GaussianBlur::SetBlurPower(const float& BlurPower)
 void GaussianBlur::Execute(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& CmdList, const std::shared_ptr<TextureBuffer>& SourceTex)
 {
     const auto& sDesc = SourceTex->GetDesc();
-    const auto& fDesc = m_finalResult->GetDesc();
+    const auto& fDesc = m_blurResult[FINAL]->GetDesc();
     assert(sDesc.Width == fDesc.Width && sDesc.Height == fDesc.Height && sDesc.Format == fDesc.Format);
 
-    static const int DIV = 4;
-
-    //Xブラー
-    s_xBlurPipeline->SetPipeline(CmdList);
     std::vector<RegisterDescriptorData>descDatas =
     {
         {m_weightConstBuff,CBV},
         {m_texInfoConstBuff,CBV},
         {SourceTex,SRV,D3D12_RESOURCE_STATE_GENERIC_READ},
-        {m_xBlurResult,UAV},
+        {m_blurResult[X_BLUR],UAV},
     };
-    for (int descIdx = 0; descIdx < descDatas.size(); ++descIdx)
-    {
-        descDatas[descIdx].SetAsCompute(CmdList, descIdx);
-    }
-    CmdList->Dispatch(
-        static_cast<UINT>(ceil(m_xBlurResult->GetDesc().Width / DIV)),
-        static_cast<UINT>(ceil(m_xBlurResult->GetDesc().Height / DIV)),
-        1);
 
-    //Yブラー
-    s_yBlurPipeline->SetPipeline(CmdList);
-    descDatas[2].m_descData = m_xBlurResult;
-    descDatas[3].m_descData = m_yBlurResult;
-    for (int descIdx = 0; descIdx < descDatas.size(); ++descIdx)
+    for (int processIdx = 0; processIdx < PROCESS_NUM; ++processIdx)
     {
-        descDatas[descIdx].SetAsCompute(CmdList, descIdx);
-    }
-    CmdList->Dispatch(
-        static_cast<UINT>(ceil(m_yBlurResult->GetDesc().Width / DIV)),
-        static_cast<UINT>(ceil(m_yBlurResult->GetDesc().Height / DIV)),
-        1);
+        s_csPipeline[processIdx]->SetPipeline(CmdList);
 
-    //最終結果合成
-    s_finalPipeline->SetPipeline(CmdList);
-    descDatas[2].m_descData = m_yBlurResult;
-    descDatas[3].m_descData = m_finalResult;
-    for (int descIdx = 0; descIdx < descDatas.size(); ++descIdx)
-    {
-        descDatas[descIdx].SetAsCompute(CmdList, descIdx);
+        if (X_BLUR < processIdx)
+        {
+            descDatas[2].m_descData = m_blurResult[processIdx - 1];
+            descDatas[3].m_descData = m_blurResult[processIdx];
+        }
+
+        for (int descIdx = 0; descIdx < descDatas.size(); ++descIdx)
+        {
+            descDatas[descIdx].SetAsCompute(CmdList, descIdx);
+        }
+
+        CmdList->Dispatch(
+            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Width / THREAD_DIV)),
+            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Height / THREAD_DIV)),
+            1);
     }
-    CmdList->Dispatch(
-        static_cast<UINT>(ceil(m_finalResult->GetDesc().Width / DIV)), 
-        static_cast<UINT>(ceil(m_finalResult->GetDesc().Height / DIV)), 
-        1);
 }
 
 void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
 {
     const auto sourceSize = SourceTex->GetGraphSize();
-    const auto resultSize = m_finalResult->GetGraphSize();
+    const auto resultSize = m_blurResult[FINAL]->GetGraphSize();
     assert(sourceSize == resultSize);
 
     static const int DIV = 4;
@@ -146,30 +127,26 @@ void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
         {m_weightConstBuff,CBV},
         {m_texInfoConstBuff,CBV},
         {SourceTex,SRV,D3D12_RESOURCE_STATE_GENERIC_READ},
-        {m_xBlurResult,UAV},
+        {m_blurResult[X_BLUR],UAV},
     };
 
-    KuroEngine::Instance()->Graphics().SetComputePipeline(s_xBlurPipeline);
-    threadNum = { m_xBlurResult->GetGraphSize().x / DIV,m_xBlurResult->GetGraphSize().y / DIV, 1 };
-    KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
+    for (int processIdx = 0; processIdx < PROCESS_NUM; ++processIdx)
+    {
+        KuroEngine::Instance()->Graphics().SetComputePipeline(s_csPipeline[processIdx]);
 
-    //Yブラー
-    KuroEngine::Instance()->Graphics().SetComputePipeline(s_yBlurPipeline);
-    threadNum = { m_yBlurResult->GetGraphSize().x / DIV, m_yBlurResult->GetGraphSize().y / DIV, 1 };
-    descDatas[2].m_descData = m_xBlurResult;
-    descDatas[3].m_descData = m_yBlurResult;
-    KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
+        if (X_BLUR < processIdx)
+        {
+            descDatas[2].m_descData = m_blurResult[processIdx - 1];
+            descDatas[3].m_descData = m_blurResult[processIdx];
+        }
 
-    //最終結果合成
-    KuroEngine::Instance()->Graphics().SetComputePipeline(s_finalPipeline);
-    threadNum = { m_finalResult->GetGraphSize().x / DIV, m_finalResult->GetGraphSize().y / DIV, 1 };
-    descDatas[2].m_descData = m_yBlurResult;
-    descDatas[3].m_descData = m_finalResult;
-    KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
+        threadNum = { m_blurResult[processIdx]->GetGraphSize().x / DIV,m_blurResult[processIdx]->GetGraphSize().y / DIV, 1 };
+        KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
+    }
 }
 
 #include"KuroEngine.h"
 void GaussianBlur::DrawResult(const AlphaBlendMode& AlphaBlend)
 {
-    DrawFunc2D::DrawExtendGraph2D({ 0,0 }, WinApp::Instance()->GetExpandWinSize(), m_finalResult, AlphaBlend);
+    DrawFunc2D::DrawExtendGraph2D({ 0,0 }, WinApp::Instance()->GetExpandWinSize(), m_blurResult[FINAL], 1.0f, AlphaBlend);
 }
