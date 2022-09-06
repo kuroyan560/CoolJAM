@@ -21,6 +21,9 @@ private:
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
 	bool m_isActive;			// 生存フラグ
 
+	int m_shotTimer;
+	const int SHOT_TIMER = 300;
+
 	//モデル
 	std::shared_ptr<Model> m_model;
 	Transform m_transform;
@@ -60,5 +63,7 @@ public:
 private:
 
 	void CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize);
+
+	void Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos);
 
 };

@@ -12,6 +12,7 @@ void Enemy::Init()
 	m_forwardVec = Vec3<float>(0, 0, 1);
 	m_scale = 1.0f;
 	m_isActive = false;
+	m_shotTimer = 0;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
 	m_transform.SetScale(1.0f);
@@ -25,6 +26,7 @@ void Enemy::Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos
 
 	m_id = ID;
 	m_pos = Pos;
+	m_shotTimer = 0;
 	m_forwardVec = Vec3<float>(PlayerPos - Pos).GetNormal();
 	m_scale = SCALE[static_cast<int>(ID)];
 	m_speed = 0;
@@ -92,6 +94,9 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 	// ìñÇΩÇËîªíË
 	CheckHit(BulletMgr, MapSize);
 
+	// éÀèoèàóù
+	Shot(BulletMgr, PlayerPos);
+
 }
 
 #include"DrawFunc3D.h"
@@ -124,6 +129,21 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 	if (0 < hitCount) {
 
 		Init();
+
+	}
+
+}
+
+void Enemy::Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos) {
+
+	/*===== íeéÀèoèàóù =====*/
+
+	++m_shotTimer;
+	if (SHOT_TIMER < m_shotTimer) {
+
+		BulletMgr.lock()->GenerateEnemyBullet(m_pos, Vec3(PlayerPos - m_pos).GetNormal());
+
+		m_shotTimer = 0;
 
 	}
 
