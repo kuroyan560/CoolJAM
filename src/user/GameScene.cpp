@@ -54,7 +54,7 @@ void GameScene::OnUpdate()
 	m_player->Update(MAP_SIZE, EDGE_SCOPE);
 
 	// 敵更新処理
-	m_enemyMgr->Update(m_player->GetPos(), MAP_SIZE);
+	//m_enemyMgr->Update(m_player->GetPos(), MAP_SIZE);
 
 	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
 	m_gameCam->SetTarget(m_player->GetPos());
@@ -141,6 +141,7 @@ void GameScene::OnImguiDebug()
 {
 	ImGui::Begin("Test");
 	ImGui::Checkbox("Emissive", &m_emissive);
+	ImGui::Checkbox("PlayerMode", &m_player->m_isDebugParam);
 	ImGui::End();
 
 	//ゲームマネージャimguiデバッグ

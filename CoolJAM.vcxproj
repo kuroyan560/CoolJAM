@@ -234,6 +234,7 @@
     <ClInclude Include="lib\imgui\imstb_textedit.h" />
     <ClInclude Include="lib\imgui\imstb_truetype.h" />
     <ClInclude Include="lib\magic_enum\magic_enum.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\AudioApp.h" />
     <ClInclude Include="src\engine\Camera.h" />

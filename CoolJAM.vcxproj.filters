@@ -74,6 +74,9 @@
     <Filter Include="src\user\敵">
       <UniqueIdentifier>{4f3972d1-8009-4369-9de5-53b6b5e1cbc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\弾">
+      <UniqueIdentifier>{d0957600-5239-4094-8665-0403ef2a00a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -479,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="src\user\EnemyMgr.h">
       <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>src\user\弾</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

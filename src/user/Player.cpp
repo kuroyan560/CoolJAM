@@ -13,7 +13,6 @@ Player::Player()
 	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
-	m_brakeBoostSpeed = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
@@ -31,7 +30,6 @@ void Player::Init()
 	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
-	m_brakeBoostSpeed = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
@@ -72,8 +70,7 @@ void Player::Input()
 	}
 
 	// ブレーキ入力を保存。
-	bool isBrakeBoostNow = 0.1f < m_brakeBoostSpeed;
-	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) && !isBrakeBoostNow;
+	m_isBrake = UsersInput::Instance()->ControllerInput(0, A);
 	if (m_isBrake) {
 
 		++m_brakeTimer;
@@ -84,16 +81,30 @@ void Player::Input()
 		// ブレーキタイマーが1以上だったらブレーキを離した瞬間ということ。
 		if (0 < m_brakeTimer) {
 
-			// 経過時間から割合を求める。
-			float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER));
+			if (m_isDebugParam) {
 
-			// ブースト量を更新。
-			float boostAmount = MAX_BRAKE_SPEED * brakeRate;
-			if (m_brakeBoostSpeed < boostAmount) {
+				// 経過時間から割合を求める。
+				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
 
-				m_brakeBoostSpeed = boostAmount;
+				// 移動速度を求める。
+				m_speed *= brakeRate;
 
 			}
+			else {
+
+				// 経過時間から割合を求める。
+				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
+
+				// 移動速度を求める。
+				m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
+
+			}
+
+			// 最大値、最小値を超えないようにする。
+			if (m_speed < MIN_SPEED) m_speed = MIN_SPEED;
+			if (MAX_SPEED < m_speed) m_speed = MAX_SPEED;
+
+			m_forwardVec = m_inputVec;
 
 		}
 
@@ -115,41 +126,16 @@ void Player::Move()
 
 	/*===== 移動処理 =====*/
 
-	// 移動方向ベクトルを入力方向ベクトルに向かって補完する。
-	float cross = m_forwardVec.Cross(m_inputVec).y;
-	if (cross != 0) {
-
-		cross = cross < 0 ? -1.0f : 1.0f;
-		float handleRot = (m_isBrake ? BRAKE_HANDLE_ROT : HANDLE_ROT) * cross;
-
-		// 移動方向ベクトルを角度に直して値を加算する。
-		float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
-		forwardVecAngle += handleRot;
-
-		// 加算した角度をベクトルに直す。
-		m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
-
-	}
-
 	// ブレーキ状態の有無に応じて移動速度を変える。
-	const float BASE_SPEED = m_isBrake ? BRAKE_SPEED : DEF_SPEED;
+	float speed = m_speed;
+	if (m_isBrake) {
 
-	// 移動速度を補完する。
-	m_speed += (BASE_SPEED - m_speed) / 20.0f;
-
-	// ブーストを減衰させる。
-	m_brakeBoostSpeed -= SUB_BRAKE_SPEED;
-	if (m_brakeBoostSpeed < 0.0f) {
-
-		m_brakeBoostSpeed = 0.0f;
+		speed = BRAKE_SPEED;
 
 	}
 
 	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
-
-	// ブースト分移動させる。
-	m_pos += m_forwardVec * m_brakeBoostSpeed;
+	m_pos += m_forwardVec * speed;
 
 }
 

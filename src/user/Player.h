@@ -21,24 +21,23 @@ private:
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
-	const float DEF_SPEED = 1.0f;			// デフォルトの移動速度
-	const float BRAKE_SPEED = 0.6f;			// ブレーキ時の移動速度
-	const float HANDLE_ROT = 0.03f;			// 移動方向ベクトルの保管量ラジアン
-	const float BRAKE_HANDLE_ROT = 0.06f;	// ブレーキ時の移動方向ベクトルの保管量ラジアン
+	const float MIN_SPEED = 0.4f;
+	const float MAX_SPEED = 2.5f;
+	const float BRAKE_SPEED = 0.2f;
 	bool m_isEdge;				// 縁にいるか
 
 	// ブレーキ関係
 	int m_brakeTimer;			// ブレーキしている時間。
-	float m_brakeBoostSpeed;	// ブレーキによって発生したブーストの速度。
 	const int MAX_BRAKE_TIMER = 60.0f;
-	const float MAX_BRAKE_SPEED = 5.0f;
-	const float SUB_BRAKE_SPEED = 0.1f;
 	bool m_isBrake;				// ブレーキしているかどうか。
+
 	//モデル
 	std::shared_ptr<Model>m_model;
 
 
 public:
+
+	bool m_isDebugParam = false;
 
 	/*===== メンバ関数 =====*/
 
