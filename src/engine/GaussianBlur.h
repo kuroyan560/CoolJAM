@@ -7,6 +7,7 @@
 class GaussianBlur
 {
 private:
+	static const int THREAD_DIV = 8;
 	static enum PROCESS { X_BLUR, Y_BLUR, FINAL, PROCESS_NUM };
 	static const int s_weightNum = 8;
 	static std::array<std::shared_ptr<ComputePipeline>, PROCESS_NUM>s_csPipeline;

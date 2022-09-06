@@ -23,6 +23,8 @@ class GameScene : public BaseScene
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
+	bool m_emissive = true;
+
 public:
 	GameScene();
 	void OnInitialize()override;

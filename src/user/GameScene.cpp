@@ -9,7 +9,7 @@ GameScene::GameScene()
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//メインレンダーターゲット
-	m_mainTarget = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 0), backBuff->GetGraphSize(), L"MainTarget");
+	m_mainTarget = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(23, 14, 41, 255), backBuff->GetGraphSize(), L"MainTarget");
 
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
@@ -38,6 +38,9 @@ void GameScene::OnDraw()
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
+	//メインレンダーターゲットクリア
+	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_mainTarget);
+
 
 /*--- 通常描画 ---*/
 	//デプスステンシルクリア
@@ -61,7 +64,10 @@ void GameScene::OnDraw()
 
 /*--- エミッシブマップ合成 ---*/
 	//ライトブルームデバイスを使って加算合成
-	m_ligBloomDev.Draw(m_emissiveMap, m_mainTarget);
+	if (m_emissive)
+	{
+		m_ligBloomDev.Draw(m_emissiveMap, m_mainTarget);
+	}
 
 /*--- バックバッファに映す ---*/
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff });
@@ -91,6 +97,10 @@ void GameScene::OnDraw()
 void GameScene::OnImguiDebug()
 {
 	return;
+	ImGui::Begin("Test");
+	ImGui::Checkbox("Emissive", &m_emissive);
+	ImGui::End();
+
 	//ゲームマネージャimguiデバッグ
 	GameManager::Instance()->ImGuiDebug();
 }

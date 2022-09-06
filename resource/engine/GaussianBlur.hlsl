@@ -24,7 +24,7 @@ float4 GetPixelColor(int x, int y, int2 texSize)
     return inputImage[uint2(x, y)];
 }
 
-static const int THREAD_DIV = 4;
+static const int THREAD_DIV = 8;
 
 //Xƒuƒ‰[‚ğÀ‘•
 [numthreads(THREAD_DIV, THREAD_DIV, 1)]

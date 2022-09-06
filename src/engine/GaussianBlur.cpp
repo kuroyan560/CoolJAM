@@ -82,8 +82,6 @@ void GaussianBlur::Execute(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandLis
     const auto& fDesc = m_blurResult[FINAL]->GetDesc();
     assert(sDesc.Width == fDesc.Width && sDesc.Height == fDesc.Height && sDesc.Format == fDesc.Format);
 
-    static const int DIV = 4;
-
     std::vector<RegisterDescriptorData>descDatas =
     {
         {m_weightConstBuff,CBV},
@@ -108,8 +106,8 @@ void GaussianBlur::Execute(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandLis
         }
 
         CmdList->Dispatch(
-            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Width / DIV)),
-            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Height / DIV)),
+            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Width / THREAD_DIV)),
+            static_cast<UINT>(ceil(m_blurResult[processIdx]->GetDesc().Height / THREAD_DIV)),
             1);
     }
 }
@@ -150,5 +148,5 @@ void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
 #include"KuroEngine.h"
 void GaussianBlur::DrawResult(const AlphaBlendMode& AlphaBlend)
 {
-    DrawFunc2D::DrawExtendGraph2D({ 0,0 }, WinApp::Instance()->GetExpandWinSize(), m_blurResult[FINAL], AlphaBlend);
+    DrawFunc2D::DrawExtendGraph2D({ 0,0 }, WinApp::Instance()->GetExpandWinSize(), m_blurResult[FINAL], 1.0f, AlphaBlend);
 }
