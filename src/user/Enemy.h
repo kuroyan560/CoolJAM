@@ -6,6 +6,7 @@
 
 class Model;
 class Camera;
+class BulletMgr;
 
 class Enemy {
 
@@ -49,14 +50,15 @@ public:
 
 	void Init();
 	void Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos);
-	void Update(const Vec3<float>& PlayerPos, const float& MapSize);
+	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void Draw(Camera& Cam);
 
 	bool GetIsActive() { return m_isActive; }
+	Vec3<float> GetPos() { return m_pos; }
 
 
 private:
 
-	void CheckHit(const float& MapSize);
+	void CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize);
 
 };

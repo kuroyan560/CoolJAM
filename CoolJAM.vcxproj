@@ -216,6 +216,9 @@
     <ClCompile Include="src\engine\Swapchain.cpp" />
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
+    <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\EnemyBullet.cpp" />
+    <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\Enemy.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
@@ -234,7 +237,6 @@
     <ClInclude Include="lib\imgui\imstb_textedit.h" />
     <ClInclude Include="lib\imgui\imstb_truetype.h" />
     <ClInclude Include="lib\magic_enum\magic_enum.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\AudioApp.h" />
     <ClInclude Include="src\engine\Camera.h" />
@@ -293,6 +295,9 @@
     <ClInclude Include="src\engine\Swapchain.h" />
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
+    <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\EnemyBullet.h" />
+    <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\Enemy.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />

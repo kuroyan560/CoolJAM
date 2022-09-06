@@ -5,6 +5,7 @@
 #include"Importer.h"
 #include"DrawFunc2D.h"
 #include"EnemyMgr.h"
+#include"BulletMgr.h"
 
 GameScene::GameScene()
 {
@@ -27,9 +28,12 @@ GameScene::GameScene()
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
-	// 敵を生成。
-	m_enemyMgr = std::make_unique<EnemyMgr>();
+	//敵を生成。
+	m_enemyMgr = std::make_shared<EnemyMgr>();
 	m_enemyMgr->Init();
+
+	//弾クラスを生成。
+	m_bulletMgr = std::make_shared<BulletMgr>();
 
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
@@ -41,6 +45,8 @@ void GameScene::OnInitialize()
 	/*===== 初期化処理 =====*/
 	m_player->Init();
 	m_enemyMgr->Init();
+	m_bulletMgr->Init();
+
 }
 
 void GameScene::OnUpdate()
@@ -51,10 +57,13 @@ void GameScene::OnUpdate()
 	GameManager::Instance()->Update();
 
 	// プレイヤー更新処理
-	m_player->Update(MAP_SIZE, EDGE_SCOPE);
+	m_player->Update(m_bulletMgr, m_enemyMgr, MAP_SIZE, EDGE_SCOPE);
 
 	// 敵更新処理
-	//m_enemyMgr->Update(m_player->GetPos(), MAP_SIZE);
+	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
+
+	// 弾を更新。
+	m_bulletMgr->Update(MAP_SIZE);
 
 	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
 	m_gameCam->SetTarget(m_player->GetPos());
@@ -90,6 +99,9 @@ void GameScene::OnDraw()
 
 	//敵を描画
 	m_enemyMgr->Draw(nowCam);
+
+	//弾を描画。
+	m_bulletMgr->Draw(nowCam);
 
 	// マップを描画
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);

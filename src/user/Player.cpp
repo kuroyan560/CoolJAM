@@ -1,7 +1,9 @@
 #include "Player.h"
 #include "../engine/UsersInput.h"
-#include"Importer.h"
+#include "Importer.h"
 #include "Model.h"
+#include "BulletMgr.h"
+#include "EnemyMgr.h"
 
 Player::Player()
 {
@@ -13,6 +15,7 @@ Player::Player()
 	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
+	m_shotTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
@@ -30,12 +33,13 @@ void Player::Init()
 	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
+	m_shotTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
 }
 
-void Player::Update(const float& MapSize, const float& EdgeScope)
+void Player::Update(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 更新処理 =====*/
@@ -46,8 +50,11 @@ void Player::Update(const float& MapSize, const float& EdgeScope)
 	// 移動処理
 	Move();
 
+	// 弾発射処理
+	Shot(BulletMgr, EnemyMgr);
+
 	// 当たり判定処理
-	CheckHit(MapSize, EdgeScope);
+	CheckHit(BulletMgr, MapSize, EdgeScope);
 
 }
 
@@ -156,34 +163,57 @@ void Player::Draw(Camera& Cam) {
 
 }
 
+void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr) {
+
+	/*===== 弾を撃つ処理 =====*/
+
+	++m_shotTimer;
+	if (SHOT_TIMER <= m_shotTimer) {
+
+		m_shotTimer = 0;
+
+		// 一番近くにいる敵を検索する。
+		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
+
+		// 敵の方向に向かって弾を撃つ。
+		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (nearestEnemy - m_pos).GetNormal());
+
+	}
+
+}
+
 void Player::DrawDebugInfo(Camera& Cam) {
 
 	/*===== デバッグ情報を描画 =====*/
 
-	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
-	float brakeRate = 0;
-	if (m_isDebugParam) {
+	if (m_isBrake) {
 
-		// 経過時間から割合を求める。
-		brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
+		Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+		float brakeRate = 0;
+		if (m_isDebugParam) {
 
-		brakeRate = m_speed * brakeRate;
-		brakeRate = (m_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED);
+			// 経過時間から割合を求める。
+			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
+
+			brakeRate = m_speed * brakeRate;
+			brakeRate = (m_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED);
+
+		}
+		else {
+
+			// 経過時間から割合を求める。
+			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
+
+
+		}
+
+		DrawFunc3D::DrawLine(Cam, m_pos, m_pos + Vec3<float>(inputVec.x, 0.0f, inputVec.y).GetNormal() * (brakeRate * 20.0f), Color(1.0f, 0.0f, 0.0f, 1.0f), 1.0f);
 
 	}
-	else {
-
-		// 経過時間から割合を求める。
-		brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
-
-
-	}
-
-	DrawFunc3D::DrawLine(Cam, m_pos, m_pos + Vec3<float>(inputVec.x, 0.0f, inputVec.y).GetNormal() * (brakeRate * 20.0f), Color(1.0f, 0.0f, 0.0f, 1.0f), 1.0f);
 
 }
 
-void Player::CheckHit(const float& MapSize, const float& EdgeScope)
+void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
@@ -193,6 +223,9 @@ void Player::CheckHit(const float& MapSize, const float& EdgeScope)
 
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
+
+	// 敵弾との当たり判定。
+	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 
 }
 

@@ -1,6 +1,7 @@
 #include "Enemy.h"
-#include"Importer.h"
+#include "Importer.h"
 #include "Model.h"
+#include "BulletMgr.h"
 
 void Enemy::Init()
 {
@@ -32,7 +33,7 @@ void Enemy::Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos
 
 }
 
-void Enemy::Update(const Vec3<float>& PlayerPos, const float& MapSize)
+void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== 更新処理 =====*/
@@ -89,7 +90,7 @@ void Enemy::Update(const Vec3<float>& PlayerPos, const float& MapSize)
 	}
 
 	// 当たり判定
-	CheckHit(MapSize);
+	CheckHit(BulletMgr, MapSize);
 
 }
 
@@ -104,14 +105,23 @@ void Enemy::Draw(Camera& Cam)
 
 }
 
-void Enemy::CheckHit(const float& MapSize)
+void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 {
 
 	/*===== 当たり判定 =====*/
 
+	// マップ外判定。
 	if (MapSize <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
+
+		Init();
+
+	}
+
+	// プレイヤー弾との当たり判定。
+	int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, SCALE[static_cast<int>(m_id)]);
+	if (0 < hitCount) {
 
 		Init();
 

@@ -259,6 +259,15 @@
     <ClCompile Include="src\user\EnemyMgr.cpp">
       <Filter>src\user\敵</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\PlayerBullet.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\BulletMgr.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyBullet.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -483,7 +492,13 @@
     <ClInclude Include="src\user\EnemyMgr.h">
       <Filter>src\user\敵</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="src\user\PlayerBullet.h">
+      <Filter>src\user\弾</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\BulletMgr.h">
+      <Filter>src\user\弾</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyBullet.h">
       <Filter>src\user\弾</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "EnemyMgr.h"
 #include "Enemy.h"
 #include "KuroFunc.h"
+#include <limits>
 
 EnemyMgr::EnemyMgr()
 {
@@ -36,7 +37,7 @@ void EnemyMgr::Init()
 
 }
 
-void EnemyMgr::Update(const Vec3<float>& PlayerPos, const float& MapSize)
+void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== 更新処理 =====*/
@@ -76,7 +77,7 @@ void EnemyMgr::Update(const Vec3<float>& PlayerPos, const float& MapSize)
 
 		if (!index->GetIsActive()) continue;
 
-		index->Update(PlayerPos, MapSize);
+		index->Update(BulletMgr, PlayerPos, MapSize);
 
 	}
 
@@ -111,7 +112,7 @@ void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const int& EnemyID, const 
 
 		// 生成位置を決める。
 		Vec3<float> generatePos = Vec3<float>();
-		if (enemyID == Enemy::ID::STOPPING) {
+		if (enemyID == Enemy::ID::STOPPING || enemyID == Enemy::ID::TRACKING) {
 
 			generatePos.x = KuroFunc::GetRand(-MapSize, MapSize);
 			generatePos.z = KuroFunc::GetRand(-MapSize, MapSize);
@@ -124,5 +125,28 @@ void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const int& EnemyID, const 
 		break;
 
 	}
+
+}
+
+Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
+
+	/*===== 一番近くにいる敵の座標を求める =====*/
+
+	float nearestLength = std::numeric_limits<float>().max();
+	Vec3<float> nearestPos = Vec3<float>();
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		// 距離を求める。
+		float length = Vec3<float>(index->GetPos() - Pos).Length();
+		if (nearestLength < length) continue;
+
+		nearestLength = length;
+		nearestPos = index->GetPos();
+
+	}
+
+	return nearestPos;
 
 }

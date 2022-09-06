@@ -14,6 +14,7 @@ class ModelObject;
 class Camera;
 class RenderTarget;
 class EnemyMgr;
+class BulletMgr;
 
 class GameScene : public BaseScene
 {
@@ -25,12 +26,15 @@ private:
 	//マップモデル
 	std::shared_ptr<ModelObject>m_mapModel;
 
-	// 敵クラス。
-	std::unique_ptr<EnemyMgr> m_enemyMgr;
+	//敵クラス。
+	std::shared_ptr<EnemyMgr> m_enemyMgr;
 
 	//ゲームカメラ
 	const std::string m_gameCamKey = "GameCamera";
 	std::shared_ptr<Camera>m_gameCam;
+
+	// クラス
+	std::shared_ptr<BulletMgr> m_bulletMgr;
 
 	//マップのサイズ
 	const float MAP_SIZE = 100.0f;

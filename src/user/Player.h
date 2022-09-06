@@ -1,11 +1,13 @@
 #pragma once
 #include"Transform.h"
-#include "Vec.h"
+#include"Vec.h"
 #include<memory>
 #include<DirectXMath.h>
 
 class Model;
 class Camera;
+class BulletMgr;
+class EnemyMgr;
 
 class Player
 {
@@ -21,10 +23,15 @@ private:
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
-	const float MIN_SPEED = 0.4f;
-	const float MAX_SPEED = 2.5f;
+	const float MIN_SPEED = 0.4f;	// 最小の移動速度
+	const float MAX_SPEED = 2.5f;	// 最大の移動速度
 	const float BRAKE_SPEED = 0.2f;
+	const float SCALE = 1.0f;
 	bool m_isEdge;				// 縁にいるか
+
+	// 弾関係
+	int m_shotTimer;
+	const float SHOT_TIMER = 15;
 
 	// ブレーキ関係
 	int m_brakeTimer;			// ブレーキしている時間。
@@ -44,7 +51,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(const float& MapSize, const float& EdgeScope);
+	void Update(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope);
 	void Draw(Camera& Cam);
 	void DrawDebugInfo(Camera& Cam);
 
@@ -59,8 +66,11 @@ private:
 	// 移動処理
 	void Move();
 
+	// 弾を撃つ。
+	void Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr);
+
 	// 当たり判定
-	void CheckHit(const float& MapSize, const float& EdgeScope);
+	void CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const float& EdgeScope);
 
 	// 01に納める。
 	float Saturate(const float& Value);
