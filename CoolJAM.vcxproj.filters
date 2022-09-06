@@ -71,6 +71,9 @@
     <Filter Include="src\user\Player">
       <UniqueIdentifier>{9998db48-c344-4ea1-8604-177d5ed2d9a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\敵">
+      <UniqueIdentifier>{4f3972d1-8009-4369-9de5-53b6b5e1cbc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -246,6 +249,12 @@
     </ClCompile>
     <ClCompile Include="src\user\GameManager.cpp">
       <Filter>src\user\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\Enemy.cpp">
+      <Filter>src\user\敵</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyMgr.cpp">
+      <Filter>src\user\敵</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +473,12 @@
     </ClInclude>
     <ClInclude Include="src\user\GameManager.h">
       <Filter>src\user\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\Enemy.h">
+      <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyMgr.h">
+      <Filter>src\user\敵</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
