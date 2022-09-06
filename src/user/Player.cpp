@@ -147,10 +147,39 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
-	float inputAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+	float inputAngle = atan2f(inputVec.x, inputVec.y);
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+
+
+}
+
+void Player::DrawDebugInfo(Camera& Cam) {
+
+	/*===== デバッグ情報を描画 =====*/
+
+	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+	float brakeRate = 0;
+	if (m_isDebugParam) {
+
+		// 経過時間から割合を求める。
+		brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
+
+		brakeRate = m_speed * brakeRate;
+		brakeRate = (m_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED);
+
+	}
+	else {
+
+		// 経過時間から割合を求める。
+		brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
+
+
+	}
+
+	DrawFunc3D::DrawLine(Cam, m_pos, m_pos + Vec3<float>(inputVec.x, 0.0f, inputVec.y).GetNormal() * (brakeRate * 20.0f), Color(1.0f, 0.0f, 0.0f, 1.0f), 1.0f);
 
 }
 

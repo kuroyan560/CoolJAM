@@ -46,6 +46,7 @@ public:
 	void Finalize();
 	void Update(const float& MapSize, const float& EdgeScope);
 	void Draw(Camera& Cam);
+	void DrawDebugInfo(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; }
 
