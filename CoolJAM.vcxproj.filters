@@ -68,6 +68,9 @@
     <Filter Include="dxcompiler">
       <UniqueIdentifier>{a8455d30-a8a2-4533-b4e7-d426564b0614}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\Player">
+      <UniqueIdentifier>{9998db48-c344-4ea1-8604-177d5ed2d9a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -237,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="src\engine\DrawFuncBillBoard.cpp">
       <Filter>src\engine\ユーザー向け\描画便利関数\BillBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\Player.cpp">
+      <Filter>src\user\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GameManager.cpp">
+      <Filter>src\user\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +458,12 @@
     </ClInclude>
     <ClInclude Include="lib\dxcompiler\inc\dxcapi.h">
       <Filter>dxcompiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\Player.h">
+      <Filter>src\user\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GameManager.h">
+      <Filter>src\user\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
