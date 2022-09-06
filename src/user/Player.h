@@ -37,6 +37,7 @@ private:
 	//ƒ‚ƒfƒ‹
 	std::shared_ptr<Model>m_model;
 
+	float inputATan2f;
 
 public:
 
@@ -51,7 +52,9 @@ public:
 	Vec3<float> GetPos() { return m_pos; };
 
 	Vec3<float>* GetPosPtr() { return &m_pos; };
-	Vec3<float>* GetVelPtr() { return &m_forwardVec; };
+
+	const float *GetInputRadian() { return &inputATan2f; };
+	const Vec3<float> *GetForwardVec() { return &m_forwardVec; };
 
 
 private:

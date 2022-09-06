@@ -5,7 +5,7 @@ GrazeEmitter::GrazeEmitter()
 {
 }
 
-void GrazeEmitter::Init(const Vec3<float>* POS, const Vec3<float> *VEL)
+void GrazeEmitter::Init(const Vec3<float>* POS, const float *VEL)
 {
 	m_posPtr = POS;
 	m_velPtr = VEL;
@@ -23,10 +23,14 @@ void GrazeEmitter::Update(float MAP_SIZE)
 		{
 			if (!m_particleArray[i].IsAlive())
 			{
-				Vec3<float>vel = *m_velPtr;
-				vel.x *= -1.0f;
-				vel.z *= -1.0f;
-				m_particleArray[i].Init(*m_posPtr, vel, 10.0f);
+				float centralDir = Angle::ConvertToRadian(90);
+				//プレイヤーの真後ろに角度を合わせ、ランダムで放射状に発射されるようにする
+				float angleLimit = 10.0f;
+				float randAngle = KuroFunc::GetRand(-angleLimit, angleLimit);
+				Vec3<float> radial = { cosf(*m_velPtr + centralDir + Angle::ConvertToRadian(randAngle)),0.0f,sinf(*m_velPtr + centralDir + Angle::ConvertToRadian(randAngle)) };
+				//方向調整
+				radial.z *= -1.0f;
+				m_particleArray[i].Init(*m_posPtr, radial, 10.0f);
 				break;
 			}
 		}

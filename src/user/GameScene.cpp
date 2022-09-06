@@ -3,6 +3,7 @@
 #include"DrawFunc3D.h"
 #include"Player.h"
 #include"Importer.h"
+#include"../engine/Common/Angle.h"
 
 GameScene::GameScene()
 {
@@ -29,7 +30,7 @@ void GameScene::OnInitialize()
 	/*===== 初期化処理 =====*/
 
 	m_player->Init();
-	m_grazeEmitter->Init(m_player->GetPosPtr(),m_player->GetVelPtr());
+	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadian());
 
 }
 
@@ -42,7 +43,7 @@ void GameScene::OnUpdate()
 	m_player->Update(MAP_SIZE, EDGE_SCOPE);
 
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	nowCam.SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
 	nowCam.SetTarget(m_player->GetPos());
@@ -66,7 +67,7 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
 
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	// マップを描画
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, m_mapModelTransform, nowCam);
@@ -74,6 +75,10 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 	m_grazeEmitter->Draw(nowCam);
+
+	float radian = Angle::ConvertToRadian(90);
+	DrawFunc3D::DrawLine(nowCam, m_player->GetPos(), m_player->GetPos() + Vec3<float>(cosf(*m_player->GetInputRadian() + radian) * 100.0f, 0.0f, sinf(*m_player->GetInputRadian() + radian) * -100.0f), Color(255, 0, 255, 255), 1.0f);
+	DrawFunc3D::DrawLine(nowCam, m_player->GetPos(), m_player->GetPos() + *m_player->GetForwardVec() * -100.0f, Color(255, 255, 255, 255), 1.0f);
 
 	//デバッグ描画
 #ifdef _DEBUG
