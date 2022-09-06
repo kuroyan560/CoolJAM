@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Vec.h"
 #include<memory>
+#include"GrazeEmitter.h"
 
 class DepthStencil;
 class Player;
@@ -24,6 +25,8 @@ private:
 	//マップのサイズ
 	const float MAP_SIZE = 100.0f;
 	const float EDGE_SCOPE = 10.0f;
+
+	std::unique_ptr<GrazeEmitter> m_grazeEmitter;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;

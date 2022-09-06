@@ -48,7 +48,10 @@ public:
 	void Update(const float& MapSize, const float& EdgeScope);
 	void Draw(Camera& Cam);
 
-	Vec3<float> GetPos() { return m_pos; }
+	Vec3<float> GetPos() { return m_pos; };
+
+	Vec3<float>* GetPosPtr() { return &m_pos; };
+	Vec3<float>* GetVelPtr() { return &m_forwardVec; };
 
 
 private:

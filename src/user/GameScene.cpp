@@ -14,6 +14,7 @@ GameScene::GameScene()
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
 	m_player = std::make_unique<Player>();
+	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
 
@@ -28,6 +29,7 @@ void GameScene::OnInitialize()
 	/*===== 初期化処理 =====*/
 
 	m_player->Init();
+	m_grazeEmitter->Init(m_player->GetPosPtr(),m_player->GetVelPtr());
 
 }
 
@@ -44,6 +46,8 @@ void GameScene::OnUpdate()
 
 	nowCam.SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
 	nowCam.SetTarget(m_player->GetPos());
+
+	m_grazeEmitter->Update(MAP_SIZE);
 
 }
 
@@ -69,6 +73,7 @@ void GameScene::OnDraw()
 
 	//プレイヤー描画
 	m_player->Draw(nowCam);
+	m_grazeEmitter->Draw(nowCam);
 
 	//デバッグ描画
 #ifdef _DEBUG
