@@ -1,6 +1,8 @@
-#include "GameScene.h"
+#include"GameScene.h"
 #include"GameManager.h"
 #include"DrawFunc3D.h"
+#include"Player.h"
+#include"Importer.h"
 #include"DrawFunc2D.h"
 
 GameScene::GameScene()
@@ -14,24 +16,48 @@ GameScene::GameScene()
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
+	m_player = std::make_unique<Player>();
+	m_player->Init();
+
+	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
+	m_mapModel->m_transform.SetScale(100.0f);
+
+	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
+	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
+
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
 }
 
 void GameScene::OnInitialize()
 {
-	m_player.Init();
+
+	/*===== 初期化処理 =====*/
+	m_player->Init();
 }
 
 void GameScene::OnUpdate()
 {
-	GameManager::Instance()->Update();
-	m_player.Update();
-}
 
+	/*===== 更新処理 =====*/
+
+	GameManager::Instance()->Update();
+	m_player->Update(MAP_SIZE, EDGE_SCOPE);
+
+	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
+	m_gameCam->SetTarget(m_player->GetPos());
+
+}
 
 void GameScene::OnDraw()
 {
+
+	/*===== 描画処理 =====*/
+
+	//デプスステンシルクリア
+	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
+
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
@@ -49,7 +75,10 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ m_mainTarget }, m_depthStencil);
 
 	//プレイヤー描画
-	m_player.Draw(nowCam);
+	m_player->Draw(nowCam);
+
+	// マップを描画
+	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
 /*--- エミッシブマップに描画 ---*/
 	//デプスステンシルクリア
@@ -60,7 +89,7 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ m_emissiveMap }, m_depthStencil);
 
 	//プレイヤー描画
-	m_player.Draw(nowCam);
+	m_player->Draw(nowCam);
 
 /*--- エミッシブマップ合成 ---*/
 	//ライトブルームデバイスを使って加算合成
@@ -84,8 +113,8 @@ void GameScene::OnDraw()
 	if (GameManager::Instance()->GetDebugDrawFlg())
 	{
 		//XYZ軸
-		static const float LEN = 30.0f;
-		static const float THICKNESS = 0.02f;
+		static const float LEN = 100.0f;
+		static const float THICKNESS = 0.5f;
 		static Vec3<float>ORIGIN = { 0,0,0 };
 		DrawFunc3D::DrawLine(nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
 		DrawFunc3D::DrawLine(nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
@@ -96,7 +125,6 @@ void GameScene::OnDraw()
 
 void GameScene::OnImguiDebug()
 {
-	return;
 	ImGui::Begin("Test");
 	ImGui::Checkbox("Emissive", &m_emissive);
 	ImGui::End();
