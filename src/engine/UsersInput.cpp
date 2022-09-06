@@ -18,8 +18,8 @@ bool UsersInput::StickInDeadZone(Vec2<float>& Thumb, const Vec2<float>& DeadRate
 		Thumb.x = 0.0f;
 		x = true;
 	}
-	if((Thumb.y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * DeadRate.y
-			&& Thumb.y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * DeadRate.y))
+	if ((Thumb.y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * DeadRate.y
+		&& Thumb.y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * DeadRate.y))
 	{
 		Thumb.y = 0.0f;
 		y = true;
@@ -230,7 +230,7 @@ bool UsersInput::ControllerOnTrigger(const int& ControllerIdx, XBOX_STICK StickI
 	}
 	else if (StickInput % 4 == L_LEFT)
 	{
-		result =  !(oldVec.x / STICK_INPUT_MAX < -DeadRange)
+		result = !(oldVec.x / STICK_INPUT_MAX < -DeadRange)
 			&& vec.x / STICK_INPUT_MAX < -DeadRange;
 	}
 	else
@@ -373,6 +373,12 @@ Vec2<float> UsersInput::GetLeftStickVec(const int& ControllerIdx, const Vec2<flo
 	Vec2<float>result(static_cast<float>(m_xinputState[ControllerIdx].Gamepad.sThumbLX), static_cast<float>(-m_xinputState[ControllerIdx].Gamepad.sThumbLY));
 	StickInDeadZone(result, DeadRate);
 	return result.GetNormal();
+}
+
+Vec2<float> UsersInput::GetLeftStickVecRawFuna(const int& ControllerIdx) const
+{
+	const float INPUT_MAX = 32767.0f;
+	return Vec2<float>(static_cast<float>(m_xinputState[ControllerIdx].Gamepad.sThumbLX) / INPUT_MAX, static_cast<float>(-m_xinputState[ControllerIdx].Gamepad.sThumbLY) / INPUT_MAX);
 }
 
 Vec2<float> UsersInput::GetRightStickVec(const int& ControllerIdx, const Vec2<float>& DeadRate)const
