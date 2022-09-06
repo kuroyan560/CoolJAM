@@ -20,12 +20,11 @@ private:
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
-	const float DEF_SPEED = 0.8f;			// デフォルトの移動速度
-	const float BRAKE_SPEED = 0.6f;		// ブレーキ時の移動速度
+	const float DEF_SPEED = 1.0f;			// デフォルトの移動速度
+	const float BRAKE_SPEED = 0.6f;			// ブレーキ時の移動速度
 	const float HANDLE_ROT = 0.03f;			// 移動方向ベクトルの保管量ラジアン
 	const float BRAKE_HANDLE_ROT = 0.06f;	// ブレーキ時の移動方向ベクトルの保管量ラジアン
 	bool m_isEdge;				// 縁にいるか
-	const float EDGE_SIZE = 100.0f;
 
 	// ブレーキ関係
 	int m_brakeTimer;			// ブレーキしている時間。
@@ -45,7 +44,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(const float& MapSize);
+	void Update(const float& MapSize, const float& EdgeScope);
 	void Draw(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; }
@@ -60,7 +59,7 @@ private:
 	void Move();
 
 	// 当たり判定
-	void CheckHit(const float& MapSize);
+	void CheckHit(const float& MapSize, const float& EdgeScope);
 
 	// 01に納める。
 	float Saturate(const float& Value);

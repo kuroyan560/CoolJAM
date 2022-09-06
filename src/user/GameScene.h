@@ -23,6 +23,7 @@ private:
 
 	//マップのサイズ
 	const float MAP_SIZE = 100.0f;
+	const float EDGE_SCOPE = 10.0f;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;

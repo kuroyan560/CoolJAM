@@ -6,6 +6,9 @@
 
 GameScene::GameScene()
 {
+
+	/*===== コンストラクタ =====*/
+
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
@@ -22,6 +25,8 @@ GameScene::GameScene()
 void GameScene::OnInitialize()
 {
 
+	/*===== 初期化処理 =====*/
+
 	m_player->Init();
 
 }
@@ -29,8 +34,10 @@ void GameScene::OnInitialize()
 void GameScene::OnUpdate()
 {
 
+	/*===== 更新処理 =====*/
+
 	GameManager::Instance()->Update();
-	m_player->Update(MAP_SIZE);
+	m_player->Update(MAP_SIZE, EDGE_SCOPE);
 
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
@@ -42,6 +49,9 @@ void GameScene::OnUpdate()
 
 void GameScene::OnDraw()
 {
+
+	/*===== 描画処理 =====*/
+
 	//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 

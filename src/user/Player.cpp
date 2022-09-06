@@ -36,7 +36,7 @@ void Player::Init()
 
 }
 
-void Player::Update(const float& MapSize)
+void Player::Update(const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 更新処理 =====*/
@@ -48,7 +48,7 @@ void Player::Update(const float& MapSize)
 	Move();
 
 	// 当たり判定処理
-	CheckHit(MapSize);
+	CheckHit(MapSize, EdgeScope);
 
 }
 
@@ -167,7 +167,7 @@ void Player::Draw(Camera& Cam) {
 
 }
 
-void Player::CheckHit(const float& MapSize)
+void Player::CheckHit(const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
@@ -176,6 +176,15 @@ void Player::CheckHit(const float& MapSize)
 	if (MapSize <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
+
+	}
+
+	// エッジの判定。
+	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
+
+	if (m_isEdge) {
+
+		int a = 0;
 
 	}
 
