@@ -182,12 +182,6 @@ void Player::CheckHit(const float& MapSize, const float& EdgeScope)
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
 
-	if (m_isEdge) {
-
-		int a = 0;
-
-	}
-
 }
 
 void Player::Finalize()
