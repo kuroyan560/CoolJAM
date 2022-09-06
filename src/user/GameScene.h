@@ -44,7 +44,7 @@ private:
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
-	bool m_emissive = true;
+	bool m_emissive = false;
 
 public:
 	GameScene();
