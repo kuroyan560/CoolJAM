@@ -6,9 +6,7 @@
 
 GameScene::GameScene()
 {
-
-	/*===== コンストラクタ =====*/
-
+/*===== コンストラクタ =====*/
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
@@ -16,19 +14,19 @@ GameScene::GameScene()
 	m_player = std::make_unique<Player>();
 	m_player->Init();
 
+	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
+	m_mapModel->m_transform.SetScale(100.0f);
 
-	m_mapModel = Importer::Instance()->LoadModel("resource/user/map/", "mapModel.glb");
-	m_mapModelTransform.SetScale(100.0f);
-
+	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
+	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 }
 
 void GameScene::OnInitialize()
 {
 
 	/*===== 初期化処理 =====*/
-
 	m_player->Init();
-
 }
 
 void GameScene::OnUpdate()
@@ -39,11 +37,8 @@ void GameScene::OnUpdate()
 	GameManager::Instance()->Update();
 	m_player->Update(MAP_SIZE, EDGE_SCOPE);
 
-	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
-
-	nowCam.SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
-	nowCam.SetTarget(m_player->GetPos());
+	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
+	m_gameCam->SetTarget(m_player->GetPos());
 
 }
 
@@ -65,7 +60,7 @@ void GameScene::OnDraw()
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	// マップを描画
-	DrawFunc3D::DrawNonShadingModel(m_mapModel, m_mapModelTransform, nowCam);
+	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
 	//プレイヤー描画
 	m_player->Draw(nowCam);
