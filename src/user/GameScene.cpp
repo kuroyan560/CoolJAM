@@ -4,6 +4,7 @@
 #include"Player.h"
 #include"Importer.h"
 #include"DrawFunc2D.h"
+#include"EnemyMgr.h"
 
 GameScene::GameScene()
 {
@@ -26,6 +27,10 @@ GameScene::GameScene()
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
+	// 敵を生成。
+	m_enemyMgr = std::make_unique<EnemyMgr>();
+	m_enemyMgr->Init();
+
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
 }
@@ -35,6 +40,7 @@ void GameScene::OnInitialize()
 
 	/*===== 初期化処理 =====*/
 	m_player->Init();
+	m_enemyMgr->Init();
 }
 
 void GameScene::OnUpdate()
@@ -43,7 +49,12 @@ void GameScene::OnUpdate()
 	/*===== 更新処理 =====*/
 
 	GameManager::Instance()->Update();
+
+	// プレイヤー更新処理
 	m_player->Update(MAP_SIZE, EDGE_SCOPE);
+
+	// 敵更新処理
+	m_enemyMgr->Update(m_player->GetPos(), MAP_SIZE);
 
 	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
 	m_gameCam->SetTarget(m_player->GetPos());
@@ -68,7 +79,7 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_mainTarget);
 
 
-/*--- 通常描画 ---*/
+	/*--- 通常描画 ---*/
 	//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 	//レンダーターゲットセット（バックバッファとデプスステンシル）
@@ -77,11 +88,14 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
+	//敵を描画
+	m_enemyMgr->Draw(nowCam);
+
 	// マップを描画
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
-/*--- エミッシブマップに描画 ---*/
-	//デプスステンシルクリア
+	/*--- エミッシブマップに描画 ---*/
+		//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 	//エミッシブマップクリア
 	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_emissiveMap);
@@ -91,18 +105,18 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
-/*--- エミッシブマップ合成 ---*/
-	//ライトブルームデバイスを使って加算合成
+	/*--- エミッシブマップ合成 ---*/
+		//ライトブルームデバイスを使って加算合成
 	if (m_emissive)
 	{
 		m_ligBloomDev.Draw(m_emissiveMap, m_mainTarget);
 	}
 
-/*--- バックバッファに映す ---*/
+	/*--- バックバッファに映す ---*/
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff });
 	DrawFunc2D::DrawGraph({ 0,0 }, m_mainTarget);
 
-/* --- デバッグ描画 ---*/
+	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG
 	//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);

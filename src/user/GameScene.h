@@ -13,6 +13,7 @@ class Model;
 class ModelObject;
 class Camera;
 class RenderTarget;
+class EnemyMgr;
 
 class GameScene : public BaseScene
 {
@@ -23,6 +24,9 @@ private:
 
 	//マップモデル
 	std::shared_ptr<ModelObject>m_mapModel;
+
+	// 敵クラス。
+	std::unique_ptr<EnemyMgr> m_enemyMgr;
 
 	//ゲームカメラ
 	const std::string m_gameCamKey = "GameCamera";

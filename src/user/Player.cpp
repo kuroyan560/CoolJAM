@@ -161,7 +161,7 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetPos(m_pos);
 
 	// “ü—Í‚ÌŠp“x‚ğ‹‚ß‚éB
-	float inputAngle = atan2f(m_inputVec.x, m_inputVec.z);
+	float inputAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
