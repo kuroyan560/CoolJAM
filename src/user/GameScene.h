@@ -17,7 +17,6 @@ class RenderTarget;
 class GameScene : public BaseScene
 {
 private:
-
 	//プレイヤー
 	std::unique_ptr<Player> m_player;
 
@@ -34,9 +33,6 @@ private:
 
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
-
-	//メインレンダーターゲット
-	std::shared_ptr<RenderTarget>m_mainTarget;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;

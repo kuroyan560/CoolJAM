@@ -118,7 +118,6 @@ void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
     const auto resultSize = m_blurResult[FINAL]->GetGraphSize();
     assert(sourceSize == resultSize);
 
-    static const int DIV = 4;
     Vec3<int>threadNum;
 
     //Xƒuƒ‰[
@@ -140,7 +139,7 @@ void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
             descDatas[3].m_descData = m_blurResult[processIdx];
         }
 
-        threadNum = { m_blurResult[processIdx]->GetGraphSize().x / DIV,m_blurResult[processIdx]->GetGraphSize().y / DIV, 1 };
+        threadNum = { m_blurResult[processIdx]->GetGraphSize().x / THREAD_DIV,m_blurResult[processIdx]->GetGraphSize().y / THREAD_DIV, 1 };
         KuroEngine::Instance()->Graphics().Dispatch(threadNum, descDatas);
     }
 }
