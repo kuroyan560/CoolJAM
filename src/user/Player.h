@@ -1,7 +1,14 @@
 #pragma once
+#include"Transform.h"
+#include<memory>
+class Model;
+class Camera;
 #include "Vec.h"
 
-class Player {
+class Player
+{
+	//トランスフォーム
+	Transform m_transform;
 
 private:
 
@@ -26,6 +33,8 @@ private:
 	const float MAX_BRAKE_SPEED = 60.0f;
 	const float SUB_BRAKE_SPEED = 1.0f;
 	bool m_isBrake;				// ブレーキしているかどうか。
+	//モデル
+	std::shared_ptr<Model>m_model;
 
 
 public:
@@ -54,4 +63,7 @@ private:
 	// 01に納める。
 	float Saturate(const float& Value);
 
+	//トランスフォームゲッタ
+	const Transform& GetTransform()const { return m_transform; }
 };
+

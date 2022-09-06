@@ -216,6 +216,7 @@
     <ClCompile Include="src\engine\Swapchain.cpp" />
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
+    <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
   </ItemGroup>
@@ -289,6 +290,7 @@
     <ClInclude Include="src\engine\Swapchain.h" />
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
+    <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
     <ClInclude Include="src\user\Player.h" />
   </ItemGroup>

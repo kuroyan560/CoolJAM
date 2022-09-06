@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../engine/UsersInput.h"
+#include"Importer.h"
 
 Player::Player()
 {
@@ -15,6 +16,7 @@ Player::Player()
 	m_isEdge = false;
 	m_isBrake = false;
 
+	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 }
 
 void Player::Init()
@@ -128,7 +130,7 @@ void Player::Move()
 		// 加算した角度をベクトルに直す。
 		m_forwardVec = Vec3<float>(cosf(forwardVecAngle), 0.0f, sinf(forwardVecAngle));
 
-	}
+}
 
 	// ブレーキ状態の有無に応じて移動速度を変える。
 	const float BASE_SPEED = m_isBrake ? BRAKE_SPEED : DEF_SPEED;
@@ -153,15 +155,19 @@ void Player::Move()
 }
 
 void Player::CheckHit()
+#include"DrawFunc3D.h"
+void Player::Draw(Camera& Cam)
 {
 
 	/*===== 当たり判定 =====*/
 
 
 
+	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 }
 
 float Player::Saturate(const float& Value)
+void Player::Finalize()
 {
 
 	/*===== 01に納める。 =====*/
