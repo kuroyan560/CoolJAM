@@ -9,7 +9,7 @@ Player::Player()
 
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
-	m_forwardVec = Vec3<float>();
+	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
 	m_brakeBoostSpeed = 0;
@@ -17,6 +17,7 @@ Player::Player()
 	m_isBrake = false;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+
 }
 
 void Player::Init()
@@ -26,7 +27,7 @@ void Player::Init()
 
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
-	m_forwardVec = Vec3<float>();
+	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = 0;
 	m_brakeTimer = 0;
 	m_brakeBoostSpeed = 0;
@@ -51,10 +52,6 @@ void Player::Update()
 
 }
 
-void Player::Draw()
-{
-}
-
 void Player::Input()
 {
 
@@ -69,12 +66,13 @@ void Player::Input()
 	if (INPUT_DEADLINE < stickInput.Length()) {
 
 		// 入力を保存。
-		m_inputVec = Vec3<float>(stickInput.x, 0.0f, stickInput.y);
+		m_inputVec = Vec3<float>(stickInput.y, 0.0f, stickInput.x);
 
 	}
 
 	// ブレーキ入力を保存。
-	m_isBrake = UsersInput::Instance()->ControllerInput(0, A);
+	bool isBrakeBoostNow = 0.1f < m_brakeBoostSpeed;
+	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) && !isBrakeBoostNow;
 	if (m_isBrake) {
 
 		++m_brakeTimer;
@@ -124,13 +122,13 @@ void Player::Move()
 		float handleRot = (m_isBrake ? BRAKE_HANDLE_ROT : HANDLE_ROT) * cross;
 
 		// 移動方向ベクトルを角度に直して値を加算する。
-		float forwardVecAngle = atan2f(m_forwardVec.z, m_forwardVec.x);
+		float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 		forwardVecAngle += handleRot;
 
 		// 加算した角度をベクトルに直す。
-		m_forwardVec = Vec3<float>(cosf(forwardVecAngle), 0.0f, sinf(forwardVecAngle));
+		m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
 
-}
+	}
 
 	// ブレーキ状態の有無に応じて移動速度を変える。
 	const float BASE_SPEED = m_isBrake ? BRAKE_SPEED : DEF_SPEED;
@@ -154,20 +152,39 @@ void Player::Move()
 
 }
 
-void Player::CheckHit()
 #include"DrawFunc3D.h"
-void Player::Draw(Camera& Cam)
+void Player::Draw(Camera& Cam) {
+
+	/*===== 描画処理 =====*/
+
+	m_transform.SetPos(m_pos);
+
+	// 入力の角度を求める。
+	float inputAngle = atan2f(m_inputVec.x, m_inputVec.z);
+	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
+
+	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+
+}
+
+void Player::CheckHit()
 {
 
 	/*===== 当たり判定 =====*/
 
 
 
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 }
 
-float Player::Saturate(const float& Value)
 void Player::Finalize()
+{
+
+
+
+}
+
+
+float Player::Saturate(const float& Value)
 {
 
 	/*===== 01に納める。 =====*/

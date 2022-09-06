@@ -24,10 +24,15 @@ void GameScene::OnInitialize()
 void GameScene::OnUpdate()
 {
 
+	GameManager::Instance()->Update();
 	m_player->Update();
 
-	GameManager::Instance()->Update();
-	m_player.Update();
+	//現在のカメラ取得
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+
+	nowCam.SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
+	nowCam.SetTarget(m_player->GetPos());
+
 }
 
 void GameScene::OnDraw()
@@ -45,15 +50,15 @@ void GameScene::OnDraw()
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//プレイヤー描画
-	m_player.Draw(nowCam);
+	m_player->Draw(nowCam);
 
 	//デバッグ描画
 #ifdef _DEBUG
 	if (GameManager::Instance()->GetDebugDrawFlg())
 	{
 		//XYZ軸
-		static const float LEN = 30.0f;
-		static const float THICKNESS = 0.02f;
+		static const float LEN = 300.0f;
+		static const float THICKNESS = 0.5f;
 		static Vec3<float>ORIGIN = { 0,0,0 };
 		DrawFunc3D::DrawLine(nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
 		DrawFunc3D::DrawLine(nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);

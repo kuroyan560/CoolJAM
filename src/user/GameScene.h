@@ -10,10 +10,9 @@ class Player;
 class GameScene : public BaseScene
 {
 private:
-	std::unique_ptr<Player> m_player;
 
 	//プレイヤー
-	Player m_player;
+	std::unique_ptr<Player> m_player;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;
