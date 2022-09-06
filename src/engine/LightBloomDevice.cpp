@@ -13,7 +13,7 @@ void LightBloomDevice::GeneratePipeline()
 	//ルートパラメータ
 	std::vector<RootParam>rootParams =
 	{
-		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"フラクタルパーリンノイズ生成情報"),
+		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"ライトブルーム設定"),
 		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_SRV,"エミッシブマップ"),
 		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,"加工後エミッシブマップ"),
 	};
@@ -46,12 +46,13 @@ void LightBloomDevice::Draw(std::weak_ptr<RenderTarget>EmissiveMap, std::weak_pt
 
 	//エミッシブマップをしきい値などに応じて加工
 	KuroEngine::Instance()->Graphics().SetComputePipeline(s_pipeline);
-	static const int DIV = 32;
+	static const int DIV = 4;
 	Vec3<int>threadNum = { emissiveMap->GetGraphSize().x / DIV,emissiveMap->GetGraphSize().y / DIV,1 };
+
 	KuroEngine::Instance()->Graphics().Dispatch(threadNum,
 		{
 			{m_constBuff,CBV},
-			{emissiveMap,SRV},
+			{emissiveMap,SRV,D3D12_RESOURCE_STATE_COMMON},
 			{m_processedEmissiveMap,UAV}
 		});
 

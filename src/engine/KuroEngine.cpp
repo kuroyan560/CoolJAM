@@ -49,10 +49,6 @@ void KuroEngine::Render()
 	m_imguiApp->BeginImgui(m_d3d12App->GetCmdList());
 	m_scenes[m_nowScene]->ImguiDebug();
 
-	ImGui::Begin("Fps");
-	ImGui::Text("fps : %.5f", m_fps->GetNowFps());
-	ImGui::End();
-
 	ImguiDebugInterface::DrawImguiDebugger();
 
 	m_imguiApp->EndImgui(m_d3d12App->GetCmdList());
@@ -168,4 +164,9 @@ void KuroEngine::Update()
 void KuroEngine::Draw()
 {
 	m_d3d12App->Render(this);
+}
+
+const float& KuroEngine::GetFps() const
+{
+	return m_fps->GetNowFps();
 }

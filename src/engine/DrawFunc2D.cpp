@@ -1,5 +1,6 @@
 #include "DrawFunc2D.h"
 #include"KuroEngine.h"
+#include<map>
 
 //DrawLine
 int DrawFunc2D::s_DrawLineCount = 0;
@@ -248,14 +249,17 @@ void DrawFunc2D::DrawCircle2D(const Vec2<float>& Center, const float& Radius, co
 	s_DrawCircleCount++;
 }
 
-void DrawFunc2D::DrawGraph(const Vec2<float>& LeftUpPos, const std::shared_ptr<TextureBuffer>& Tex,const float& Alpha, const AlphaBlendMode& BlendMode, const Vec2<bool>& Miror)
+void DrawFunc2D::DrawGraph(const Vec2<float>& LeftUpPos, const std::shared_ptr<TextureBuffer>& Tex, const float& Alpha, const AlphaBlendMode& BlendMode, const Vec2<bool>& Miror)
 {
 	DrawExtendGraph2D(LeftUpPos, LeftUpPos + Tex->GetGraphSize().Float(), Tex, Alpha, BlendMode, Miror);
 }
 
 void DrawFunc2D::DrawExtendGraph2D(const Vec2<float>& LeftUpPos, const Vec2<float>& RightBottomPos, const std::shared_ptr<TextureBuffer>& Tex, const float& Alpha, const AlphaBlendMode& BlendMode, const Vec2<bool>& Miror)
 {
-	static std::shared_ptr<GraphicsPipeline>EXTEND_GRAPH_PIPELINE[AlphaBlendModeNum];
+	//最新のレンダーターゲットのフォーマット取得
+	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
+
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>EXTEND_GRAPH_PIPELINE;
 	static std::vector<std::shared_ptr<VertexBuffer>>EXTEND_GRAPH_VERTEX_BUFF;
 
 	//DrawExtendGraph専用頂点
@@ -271,7 +275,7 @@ void DrawFunc2D::DrawExtendGraph2D(const Vec2<float>& LeftUpPos, const Vec2<floa
 	};
 
 	//パイプライン未生成
-	if (!EXTEND_GRAPH_PIPELINE[BlendMode])
+	if (!EXTEND_GRAPH_PIPELINE[targetFormat][BlendMode])
 	{
 		//パイプライン設定
 		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -300,12 +304,12 @@ void DrawFunc2D::DrawExtendGraph2D(const Vec2<float>& LeftUpPos, const Vec2<floa
 		};
 
 		//レンダーターゲット描画先情報
-		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(D3D12App::Instance()->GetBackBuffFormat(), BlendMode) };
+		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(targetFormat, BlendMode) };
 		//パイプライン生成
-		EXTEND_GRAPH_PIPELINE[BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(true, false) });
+		EXTEND_GRAPH_PIPELINE[targetFormat][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(true, false) });
 	}
 
-	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(EXTEND_GRAPH_PIPELINE[BlendMode]);
+	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(EXTEND_GRAPH_PIPELINE[targetFormat][BlendMode]);
 
 	if (EXTEND_GRAPH_VERTEX_BUFF.size() < (s_DrawExtendGraphCount + 1))
 	{

@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include"imguiApp.h"
 #include"Player.h"
+#include"KuroEngine.h"
+#include"Fps.h"
 
 GameManager::GameManager()
 {
@@ -20,6 +22,10 @@ void GameManager::Update()
 void GameManager::ImGuiDebug()
 {
 	ImGui::Begin("GameManager");
+
+/*--- FPS表示 ---*/
+	ImGui::Text("fps : %.5f", KuroEngine::Instance()->GetFps());
+	ImGui::Separator();
 
 /*--- デバッグ描画 ---*/
 	ImGui::Checkbox("DebugDraw", &m_debugDraw);
