@@ -36,7 +36,7 @@ void Player::Init()
 
 }
 
-void Player::Update()
+void Player::Update(const float& MapSize)
 {
 
 	/*===== 更新処理 =====*/
@@ -48,7 +48,7 @@ void Player::Update()
 	Move();
 
 	// 当たり判定処理
-	CheckHit();
+	CheckHit(MapSize);
 
 }
 
@@ -167,12 +167,17 @@ void Player::Draw(Camera& Cam) {
 
 }
 
-void Player::CheckHit()
+void Player::CheckHit(const float& MapSize)
 {
 
 	/*===== 当たり判定 =====*/
 
+	// マップとの当たり判定。
+	if (MapSize <= m_pos.Length()) {
 
+		m_pos = m_pos.GetNormal() * MapSize;
+
+	}
 
 }
 

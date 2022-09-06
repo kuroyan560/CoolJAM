@@ -1,7 +1,8 @@
-#include "GameScene.h"
+#include"GameScene.h"
 #include"GameManager.h"
 #include"DrawFunc3D.h"
-#include "Player.h"
+#include"Player.h"
+#include"Importer.h"
 
 GameScene::GameScene()
 {
@@ -11,6 +12,10 @@ GameScene::GameScene()
 
 	m_player = std::make_unique<Player>();
 	m_player->Init();
+
+
+	m_mapModel = Importer::Instance()->LoadModel("resource/user/map/", "mapModel.glb");
+	m_mapModelTransform.SetScale(100.0f);
 
 }
 
@@ -25,7 +30,7 @@ void GameScene::OnUpdate()
 {
 
 	GameManager::Instance()->Update();
-	m_player->Update();
+	m_player->Update(MAP_SIZE);
 
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
@@ -49,6 +54,9 @@ void GameScene::OnDraw()
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
+	// マップを描画
+	DrawFunc3D::DrawNonShadingModel(m_mapModel, m_mapModelTransform, nowCam);
+
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
@@ -57,7 +65,7 @@ void GameScene::OnDraw()
 	if (GameManager::Instance()->GetDebugDrawFlg())
 	{
 		//XYZ軸
-		static const float LEN = 300.0f;
+		static const float LEN = 100.0f;
 		static const float THICKNESS = 0.5f;
 		static Vec3<float>ORIGIN = { 0,0,0 };
 		DrawFunc3D::DrawLine(nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
