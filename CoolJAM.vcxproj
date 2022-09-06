@@ -133,6 +133,7 @@
       <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -218,6 +219,7 @@
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
+    <ClCompile Include="src\user\KazCollisionHelper.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +294,7 @@
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
+    <ClInclude Include="src\user\KazCollisionHelper.h" />
     <ClInclude Include="src\user\Player.h" />
   </ItemGroup>
   <ItemGroup>

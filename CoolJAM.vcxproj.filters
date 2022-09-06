@@ -71,6 +71,9 @@
     <Filter Include="src\user\Player">
       <UniqueIdentifier>{9998db48-c344-4ea1-8604-177d5ed2d9a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Helper">
+      <UniqueIdentifier>{229bfca0-0a1f-4a31-9cb3-76dcf4782ff8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -246,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="src\user\GameManager.cpp">
       <Filter>src\user\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazCollisionHelper.cpp">
+      <Filter>src\Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +470,9 @@
     </ClInclude>
     <ClInclude Include="src\user\GameManager.h">
       <Filter>src\user\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazCollisionHelper.h">
+      <Filter>src\Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
