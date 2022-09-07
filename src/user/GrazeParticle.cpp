@@ -15,7 +15,7 @@ GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(120)
 void GrazeParticle::Init(const Vec3<float>& POS, const Vec3<float>& DIR, float SIZE)
 {
 	m_pos = POS;
-	m_vel = DIR * SPEED;
+	m_vel = DIR;
 	m_size = { SIZE ,SIZE };
 
 	float disppaerPerSpeed = SIZE / static_cast<float>(DISAPPEAR_TIME);
@@ -28,9 +28,19 @@ void GrazeParticle::Update(float MAP_SIZE)
 {
 	if (initFlag)
 	{
+		Vec3<float> mapCentralPos = { 0.0f,0.0f,0.0f };
+		Vec3<float> playerPos = m_pos;
+
+		float playerAndMapCenterDistance = playerPos.Distance(mapCentralPos);
+		float radius = MAP_SIZE;
+
+		float powNum = pow(radius, 2.0f) - playerAndMapCenterDistance;
+		float t = sqrtf(powNum);
+
+
 		//if (!initWallFlag)
 		{
-			m_pos += m_vel;
+			m_pos += (m_vel * t);
 			initWallFlag = true;
 		}
 		m_pos = KazCollisionHelper::KeepInMap(m_pos, MAP_SIZE);
