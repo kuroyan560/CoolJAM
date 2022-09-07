@@ -58,6 +58,7 @@ public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
+	Enemy();
 	void Init();
 	void Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos);
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);

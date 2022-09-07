@@ -5,6 +5,24 @@
 
 bool Enemy::m_debugIsShotEnemy = true;
 
+Enemy::Enemy() {
+
+	/*===== コンストラクタ =====*/
+
+	m_pos = Vec3<float>();
+	m_forwardVec = Vec3<float>(0, 0, 1);
+	m_scale = 1.0f;
+	m_isActive = false;
+	m_hitEffectTimer = 0;
+	m_shotTimer = 0;
+	m_hp = 0;
+
+	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
+	m_transform.SetScale(1.0f);
+
+}
+
 void Enemy::Init()
 {
 
@@ -18,8 +36,6 @@ void Enemy::Init()
 	m_shotTimer = 0;
 	m_hp = 0;
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
-	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 	m_transform.SetScale(1.0f);
 
 }
