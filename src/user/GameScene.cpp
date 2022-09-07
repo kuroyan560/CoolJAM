@@ -7,6 +7,7 @@
 #include"EnemyMgr.h"
 #include"Enemy.h"
 #include"BulletMgr.h"
+#include"WinApp.h"
 
 GameScene::GameScene()
 {
@@ -57,8 +58,14 @@ void GameScene::OnUpdate()
 
 	GameManager::Instance()->Update();
 
+	//スクリーンサイズを取得。
+	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
+
+	//現在のカメラ取得
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+
 	// プレイヤー更新処理
-	m_player->Update(m_bulletMgr, m_enemyMgr, MAP_SIZE, EDGE_SCOPE);
+	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
 
 	// 敵更新処理
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);

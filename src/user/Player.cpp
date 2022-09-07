@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "BulletMgr.h"
 #include "EnemyMgr.h"
+#include "KuroFunc.h"
+#include "GameManager.h"
 
 Player::Player()
 {
@@ -39,13 +41,13 @@ void Player::Init()
 
 }
 
-void Player::Update(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
+void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 更新処理 =====*/
 
 	// 入力処理
-	Input();
+	Input(Cam, WindowSize);
 
 	// 移動処理
 	Move();
@@ -58,13 +60,18 @@ void Player::Update(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> 
 
 }
 
-void Player::Input()
+void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 {
 
 	/*====== 入力処理 =====*/
 
 	// スティックの入力を取得。
 	Vec2<float> stickInput = UsersInput::Instance()->GetLeftStickVecRawFuna(0);
+
+	// マウスの入力からベクトルを求める。
+	Vec2<float> screenPos = KuroFunc::ConvertWorldToScreen(m_pos, Cam.GetViewMat(), Cam.GetProjectionMat(), WindowSize);
+	Vec2<float> mouseDir = Vec2<float>(UsersInput::Instance()->GetMousePos() - screenPos).GetNormal();
+	m_inputVec = Vec3<float>(mouseDir.y, 0.0f, mouseDir.x);
 
 	// デッドラインを設ける。
 	const float INPUT_DEADLINE = 0.25f;
@@ -77,7 +84,7 @@ void Player::Input()
 	}
 
 	// ブレーキ入力を保存。
-	m_isBrake = UsersInput::Instance()->ControllerInput(0, A);
+	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
 	if (m_isBrake) {
 
 		++m_brakeTimer;
@@ -159,7 +166,7 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-	
+
 
 }
 

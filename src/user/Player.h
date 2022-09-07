@@ -51,7 +51,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope);
+	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope);
 	void Draw(Camera& Cam);
 	void DrawDebugInfo(Camera& Cam);
 
@@ -61,7 +61,7 @@ public:
 private:
 
 	// “ü—Íˆ—
-	void Input();
+	void Input(Camera& Cam, const Vec2<float>& WindowSize);
 
 	// ˆÚ“®ˆ—
 	void Move();
