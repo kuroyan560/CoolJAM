@@ -670,4 +670,57 @@ Vec3<float> KuroMath::TransformVec3(const Vec3<float>& Value, const Vec3<float>&
     return Vec3<float>(valueVec.m128_f32[0], valueVec.m128_f32[1], valueVec.m128_f32[2]);
 }
 
+#include<array>
+#include"imguiApp.h"
+#include<magic_enum.h>
+void EasingParameter::ImguiDebug(const std::string& Tag)
+{
+    //static const std::array<std::string, EASE_CHANGE_TYPE_NUM> CHANGE_TYPE_STR = { "In","Out","InOut" };
+
+    std::string currentChangeType = std::string(magic_enum::enum_name(m_changeType));
+    if (ImGui::BeginCombo((Tag + " - EaseChangeType").c_str(), currentChangeType.c_str()))
+    {
+        for (int n = 0; n < EASE_CHANGE_TYPE_NUM; ++n)
+        {
+            bool isSelected = (m_changeType == n);
+            auto newChangeType = (EASE_CHANGE_TYPE)n;
+            //if (ImGui::Selectable(CHANGE_TYPE_STR[n].c_str(), isSelected))
+            if (ImGui::Selectable(std::string(magic_enum::enum_name(newChangeType)).c_str(), isSelected))
+            {
+                m_changeType = newChangeType;
+            }
+            if (isSelected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+
+        ImGui::EndCombo();
+    }
+
+    //static const std::array<std::string, EASING_TYPE_NUM> CHANGE_TYPE_STR = { "In","Out","InOut" };
+    std::string currentEaseType = std::string(magic_enum::enum_name(m_easeType));
+    if (ImGui::BeginCombo((Tag + " - EaseType").c_str(), currentEaseType.c_str()))
+    {
+        for (int n = 0; n < EASING_TYPE_NUM; ++n)
+        {
+            bool isSelected = (m_easeType == n);
+            auto newChangeType = (EASING_TYPE)n;
+            //if (ImGui::Selectable(CHANGE_TYPE_STR[n].c_str(), isSelected))
+            if (ImGui::Selectable(std::string(magic_enum::enum_name(newChangeType)).c_str(), isSelected))
+            {
+                m_easeType = newChangeType;
+            }
+            if (isSelected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+
+        ImGui::EndCombo();
+    }
+
+}
+
 #pragma endregion
+

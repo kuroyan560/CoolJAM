@@ -12,14 +12,7 @@ Player::Player()
 
 	/*===== コンストラクタ =====*/
 
-	m_pos = Vec3<float>();
-	m_inputVec = Vec3<float>();
-	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = MIN_SPEED;
-	m_brakeTimer = 0;
-	m_shotTimer = 0;
-	m_isEdge = false;
-	m_isBrake = false;
+	Init();
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 
@@ -30,15 +23,9 @@ void Player::Init()
 
 	/*===== 初期化処理 =====*/
 
-	m_pos = Vec3<float>();
-	m_inputVec = Vec3<float>();
-	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = MIN_SPEED;
-	m_brakeTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
-	m_isBrake = false;
-
+	m_move = m_initMove;
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
@@ -69,9 +56,11 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	Vec2<float> stickInput = UsersInput::Instance()->GetLeftStickVecRawFuna(0);
 
 	// マウスの入力からベクトルを求める。
-	Vec2<float> screenPos = KuroFunc::ConvertWorldToScreen(m_pos, Cam.GetViewMat(), Cam.GetProjectionMat(), WindowSize);
+
+	auto myPos = m_transform.GetPos();
+	Vec2<float> screenPos = KuroFunc::ConvertWorldToScreen(myPos, Cam.GetViewMat(), Cam.GetProjectionMat(), WindowSize);
 	Vec2<float> mouseDir = Vec2<float>(UsersInput::Instance()->GetMousePos() - screenPos).GetNormal();
-	m_inputVec = Vec3<float>(mouseDir.y, 0.0f, mouseDir.x);
+	auto inputVec = Vec3<float>(mouseDir.y, 0.0f, mouseDir.x);
 
 	// デッドラインを設ける。
 	const float INPUT_DEADLINE = 0.25f;
@@ -79,52 +68,12 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	if (INPUT_DEADLINE < stickInput.Length()) {
 
 		// 入力を保存。
-		m_inputVec = Vec3<float>(stickInput.y, 0.0f, stickInput.x);
+		inputVec = Vec3<float>(stickInput.y, 0.0f, stickInput.x);
 
 	}
 
 	// ブレーキ入力を保存。
-	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
-	if (m_isBrake) {
-
-		++m_brakeTimer;
-
-	}
-	else {
-
-		// ブレーキタイマーが1以上だったらブレーキを離した瞬間ということ。
-		if (0 < m_brakeTimer) {
-
-			if (m_isDebugParam) {
-
-				// 経過時間から割合を求める。
-				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
-
-				// 移動速度を求める。
-				m_speed *= brakeRate;
-
-			}
-			else {
-
-				// 経過時間から割合を求める。
-				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
-
-				// 移動速度を求める。
-				m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
-
-			}
-
-			// 最大値、最小値を超えないようにする。
-			if (m_speed < MIN_SPEED) m_speed = MIN_SPEED;
-			if (MAX_SPEED < m_speed) m_speed = MAX_SPEED;
-
-			m_forwardVec = m_inputVec;
-
-		}
-
-		m_brakeTimer = 0;
-
-	}
+	bool isDrift = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
 
 	// デバッグ機能
 	if (UsersInput::Instance()->ControllerInput(0, B)) {
@@ -141,16 +90,11 @@ void Player::Move()
 	/*===== 移動処理 =====*/
 
 	// ブレーキ状態の有無に応じて移動速度を変える。
-	float speed = m_speed;
-	if (m_isBrake) {
-
-		speed = BRAKE_SPEED;
-
-	}
 
 	// 移動させる。
-	m_pos += m_forwardVec * speed;
-
+	auto myPos = m_transform.GetPos();
+	myPos += m_move;
+	m_transform.SetPos(myPos);
 }
 
 #include"DrawFunc3D.h"
@@ -158,13 +102,7 @@ void Player::Draw(Camera& Cam) {
 
 	/*===== 描画処理 =====*/
 
-	m_transform.SetPos(m_pos);
-
-	// 入力の角度を求める。
-	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
-	float inputAngle = atan2f(inputVec.x, inputVec.y);
-	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
-
+	m_transform.SetFront(m_move.GetNormal());
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 
 
@@ -179,11 +117,13 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 		m_shotTimer = 0;
 
+		auto myPos = m_transform.GetPos();
+
 		// 一番近くにいる敵を検索する。
-		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
+		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(myPos);
 
 		// 敵の方向に向かって弾を撃つ。
-		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (nearestEnemy - m_pos).GetNormal());
+		BulletMgr.lock()->GeneratePlayerBullet(myPos, (nearestEnemy - myPos).GetNormal());
 
 	}
 
@@ -193,31 +133,6 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 	/*===== デバッグ情報を描画 =====*/
 
-	if (m_isBrake) {
-
-		Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
-		float brakeRate = 0;
-		if (m_isDebugParam) {
-
-			// 経過時間から割合を求める。
-			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
-
-			brakeRate = m_speed * brakeRate;
-			brakeRate = (m_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED);
-
-		}
-		else {
-
-			// 経過時間から割合を求める。
-			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
-
-
-		}
-
-		DrawFunc3D::DrawLine(Cam, m_pos, m_pos + Vec3<float>(inputVec.x, 0.0f, inputVec.y).GetNormal() * (brakeRate * 20.0f), Color(1.0f, 0.0f, 0.0f, 1.0f), 1.0f);
-
-	}
-
 }
 
 void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const float& EdgeScope)
@@ -226,14 +141,17 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, 
 	/*===== 当たり判定 =====*/
 
 	// マップとの当たり判定。
-	m_pos = KeepInMap(m_pos, MapSize);
+	auto myPos = m_transform.GetPos();
+
+	myPos = KeepInMap(myPos, MapSize);
 
 	// エッジの判定。
-	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
+	m_isEdge = MapSize - myPos.Length() < EdgeScope;
 
 	// 敵弾との当たり判定。
-	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
+	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(myPos, SCALE);
 
+	m_transform.SetPos(myPos);
 }
 
 void Player::Finalize()
@@ -310,7 +228,8 @@ bool Player::CheckHitModel(std::weak_ptr<Model> Model, Transform ModelTransform,
 	// 当たり判定を行い、衝突地点を保存する。
 	std::vector<Vec2<float>> hitPos;
 	// プレイヤー側のレイの設定。
-	Vec2<float> pos = Vec2(m_pos.x, m_pos.z);
+	auto myPos = m_transform.GetPos();
+	Vec2<float> pos = Vec2(myPos.x, myPos.z);
 	Vec2<float> rayDir = Vec2 <float>(RayDir.x, RayDir.z);
 	for (auto& index : vertex) {
 
@@ -350,7 +269,7 @@ bool Player::CheckHitModel(std::weak_ptr<Model> Model, Transform ModelTransform,
 
 		for (auto& index : hitPos) {
 
-			float length = (Vec2<float>(m_pos.x, m_pos.z) - index).Length();
+			float length = (Vec2<float>(myPos.x, myPos.z) - index).Length();
 			if (shortestLength < length) continue;
 
 			shortestLength = length;
@@ -420,4 +339,20 @@ Vec2<float> Player::CalIntersectPoint(Vec2<float> posA1, Vec2<float> posA2, Vec2
 	double t = d1 / (d1 + d2);
 
 	return Vec2<float>(posA1.x + (posA2.x - posA1.x) * t, posA1.y + (posA2.y - posA1.y) * t);
+}
+
+#include"imguiApp.h"
+void Player::OnImguiDebug()
+{
+	ImGui::Begin("Player");
+
+	ImGui::Text("move : { %.2f , %.2f , %.2f }", m_move.x, m_move.y, m_move.z);
+
+	static float s_initMove[3] = { m_move.x,m_move.y,m_move.z };
+	if (ImGui::DragFloat3("initMove", s_initMove, 0.01f))
+	{
+		m_initMove = { s_initMove[0],s_initMove[1],s_initMove[2] };
+	}
+
+	ImGui::End();
 }

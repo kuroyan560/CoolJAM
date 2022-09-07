@@ -3,13 +3,14 @@
 #include"Vec.h"
 #include<memory>
 #include<DirectXMath.h>
+#include"ImguiDebugInterFace.h"
 
 class Model;
 class Camera;
 class BulletMgr;
 class EnemyMgr;
 
-class Player
+class Player : public ImguiDebugInterface
 {
 
 private:
@@ -18,11 +19,6 @@ private:
 
 	//トランスフォーム
 	Transform m_transform;
-	Vec3<float> m_pos;			// 現在座標
-	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
-	Vec3<float> m_forwardVec;	// 移動方向ベクトル
-	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
-	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
 	bool m_isEdge;				// 縁にいるか
 
@@ -30,14 +26,12 @@ private:
 	int m_shotTimer;
 	const float SHOT_TIMER = 15;
 
-	// ブレーキ関係
-	int m_brakeTimer;			// ブレーキしている時間。
-	const int MAX_BRAKE_TIMER = 60.0f;
-	bool m_isBrake;				// ブレーキしているかどうか。
-
 	//モデル
 	std::shared_ptr<Model>m_model;
 
+/*--- はし ---*/
+	Vec3<float>m_initMove;
+	Vec3<float>m_move;
 
 public:
 
@@ -55,7 +49,7 @@ public:
 	void Draw(Camera& Cam);
 	void DrawDebugInfo(Camera& Cam);
 
-	Vec3<float> GetPos() { return m_pos; }
+	Vec3<float> GetPos() { return m_transform.GetPos(); }
 
 
 private:
@@ -104,5 +98,6 @@ private:
 		return Vec3<float>(vector.m128_f32[0], vector.m128_f32[1], vector.m128_f32[2]);
 	}
 
+	void OnImguiDebug()override;
 };
 
