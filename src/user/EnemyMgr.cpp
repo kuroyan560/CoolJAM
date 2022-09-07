@@ -170,3 +170,24 @@ bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
 	return false;
 
 }
+
+void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
+
+	/*===== w’è‚Ì”ÍˆÍ‚Ì“G‚ğ“|‚· =====*/
+
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		// “G‚ÌÀ•W
+		Vec3<float> enemyPos = index->GetPos();
+		float enemySize = index->GetScale();
+
+		// “–‚½‚è”»’è
+		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
+
+		index->Damage();
+
+	}
+
+}

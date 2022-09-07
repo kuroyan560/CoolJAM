@@ -67,10 +67,13 @@ public:
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }
+	float GetScale() { return SCALE[static_cast<int>(m_id)]; }
 
 	// 近くにいるか。
 	bool CheckIsEdge(const Vec3<float>& Pos, const float& Size);
 
+	// ダメージを与える。
+	void Damage();
 
 private:
 

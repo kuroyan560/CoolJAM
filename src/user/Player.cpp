@@ -17,6 +17,7 @@ Player::Player()
 	m_forwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_brakeBoostTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
@@ -36,6 +37,7 @@ void Player::Init()
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
 	m_shotTimer = 0;
+	m_brakeBoostTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
@@ -89,6 +91,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		++m_brakeTimer;
 
+		// ブレーキブーストのタイマーを初期化する。
+		m_brakeBoostTimer = 0;
+
 		// ベクトルをすごくゆっくり補完する。
 		float cross = m_forwardVec.Cross(m_inputVec).y;
 		if (cross != 0) {
@@ -109,13 +114,18 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		if (0 < m_brakeTimer) {
 
 			// 経過時間から割合を求める。
-			float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
+			float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER));
 
 			// 移動速度を求める。
 			m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
 
 			// ベクトルを保存。
 			m_forwardVec = m_inputVec;
+
+			// ブレーキブーストの効果時間を計算する。
+			if (0.5f < brakeRate) {
+				m_brakeBoostTimer = brakeRate * MAX_BRAKE_TIMER;
+			}
 
 		}
 
@@ -232,6 +242,19 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	}
 
+	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
+	--m_brakeBoostTimer;
+	if (0 < m_brakeBoostTimer) {
+
+		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE);
+
+	}
+	else {
+
+		m_brakeBoostTimer = 0;
+
+	}
+
 }
 
 void Player::Finalize()
@@ -239,7 +262,6 @@ void Player::Finalize()
 
 
 }
-
 
 float Player::Saturate(const float& Value)
 {

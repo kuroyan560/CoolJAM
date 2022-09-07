@@ -218,3 +218,16 @@ bool Enemy::CheckIsEdge(const Vec3<float>& Pos, const float& Size) {
 	return false;
 
 }
+
+void Enemy::Damage() {
+
+	/*===== ƒ_ƒ[ƒW‚ğ—^‚¦‚é =====*/
+
+	--m_hp;
+	if (m_hp <= 0) {
+
+		Init();
+
+	}
+
+}

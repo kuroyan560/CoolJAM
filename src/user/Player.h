@@ -17,8 +17,10 @@ private:
 
 	/*===== メンバ変数 =====*/
 
-	//トランスフォーム
+	// トランスフォーム
 	Transform m_transform;
+
+	// 基本的な変数
 	Vec3<float> m_pos;			// 現在座標
 	Vec3<float> m_prevPos;		// 前フレームの座標
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
@@ -26,7 +28,10 @@ private:
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
+	const float BOOST_SCALE = 2.0f;
 	bool m_isEdge;				// 縁にいるか
+	int m_brakeBoostTimer;
+	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
 	// 弾関係
 	int m_shotTimer;
