@@ -19,7 +19,6 @@ class BulletMgr;
 class GameScene : public BaseScene
 {
 private:
-
 	//プレイヤー
 	std::unique_ptr<Player> m_player;
 
@@ -43,16 +42,13 @@ private:
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
 
-	//メインレンダーターゲット
-	std::shared_ptr<RenderTarget>m_mainTarget;
-
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;
 
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
-	bool m_emissive = true;
+	bool m_emissive = false;
 
 public:
 	GameScene();
