@@ -20,11 +20,11 @@ private:
 	//トランスフォーム
 	Transform m_transform;
 	Vec3<float> m_pos;			// 現在座標
+	Vec3<float> m_prevPos;		// 前フレームの座標
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
-	std::array<Vec3<float>, 2> m_forwardVec;	// 移動方向ベクトル
+	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
-	std::array<float, 2> m_speed;				// 移動速度
-	int m_nowVecIndex;			// 現在メインとなっているベクトルのインデックス。
+	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
 	bool m_isEdge;				// 縁にいるか
 
@@ -57,6 +57,8 @@ public:
 	void DrawDebugInfo(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; }
+	Vec3<float> GetForwardVec() { return m_forwardVec; }
+	Vec3<float> GetMovedVec() { return Vec3<float>(m_pos - m_prevPos).GetNormal(); }
 
 
 private:

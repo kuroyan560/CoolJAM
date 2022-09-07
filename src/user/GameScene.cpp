@@ -49,6 +49,11 @@ void GameScene::OnInitialize()
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
 
+	m_baseEye = Vec3<float>(m_player->GetPos() + Vec3<float>(30.0f, 30.0f, 0.0f));
+	m_nowEye = m_baseEye;
+	m_baseTarget = m_player->GetPos();
+	m_nowTarget = m_baseTarget;
+
 }
 
 void GameScene::OnUpdate()
@@ -73,8 +78,19 @@ void GameScene::OnUpdate()
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
 
-	m_gameCam->SetPos(m_player->GetPos() + Vec3<float>(30, 30, 0));
-	m_gameCam->SetTarget(m_player->GetPos());
+	Vec3<float> playerVecX = -m_player->GetForwardVec();
+	const float CAMERA_DISTANCE = 60.0f;
+
+	// カメラを補間。
+	m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
+	m_nowEye = m_baseEye;
+
+	m_baseTarget = m_player->GetPos();
+	m_baseTarget.x += 3.0f;
+	m_nowTarget = m_baseTarget;
+
+	m_gameCam->SetPos(m_nowEye);
+	m_gameCam->SetTarget(m_nowTarget);
 
 }
 
