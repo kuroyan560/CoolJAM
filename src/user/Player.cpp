@@ -14,8 +14,11 @@ Player::Player()
 
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
-	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = MIN_SPEED;
+	m_forwardVec[0] = DEF_FORWARDVEC;
+	m_forwardVec[1] = DEF_FORWARDVEC;
+	m_speed[0] = MIN_SPEED;
+	m_speed[1] = 0.1f;
+	m_nowVecIndex = 0;
 	m_brakeTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
@@ -32,8 +35,11 @@ void Player::Init()
 
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
-	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = MIN_SPEED;
+	m_forwardVec[0] = DEF_FORWARDVEC;
+	m_forwardVec[1] = DEF_FORWARDVEC;
+	m_speed[0] = MIN_SPEED;
+	m_speed[1] = 0.1f;
+	m_nowVecIndex = 0;
 	m_brakeTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
@@ -89,38 +95,47 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		++m_brakeTimer;
 
+		// ベクトルをすごくゆっくり補完する。
+		float cross = m_forwardVec[m_nowVecIndex].Cross(m_inputVec).y;
+		if (cross != 0) {
+
+			// 保管量
+			float rot = 0.001f * (cross < 0 ? -1.0f : 1.0f);
+
+			float nowAngle = atan2f(m_forwardVec[m_nowVecIndex].x, m_forwardVec[m_nowVecIndex].z) + rot;
+
+			m_forwardVec[m_nowVecIndex] = Vec3<float>(sinf(nowAngle), 0.0f, cosf(nowAngle));
+
+		}
+
 	}
 	else {
 
 		// ブレーキタイマーが1以上だったらブレーキを離した瞬間ということ。
 		if (0 < m_brakeTimer) {
 
-			if (m_isDebugParam) {
+			// 経過時間から割合を求める。
+			float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
 
-				// 経過時間から割合を求める。
-				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
+			// ベクトルのインデックスを更新。
+			++m_nowVecIndex;
+			if (1 < m_nowVecIndex) {
 
-				// 移動速度を求める。
-				m_speed *= brakeRate;
-
-			}
-			else {
-
-				// 経過時間から割合を求める。
-				float brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
-
-				// 移動速度を求める。
-				m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
+				m_nowVecIndex = 0;
 
 			}
 
-			// 最大値、最小値を超えないようにする。
-			if (m_speed < MIN_SPEED) m_speed = MIN_SPEED;
-			if (MAX_SPEED < m_speed) m_speed = MAX_SPEED;
+			// 移動速度を求める。
+			m_speed[m_nowVecIndex] = brakeRate * (MIN_SPEED + MAX_SPEED);
 
-			m_forwardVec = m_inputVec;
+			// ベクトルを保存。
+			m_forwardVec[m_nowVecIndex] = m_inputVec;
 
 		}
+
+		// 最大値、最小値を超えないようにする。
+		if (m_speed[m_nowVecIndex] < MIN_SPEED) m_speed[m_nowVecIndex] = MIN_SPEED;
+		if (MAX_SPEED < m_speed[m_nowVecIndex]) m_speed[m_nowVecIndex] = MAX_SPEED;
 
 		m_brakeTimer = 0;
 
@@ -141,15 +156,20 @@ void Player::Move()
 	/*===== 移動処理 =====*/
 
 	// ブレーキ状態の有無に応じて移動速度を変える。
-	float speed = m_speed;
 	if (m_isBrake) {
 
-		speed = BRAKE_SPEED;
+		m_speed[m_nowVecIndex] += (BRAKE_SPEED - m_speed[m_nowVecIndex]) / 10.0f;
 
 	}
 
 	// 移動させる。
-	m_pos += m_forwardVec * speed;
+	m_pos += m_forwardVec[m_nowVecIndex] * m_speed[m_nowVecIndex];
+
+	// インデックスじゃない方の移動速度はだんだん減らす。
+	m_speed[!m_nowVecIndex] -= m_speed[!m_nowVecIndex] / 50.0f;
+
+	// 移動させる。
+	m_pos += m_forwardVec[!m_nowVecIndex] * m_speed[!m_nowVecIndex];
 
 }
 
@@ -161,7 +181,7 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
-	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec[m_nowVecIndex].x, m_forwardVec[m_nowVecIndex].z);
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
@@ -195,24 +215,12 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 	if (m_isBrake) {
 
-		Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+		Vec2<float> inputVec = Vec2<float>(m_inputVec.x, m_inputVec.z);
 		float brakeRate = 0;
-		if (m_isDebugParam) {
 
-			// 経過時間から割合を求める。
-			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)) + 0.5f; // 0.5f ~ 1.5f の範囲
+		// 経過時間から割合を求める。
+		brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
 
-			brakeRate = m_speed * brakeRate;
-			brakeRate = (m_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED);
-
-		}
-		else {
-
-			// 経過時間から割合を求める。
-			brakeRate = Saturate(static_cast<float>(m_brakeTimer) / static_cast<float>(MAX_BRAKE_TIMER)); // 0.5f ~ 1.5f の範囲
-
-
-		}
 
 		DrawFunc3D::DrawLine(Cam, m_pos, m_pos + Vec3<float>(inputVec.x, 0.0f, inputVec.y).GetNormal() * (brakeRate * 20.0f), Color(1.0f, 0.0f, 0.0f, 1.0f), 1.0f);
 

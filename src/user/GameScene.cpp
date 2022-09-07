@@ -164,7 +164,6 @@ void GameScene::OnImguiDebug()
 {
 	ImGui::Begin("Test");
 	ImGui::Checkbox("Emissive", &m_emissive);
-	ImGui::Checkbox("PlayerMode", &m_player->m_isDebugParam);
 	ImGui::DragFloat("PlayerMaxSpeed", &m_player->MAX_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerMinSpeed", &m_player->MIN_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerDriftSpeed", &m_player->BRAKE_SPEED, 0.1f);
