@@ -201,8 +201,8 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetPos(m_pos);
 
 	// “ü—Í‚ÌŠp“x‚ğ‹‚ß‚éB
-	Vec3<float> movedVec = m_pos - m_prevPos;
-	movedVec.Normalize();
+	Vec3<float> movedVec = m_forwardVec;
+	//movedVec.Normalize();
 	Vec2<float> inputVec = Vec2<float>(movedVec.x, movedVec.z);
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
 
