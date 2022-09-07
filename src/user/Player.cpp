@@ -56,7 +56,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	Shot(BulletMgr, EnemyMgr);
 
 	// 当たり判定処理
-	CheckHit(BulletMgr, MapSize, EdgeScope);
+	CheckHit(BulletMgr, EnemyMgr, MapSize, EdgeScope);
 
 }
 
@@ -211,7 +211,7 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 }
 
-void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const float& EdgeScope)
+void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
@@ -224,6 +224,13 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, 
 
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
+
+	// 敵とのエッジの判定。
+	if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
+
+		m_isEdge = true;
+
+	}
 
 }
 

@@ -150,3 +150,23 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 	return nearestPos;
 
 }
+
+bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
+
+	/*===== ƒGƒbƒW‚Ì”»’è =====*/
+
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		if (index->CheckIsEdge(Pos, Size)) {
+
+			return true;
+
+		}
+
+	}
+
+	return false;
+
+}

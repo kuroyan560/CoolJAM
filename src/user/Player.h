@@ -73,7 +73,7 @@ private:
 	void Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr);
 
 	// ìñÇΩÇËîªíË
-	void CheckHit(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const float& EdgeScope);
+	void CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope);
 
 	// 01Ç…î[ÇﬂÇÈÅB
 	float Saturate(const float& Value);

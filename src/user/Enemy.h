@@ -33,6 +33,7 @@ private:
 	Transform m_transform;
 
 	const std::array<float, 3> SCALE = { 6,3,1 };
+	const std::array<float, 3> EDGE_SCALE = { 10,7,4 };	// ãﬂÇ≠Ç…Ç¢ÇÈîªíËÇÃëÂÇ´Ç≥ÅB
 	const std::array<int, 3> HP = { 3,2,1 };
 	const float TRACKING_ROT = 0.05f;
 
@@ -66,6 +67,9 @@ public:
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }
+
+	// ãﬂÇ≠Ç…Ç¢ÇÈÇ©ÅB
+	bool CheckIsEdge(const Vec3<float>& Pos, const float& Size);
 
 
 private:

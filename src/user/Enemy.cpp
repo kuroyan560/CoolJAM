@@ -200,3 +200,21 @@ void Enemy::Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerP
 	}
 
 }
+
+bool Enemy::CheckIsEdge(const Vec3<float>& Pos, const float& Size) {
+
+	/*===== 近くにいるかどうか =====*/
+
+	// 二点間の距離
+	float length = Vec3<float>(Pos - m_pos).Length();
+
+	// エッジ用の円との当たり判定。
+	if (length < Size + EDGE_SCALE[static_cast<int>(m_id)]) {
+
+		return true;
+
+	}
+
+	return false;
+
+}

@@ -35,6 +35,9 @@ public:
 	// ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌêŠ‚ğ‚©‚¦‚·B
 	Vec3<float> SearchNearestEnemy(const Vec3<float>& Pos);
 
+	// “G‚Ì‹ß‚­‚É‚¢‚é”»’èB
+	bool CheckEnemyEdge(const Vec3<float>& Pos, const float& Size);
+
 
 private:
 
