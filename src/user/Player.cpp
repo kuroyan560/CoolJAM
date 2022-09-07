@@ -6,6 +6,7 @@
 #include "EnemyMgr.h"
 #include "KuroFunc.h"
 #include "GameManager.h"
+#include "DriftParticle.h"
 
 Player::Player()
 {
@@ -18,6 +19,7 @@ Player::Player()
 	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_driftParticleDelay = 0;
 	m_rotX = 0.01f;
 	m_rotX = 0;
 	m_brakeBoostTimer = 0;
@@ -26,6 +28,12 @@ Player::Player()
 	m_isBrake = false;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+
+	for (auto& index : m_driftParticle) {
+
+		index = std::make_shared<DriftParticle>();
+
+	}
 
 }
 
@@ -40,11 +48,18 @@ void Player::Init()
 	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_driftParticleDelay = 0;
 	m_rotX = 0.01f;
 	m_shotTimer = 0;
 	m_brakeBoostTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
+
+	for (auto& index : m_driftParticle) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -64,6 +79,15 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	// 当たり判定処理
 	CheckHit(BulletMgr, EnemyMgr, MapSize, EdgeScope);
+
+	// ドリフトパーティクルの更新処理
+	for (auto& index : m_driftParticle) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Update();
+
+	}
 
 }
 
@@ -104,14 +128,41 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		// ベクトルをすごくゆっくり補完する。
 		float cross = m_forwardVec.Cross(m_inputVec).y;
+		float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 		if (cross != 0) {
 
 			// 保管量
 			float rot = 0.04f * cross;
 
-			float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z) + rot;
+			float rotAngle = nowAngle + rot;
 
-			m_forwardVec = Vec3<float>(sinf(nowAngle), 0.0f, cosf(nowAngle));
+			m_forwardVec = Vec3<float>(sinf(rotAngle), 0.0f, cosf(rotAngle));
+
+		}
+
+		++m_driftParticleDelay;
+		if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
+
+			// ドリフトパーティクルを生成
+			int generateCount = 0;
+			const float MAX_GENERATE_COUNT = 4.0f;
+			for (auto& index : m_driftParticle) {
+
+				if (index->GetIsActive()) continue;
+
+				index->Generate(m_pos, nowAngle + (cross < 0 ? DirectX::XM_PIDIV2 : -DirectX::XM_PIDIV2), cross);
+
+				++generateCount;
+
+				if (MAX_GENERATE_COUNT * fabs(cross) < generateCount) {
+
+					break;
+
+				}
+
+			}
+
+			m_driftParticleDelay = 0;
 
 		}
 
@@ -229,6 +280,15 @@ void Player::Draw(Camera& Cam) {
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 
+
+	// ドリフトパーティクルの描画処理
+	for (auto& index : m_driftParticle) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Draw(Cam);
+
+	}
 
 }
 

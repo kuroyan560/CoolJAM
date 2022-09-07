@@ -9,6 +9,7 @@ class Model;
 class Camera;
 class BulletMgr;
 class EnemyMgr;
+class DriftParticle;
 
 class Player
 {
@@ -33,6 +34,11 @@ private:
 	bool m_isEdge;				// ‰‚É‚¢‚é‚©
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
+
+	// ƒhƒŠƒtƒg
+	std::array<std::shared_ptr<DriftParticle>, 64> m_driftParticle;
+	int m_driftParticleDelay;
+	const int DRIFT_PARTICLE_DELAY = 2;
 
 	// Z²‰ñ“]—Ê
 	float m_rotX;
