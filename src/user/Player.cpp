@@ -15,8 +15,11 @@ Player::Player()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
+	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_rotX = 0.01f;
+	m_rotX = 0;
 	m_brakeBoostTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
@@ -34,8 +37,10 @@ void Player::Init()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
+	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_rotX = 0.01f;
 	m_shotTimer = 0;
 	m_brakeBoostTimer = 0;
 	m_isEdge = false;
@@ -85,6 +90,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
+	// 正面ベクトルを保存。
+	m_prevForwardVec = m_forwardVec;
+
 	// ブレーキ入力を保存。
 	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
 	if (m_isBrake) {
@@ -99,7 +107,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		if (cross != 0) {
 
 			// 保管量
-			float rot = 0.001f * (cross < 0 ? -1.0f : 1.0f);
+			float rot = 0.04f * cross;
 
 			float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z) + rot;
 
@@ -118,9 +126,6 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 			// 移動速度を求める。
 			m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
-
-			// ベクトルを保存。
-			m_forwardVec = m_inputVec;
 
 			// ブレーキブーストの効果時間を計算する。
 			if (0.5f < brakeRate) {
@@ -164,6 +169,28 @@ void Player::Move()
 	// 移動させる。
 	m_pos += m_forwardVec * m_speed;
 
+	// 正面ベクトルが回転した量を計算する。
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+
+		int a = 0;
+
+	}
+
+	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
+	float subAngle = forwardVecAngle - prevForwardVecAngle;
+
+	if (subAngle != 0) {
+
+		m_rotX = -subAngle;
+
+	}
+	else {
+
+		m_rotX -= m_rotX / 10.0f;
+
+	}
+
 }
 
 #include"DrawFunc3D.h"
@@ -174,9 +201,31 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
-	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+	Vec3<float> movedVec = m_pos - m_prevPos;
+	movedVec.Normalize();
+	Vec2<float> inputVec = Vec2<float>(movedVec.x, movedVec.z);
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
-	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
+
+	if (UsersInput::Instance()->KeyInput(DIK_O)) {
+
+		m_rotX += 0.01f;
+
+	}
+	if (UsersInput::Instance()->KeyInput(DIK_P)) {
+
+		m_rotX -= 0.01f;
+
+	}
+
+	// Y軸回転のクォータニオン求める。
+	auto resultY = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 1), inputAngle));
+	// X軸回転のクォータニオン求める。
+	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 20.0f));
+
+	// クォータニオンをかける。
+	auto resultQ = resultY * resultX;
+
+	m_transform.SetRotate(resultQ);
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 

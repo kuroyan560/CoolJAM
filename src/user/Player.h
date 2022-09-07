@@ -24,6 +24,7 @@ private:
 	Vec3<float> m_pos;			// 現在座標
 	Vec3<float> m_prevPos;		// 前フレームの座標
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
+	Vec3<float> m_prevForwardVec;// 前フレームの移動方向ベクトル。
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
@@ -32,6 +33,9 @@ private:
 	bool m_isEdge;				// 縁にいるか
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
+
+	// Z軸回転量
+	float m_rotX;
 
 	// 弾関係
 	int m_shotTimer;
