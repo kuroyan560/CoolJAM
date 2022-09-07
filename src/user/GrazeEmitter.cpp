@@ -25,7 +25,7 @@ void GrazeEmitter::Update(float MAP_SIZE,bool HIT_FLAG)
 			{
 				float centralDir = Angle::ConvertToRadian(90);
 				//プレイヤーの真後ろに角度を合わせ、ランダムで放射状に発射されるようにする
-				float randAngle = 0.0f;//KuroFunc::GetRand(-static_cast<float>(RADIAL_LIMIT), static_cast<float>(RADIAL_LIMIT));
+				float randAngle = KuroFunc::GetRand(-static_cast<float>(RADIAL_LIMIT), static_cast<float>(RADIAL_LIMIT));
 				float cosRadian = cosf(*m_velPtr + centralDir);
 				float sinRadian = sinf(*m_velPtr + centralDir);
 				Vec3<float>dir(cosRadian, 0.0f, -sinRadian);

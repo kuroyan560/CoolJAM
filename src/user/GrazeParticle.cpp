@@ -28,21 +28,21 @@ void GrazeParticle::Update(float MAP_SIZE)
 {
 	if (initFlag)
 	{
-		Vec3<float> mapCentralPos = { 0.0f,0.0f,0.0f };
-		Vec3<float> playerPos = m_pos;
+		Vec2<float> mapCentralPos = { 0.0f,0.0f };
+		Vec2<float> playerPos = { m_pos.x,m_pos.z };
 
-		float playerAndMapCenterDistance = playerPos.Distance(mapCentralPos);
+		float playerAndMapCenterDistance = mapCentralPos.Distance(playerPos);
 		float radius = MAP_SIZE;
-
-		float powNum = pow(radius, 2.0f) - playerAndMapCenterDistance;
+		float powNum = abs(pow(radius, 2.0f) - pow(playerAndMapCenterDistance, 2.0f));
 		float t = sqrtf(powNum);
 
 
 		//if (!initWallFlag)
 		{
-			m_pos += (m_vel * t);
+			
 			initWallFlag = true;
 		}
+		m_pos += (m_vel * t);
 		m_pos = KazCollisionHelper::KeepInMap(m_pos, MAP_SIZE);
 
 

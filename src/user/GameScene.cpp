@@ -45,7 +45,7 @@ void GameScene::OnUpdate()
 	m_player->Update(MAP_SIZE, EDGE_SCOPE);
 
 	float distance = MAP_SIZE - m_player->GetPos().Length();
-	m_grazeEmitter->Update(MAP_SIZE, true);
+	m_grazeEmitter->Update(MAP_SIZE, distance <= 20.0f);
 
 
 	//Œ»Ý‚ÌƒJƒƒ‰Žæ“¾
