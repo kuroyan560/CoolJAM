@@ -50,12 +50,9 @@ public:
 	void Draw(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; };
-
 	Vec3<float>* GetPosPtr() { return &m_pos; };
-
-	const float *GetInputRadian() { return &inputATan2f; };
-	const Vec3<float> *GetForwardVec() { return &m_forwardVec; };
-
+	const float *GetInputRadianPtr() { return &inputATan2f; };
+	float GetInputRadian() { return inputATan2f; };
 
 private:
 

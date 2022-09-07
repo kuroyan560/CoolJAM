@@ -5,7 +5,7 @@
 #include"KazCollisionHelper.h"
 #include"../engine/D3D12App.h"
 
-GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(30)
+GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(120)
 {
 	texBuff = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/GrazeParticle.png");
 	initFlag = false;
@@ -28,7 +28,7 @@ void GrazeParticle::Update(float MAP_SIZE)
 {
 	if (initFlag)
 	{
-		if (!initWallFlag)
+		//if (!initWallFlag)
 		{
 			m_pos += m_vel;
 			initWallFlag = true;

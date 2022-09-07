@@ -21,6 +21,7 @@ private:
 	//マップモデル
 	std::shared_ptr<Model> m_mapModel;
 	Transform m_mapModelTransform;
+	Vec3<float>limitPos;
 
 	//マップのサイズ
 	const float MAP_SIZE = 100.0f;
@@ -30,6 +31,9 @@ private:
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;
+
+	std::shared_ptr<TextureBuffer>texBuff;
+
 
 public:
 	GameScene();
