@@ -20,15 +20,20 @@ private:
 	float m_speed;				// 移動速度
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
 	bool m_isActive;			// 生存フラグ
+	int m_hitEffectTimer;		// 弾に当たったフラグ
+	const int HIT_EFFECT_TIMER = 10;
 
+	int m_hp;
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
 
 	//モデル
 	std::shared_ptr<Model> m_model;
+	std::shared_ptr<Model> m_modelHit;
 	Transform m_transform;
 
 	const std::array<float, 3> SCALE = { 6,3,1 };
+	const std::array<int, 3> HP = { 3,2,1 };
 	const float TRACKING_ROT = 0.05f;
 
 

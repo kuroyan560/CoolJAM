@@ -16,9 +16,9 @@ private:
 	std::array<std::shared_ptr<Enemy>, 64> m_enemy;
 
 	int m_stopEnemyTimer;
-	const int STOP_ENEMY_TIMER = 30;
+	const int STOP_ENEMY_TIMER = 90;
 	int m_straightEnemyTimer;
-	const int STRAIGHT_ENEMY_TIMER = 30;
+	const int STRAIGHT_ENEMY_TIMER = 60;
 	int m_trackingEnemyTimer;
 	const int TRACKING_ENEMY_TIMER = 60;
 

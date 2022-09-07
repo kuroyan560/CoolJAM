@@ -12,9 +12,12 @@ void Enemy::Init()
 	m_forwardVec = Vec3<float>(0, 0, 1);
 	m_scale = 1.0f;
 	m_isActive = false;
+	m_hitEffectTimer = 0;
 	m_shotTimer = 0;
+	m_hp = 0;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 	m_transform.SetScale(1.0f);
 
 }
@@ -28,10 +31,12 @@ void Enemy::Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos
 	m_pos = Pos;
 	m_shotTimer = 0;
 	m_forwardVec = Vec3<float>(PlayerPos - Pos).GetNormal();
+	m_hp = HP[static_cast<int>(ID)];
 	m_scale = SCALE[static_cast<int>(ID)];
 	m_speed = 0;
 	m_transform.SetScale(m_scale);
 	m_isActive = true;
+	m_hitEffectTimer = 0;
 
 }
 
@@ -106,7 +111,16 @@ void Enemy::Draw(Camera& Cam)
 	/*===== 描画処理 =====*/
 
 	m_transform.SetPos(m_pos);
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+	if (0 < m_hitEffectTimer) {
+
+		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+
+	}
+	else {
+
+		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+
+	}
 
 }
 
@@ -126,9 +140,27 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 
 	// プレイヤー弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, SCALE[static_cast<int>(m_id)]);
-	if (0 < hitCount) {
+	m_hp -= hitCount;
+	if (m_hp < 0) {
 
 		Init();
+
+	}
+
+	// 弾に当たったかフラグ
+	if (0 < hitCount) {
+
+		m_hitEffectTimer = HIT_EFFECT_TIMER;
+
+	}
+	else {
+
+		--m_hitEffectTimer;
+		if (m_hitEffectTimer < 0) {
+
+			m_hitEffectTimer = 0;
+
+		}
 
 	}
 
