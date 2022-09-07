@@ -23,9 +23,6 @@ private:
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
-	const float MIN_SPEED = 0.4f;	// 最小の移動速度
-	const float MAX_SPEED = 2.5f;	// 最大の移動速度
-	const float BRAKE_SPEED = 0.2f;
 	const float SCALE = 1.0f;
 	bool m_isEdge;				// 縁にいるか
 
@@ -45,6 +42,9 @@ private:
 public:
 
 	bool m_isDebugParam = false;
+	float MIN_SPEED = 0.4f;	// 最小の移動速度
+	float MAX_SPEED = 2.5f;	// 最大の移動速度
+	float BRAKE_SPEED = 0.2f;
 
 	/*===== メンバ関数 =====*/
 

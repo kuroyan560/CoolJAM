@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "BulletMgr.h"
 
+bool Enemy::m_debugIsShotEnemy = true;
+
 void Enemy::Init()
 {
 
@@ -141,7 +143,7 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 	// プレイヤー弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, SCALE[static_cast<int>(m_id)]);
 	m_hp -= hitCount;
-	if (m_hp < 0) {
+	if (m_hp <= 0) {
 
 		Init();
 
@@ -156,7 +158,7 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 	else {
 
 		--m_hitEffectTimer;
-		if (m_hitEffectTimer < 0) {
+		if (m_hitEffectTimer <= 0) {
 
 			m_hitEffectTimer = 0;
 
@@ -169,6 +171,8 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 void Enemy::Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos) {
 
 	/*===== 弾射出処理 =====*/
+
+	if (!m_debugIsShotEnemy) return;
 
 	++m_shotTimer;
 	if (SHOT_TIMER < m_shotTimer) {

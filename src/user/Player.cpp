@@ -13,7 +13,7 @@ Player::Player()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = 0;
+	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
@@ -31,7 +31,7 @@ void Player::Init()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
-	m_speed = 0;
+	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
@@ -159,7 +159,7 @@ void Player::Draw(Camera& Cam) {
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-
+	
 
 }
 

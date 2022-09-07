@@ -47,6 +47,8 @@ public:
 
 	};
 
+	static bool m_debugIsShotEnemy;
+
 private:
 
 	ID m_id;
