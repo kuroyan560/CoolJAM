@@ -12,9 +12,6 @@ EnvironmentMgr::EnvironmentMgr()
 
     m_pillarModelArray[STATUS::DEFAULT] = Importer::Instance()->LoadModel(DIR, "pillar_mono.glb");
     m_pillarModelArray[STATUS::FEVER] = Importer::Instance()->LoadModel(DIR, "pillar_fever.glb");
-
-    m_floorModelObj = std::make_shared<ModelObject>(DIR, "floor.glb");
-    m_floorModelObj->m_transform.SetScale(100.0f);
 }
 
 void EnvironmentMgr::Init()
@@ -51,9 +48,6 @@ void EnvironmentMgr::Update()
 void EnvironmentMgr::Draw(Camera& Cam)
 {
     static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
-
-    //è∞
-    DrawFunc3D::DrawNonShadingModel(m_floorModelObj, Cam);
 
     if (m_nextStatus == STATUS::NONE ||  m_statusChangeRate < 0.02f)
     {

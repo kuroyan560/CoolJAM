@@ -23,9 +23,6 @@ private:
 	static const int PILLAR_NUM = 12;
 	float m_pillarPosRadius = 160.0f;
 
-	//床モデル
-	std::shared_ptr<ModelObject>m_floorModelObj;
-
 	//現在のステータス
 	int m_nowStatus = STATUS::DEFAULT;
 
