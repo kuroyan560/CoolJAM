@@ -286,6 +286,9 @@
     <ClCompile Include="src\user\EnemyWaveMgr.cpp">
       <Filter>src\user\敵のウェーブ</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\PlayerModelOutline.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -528,6 +531,9 @@
     </ClInclude>
     <ClInclude Include="src\user\EnemyWaveMgr.h">
       <Filter>src\user\敵のウェーブ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PlayerModelOutline.h">
+      <Filter>src\user</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
