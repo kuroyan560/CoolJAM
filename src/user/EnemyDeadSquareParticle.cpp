@@ -1,7 +1,7 @@
 #include"EnemyDeadSquareParticle.h"
 #include"../engine/DrawFunc3D.h"
 
-EnemyDeadSquareParticle::EnemyDeadSquareParticle(std::shared_ptr<Model>MODEL) :m_model(MODEL)
+EnemyDeadSquareParticle::EnemyDeadSquareParticle()
 {
 }
 
@@ -12,8 +12,7 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 	m_vel *= SPEED;
 	m_alpha = 255;
 	m_dispappearTime = 255 / 30;
-	m_initFlag = true;
-	m_transform.SetPos(POS);
+	m_initFlag = 1;
 	m_angle = { 0,0,0 };
 
 	float minVel = -0.5f;
@@ -36,10 +35,9 @@ void EnemyDeadSquareParticle::Update()
 		if (m_alpha <= 0)
 		{
 			m_alpha = 0;
-			m_initFlag = false;
+			m_initFlag = 0;
 		}
-		m_transform.SetPos(m_pos);
-		m_transform.SetRotate(m_angle);
+
 	}
 }
 
@@ -47,6 +45,6 @@ void EnemyDeadSquareParticle::Draw(Camera &CAMERA)
 {
 	if (m_initFlag)
 	{
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, CAMERA);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, CAMERA);
 	}
 }

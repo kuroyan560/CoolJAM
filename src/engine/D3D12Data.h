@@ -586,7 +586,11 @@ class InputLayoutParam
 public:
 	const std::string m_semantics;
 	const DXGI_FORMAT m_format;
-	InputLayoutParam(const std::string& Semantics, const DXGI_FORMAT& Format) :m_semantics(Semantics), m_format(Format) {}
+	const int m_semanticIdx = 0;
+	InputLayoutParam(const std::string& Semantics,
+		const DXGI_FORMAT& Format,
+		const int& SemanticIdx = 0
+	) :m_semantics(Semantics), m_format(Format), m_semanticIdx(SemanticIdx) {}
 };
 
 
@@ -680,8 +684,8 @@ class PipelineInitializeOption
 {
 	PipelineInitializeOption() = delete;
 public:
-	bool m_calling = true;	//カリング
-	bool m_wireFrame = false;	//ワイヤーフレーム
+	D3D12_CULL_MODE m_calling = D3D12_CULL_MODE_BACK;	//カリング
+	D3D12_FILL_MODE m_fillMode = D3D12_FILL_MODE_SOLID;	//ワイヤーフレーム
 	bool m_depthTest = true;	//深度テスト
 	DXGI_FORMAT m_dsvFormat = DXGI_FORMAT_D32_FLOAT;	//デプスステンシルのフォーマット
 	bool m_depthWriteMask = true;	//デプスの書き込み（深度テストを行う場合）

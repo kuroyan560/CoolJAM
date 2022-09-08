@@ -142,15 +142,14 @@ void GameScene::OnDraw()
 	m_bulletMgr->Draw(nowCam);
 
 
-	for (int i = 0; i < m_emitter.size(); ++i)
-	{
-		m_emitter[i].Draw(nowCam);
-	}
-
-
 
 	// マップを描画
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
+
+	for (int i = 0; i < m_emitter.size(); ++i)
+	{
+		m_emitter[i].Draw(nowCam, m_mainTarget, m_emissiveMap, m_depthStencil);
+	}
 
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア

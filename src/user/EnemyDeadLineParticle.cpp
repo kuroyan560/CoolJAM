@@ -2,7 +2,7 @@
 #include"../engine/DrawFunc3D.h"
 #include"../engine/Common/Angle.h"
 
-EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(false)
+EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(0)
 {
 }
 
@@ -13,7 +13,8 @@ void EnemyDeadLineParticle::Init(const Vec3<float> &POS,float SPEED, int ANGLE)
 	m_vel *= SPEED;
 	m_alpha = 255;
 	m_dispappearTime = 255 / 30;
-	m_initFlag = true;
+	m_initFlag = 1;
+	m_rgb = { 255,255,255 };
 }
 
 void EnemyDeadLineParticle::Update()
@@ -30,7 +31,7 @@ void EnemyDeadLineParticle::Update()
 		if (m_alpha <= 0)
 		{
 			m_alpha = 0;
-			m_initFlag = false;
+			m_initFlag = 0;
 		}
 	}
 }
