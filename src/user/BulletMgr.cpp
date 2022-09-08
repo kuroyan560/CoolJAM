@@ -63,7 +63,7 @@ void BulletMgr::Update(const float& MapSize) {
 
 }
 
-void BulletMgr::Draw(Camera& NowCam) {
+void BulletMgr::Draw() {
 
 	/*====== •`‰æˆ— =====*/
 
@@ -71,7 +71,7 @@ void BulletMgr::Draw(Camera& NowCam) {
 
 		if (!index->GetIsActive()) continue;
 
-		index->Draw(NowCam);
+		index->Draw();
 
 	}
 
@@ -79,7 +79,7 @@ void BulletMgr::Draw(Camera& NowCam) {
 
 		if (!index->GetIsActive()) continue;
 
-		index->Draw(NowCam);
+		index->Draw();
 
 	}
 

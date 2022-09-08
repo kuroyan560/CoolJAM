@@ -95,7 +95,7 @@ void DrawFunc3D::DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float
 
 void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform& Transform, Camera& Cam, const float& Alpha, std::shared_ptr<ModelAnimator> Animator, const AlphaBlendMode& BlendMode)
 {
-	static std::map < DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
 	static std::vector<std::shared_ptr<ConstantBuffer>>DRWA_DATA_BUFF;
 
 	struct DrawData

@@ -9,6 +9,7 @@
 #include"BulletMgr.h"
 #include"WinApp.h"
 #include"EnvironmentMgr.h"
+#include"DrawFunc_Append.h"
 
 GameScene::GameScene()
 {
@@ -38,6 +39,9 @@ GameScene::GameScene()
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
 
+	//デプスマップ生成
+	m_depthMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32_FLOAT, Color(0, 0, 0, 0), backBuff->GetGraphSize(), L"DepthMap");
+
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 }
@@ -64,13 +68,14 @@ void GameScene::OnUpdate()
 
 	/*===== 更新処理 =====*/
 
-	GameManager::Instance()->Update();
-
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
 
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+
+	//ゲームマネージャ更新
+	GameManager::Instance()->Update();
 
 	// プレイヤー更新処理
 	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
@@ -110,41 +115,35 @@ void GameScene::OnDraw()
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
+
+	//DrawFunc初期化
+	DrawFunc_Append::FrameInit(
+		backBuff,
+		m_emissiveMap,
+		m_depthMap,
+		m_depthStencil,
+		nowCam,
+		m_environmentMgr->GetLigMgr()
+	);
 
 /*--- 通常描画 ---*/
-	//デプスステンシルクリア
-	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-	//レンダーターゲットセット（バックバッファとデプスステンシル）
-	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
-
 	//環境描画
-	m_environmentMgr->Draw(nowCam);
+	m_environmentMgr->Draw(*nowCam);
 
 	//プレイヤー描画
-	m_player->Draw(nowCam);
+	m_player->Draw();
 
 	//敵を描画
-	m_enemyMgr->Draw(nowCam);
+	m_enemyMgr->Draw();
 
 	//弾を描画。
-	m_bulletMgr->Draw(nowCam);
+	m_bulletMgr->Draw();
 
 	// マップを描画
-	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
+	DrawFunc_Append::DrawModel(m_mapModel);
 
-	/*--- エミッシブマップに描画 ---*/
-		//デプスステンシルクリア
-	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-	//エミッシブマップクリア
-	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_emissiveMap);
-	//レンダーターゲットセット（エミッシブマップとデプスステンシル）
-	KuroEngine::Instance()->Graphics().SetRenderTargets({ m_emissiveMap }, m_depthStencil);
-
-	//プレイヤー描画
-	m_player->Draw(nowCam);
-
-	/*--- エミッシブマップ合成 ---*/
+/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
 	if (m_emissive)
 	{
@@ -165,11 +164,11 @@ void GameScene::OnDraw()
 		static const float LEN = 100.0f;
 		static const float THICKNESS = 0.5f;
 		static Vec3<float>ORIGIN = { 0,0,0 };
-		DrawFunc3D::DrawLine(nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
-		DrawFunc3D::DrawLine(nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
-		DrawFunc3D::DrawLine(nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
 
-		m_player->DrawDebugInfo(nowCam);
+		m_player->DrawDebugInfo(*nowCam);
 
 	}
 #endif

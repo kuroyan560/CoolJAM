@@ -30,7 +30,7 @@ public:
 	EnemyMgr();
 	void Init();
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	void Draw(Camera& NowCam);
+	void Draw();
 
 	// ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌêŠ‚ğ‚©‚¦‚·B
 	Vec3<float> SearchNearestEnemy(const Vec3<float>& Pos);

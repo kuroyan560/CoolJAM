@@ -58,7 +58,7 @@ public:
 	void Init();
 	void Finalize();
 	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope);
-	void Draw(Camera& Cam);
+	void Draw();
 	void DrawDebugInfo(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; }

@@ -64,7 +64,7 @@ public:
 	void Init();
 	void Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos);
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	void Draw(Camera& Cam);
+	void Draw();
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }

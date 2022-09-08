@@ -83,7 +83,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Pl
 
 }
 
-void EnemyMgr::Draw(Camera& NowCam)
+void EnemyMgr::Draw()
 {
 
 	/*===== •`‰æˆ— =====*/
@@ -92,7 +92,7 @@ void EnemyMgr::Draw(Camera& NowCam)
 
 		if (!index->GetIsActive()) continue;
 
-		index->Draw(NowCam);
+		index->Draw();
 
 	}
 

@@ -58,6 +58,9 @@ private:
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
+	//デプスマップ
+	std::shared_ptr<RenderTarget>m_depthMap;
+
 	//環境統括
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 

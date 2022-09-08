@@ -166,9 +166,9 @@ void Player::Move()
 
 }
 
-#include"DrawFunc3D.h"
-void Player::Draw(Camera& Cam) {
-
+#include"DrawFunc_Append.h"
+void Player::Draw() 
+{
 	/*===== 描画処理 =====*/
 
 	m_transform.SetPos(m_pos);
@@ -178,9 +178,7 @@ void Player::Draw(Camera& Cam) {
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
 
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-
-
+	DrawFunc_Append::DrawModel(m_model, m_transform);
 }
 
 void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr) {
@@ -202,6 +200,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 }
 
+#include"DrawFunc3D.h"
 void Player::DrawDebugInfo(Camera& Cam) {
 
 	/*===== デバッグ情報を描画 =====*/

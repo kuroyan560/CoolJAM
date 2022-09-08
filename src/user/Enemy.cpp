@@ -127,8 +127,9 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 }
 
-#include"DrawFunc3D.h"
-void Enemy::Draw(Camera& Cam)
+//#include"DrawFunc3D.h"
+#include"DrawFunc_Append.h"
+void Enemy::Draw()
 {
 
 	/*===== •`‰æˆ— =====*/
@@ -136,12 +137,12 @@ void Enemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(s_modelHit, m_transform, Cam);
+		DrawFunc_Append::DrawModel(s_modelHit, m_transform);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(s_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(s_model, m_transform);
 
 	}
 

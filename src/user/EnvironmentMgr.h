@@ -7,6 +7,7 @@
 class Model;
 class ModelObject;
 class Camera;
+class LightManager;
 
 class EnvironmentMgr : public ImguiDebugInterface
 {
@@ -36,6 +37,9 @@ private:
 	//ステータス切り替わり時間
 	int m_statusChangeTime = 250;
 
+	//ライトマネージャ
+	std::shared_ptr<LightManager>m_ligMgr;
+
 public:
 	EnvironmentMgr();
 	~EnvironmentMgr() {}
@@ -44,11 +48,16 @@ public:
 	void Update();
 	void Draw(Camera& Cam);
 
+	//環境ステータス変更
 	void ChangeStatus(STATUS NextStatus)
 	{
 		m_nextStatus = NextStatus;
 		m_statusChangeRate = 0.0f;
 	}
+
+	//ゲッタ
+	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
+
 	void OnImguiDebug()override;
 };
 

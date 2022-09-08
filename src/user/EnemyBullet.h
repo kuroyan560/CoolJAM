@@ -33,7 +33,7 @@ public:
 	void Init();
 	void Generate(const Vec3<float>& Pos, const Vec3<float>& ForwardVec);
 	void Update(const float& MapSize);
-	void Draw(Camera& NowCam);
+	void Draw();
 
 	inline Vec3<float> GetPos() { return m_pos; }
 	inline float GetCheckHitScale() { return m_scale; }
