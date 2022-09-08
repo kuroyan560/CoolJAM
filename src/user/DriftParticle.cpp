@@ -7,7 +7,7 @@ DriftParticle::DriftParticle() {
 	/*===== コンストラクタ =====*/
 
 	// モデル
-	m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
+	m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");
 
 	// 基本的な変数
 	m_pos = Vec3<float>();			// 座標
