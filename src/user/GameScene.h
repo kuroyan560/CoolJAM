@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Vec.h"
 #include<memory>
+#include"EnemyDeadEmitter.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -59,6 +60,9 @@ private:
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
 	bool m_emissive = true;
+
+
+	std::array<EnemyDeadEmitter, 10> m_emitter;
 
 public:
 	GameScene();

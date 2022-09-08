@@ -80,6 +80,9 @@
     <Filter Include="src\user\Player\ドリフトのパーティクル">
       <UniqueIdentifier>{d772afd6-6290-4b80-8d16-7efbbb33c977}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\Effect">
+      <UniqueIdentifier>{b6a3db00-351e-495d-9fdc-e2f6a8151e6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -273,6 +276,15 @@
     </ClCompile>
     <ClCompile Include="src\user\DriftParticle.cpp">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadEmitter.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadParticle.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadLineParticle.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -510,5 +522,12 @@
     <ClInclude Include="src\user\DriftParticle.h">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\EnemyDeadEmitter.h">
+      <Filter>src\user\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyDeadParticle.h">
+      <Filter>src\user\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
   </ItemGroup>
 </Project>

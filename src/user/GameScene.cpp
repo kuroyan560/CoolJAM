@@ -37,6 +37,8 @@ GameScene::GameScene()
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
 
+
+
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
 }
@@ -53,6 +55,7 @@ void GameScene::OnInitialize()
 	m_nowEye = m_baseEye;
 	m_baseTarget = m_player->GetPos();
 	m_nowTarget = m_baseTarget;
+
 
 }
 
@@ -77,6 +80,17 @@ void GameScene::OnUpdate()
 
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
+
+
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE))
+	{
+		m_emitter[0].Init(m_player->GetPos());
+	}
+	//死亡演出
+	for (int i = 0; i < m_emitter.size(); ++i)
+	{
+		m_emitter[i].Update();
+	}
 
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
 	const float CAMERA_DISTANCE = 60.0f;
@@ -126,6 +140,14 @@ void GameScene::OnDraw()
 
 	//弾を描画。
 	m_bulletMgr->Draw(nowCam);
+
+
+	for (int i = 0; i < m_emitter.size(); ++i)
+	{
+		m_emitter[i].Draw(nowCam);
+	}
+
+
 
 	// マップを描画
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
