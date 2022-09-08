@@ -16,6 +16,7 @@ class RenderTarget;
 class EnemyMgr;
 class BulletMgr;
 class EnvironmentMgr;
+class EnemyWaveMgr;
 
 class GameScene : public BaseScene
 {
@@ -35,6 +36,9 @@ private:
 
 	// クラス
 	std::shared_ptr<BulletMgr> m_bulletMgr;
+
+	// 敵ウェーブクラス
+	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
 
 	//マップのサイズ
 	const float MAP_SIZE = 100.0f;

@@ -9,6 +9,7 @@
 #include"BulletMgr.h"
 #include"WinApp.h"
 #include"EnvironmentMgr.h"
+#include"EnemyWaveMgr.h"
 
 GameScene::GameScene()
 {
@@ -35,6 +36,9 @@ GameScene::GameScene()
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
 
+	//敵ウェーブ管理クラス
+	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>();
+
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
 
@@ -49,6 +53,7 @@ void GameScene::OnInitialize()
 	m_player->Init();
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
+	m_enemyWaveMgr->Init();
 
 	m_baseEye = Vec3<float>(m_player->GetPos() + Vec3<float>(30.0f, 30.0f, 0.0f));
 	m_nowEye = m_baseEye;
@@ -74,6 +79,9 @@ void GameScene::OnUpdate()
 
 	// プレイヤー更新処理
 	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
+
+	// 敵ウェーブ管理クラスを更新。
+	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 
 	// 敵更新処理
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
@@ -112,8 +120,8 @@ void GameScene::OnDraw()
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
-/*--- 通常描画 ---*/
-	//デプスステンシルクリア
+	/*--- 通常描画 ---*/
+		//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 	//レンダーターゲットセット（バックバッファとデプスステンシル）
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
@@ -151,7 +159,7 @@ void GameScene::OnDraw()
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
 
-/* --- デバッグ描画 ---*/
+	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG
 	//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);

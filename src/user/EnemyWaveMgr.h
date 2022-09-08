@@ -4,6 +4,7 @@
 #include <memory>
 
 class EnemyWave;
+class EnemyMgr;
 
 class EnemyWaveMgr {
 
@@ -21,6 +22,7 @@ public:
 
 	EnemyWaveMgr();
 	void Init();
-	void Update(const Vec3<float>& PlayerPos);
+	void Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize);
+	void AddWave(std::shared_ptr<EnemyWave> Wave);
 
 };
