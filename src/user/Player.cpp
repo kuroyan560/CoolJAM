@@ -275,8 +275,8 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 		// ‘½­•ªU‚³‚¹‚éB
 		Vec3<float> shotEnemyPos = nearestEnemy;
-		shotEnemyPos.x += KuroFunc::GetRand(-5.0f, 5.0f);
-		shotEnemyPos.z += KuroFunc::GetRand(-5.0f, 5.0f);
+		shotEnemyPos.x += KuroFunc::GetRand(-3.0f, 3.0f);
+		shotEnemyPos.z += KuroFunc::GetRand(-3.0f, 3.0f);
 
 		// “G‚Ì•ûŒü‚ÉŒü‚©‚Á‚Ä’e‚ğŒ‚‚ÂB
 		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (shotEnemyPos - m_pos).GetNormal());

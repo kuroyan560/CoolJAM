@@ -38,7 +38,7 @@ private:
 	// ƒhƒŠƒtƒg
 	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
 	int m_driftParticleDelay;
-	const int DRIFT_PARTICLE_DELAY = 2;
+	const int DRIFT_PARTICLE_DELAY = 5;
 
 	// ZŽ²‰ñ“]—Ê
 	float m_rotX;
