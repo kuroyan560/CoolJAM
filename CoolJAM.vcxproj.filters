@@ -271,6 +271,9 @@
     <ClCompile Include="src\user\EnvironmentMgr.cpp">
       <Filter>src\user</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\DrawFunc_Append.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -505,6 +508,9 @@
       <Filter>src\user\弾</Filter>
     </ClInclude>
     <ClInclude Include="src\user\EnvironmentMgr.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DrawFunc_Append.h">
       <Filter>src\user</Filter>
     </ClInclude>
   </ItemGroup>

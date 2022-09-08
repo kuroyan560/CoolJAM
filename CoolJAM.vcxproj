@@ -217,6 +217,7 @@
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\DrawFunc_Append.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
@@ -297,6 +298,7 @@
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\DrawFunc_Append.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
