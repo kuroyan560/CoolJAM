@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "BulletMgr.h"
 
+std::shared_ptr<Model> Enemy::s_model;
+std::shared_ptr<Model> Enemy::s_modelHit;
 bool Enemy::m_debugIsShotEnemy = true;
 
 Enemy::Enemy() {
@@ -17,8 +19,11 @@ Enemy::Enemy() {
 	m_shotTimer = 0;
 	m_hp = 0;
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
-	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
+	if (!s_model)
+	{
+		s_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+		s_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
+	}
 	m_transform.SetScale(1.0f);
 
 }
@@ -131,12 +136,12 @@ void Enemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		DrawFunc3D::DrawNonShadingModel(s_modelHit, m_transform, Cam);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc3D::DrawNonShadingModel(s_model, m_transform, Cam);
 
 	}
 

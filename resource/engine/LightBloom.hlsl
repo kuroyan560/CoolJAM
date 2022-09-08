@@ -10,7 +10,7 @@ Texture2D<float4> img_2 : register(t2);
 Texture2D<float4> img_3 : register(t3);
 RWTexture2D<float4> outputPixels : register(u0);
 
-static const int DIV = 8;
+static const int DIV = 32;
 
 [numthreads(DIV, DIV, 1)]
 void Filter( uint2 DTid : SV_DispatchThreadID )

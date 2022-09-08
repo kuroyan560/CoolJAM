@@ -273,6 +273,8 @@
     </ClCompile>
     <ClCompile Include="src\user\DriftParticle.cpp">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    <ClCompile Include="src\user\EnvironmentMgr.cpp">
+      <Filter>src\user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -509,6 +511,8 @@
     </ClInclude>
     <ClInclude Include="src\user\DriftParticle.h">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    <ClInclude Include="src\user\EnvironmentMgr.h">
+      <Filter>src\user</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

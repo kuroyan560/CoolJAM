@@ -158,4 +158,5 @@ struct EasingParameter
     {
         return KuroMath::Ease(m_changeType, m_easeType, Rate, Min, Max);
     }
+    void ImguiDebug(const std::string& Tag);
 };

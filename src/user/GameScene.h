@@ -15,11 +15,11 @@ class Camera;
 class RenderTarget;
 class EnemyMgr;
 class BulletMgr;
+class EnvironmentMgr;
 
 class GameScene : public BaseScene
 {
 private:
-
 	//プレイヤー
 	std::unique_ptr<Player> m_player;
 
@@ -58,7 +58,10 @@ private:
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
-	bool m_emissive = true;
+	//環境統括
+	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
+
+	bool m_emissive = false;
 
 public:
 	GameScene();

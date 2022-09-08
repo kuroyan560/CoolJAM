@@ -21,7 +21,7 @@ struct LightBloomConfig
 class LightBloomDevice
 {
 private:
-	static const int THREAD_DIV = 8;
+	static const int THREAD_DIV = 32;
 	static std::shared_ptr<ComputePipeline>s_filterPipeline;
 	static std::shared_ptr<ComputePipeline>s_combinePipeline;
 	void GeneratePipeline();

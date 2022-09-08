@@ -1454,7 +1454,9 @@ std::shared_ptr<Model> Importer::LoadGLTFModel(const std::string& Dir, const std
 			auto& texture = doc.textures.Get(textureId);
 			auto& image = doc.images.Get(texture.imageId);
 			LoadGLTFMaterial(COLOR_TEX, material, image, Dir, *resourceReader, doc);
+			material->constData.pbr.baseColor = { 0,0,0 };
 		}
+
 		//エミッシブ
 		textureId = m.emissiveTexture.textureId;
 		if (!textureId.empty())
