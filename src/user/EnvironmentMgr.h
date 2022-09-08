@@ -4,6 +4,7 @@
 #include<string>
 #include<array>
 #include"Transform.h"
+#include"Light.h"
 class Model;
 class ModelObject;
 class Camera;
@@ -16,10 +17,10 @@ public:
 
 private:
 	//スカイドームモデル
-	std::shared_ptr<Model>m_skyDomeModelArray[STATUS::NUM];
+	std::array<std::shared_ptr<Model>, STATUS::NUM>m_skyDomeModelArray;
 
 	//柱モデル
-	std::shared_ptr<Model>m_pillarModelArray[STATUS::NUM];
+	std::array<std::shared_ptr<Model>, STATUS::NUM>m_pillarModelArray;
 	//柱の数
 	static const int PILLAR_NUM = 12;
 	float m_pillarPosRadius = 160.0f;
@@ -39,6 +40,9 @@ private:
 
 	//ライトマネージャ
 	std::shared_ptr<LightManager>m_ligMgr;
+
+	//ディレクションライト
+	Light::Direction m_dirLigDef;
 
 public:
 	EnvironmentMgr();

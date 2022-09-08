@@ -15,6 +15,10 @@ EnvironmentMgr::EnvironmentMgr()
     m_pillarModelArray[STATUS::FEVER] = Importer::Instance()->LoadModel(DIR, "pillar_fever.glb");
 
     m_ligMgr = std::make_shared<LightManager>();
+    
+    //ディレクションライト
+    m_dirLigDef.SetDir({ 0,-1,0 });
+    m_ligMgr->RegisterDirLight(&m_dirLigDef);
 }
 
 void EnvironmentMgr::Init()

@@ -2,12 +2,14 @@
 #include "Importer.h"
 #include "Model.h"
 
+std::shared_ptr<Model>DriftParticle::s_model;
+
 DriftParticle::DriftParticle() {
 
 	/*===== コンストラクタ =====*/
 
 	// モデル
-	m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
+	if(!s_model)s_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
 
 	// 基本的な変数
 	m_pos = Vec3<float>();			// 座標
@@ -118,6 +120,6 @@ void DriftParticle::Draw() {
 
 	m_transform.SetPos(m_pos);
 	m_transform.SetScale(m_scale);
-	DrawFunc_Append::DrawModel(m_model, m_transform, 1.0f, { false,true,false });
+	DrawFunc_Append::DrawModel(s_model, m_transform, 1.0f, { false,true,false });
 
 }

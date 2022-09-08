@@ -17,7 +17,7 @@ private:
 	Transform m_transform;
 
 	// モデル
-	std::shared_ptr<Model>m_model;
+	static std::shared_ptr<Model>s_model;
 
 	// 基本的な変数
 	Vec3<float> m_pos;			// 座標

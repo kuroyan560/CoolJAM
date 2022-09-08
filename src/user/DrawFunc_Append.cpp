@@ -44,8 +44,8 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	struct DrawData
 	{
 		Matrix m_transformMat;
-		RenderTargetSwitch m_drawSwitch;
 		float m_alpha = 1.0f;
+		RenderTargetSwitch m_drawSwitch;
 	};
 
 	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
