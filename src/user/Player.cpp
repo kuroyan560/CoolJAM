@@ -169,13 +169,6 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
-	// デバッグ機能
-	if (UsersInput::Instance()->ControllerInput(0, B)) {
-
-		Init();
-
-	}
-
 }
 
 void Player::Move()
@@ -281,11 +274,12 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
 
 		// 多少分散させる。
-		nearestEnemy.x += KuroFunc::GetRand(-5.0f, 5.0f);
-		nearestEnemy.z += KuroFunc::GetRand(-5.0f, 5.0f);
+		Vec3<float> shotEnemyPos = nearestEnemy;
+		shotEnemyPos.x += KuroFunc::GetRand(-5.0f, 5.0f);
+		shotEnemyPos.z += KuroFunc::GetRand(-5.0f, 5.0f);
 
 		// 敵の方向に向かって弾を撃つ。
-		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (nearestEnemy - m_pos).GetNormal());
+		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (shotEnemyPos - m_pos).GetNormal());
 
 	}
 
@@ -576,7 +570,7 @@ void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
 			++generateCount;
 
 			// ドリフト最初のFだったら。
-			if (m_brakeTimer <= 20) {
+			if (m_brakeTimer <= 15) {
 
 				if (10 < generateCount) {
 

@@ -186,7 +186,7 @@ void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
 		// “–‚½‚è”»’è
 		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
 
-		index->Damage();
+		index->Init();
 
 	}
 

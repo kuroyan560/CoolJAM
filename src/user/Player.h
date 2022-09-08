@@ -36,9 +36,9 @@ private:
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
 	// ƒhƒŠƒtƒg
-	std::array<std::shared_ptr<DriftParticle>, 64> m_driftParticle;
+	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
 	int m_driftParticleDelay;
-	const int DRIFT_PARTICLE_DELAY = 5;
+	const int DRIFT_PARTICLE_DELAY = 2;
 
 	// ZŽ²‰ñ“]—Ê
 	float m_rotX;
