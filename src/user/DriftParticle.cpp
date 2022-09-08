@@ -5,7 +5,6 @@
 DriftParticle::DriftParticle() {
 
 	/*===== コンストラクタ =====*/
-
 	// モデル
 	m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
 

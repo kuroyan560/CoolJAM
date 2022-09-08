@@ -535,5 +535,8 @@
     <ClInclude Include="src\user\PlayerModelOutline.h">
       <Filter>src\user</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
