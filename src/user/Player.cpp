@@ -142,6 +142,12 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		// ベクトルをすごくゆっくり補完する。
 		float cross = m_forwardVec.Cross(m_inputVec).y;
+		float dot = m_forwardVec.Dot(m_inputVec);
+		if (dot < 0.0f) {
+
+			cross = 1.0f * (cross < 0 ? -1.0f : 1.0f);
+
+		}
 		float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 		if (cross != 0) {
 
@@ -405,7 +411,7 @@ void Player::Draw(Camera& Cam) {
 	// Y軸回転のクォータニオン求める。
 	auto resultY = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 1), inputAngle));
 	// X軸回転のクォータニオン求める。
-	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 20.0f));
+	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 25.0f));
 
 	// クォータニオンをかける。
 	auto resultQ = resultY * resultX;

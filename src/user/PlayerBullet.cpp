@@ -51,7 +51,7 @@ void PlayerBullet::Update(const float& MapSize) {
 	m_pos += m_forwardVec * SPEED;
 
 	// マップ外へ移動したら。
-	if (MapSize < m_pos.Length()) {
+	if (MapSize + CHECK_HIT_SCALE < m_pos.Length()) {
 
 		Init();
 
