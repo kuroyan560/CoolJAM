@@ -23,7 +23,6 @@ private:
 	bool m_initFlag;
 	int m_alpha;
 	int m_dispappearTime;
-	int timer;
-	float sinVel;
+
 };
 

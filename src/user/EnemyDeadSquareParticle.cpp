@@ -23,9 +23,6 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 		KuroFunc::GetRand(minVel, maxVel),
 		KuroFunc::GetRand(minVel, maxVel)
 	};
-
-	timer = 0;
-	sinVel = KuroFunc::GetRand(-5.0f, 5.0f);
 }
 
 void EnemyDeadSquareParticle::Update()
