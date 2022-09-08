@@ -5,28 +5,38 @@
 #include<array>
 #include"Transform.h"
 class Model;
+class ModelObject;
 class Camera;
 
 class EnvironmentMgr : public ImguiDebugInterface
 {
 public:
-	enum SKY_DOME { DEFAULT, FEVER, NUM, NONE = -1 };
+	enum STATUS { DEFAULT, FEVER, NUM, NONE = -1 };
 
 private:
 	//スカイドームモデル
-	std::shared_ptr<Model>m_skyDomeModelArray[SKY_DOME::NUM];
+	std::shared_ptr<Model>m_skyDomeModelArray[STATUS::NUM];
 
-	//現在のスカイドーム
-	int m_skyDomeIdx = SKY_DOME::DEFAULT;
+	//柱モデル
+	std::shared_ptr<Model>m_pillarModelArray[STATUS::NUM];
+	//柱の数
+	static const int PILLAR_NUM = 12;
+	float m_pillarPosRadius = 160.0f;
 
-	//次にセットされるスカイドーム
-	int m_nextSkyDomeIdx = SKY_DOME::NONE;
+	//床モデル
+	std::shared_ptr<ModelObject>m_floorModelObj;
 
-	//スカイドームの切り替え進行レート
-	float m_skyDomeChangeRate = 0.0f;
+	//現在のステータス
+	int m_nowStatus = STATUS::DEFAULT;
 
-	//スカイドーム切り替わり時間
-	int m_changeSkyDomeTime = 300;
+	//次にセットされるステータス
+	int m_nextStatus = STATUS::NONE;
+
+	//ステータスの切り替え進行レート
+	float m_statusChangeRate = 1.0f;
+
+	//ステータス切り替わり時間
+	int m_statusChangeTime = 250;
 
 public:
 	EnvironmentMgr();
@@ -36,14 +46,15 @@ public:
 	void Update();
 	void Draw(Camera& Cam);
 
-	void ChangeSkyDome(SKY_DOME NextSkyDome)
+	void ChangeStatus(STATUS NextStatus)
 	{
-		m_nextSkyDomeIdx = NextSkyDome;
+		m_nextStatus = NextStatus;
+		m_statusChangeRate = 0.0f;
 	}
 	void OnImguiDebug()override;
 };
 
-static std::array<std::string, EnvironmentMgr::SKY_DOME::NUM> s_skyDomeNameArray =
+static std::array<std::string, EnvironmentMgr::STATUS::NUM> s_skyDomeNameArray =
 {
 	"DEFAULT","FEVER"
 };
