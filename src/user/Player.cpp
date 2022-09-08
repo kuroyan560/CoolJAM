@@ -85,7 +85,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 		if (!index->GetIsActive()) continue;
 
-		index->Update();
+		index->Update(m_pos);
 
 	}
 
@@ -140,31 +140,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		}
 
-		++m_driftParticleDelay;
-		if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
-
-			// ドリフトパーティクルを生成
-			int generateCount = 0;
-			const float MAX_GENERATE_COUNT = 4.0f;
-			for (auto& index : m_driftParticle) {
-
-				if (index->GetIsActive()) continue;
-
-				index->Generate(m_pos, nowAngle + (cross < 0 ? DirectX::XM_PIDIV2 : -DirectX::XM_PIDIV2), cross);
-
-				++generateCount;
-
-				if (MAX_GENERATE_COUNT * fabs(cross) < generateCount) {
-
-					break;
-
-				}
-
-			}
-
-			m_driftParticleDelay = 0;
-
-		}
+		GenerateDriftParticle(nowAngle, cross);
 
 	}
 	else {
@@ -303,6 +279,10 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 		// 一番近くにいる敵を検索する。
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
+
+		// 多少分散させる。
+		nearestEnemy.x += KuroFunc::GetRand(-5.0f, 5.0f);
+		nearestEnemy.z += KuroFunc::GetRand(-5.0f, 5.0f);
 
 		// 敵の方向に向かって弾を撃つ。
 		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (nearestEnemy - m_pos).GetNormal());
@@ -549,4 +529,77 @@ Vec2<float> Player::CalIntersectPoint(Vec2<float> posA1, Vec2<float> posA2, Vec2
 	double t = d1 / (d1 + d2);
 
 	return Vec2<float>(posA1.x + (posA2.x - posA1.x) * t, posA1.y + (posA2.y - posA1.y) * t);
+}
+
+void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
+
+	++m_driftParticleDelay;
+	if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
+
+		// ドリフトパーティクルを生成
+		Vec3<float> generatePos;
+		int generateCount = 0;
+		const float MAX_GENERATE_COUNT = 3.0f;
+		for (auto& index : m_driftParticle) {
+
+			if (index->GetIsActive()) continue;
+
+			// 外積の結果がマイナス(左)だったら
+			float shotAngle = NowAngle;
+			if (Cross < 0) {
+
+				shotAngle += DirectX::XM_PI;
+
+			}
+			else {
+
+				shotAngle -= DirectX::XM_PI;
+
+			}
+
+			// 生成場所を決める。
+			if (static_cast<int>(&index - &m_driftParticle[0]) % 2 == 0) {
+
+				// 前輪部分
+				generatePos = m_pos + m_forwardVec * 3.0f;
+
+			}
+			else {
+
+				// 後輪部分
+				generatePos = m_pos - m_forwardVec * 2.5f;
+
+			}
+
+			index->Generate(generatePos, shotAngle, Cross);
+
+			++generateCount;
+
+			// ドリフト最初のFだったら。
+			if (m_brakeTimer <= 20) {
+
+				if (10 < generateCount) {
+
+					break;
+
+				}
+
+			}
+			else {
+
+				if (MAX_GENERATE_COUNT * fabs(Cross) < generateCount) {
+
+					break;
+
+				}
+
+			}
+
+		}
+
+		m_driftParticleDelay = 0;
+
+	}
+
+
 }

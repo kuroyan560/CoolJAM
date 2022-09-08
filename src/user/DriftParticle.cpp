@@ -45,6 +45,7 @@ void DriftParticle::Generate(const Vec3<float>& Pos, const float& Angle, const f
 
 	/*===== 生成処理 =====*/
 
+	m_playerPos = Pos;
 	m_pos = Pos;
 	m_prevPos = Pos;
 	m_speed = MAX_SPEED;
@@ -67,7 +68,7 @@ void DriftParticle::Generate(const Vec3<float>& Pos, const float& Angle, const f
 
 }
 
-void DriftParticle::Update() {
+void DriftParticle::Update(const Vec3<float>& Pos) {
 
 	/*===== 更新処理 =====*/
 
@@ -88,7 +89,7 @@ void DriftParticle::Update() {
 	}
 
 	// 重力を加算。
-	m_pos -= m_gravity;
+	//m_pos -= m_gravity;
 
 	// 消えるまでのタイマーを更新。
 	++m_exitTimer;

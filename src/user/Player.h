@@ -38,14 +38,14 @@ private:
 	// ドリフト
 	std::array<std::shared_ptr<DriftParticle>, 64> m_driftParticle;
 	int m_driftParticleDelay;
-	const int DRIFT_PARTICLE_DELAY = 2;
+	const int DRIFT_PARTICLE_DELAY = 5;
 
 	// Z軸回転量
 	float m_rotX;
 
 	// 弾関係
 	int m_shotTimer;
-	const float SHOT_TIMER = 15;
+	const float SHOT_TIMER = 5;
 
 	// ブレーキ関係
 	int m_brakeTimer;			// ブレーキしている時間。
@@ -121,6 +121,9 @@ private:
 		DirectX::XMVECTOR vector = DirectX::XMVector3Transform({ Vec.x, Vec.y, Vec.z }, Mat);
 		return Vec3<float>(vector.m128_f32[0], vector.m128_f32[1], vector.m128_f32[2]);
 	}
+
+	// ドリフトのパーティクルを生成。
+	void GenerateDriftParticle(const float& NowAngle, const float& Cross);
 
 };
 

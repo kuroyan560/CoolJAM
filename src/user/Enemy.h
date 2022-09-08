@@ -34,7 +34,7 @@ private:
 
 	const std::array<float, 3> SCALE = { 6,3,1 };
 	const std::array<float, 3> EDGE_SCALE = { 10,7,4 };	// ‹ß‚­‚É‚¢‚é”»’è‚Ì‘å‚«‚³B
-	const std::array<int, 3> HP = { 3,2,1 };
+	const std::array<int, 3> HP = { 10,5,3 };
 	const float TRACKING_ROT = 0.05f;
 
 
