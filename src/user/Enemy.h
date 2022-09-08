@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec.h"
 #include "Transform.h"
+#include "EnemyWave.h"
 #include <memory>
 #include <array>
 
@@ -28,32 +29,22 @@ private:
 
 	int m_hp;
 	int m_shotTimer;
-	const int SHOT_TIMER = 300;
+	const int SHOT_TIMER = 3000;
 
 	//ÉÇÉfÉã
 	Transform m_transform;
 
-	const std::array<float, 3> SCALE = { 6,3,1 };
-	const std::array<float, 3> EDGE_SCALE = { 10,7,4 };	// ãﬂÇ≠Ç…Ç¢ÇÈîªíËÇÃëÂÇ´Ç≥ÅB
-	const std::array<int, 3> HP = { 3,2,1 };
+	const std::array<float, 4> SCALE = { 6,3,3,1 };
+	const std::array<float, 4> EDGE_SCALE = { 10,7,7,4 };	// ãﬂÇ≠Ç…Ç¢ÇÈîªíËÇÃëÂÇ´Ç≥ÅB
+	const std::array<int, 3> HP = { 10,5,3 };
 	const float TRACKING_ROT = 0.05f;
+
+	ENEMY_INFO::ID m_id;
 
 
 public:
 
-	enum class ID {
-
-		STOPPING,
-		STRAIGHT,
-		TRACKING,
-
-	};
-
 	static bool m_debugIsShotEnemy;
-
-private:
-
-	ID m_id;
 
 
 public:
@@ -62,7 +53,7 @@ public:
 
 	Enemy();
 	void Init();
-	void Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos);
+	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec);
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void Draw();
 

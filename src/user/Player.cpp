@@ -6,6 +6,7 @@
 #include "EnemyMgr.h"
 #include "KuroFunc.h"
 #include "GameManager.h"
+#include "DriftParticle.h"
 
 Player::Player()
 {
@@ -15,14 +16,24 @@ Player::Player()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
+	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_driftParticleDelay = 0;
+	m_rotX = 0.01f;
+	m_rotX = 0;
 	m_brakeBoostTimer = 0;
 	m_shotTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+
+	for (auto& index : m_driftParticle) {
+
+		index = std::make_shared<DriftParticle>();
+
+	}
 
 }
 
@@ -34,12 +45,21 @@ void Player::Init()
 	m_pos = Vec3<float>();
 	m_inputVec = Vec3<float>();
 	m_forwardVec = DEF_FORWARDVEC;
+	m_prevForwardVec = DEF_FORWARDVEC;
 	m_speed = MIN_SPEED;
 	m_brakeTimer = 0;
+	m_driftParticleDelay = 0;
+	m_rotX = 0.01f;
 	m_shotTimer = 0;
 	m_brakeBoostTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
+
+	for (auto& index : m_driftParticle) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -59,6 +79,15 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	// 当たり判定処理
 	CheckHit(BulletMgr, EnemyMgr, MapSize, EdgeScope);
+
+	// ドリフトパーティクルの更新処理
+	for (auto& index : m_driftParticle) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Update(m_pos);
+
+	}
 
 }
 
@@ -85,6 +114,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
+	// 正面ベクトルを保存。
+	m_prevForwardVec = m_forwardVec;
+
 	// ブレーキ入力を保存。
 	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
 	if (m_isBrake) {
@@ -96,16 +128,19 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 		// ベクトルをすごくゆっくり補完する。
 		float cross = m_forwardVec.Cross(m_inputVec).y;
+		float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 		if (cross != 0) {
 
 			// 保管量
-			float rot = 0.001f * (cross < 0 ? -1.0f : 1.0f);
+			float rot = 0.04f * cross;
 
-			float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z) + rot;
+			float rotAngle = nowAngle + rot;
 
-			m_forwardVec = Vec3<float>(sinf(nowAngle), 0.0f, cosf(nowAngle));
+			m_forwardVec = Vec3<float>(sinf(rotAngle), 0.0f, cosf(rotAngle));
 
 		}
+
+		GenerateDriftParticle(nowAngle, cross);
 
 	}
 	else {
@@ -119,9 +154,6 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			// 移動速度を求める。
 			m_speed = brakeRate * (MIN_SPEED + MAX_SPEED);
 
-			// ベクトルを保存。
-			m_forwardVec = m_inputVec;
-
 			// ブレーキブーストの効果時間を計算する。
 			if (0.5f < brakeRate) {
 				m_brakeBoostTimer = brakeRate * MAX_BRAKE_TIMER;
@@ -134,13 +166,6 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		if (MAX_SPEED < m_speed) m_speed = MAX_SPEED;
 
 		m_brakeTimer = 0;
-
-	}
-
-	// デバッグ機能
-	if (UsersInput::Instance()->ControllerInput(0, B)) {
-
-		Init();
 
 	}
 
@@ -164,7 +189,30 @@ void Player::Move()
 	// 移動させる。
 	m_pos += m_forwardVec * m_speed;
 
+	// 正面ベクトルが回転した量を計算する。
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+
+		int a = 0;
+
+	}
+
+	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
+	float subAngle = forwardVecAngle - prevForwardVecAngle;
+
+	if (subAngle != 0) {
+
+		m_rotX = -subAngle;
+
+	}
+	else {
+
+		m_rotX -= m_rotX / 10.0f;
+
+	}
+
 }
+
 
 #include"DrawFunc_Append.h"
 void Player::Draw() 
@@ -174,9 +222,41 @@ void Player::Draw()
 	m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
-	Vec2<float> inputVec = m_isBrake ? Vec2<float>(m_inputVec.x, m_inputVec.z) : Vec2<float>(m_forwardVec.x, m_forwardVec.z);
+	Vec3<float> movedVec = m_forwardVec;
+	//movedVec.Normalize();
+	Vec2<float> inputVec = Vec2<float>(movedVec.x, movedVec.z);
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
-	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputAngle));
+
+	if (UsersInput::Instance()->KeyInput(DIK_O)) {
+
+		m_rotX += 0.01f;
+
+	}
+	if (UsersInput::Instance()->KeyInput(DIK_P)) {
+
+		m_rotX -= 0.01f;
+
+	}
+
+	// Y軸回転のクォータニオン求める。
+	auto resultY = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 1), inputAngle));
+	// X軸回転のクォータニオン求める。
+	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 20.0f));
+
+	// クォータニオンをかける。
+	auto resultQ = resultY * resultX;
+
+	m_transform.SetRotate(resultQ);
+
+
+	// ドリフトパーティクルの描画処理
+	for (auto& index : m_driftParticle) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Draw();
+
+	}
 
 	DrawFunc_Append::DrawModel(m_model, m_transform);
 }
@@ -193,8 +273,13 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		// 一番近くにいる敵を検索する。
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
 
+		// 多少分散させる。
+		Vec3<float> shotEnemyPos = nearestEnemy;
+		shotEnemyPos.x += KuroFunc::GetRand(-3.0f, 3.0f);
+		shotEnemyPos.z += KuroFunc::GetRand(-3.0f, 3.0f);
+
 		// 敵の方向に向かって弾を撃つ。
-		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (nearestEnemy - m_pos).GetNormal());
+		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (shotEnemyPos - m_pos).GetNormal());
 
 	}
 
@@ -439,4 +524,77 @@ Vec2<float> Player::CalIntersectPoint(Vec2<float> posA1, Vec2<float> posA2, Vec2
 	double t = d1 / (d1 + d2);
 
 	return Vec2<float>(posA1.x + (posA2.x - posA1.x) * t, posA1.y + (posA2.y - posA1.y) * t);
+}
+
+void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
+
+	++m_driftParticleDelay;
+	if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
+
+		// ドリフトパーティクルを生成
+		Vec3<float> generatePos;
+		int generateCount = 0;
+		const float MAX_GENERATE_COUNT = 3.0f;
+		for (auto& index : m_driftParticle) {
+
+			if (index->GetIsActive()) continue;
+
+			// 外積の結果がマイナス(左)だったら
+			float shotAngle = NowAngle;
+			if (Cross < 0) {
+
+				shotAngle += DirectX::XM_PI;
+
+			}
+			else {
+
+				shotAngle -= DirectX::XM_PI;
+
+			}
+
+			// 生成場所を決める。
+			if (static_cast<int>(&index - &m_driftParticle[0]) % 2 == 0) {
+
+				// 前輪部分
+				generatePos = m_pos + m_forwardVec * 3.0f;
+
+			}
+			else {
+
+				// 後輪部分
+				generatePos = m_pos - m_forwardVec * 2.5f;
+
+			}
+
+			index->Generate(generatePos, shotAngle, Cross);
+
+			++generateCount;
+
+			// ドリフト最初のFだったら。
+			if (m_brakeTimer <= 15) {
+
+				if (10 < generateCount) {
+
+					break;
+
+				}
+
+			}
+			else {
+
+				if (MAX_GENERATE_COUNT * fabs(Cross) < generateCount) {
+
+					break;
+
+				}
+
+			}
+
+		}
+
+		m_driftParticleDelay = 0;
+
+	}
+
+
 }

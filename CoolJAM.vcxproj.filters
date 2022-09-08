@@ -77,6 +77,12 @@
     <Filter Include="src\user\弾">
       <UniqueIdentifier>{d0957600-5239-4094-8665-0403ef2a00a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\Player\ドリフトのパーティクル">
+      <UniqueIdentifier>{d772afd6-6290-4b80-8d16-7efbbb33c977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\user\敵のウェーブ">
+      <UniqueIdentifier>{9bc20478-8dd0-455a-a9c0-dfc16ceec626}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -271,8 +277,17 @@
     <ClCompile Include="src\user\EnvironmentMgr.cpp">
       <Filter>src\user</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\EnemyWave.cpp">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyWaveMgr.cpp">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClCompile>
     <ClCompile Include="src\user\DrawFunc_Append.cpp">
       <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -510,8 +525,17 @@
     <ClInclude Include="src\user\EnvironmentMgr.h">
       <Filter>src\user</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\EnemyWave.h">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyWaveMgr.h">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClInclude>
     <ClInclude Include="src\user\DrawFunc_Append.h">
       <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DriftParticle.h">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

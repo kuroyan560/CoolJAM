@@ -45,7 +45,7 @@ void Enemy::Init()
 
 }
 
-void Enemy::Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos)
+void Enemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== 初期化処理 =====*/
@@ -53,7 +53,7 @@ void Enemy::Generate(ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos
 	m_id = ID;
 	m_pos = Pos;
 	m_shotTimer = 0;
-	m_forwardVec = Vec3<float>(PlayerPos - Pos).GetNormal();
+	m_forwardVec = ForwardVec;
 	m_hp = HP[static_cast<int>(ID)];
 	m_scale = SCALE[static_cast<int>(ID)];
 	m_speed = 0;
@@ -70,9 +70,10 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 	switch (m_id)
 	{
-	case Enemy::ID::STOPPING:
+	case ENEMY_INFO::ID::STOPPING:
 		break;
-	case Enemy::ID::STRAIGHT:
+	case ENEMY_INFO::ID::STRAIGHT:
+	case ENEMY_INFO::ID::PLAYER_STRAIGHT:
 
 		/*-- 追尾敵 --*/
 
@@ -84,7 +85,7 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 
 		break;
-	case Enemy::ID::TRACKING:
+	case ENEMY_INFO::ID::TRACKING:
 
 		/*-- 追尾敵 --*/
 
@@ -154,7 +155,7 @@ void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 	/*===== 当たり判定 =====*/
 
 	// マップ外判定。
-	if (MapSize <= m_pos.Length()) {
+	if (MapSize + MapSize / 2.0f <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
