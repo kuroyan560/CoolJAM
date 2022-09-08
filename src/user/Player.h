@@ -74,6 +74,7 @@ public:
 	Vec3<float> GetPos() { return m_pos; }
 	Vec3<float> GetForwardVec() { return m_forwardVec; }
 	Vec3<float> GetMovedVec() { return Vec3<float>(m_pos - m_prevPos).GetNormal(); }
+	int GetBrakeBoostTimer() { return m_brakeBoostTimer; }
 
 
 private:

@@ -48,7 +48,7 @@ void DriftParticle::Generate(const Vec3<float>& Pos, const float& Angle, const f
 	m_playerPos = Pos;
 	m_pos = Pos;
 	m_prevPos = Pos;
-	m_speed = MAX_SPEED;
+	m_speed = KuroFunc::GetRand(MAX_SPEED / 2.0f, MAX_SPEED);
 	m_scale = SCALE;
 	m_gravity = 0;
 	m_exitTimer = 0;

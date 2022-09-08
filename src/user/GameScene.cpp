@@ -180,6 +180,8 @@ void GameScene::OnImguiDebug()
 {
 	ImGui::Begin("Test");
 	ImGui::Checkbox("Emissive", &m_emissive);
+	bool isBrakeBoostMode = 0 < m_player->GetBrakeBoostTimer();
+	ImGui::Checkbox("isBrakeBoostMode", &isBrakeBoostMode);
 	ImGui::DragFloat("PlayerMaxSpeed", &m_player->MAX_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerMinSpeed", &m_player->MIN_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerDriftSpeed", &m_player->BRAKE_SPEED, 0.1f);
