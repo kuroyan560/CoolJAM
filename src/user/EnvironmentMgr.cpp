@@ -49,7 +49,7 @@ void EnvironmentMgr::Draw(Camera& Cam)
 {
     static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
 
-    if (m_nextStatus == STATUS::NONE ||  m_statusChangeRate < 0.02f)
+    if (m_nextStatus == STATUS::NONE || m_statusChangeRate < 0.3f)
     {
         //スカイドーム
         DrawFunc3D::DrawNonShadingModel(m_skyDomeModelArray[m_nowStatus], Transform(), Cam);
@@ -59,7 +59,7 @@ void EnvironmentMgr::Draw(Camera& Cam)
         {
             Transform transform;
             Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
-            transform.SetPos({ cos(posAngle) * m_pillarPosRadius,0.0f,sin(posAngle) * m_pillarPosRadius });
+            transform.SetPos({ cos(posAngle) * m_pillarPosRadius,m_pillarPosY,sin(posAngle) * m_pillarPosRadius });
             DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nowStatus], transform, Cam);
         }
     }
@@ -68,7 +68,7 @@ void EnvironmentMgr::Draw(Camera& Cam)
     {
         //スカイドーム拡縮
         Transform skyDomeTransform;
-        float scale = KuroMath::Ease(Out, Back, m_statusChangeRate, 0.0f, 1.0f);
+        float scale = KuroMath::Ease(InOut, Circ, m_statusChangeRate, 0.0f, 1.0f);
         skyDomeTransform.SetScale(scale);
         Angle rotate = KuroMath::Ease(Out, Circ, m_statusChangeRate, Angle::ROUND() * 3.0f, 0.0f);
         skyDomeTransform.SetRotate({ 0,1,0 }, rotate);
@@ -80,7 +80,7 @@ void EnvironmentMgr::Draw(Camera& Cam)
             Transform transform;
             Angle posAngle = rotate + Angle(PILLAR_POS_ANGLE_OFFSET * pillarIdx);
             float posRadius = KuroMath::Ease(Out, Back, m_statusChangeRate, 0.0f, m_pillarPosRadius);
-            transform.SetPos({ cos(posAngle) * posRadius,0.0f,sin(posAngle) * posRadius });
+            transform.SetPos({ cos(posAngle) * posRadius,m_pillarPosY,sin(posAngle) * posRadius });
             DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nextStatus], transform, Cam);
         }
     }
@@ -90,6 +90,7 @@ void EnvironmentMgr::OnImguiDebug()
 {
 	ImGui::Begin("EnvironmentMgr");
 
+/*--- ステータス ---*/
     //現在のステータス
     ImGui::Text("NowStatus : { %s }", s_skyDomeNameArray[m_nowStatus].c_str());
 
@@ -121,13 +122,16 @@ void EnvironmentMgr::OnImguiDebug()
         m_statusChangeTime = 1;    //０以下防止
     }
 
+/*--- 円周柱 ---*/
     ImGui::Separator();
 
-    //柱の座標半径
+    //座標半径
     if (ImGui::DragFloat("Pillar_PosRadius", &m_pillarPosRadius, 0.01f) && m_pillarPosRadius < 1.0f)
     {
         m_pillarPosRadius = 1.0f;
     }
+    //Y座標
+    ImGui::DragFloat("Pillar_PosY", &m_pillarPosY, 0.5f);
 
 	ImGui::End();
 }

@@ -22,6 +22,7 @@ private:
 	//柱の数
 	static const int PILLAR_NUM = 12;
 	float m_pillarPosRadius = 160.0f;
+	float m_pillarPosY = -50.0f;
 
 	//現在のステータス
 	int m_nowStatus = STATUS::DEFAULT;
