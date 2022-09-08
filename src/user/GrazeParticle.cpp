@@ -5,7 +5,7 @@
 #include"KazCollisionHelper.h"
 #include"../engine/D3D12App.h"
 
-GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(120)
+GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(60)
 {
 	texBuff = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/GrazeParticle.png");
 	initFlag = false;
@@ -16,6 +16,19 @@ void GrazeParticle::Init(const Vec3<float>& POS, const Vec3<float>& DIR, float S
 {
 	m_pos = POS;
 	m_vel = DIR;
+
+	Vec3<float>pos = m_pos;
+	for (int i = 0; i < 100; ++i)
+	{
+		pos += m_vel * 2.0f;
+		if (100.0f <= pos.Length())
+		{
+			break;
+		}
+	}
+	float speed = m_pos.Distance(pos);;
+	m_vel *= speed;
+	m_pos = pos;
 	m_size = { SIZE ,SIZE };
 
 	float disppaerPerSpeed = SIZE / static_cast<float>(DISAPPEAR_TIME);
@@ -28,23 +41,13 @@ void GrazeParticle::Update(float MAP_SIZE)
 {
 	if (initFlag)
 	{
-		Vec2<float> mapCentralPos = { 0.0f,0.0f };
-		Vec2<float> playerPos = { m_pos.x,m_pos.z };
 
-		float playerAndMapCenterDistance = mapCentralPos.Distance(playerPos);
-		float radius = MAP_SIZE;
-		float powNum = abs(pow(radius, 2.0f) - pow(playerAndMapCenterDistance, 2.0f));
-		float t = sqrtf(powNum);
-
-
-		//if (!initWallFlag)
+		/*if (!initWallFlag)
 		{
-			
+			m_pos += m_vel;
+			m_pos = KazCollisionHelper::KeepInMap(m_pos, MAP_SIZE);
 			initWallFlag = true;
-		}
-		m_pos += (m_vel * t);
-		m_pos = KazCollisionHelper::KeepInMap(m_pos, MAP_SIZE);
-
+		}*/
 
 
 		//サイズ縮小ーーーーー

@@ -15,7 +15,7 @@ public:
 
 private:
 	static const int ARRAY_MAX = 300;
-	static const int RADIAL_LIMIT = 1;
+	static const int RADIAL_LIMIT = 120;
 
 	const Vec3<float>*m_posPtr;
 	const float *m_velPtr;
