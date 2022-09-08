@@ -121,7 +121,7 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 	}
 
 	// 当たり判定
-	CheckHit(BulletMgr, MapSize);
+	CheckHitBullet(BulletMgr, MapSize);
 
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
@@ -148,7 +148,7 @@ void Enemy::Draw(Camera& Cam)
 
 }
 
-void Enemy::CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
+void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
 {
 
 	/*===== 当たり判定 =====*/
@@ -216,6 +216,24 @@ bool Enemy::CheckIsEdge(const Vec3<float>& Pos, const float& Size) {
 
 	// エッジ用の円との当たり判定。
 	if (length < Size + EDGE_SCALE[static_cast<int>(m_id)]) {
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+bool Enemy::CheckHit(const Vec3<float>& Pos, const float& Size)
+{
+
+	/*===== 当たり判定 =====*/
+
+	// 二点間の距離
+	float length = Vec3<float>(Pos - m_pos).Length();
+	\
+	if (length < Size + SCALE[static_cast<int>(m_id)]) {
 
 		return true;
 

@@ -64,12 +64,15 @@ public:
 	// 近くにいるか。
 	bool CheckIsEdge(const Vec3<float>& Pos, const float& Size);
 
+	// 当たっているか。
+	bool CheckHit(const Vec3<float>& Pos, const float& Size);
+
 	// ダメージを与える。
 	void Damage();
 
 private:
 
-	void CheckHit(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize);
+	void CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize);
 
 	void Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos);
 

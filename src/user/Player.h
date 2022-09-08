@@ -34,6 +34,16 @@ private:
 	bool m_isEdge;				// 縁にいるか
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
+	int m_hp;		// プレイヤーのHP
+	const int MAX_HP = 5;
+
+	// ダメージ時
+	int m_damageEffectTimer;
+	const int DAMAGE_EFFECT_DRAW_CHANGE_SPAN = 4;
+	int m_damageEffectCount;
+	const int DAMAGE_EFFECT_COUNT = 3;
+	bool m_isDamageEffect;
+	bool m_isDamageEffectDrawPlayer;
 
 	// ドリフト
 	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
@@ -84,6 +94,9 @@ private:
 
 	// 移動処理
 	void Move();
+
+	// エフェクト全般の更新処理
+	void UpdateEffect();
 
 	// 弾を撃つ。
 	void Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr);

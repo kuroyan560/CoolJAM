@@ -124,6 +124,27 @@ bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
 
 }
 
+bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
+{
+
+	/*===== “G‚Æ‚Ì‚ ‚½‚è”»’è =====*/
+
+	bool isHit = false;
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		if (!index->CheckHit(Pos, Size)) continue;
+
+		isHit = true;
+		index->Init();
+
+	}
+
+	return isHit;
+
+}
+
 void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
 
 	/*===== Žw’è‚Ì”ÍˆÍ‚Ì“G‚ð“|‚· =====*/

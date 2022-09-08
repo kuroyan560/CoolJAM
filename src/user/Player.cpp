@@ -26,6 +26,11 @@ Player::Player()
 	m_shotTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
+	m_isDamageEffectDrawPlayer = true;
+	m_isDamageEffect = false;
+	m_damageEffectTimer = 0;
+	m_damageEffectCount = 0;
+	m_hp = MAX_HP;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 
@@ -54,6 +59,11 @@ void Player::Init()
 	m_brakeBoostTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
+	m_isDamageEffectDrawPlayer = true;
+	m_isDamageEffect = false;
+	m_damageEffectTimer = 0;
+	m_damageEffectCount = 0;
+	m_hp = MAX_HP;
 
 	for (auto& index : m_driftParticle) {
 
@@ -80,14 +90,8 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	// 当たり判定処理
 	CheckHit(BulletMgr, EnemyMgr, MapSize, EdgeScope);
 
-	// ドリフトパーティクルの更新処理
-	for (auto& index : m_driftParticle) {
-
-		if (!index->GetIsActive()) continue;
-
-		index->Update(m_pos);
-
-	}
+	// エフェクト全般の更新処理
+	UpdateEffect();
 
 }
 
@@ -213,6 +217,54 @@ void Player::Move()
 
 }
 
+void Player::UpdateEffect()
+{
+
+	/*===== エフェクト全般の更新処理 =====*/
+
+	// ドリフトパーティクルの更新処理
+	for (auto& index : m_driftParticle) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Update(m_pos);
+
+	}
+
+	// ダメージエフェクトの更新処理
+	if (m_isDamageEffect) {
+
+		++m_damageEffectTimer;
+		if (DAMAGE_EFFECT_DRAW_CHANGE_SPAN <= m_damageEffectTimer) {
+
+			// プレイヤーを表示しているかどうかで処理を変える。
+			if (m_isDamageEffectDrawPlayer) {
+
+				m_isDamageEffectDrawPlayer = false;
+
+			}
+			else {
+
+				m_isDamageEffectDrawPlayer = true;
+
+				++m_damageEffectCount;
+				if (DAMAGE_EFFECT_COUNT <= m_damageEffectCount) {
+
+					// ダメージエフェクトを終える。
+					m_isDamageEffect = false;
+
+				}
+
+			}
+
+			m_damageEffectTimer = 0;
+
+		}
+
+	}
+
+}
+
 #include"DrawFunc3D.h"
 void Player::Draw(Camera& Cam) {
 
@@ -247,8 +299,11 @@ void Player::Draw(Camera& Cam) {
 
 	m_transform.SetRotate(resultQ);
 
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+	if (m_isDamageEffectDrawPlayer) {
 
+		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+
+	}
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {
@@ -322,6 +377,16 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
 
 		m_isEdge = true;
+
+	}
+
+	// 敵との当たり判定。
+	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
+
+		// 当たった判定。
+		m_damageEffectTimer = 0;
+		m_damageEffectCount = 0;
+		m_isDamageEffect = true;
 
 	}
 
