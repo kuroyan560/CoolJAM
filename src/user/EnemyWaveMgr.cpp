@@ -56,7 +56,7 @@ EnemyWaveMgr::EnemyWaveMgr()
 	}
 
 
-	for (int index = 0; index < 100; ++index) {
+	for (int index = 0; index < 1000; ++index) {
 
 		wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 1000 + index * 20);
 
