@@ -86,7 +86,7 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 	/*===== ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌÀ•W‚ğ‹‚ß‚é =====*/
 
 	float nearestLength = std::numeric_limits<float>().max();
-	Vec3<float> nearestPos = Vec3<float>();
+	Vec3<float> nearestPos = Vec3<float>(-1, -1, -1);
 	for (auto& index : m_enemy) {
 
 		if (!index->GetIsActive()) continue;

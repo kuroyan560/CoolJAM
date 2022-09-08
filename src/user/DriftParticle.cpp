@@ -2,12 +2,18 @@
 #include "Importer.h"
 #include "Model.h"
 
+std::shared_ptr<Model> DriftParticle::m_model;
+
 DriftParticle::DriftParticle() {
 
 	/*===== コンストラクタ =====*/
 
 	// モデル
-	m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
+	static int first = 0;
+	if (first == 0) {
+		++first;
+		m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
+	}
 
 	// 基本的な変数
 	m_pos = Vec3<float>();			// 座標

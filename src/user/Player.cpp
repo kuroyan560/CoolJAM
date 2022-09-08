@@ -24,7 +24,12 @@ Player::Player()
 	m_rotX = 0;
 	m_brakeBoostTimer = 0;
 	m_shotTimer = 0;
+	m_RedTime = 0;
+	m_colorEasingTimer = 0;
+	m_isRed = true;
 	m_isEdge = false;
+	m_isChangeRed = false;
+	m_isChangeGreen = false;
 	m_isBrake = false;
 	m_isDamageEffectDrawPlayer = true;
 	m_isDamageEffect = false;
@@ -56,9 +61,14 @@ void Player::Init()
 	m_driftParticleDelay = 0;
 	m_rotX = 0.01f;
 	m_shotTimer = 0;
+	m_RedTime = 0;
+	m_colorEasingTimer = 0;
+	m_isRed = true;
 	m_brakeBoostTimer = 0;
 	m_isEdge = false;
 	m_isBrake = false;
+	m_isChangeRed = false;
+	m_isChangeGreen = false;
 	m_isDamageEffectDrawPlayer = true;
 	m_isDamageEffect = false;
 	m_damageEffectTimer = 0;
@@ -263,6 +273,109 @@ void Player::UpdateEffect()
 
 	}
 
+
+	// デバッグ用
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
+
+		float prevHP = m_hp;
+		--m_hp;
+		if (m_hp <= 0) m_hp = 0;
+		if (m_hp <= 2 && 2 < prevHP) {
+			m_isChangeRed = true;
+			m_colorEasingTimer = 0;
+		}
+
+	}
+	// デバッグ用
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_P)) {
+
+		float prevHP = m_hp;
+		++m_hp;
+
+		if (3 <= m_hp && prevHP < 3) {
+
+			m_isChangeGreen = true;
+
+		}
+
+		if (MAX_HP <= m_hp) {
+
+			m_hp = MAX_HP;
+
+		}
+
+	}
+
+	// 赤色に変えるフラグが経っていたら。
+	if (m_isChangeRed) {
+
+		bool isEnd = ChangeBodyColorEasing(0.1f, Sine, In, GREEN_HSV, RED_HSV, true);
+
+		// イージングが終わったら。
+		if (isEnd) {
+
+			m_isRed = true;
+			m_isChangeRed = false;
+			m_colorEasingTimer = 0.0f;
+
+		}
+
+	}
+
+	// 緑色に変えるフラグが立っていたら。
+	else if (m_isChangeGreen) {
+
+		bool isEnd = ChangeBodyColorEasing(0.1f, Sine, In, RED_HSV, GREEN_HSV, true);
+
+		if (isEnd) {
+
+			m_isChangeGreen = false;
+			m_colorEasingTimer = 0.0f;
+
+		}
+
+	}
+
+	// HPが3以下だったら自機を点滅させる。
+	else if (m_hp <= 2) {
+
+		// 赤の時。
+		if (m_isRed) {
+
+			// 赤でいる時間のタイマーを更新する。
+			++m_RedTime;
+			if (RED_TIME[m_hp] <= m_RedTime) {
+
+				// 一定時間経過してたらイージングで緑にする。
+				bool isEnd = ChangeBodyColorEasing(ADD_COLOR_EASING_TIMER[m_hp], Exp, In, RED_HSV, DARK_RED_HSV, false);
+
+				if (isEnd) {
+
+					m_isRed = false;
+					m_colorEasingTimer = 0.0f;
+
+				}
+
+			}
+
+		}
+		else {
+
+			// 一定時間経過してたらイージングで暗い赤にする。
+			bool isEnd = ChangeBodyColorEasing(ADD_COLOR_EASING_TIMER[m_hp], Exp, In, DARK_RED_HSV, RED_HSV, false);
+
+			if (isEnd) {
+
+				m_isRed = true;
+				m_colorEasingTimer = 0.0f;
+				m_RedTime = 0;
+
+			}
+
+		}
+
+	}
+
 }
 
 #include"DrawFunc3D.h"
@@ -328,6 +441,9 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		// 一番近くにいる敵を検索する。
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
 
+		// Vec3<float>(-1,-1,-1)だったら敵がいないので撃たない。
+		if (nearestEnemy == Vec3<float>(-1, -1, -1)) return;
+
 		// 多少分散させる。
 		Vec3<float> shotEnemyPos = nearestEnemy;
 		shotEnemyPos.x += KuroFunc::GetRand(-3.0f, 3.0f);
@@ -380,16 +496,6 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	}
 
-	// 敵との当たり判定。
-	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
-
-		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-
-	}
-
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
 	--m_brakeBoostTimer;
 	if (0 < m_brakeBoostTimer) {
@@ -400,6 +506,23 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	else {
 
 		m_brakeBoostTimer = 0;
+
+	}
+
+	// 敵との当たり判定。
+	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
+
+		// 当たった判定。
+		m_damageEffectTimer = 0;
+		m_damageEffectCount = 0;
+		m_isDamageEffect = true;
+		float prevHP = m_hp;
+		--m_hp;
+		if (m_hp <= 0) m_hp = 0;
+		if (m_hp <= 2 && 2 < prevHP) {
+			m_isChangeRed = true;
+			m_colorEasingTimer = 0;
+		}
 
 	}
 
@@ -660,5 +783,166 @@ void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
 
 	}
 
+
+}
+
+Vec3<float> Player::RGBtoHSV(const Vec3<float>& RGB)
+{
+	double hue = 0;
+	double s = 0;
+	double value = 0;
+	double max = 0;
+	double min = 0;
+	int colorIndex = 0;
+	Vec3<float> rgb = RGB;
+	SearchMaxMinColor(rgb, max, min, colorIndex);
+
+	/*RGB -> HSV*/
+	//色相を求める
+	//Rが最大値の場合
+	if (colorIndex == 0) {
+		hue = 60.0f * ((rgb.y - rgb.z) / (max - min));
+	}
+	//Gが最大値の場合
+	if (colorIndex == 1) {
+		hue = 60.0f * (rgb.z - rgb.x) / (max - min) + 120;
+	}
+	//Bが最大値の場合
+	if (colorIndex == 2) {
+		hue = 60.0f * (rgb.x - rgb.y) / (max - min) + 240;
+	}
+	//すべての色が同じだった場合
+	if (colorIndex == 3) {
+		hue = 0;
+	}
+	//色相がマイナス値だった場合は360を足す
+	if (hue < 0) {
+		hue += 360;
+	}
+
+	//彩度を求める
+	s = (max - min) / max * 255.0f;
+
+	//明度を求める
+	value = max;
+
+	return Vec3<float>(hue, s, value);
+
+}
+
+Vec3<float> Player::HSVtoRGB(const Vec3<float>& HSV)
+{
+	/*HSV -> RGB*/
+
+	//最大値と最小値を求める
+	float max = HSV.z;
+	float min = max - ((HSV.y / 255.0f) * max);
+
+	//RGBを求める
+	float hue = HSV.x;
+	Vec3<float> rgb;
+	if (hue >= 0 && hue < 60) {
+		rgb.x = max;
+		rgb.y = (hue / 60) * (max - min) + min;
+		rgb.z = min;
+	}
+	else if (hue >= 60 && hue < 120) {
+		rgb.x = ((120 - hue) / 60) * (max - min) + min;
+		rgb.y = max;
+		rgb.z = min;
+	}
+	else if (hue >= 120 && hue < 180) {
+		rgb.x = min;
+		rgb.y = max;
+		rgb.z = ((hue - 120) / 60) * (max - min) + min;
+	}
+	else if (hue >= 180 && hue < 240) {
+		rgb.x = min;
+		rgb.y = ((240 - hue) / 60) * (max - min) + min;
+		rgb.z = max;
+	}
+	else if (hue >= 240 && hue < 300) {
+		rgb.x = ((hue - 240) / 60) * (max - min) + min;
+		rgb.y = min;
+		rgb.z = max;
+	}
+	else if (hue >= 300 && hue <= 360) {
+		rgb.x = max;
+		rgb.y = min;
+		rgb.z = ((360 - hue) / 60) * (max - min) + min;
+	}
+
+	rgb = Vec3<float>(rgb.x, rgb.y, rgb.z);
+
+	return rgb;
+}
+
+void Player::SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int& rgb)
+{
+
+	float r = Color.x;
+	float g = Color.y;
+	float b = Color.z;
+	max = r;
+	min = r;
+	rgb = 0;
+
+	//すべての色が同じ値の場合
+	if (r == g && g == b) {
+		max = r;
+		min = r;
+		rgb = 3;
+		return;
+	}
+
+	//最大値を求める
+	if (max < g) {
+		max = g;
+		rgb = 1;
+	}
+	if (max < b) {
+		max = b;
+		rgb = 2;
+	};
+	//最小値を求める
+	if (min > g) {
+		min = g;
+	}
+	if (min > b) {
+		min = b;
+	}
+
+}
+
+bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX)
+{
+
+	/*===== 色をイージングで変える =====*/
+
+	m_colorEasingTimer += AddEasingAmount;
+	if (1.0f <= m_colorEasingTimer) {
+
+		m_colorEasingTimer = 1.0f;
+
+	}
+
+	// イージング量を計算する。
+	float easingAmount = KuroMath::Ease(EaseChangeType, EasingType, m_colorEasingTimer, 0.0f, 1.0f);
+
+	// 色を計算する。
+	Vec3<float> nowHSV = StartColor;
+	if (IsEaseX) {
+		nowHSV.x += Vec3<float>(EndColor - StartColor).x * easingAmount;
+	}
+	else {
+		nowHSV.z += Vec3<float>(EndColor - StartColor).z * easingAmount;
+	}
+	if (nowHSV.x < 0) {
+		nowHSV.x += 360.0f;
+	}
+	m_model->m_meshes[1].material->constData.pbr.baseColor = HSVtoRGB(nowHSV);
+	m_model->m_meshes[1].material->Mapping();
+
+	return 1.0f <= m_colorEasingTimer;
 
 }

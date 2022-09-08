@@ -34,15 +34,27 @@ private:
 	bool m_isEdge;				// 縁にいるか
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
+
+	// HP関係
 	int m_hp;		// プレイヤーのHP
 	const int MAX_HP = 5;
+	int m_RedTime;		// HPが減った際の色変化に使用するタイマー。
+	const std::array<int, 4> RED_TIME = { 0,0,60,120 };	// [0]は使用しない。
+	float m_colorEasingTimer;	// HPが減った際の色変化のイージングに使用するタイマー
+	const std::array<float, 4> ADD_COLOR_EASING_TIMER = { 0.2f, 0.1f, 0.08f, 0.01f };	// [0]は使用しない。
+	bool m_isRed;			// 今の色の状態。
+	bool m_isChangeRed;		// 赤に変更するか
+	bool m_isChangeGreen;	// 緑に変更するか。
+
+
+
 
 	// ダメージ時
-	int m_damageEffectTimer;
+	int m_damageEffectTimer;	// ダメージエフェクトの点滅に使用するタイマー
 	const int DAMAGE_EFFECT_DRAW_CHANGE_SPAN = 4;
-	int m_damageEffectCount;
+	int m_damageEffectCount;	// 点滅の回数
 	const int DAMAGE_EFFECT_COUNT = 3;
-	bool m_isDamageEffect;
+	bool m_isDamageEffect;		// ダメージエフェクト中か
 	bool m_isDamageEffectDrawPlayer;
 
 	// ドリフト
@@ -64,6 +76,10 @@ private:
 
 	//モデル
 	std::shared_ptr<Model>m_model;
+
+	const Vec3<float> GREEN_HSV = Vec3<float>(152.857f, 223.125f, 0.959f);
+	const Vec3<float> RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.879f);
+	const Vec3<float> DARK_RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.289f);
 
 
 public:
@@ -138,6 +154,13 @@ private:
 
 	// ドリフトのパーティクルを生成。
 	void GenerateDriftParticle(const float& NowAngle, const float& Cross);
+
+	Vec3<float> RGBtoHSV(const Vec3<float>& RGB);
+	Vec3<float> HSVtoRGB(const Vec3<float>& HSV);
+	void SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int& rgb);
+
+	// 車体の色を変える。
+	bool ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX);
 
 };
 
