@@ -61,6 +61,7 @@ void Player::Init()
 
 	}
 
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.4f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
@@ -88,6 +89,17 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 		index->Update(m_pos);
 
 	}
+
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE))
+	{
+		m_outlineModel.PowerUpEffect(50);
+	}
+	if (UsersInput::Instance()->KeyInput(DIK_A))
+	{
+		m_outlineModel.EnoughPowerEffect();
+	}
+
+	m_outlineModel.Update();
 
 }
 
@@ -169,6 +181,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
+
 }
 
 void Player::Move()
@@ -243,12 +256,13 @@ void Player::Draw(Camera& Cam) {
 	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 20.0f));
 
 	// クォータニオンをかける。
-	auto resultQ = resultY * resultX;
+	m_rotation = resultY * resultX;
 
-	m_transform.SetRotate(resultQ);
+	m_transform.SetRotate(m_rotation);
 
 	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 
+	m_outlineModel.Draw(Cam);
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {

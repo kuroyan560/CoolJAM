@@ -12,10 +12,12 @@
 #include"DrawFunc2D_Color.h"
 
 #include"DrawFunc3D.h"
+#include"../user/KazDrawFunc.h"
 
 #include"DrawFuncBillBoard.h"
 
 #include"NoiseGenerator.h"
+
 
 
 #ifdef _DEBUG
@@ -97,6 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		DrawFuncBillBoard::CountReset();
 
 		NoiseGenerator::CountReset();
+		KazDrawFunc::CountReset();
 	}
 
 	return 0;

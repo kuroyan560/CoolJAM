@@ -1,10 +1,11 @@
 #include "PlayerModelOutline.h"
 #include"DrawFunc3D.h"
 #include"../engine/Common/KuroMath.h"
-//#include"../user/KazDrawFunc.h"
+#include"../user/KazDrawFunc.h"
 
 PlayerModelOutline::PlayerModelOutline()
 {
+	m_color = { 255,255,0,255 };
 }
 
 void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION,float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL)
@@ -71,12 +72,13 @@ void PlayerModelOutline::Update()
 	m_transform.SetRotate(*m_rotation);
 
 	m_enoughPowerFlag = false;
+	m_powerUpFlag = false;
+	m_color.m_a = m_color.m_a / 255;
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)
 {
-	return;
-	//KazDrawFunc::DrawNonShadingModel(m_model, m_transform, m_color, CAMERA);
+	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_color, CAMERA);
 }
 
 void PlayerModelOutline::EnoughPowerEffect()

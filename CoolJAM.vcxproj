@@ -222,6 +222,7 @@
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
+    <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\Enemy.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
