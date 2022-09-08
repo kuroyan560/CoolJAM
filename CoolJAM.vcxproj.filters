@@ -284,7 +284,7 @@
       <Filter>src\user\Effect</Filter>
     </ClCompile>
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp">
-      <Filter>src</Filter>
+      <Filter>src\user\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -528,6 +528,8 @@
     <ClInclude Include="src\user\EnemyDeadSquareParticle.h">
       <Filter>src\user\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
+    <ClInclude Include="src\user\EnemyDeadLineParticle.h">
+      <Filter>src\user\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
