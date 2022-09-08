@@ -10,6 +10,9 @@ class BulletMgr;
 
 class Enemy {
 
+	static std::shared_ptr<Model> s_model;
+	static std::shared_ptr<Model> s_modelHit;
+
 private:
 
 	/*===== ƒƒ“ƒo•Ï” =====*/
@@ -28,8 +31,6 @@ private:
 	const int SHOT_TIMER = 300;
 
 	//ƒ‚ƒfƒ‹
-	std::shared_ptr<Model> m_model;
-	std::shared_ptr<Model> m_modelHit;
 	Transform m_transform;
 
 	const std::array<float, 3> SCALE = { 6,3,1 };

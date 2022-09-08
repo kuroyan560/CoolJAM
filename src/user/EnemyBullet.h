@@ -8,6 +8,8 @@ class Camera;
 
 class EnemyBullet {
 
+	static std::shared_ptr<Model> s_model;
+
 private:
 
 	/*===== ƒƒ“ƒo•Ï” =====*/
@@ -20,7 +22,6 @@ private:
 	const float SPEED = 0.3f;
 	bool m_isActive;
 
-	std::shared_ptr<Model> m_model;
 	Transform m_transform;
 
 

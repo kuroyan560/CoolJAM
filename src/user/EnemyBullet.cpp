@@ -3,6 +3,8 @@
 #include "Importer.h"
 #include "Model.h"
 
+std::shared_ptr<Model> EnemyBullet::s_model;
+
 EnemyBullet::EnemyBullet() {
 
 	/*===== コンストラクタ =====*/
@@ -12,7 +14,10 @@ EnemyBullet::EnemyBullet() {
 	m_scale = SCALE;
 	m_isActive = false;
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "enemyBullet.glb");
+	if (!s_model)
+	{
+		s_model = Importer::Instance()->LoadModel("resource/user/", "enemyBullet.glb");
+	}
 	m_transform.SetScale(SCALE);
 
 }
@@ -60,6 +65,6 @@ void EnemyBullet::Draw(Camera& NowCam) {
 	/*===== 描画処理 =====*/
 
 	m_transform.SetPos(m_pos);
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, NowCam);
+	DrawFunc3D::DrawNonShadingModel(s_model, m_transform, NowCam);
 
 }

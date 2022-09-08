@@ -8,6 +8,7 @@
 #include"Enemy.h"
 #include"BulletMgr.h"
 #include"WinApp.h"
+#include"EnvironmentMgr.h"
 
 GameScene::GameScene()
 {
@@ -36,6 +37,9 @@ GameScene::GameScene()
 
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
+
+	//環境マネージャ生成
+	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 }
 
 void GameScene::OnInitialize()
@@ -50,6 +54,8 @@ void GameScene::OnInitialize()
 	m_nowEye = m_baseEye;
 	m_baseTarget = m_player->GetPos();
 	m_nowTarget = m_baseTarget;
+
+	m_environmentMgr->Init();
 
 }
 
@@ -89,6 +95,7 @@ void GameScene::OnUpdate()
 	m_gameCam->SetPos(m_nowEye);
 	m_gameCam->SetTarget(m_nowTarget);
 
+	m_environmentMgr->Update();
 }
 
 void GameScene::OnDraw()
@@ -110,6 +117,9 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 	//レンダーターゲットセット（バックバッファとデプスステンシル）
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
+
+	//環境描画
+	m_environmentMgr->Draw(nowCam);
 
 	//プレイヤー描画
 	m_player->Draw(nowCam);
