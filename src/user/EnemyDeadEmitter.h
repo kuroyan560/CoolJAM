@@ -1,5 +1,6 @@
 #pragma once
 #include"../user/EnemyDeadLineParticle.h"
+#include"../user/EnemyDeadSquareParticle.h"
 #include<array>
 #include"../engine/Common/Vec.h"
 
@@ -15,6 +16,7 @@ public:
 private:
 	Vec3<float>pos;
 	std::array<EnemyDeadLineParticle, 20>m_lineParticle;
+	std::array<std::unique_ptr<EnemyDeadSquareParticle>, 20>m_SquareParticle;
 
 };
 

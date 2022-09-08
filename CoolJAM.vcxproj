@@ -221,7 +221,7 @@
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp" />
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp" />
-    <ClCompile Include="src\user\EnemyDeadParticle.cpp" />
+    <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\Enemy.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
@@ -304,7 +304,7 @@
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
-    <ClInclude Include="src\user\EnemyDeadParticle.h" />
+    <ClInclude Include="src\user\EnemyDeadSquareParticle.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\Enemy.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />

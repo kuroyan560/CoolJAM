@@ -280,7 +280,7 @@
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp">
       <Filter>src\user\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\EnemyDeadParticle.cpp">
+    <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp">
       <Filter>src\user\Effect</Filter>
     </ClCompile>
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp">
@@ -525,7 +525,7 @@
     <ClInclude Include="src\user\EnemyDeadEmitter.h">
       <Filter>src\user\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="src\user\EnemyDeadParticle.h">
+    <ClInclude Include="src\user\EnemyDeadSquareParticle.h">
       <Filter>src\user\Effect</Filter>
     </ClInclude>
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
