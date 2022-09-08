@@ -150,3 +150,44 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 	return nearestPos;
 
 }
+
+bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
+
+	/*===== エッジの判定 =====*/
+
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		if (index->CheckIsEdge(Pos, Size)) {
+
+			return true;
+
+		}
+
+	}
+
+	return false;
+
+}
+
+void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
+
+	/*===== 指定の範囲の敵を倒す =====*/
+
+	for (auto& index : m_enemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		// 敵の座標
+		Vec3<float> enemyPos = index->GetPos();
+		float enemySize = index->GetScale();
+
+		// 当たり判定
+		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
+
+		index->Damage();
+
+	}
+
+}

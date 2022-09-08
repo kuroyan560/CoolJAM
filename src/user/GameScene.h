@@ -42,6 +42,15 @@ private:
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
 
+	//カメラ関係。
+	Vec3<float> m_baseEye;
+	Vec3<float> m_nowEye;
+	Vec3<float> m_baseTarget;
+	Vec3<float> m_nowTarget;
+
+	//メインレンダーターゲット
+	std::shared_ptr<RenderTarget>m_mainTarget;
+
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;
 

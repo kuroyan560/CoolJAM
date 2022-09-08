@@ -33,6 +33,7 @@ private:
 	Transform m_transform;
 
 	const std::array<float, 3> SCALE = { 6,3,1 };
+	const std::array<float, 3> EDGE_SCALE = { 10,7,4 };	// 近くにいる判定の大きさ。
 	const std::array<int, 3> HP = { 3,2,1 };
 	const float TRACKING_ROT = 0.05f;
 
@@ -66,7 +67,13 @@ public:
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }
+	float GetScale() { return SCALE[static_cast<int>(m_id)]; }
 
+	// 近くにいるか。
+	bool CheckIsEdge(const Vec3<float>& Pos, const float& Size);
+
+	// ダメージを与える。
+	void Damage();
 
 private:
 
