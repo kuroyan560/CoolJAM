@@ -6,7 +6,7 @@ class EnemyDeadLineParticle
 {
 public:
 	EnemyDeadLineParticle();
-	void Init(const Vec3<float> &POS, int ANGLE);
+	void Init(const Vec3<float> &POS, float SPEED, int ANGLE);
 	void Update();
 	void Draw(Camera &CAMERA);
 

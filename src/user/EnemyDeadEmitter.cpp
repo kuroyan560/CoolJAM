@@ -20,7 +20,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 		int min = 0 + nowPerCount * 90;
 		int max = min + 90;
 		int random = KuroFunc::GetRand(min, max);
-		m_lineParticle[i].Init(POS, random);
+		m_lineParticle[i].Init(POS, KuroFunc::GetRand(1.0f, 2.0f), random);
 	}
 }
 

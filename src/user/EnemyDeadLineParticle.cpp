@@ -6,13 +6,13 @@ EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(false
 {
 }
 
-void EnemyDeadLineParticle::Init(const Vec3<float> &POS, int ANGLE)
+void EnemyDeadLineParticle::Init(const Vec3<float> &POS,float SPEED, int ANGLE)
 {
 	m_pos = POS;
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
-	m_vel *= 2.0f;
+	m_vel *= SPEED;
 	m_alpha = 255;
-	m_dispappearTime = 255 / 60;
+	m_dispappearTime = 255 / 30;
 	m_initFlag = true;
 }
 
@@ -39,6 +39,6 @@ void EnemyDeadLineParticle::Draw(Camera &CAMERA)
 {
 	if (m_initFlag)
 	{
-		DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 255, m_alpha), 1.0f);
+		DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 255, m_alpha), 0.3f);
 	}
 }
