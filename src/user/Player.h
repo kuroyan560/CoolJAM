@@ -30,7 +30,7 @@ private:
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// ˆÚ“®‘¬“x
 	const float SCALE = 1.0f;
-	const float BOOST_SCALE = 2.0f;
+	const float BOOST_SCALE = 5.0f;
 	bool m_isEdge;				// ‰‚É‚¢‚é‚©
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
@@ -119,6 +119,9 @@ private:
 
 	// “–‚½‚è”»’è
 	void CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope);
+
+	// HP‚ğ1Œ¸‚ç‚·B
+	void Damage();
 
 	// 01‚É”[‚ß‚éB
 	float Saturate(const float& Value);

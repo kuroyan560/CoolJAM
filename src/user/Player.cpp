@@ -439,19 +439,22 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 	/*===== 弾を撃つ処理 =====*/
 
+	// ドリフトしていなかったら処理とを飛ばす。
+	if (!m_isBrake) return;
+
 	++m_shotTimer;
 	if (SHOT_TIMER <= m_shotTimer) {
 
 		m_shotTimer = 0;
 
-		// 一番近くにいる敵を検索する。
-		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
+		//// 一番近くにいる敵を検索する。
+		//Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
 
-		// Vec3<float>(-1,-1,-1)だったら敵がいないので撃たない。
-		if (nearestEnemy == Vec3<float>(-1, -1, -1)) return;
+		//// Vec3<float>(-1,-1,-1)だったら敵がいないので撃たない。
+		//if (nearestEnemy == Vec3<float>(-1, -1, -1)) return;
 
 		// 多少分散させる。
-		Vec3<float> shotEnemyPos = nearestEnemy;
+		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
 		shotEnemyPos.x += KuroFunc::GetRand(-3.0f, 3.0f);
 		shotEnemyPos.z += KuroFunc::GetRand(-3.0f, 3.0f);
 
