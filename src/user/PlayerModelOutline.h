@@ -41,13 +41,32 @@ private:
 	bool m_powerUpFlag;
 	float m_expandMaxScale;
 
-	//強化完了演出----------
-	bool m_enoughPowerFlag;
-	float m_expandVertexRate;
-	bool m_reversRateFlag, m_prevReversRateFlag;
-	float m_powerNum;
-	//強化完了演出----------
+	struct OutlineRateData
+	{
+		float m_expandVertexRate;
+		bool m_reversRateFlag;
+		float m_powerNum;
+		float m_countReversNum;
+		float m_countReversMaxNum;
 
+		void Init()
+		{
+			m_expandVertexRate = 0.0f;
+			m_powerNum = 0.0f;
+			m_countReversNum = 0.0f;
+			m_countReversMaxNum = 15.0f;
+			m_reversRateFlag = false;
+		}
+	};
+
+	//強化演出中----------
+	bool m_enoughPowerFlag;
+	OutlineRateData m_enoughPowerRateData;
+	OutlineRateData m_powerUpRateData;
+	//強化演出演出----------
+
+	Vec2<float>waveTextureSize;
+	std::shared_ptr<TextureBuffer>waveTex;
 
 	Color m_color;
 

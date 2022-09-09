@@ -218,6 +218,7 @@
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
     <ClCompile Include="src\user\DashLightingParticle.cpp" />
+    <ClCompile Include="src\user\DashLightingRoad.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
@@ -304,7 +305,9 @@
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\ColorPalette.h" />
     <ClInclude Include="src\user\DashLightingParticle.h" />
+    <ClInclude Include="src\user\DashLightingRoad.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnemyWave.h" />

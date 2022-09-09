@@ -394,16 +394,16 @@ void Player::UpdateEffect()
 
 
 	//パワーが溜まり切った演出
-	if (false)
+	if (UsersInput::Instance()->KeyInput(DIK_A))
 	{
-		m_outlineModel.PowerUpEffect(50);
+		m_outlineModel.EnoughPowerEffect();
 	}
 
-	bool dashFlag = 1.0f <= m_brakeBoostTimer;
+	bool dashFlag = 1.0f <= m_brakeBoostTimer && !UsersInput::Instance()->MouseInput(LEFT);
 	//ダッシュ中の演出
 	if (dashFlag)
 	{
-		m_outlineModel.EnoughPowerEffect();
+		m_outlineModel.PowerUpEffect(50);
 	}
 
 	//プレイヤーのアウトライン用

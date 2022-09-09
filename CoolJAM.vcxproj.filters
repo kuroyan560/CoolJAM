@@ -298,6 +298,9 @@
       <Filter>src</Filter>
       <Filter>src\user</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\DashLightingRoad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -553,6 +556,10 @@
       <Filter>src\user</Filter>
     </ClInclude>
     <ClInclude Include="src\user\KazDrawFunc.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DashLightingRoad.h" />
+    <ClInclude Include="src\user\ColorPalette.h">
       <Filter>src\user</Filter>
     </ClInclude>
   </ItemGroup>

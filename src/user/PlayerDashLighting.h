@@ -4,6 +4,7 @@
 #include<array>
 #include<DirectXMath.h>
 #include"DashLightingParticle.h"
+#include"DashLightingRoad.h"
 
 class Camera;
 class PlayerDashLighting
@@ -15,12 +16,14 @@ public:
 	void Draw(Camera &Cam);
 
 private:
-	Vec3<float> *pos;
-	std::array<DashLightingParticle, 40> particleArray;
+	Vec3<float> *pos;//プレイヤーの座標ポインタ
+	Vec3<float> startPos, endPos;//プレイヤーの座標ポインタ
+
+	std::array<DashLightingParticle, 40> particleArray;//電撃パーティクル
 	int particleInitNum;
 	int timer;
 
-
-	Vec3<float> startPos, endPos;
 	bool prevFlag;
+	int roadIndex;
+	std::array<DashLightingRoad, 5> roadArray;			//加速時の道
 };

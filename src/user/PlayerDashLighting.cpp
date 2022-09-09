@@ -9,6 +9,7 @@ void PlayerDashLighting::Init(Vec3<float> *POS)
 {
 	pos = POS;
 	timer = 0;
+	roadIndex = -1;
 }
 
 void PlayerDashLighting::Update(bool ENABLE_FLAG)
@@ -37,13 +38,24 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 
 	if (ENABLE_FLAG && !prevFlag)
 	{
+		++roadIndex;
+		if (roadArray.size() <= roadIndex)
+		{
+			roadIndex = 0;
+		}
 		startPos = *pos;
+		roadArray[roadIndex].Init(startPos);
 	}
-	if(ENABLE_FLAG)
+	if (ENABLE_FLAG)
 	{
 		endPos = *pos;
 	}
 	prevFlag = ENABLE_FLAG;
+
+	for (int i = 0; i < roadArray.size(); ++i)
+	{
+		roadArray[i].Update(endPos, roadIndex);
+	}
 }
 
 void PlayerDashLighting::Draw(Camera &CAMERA)
@@ -52,6 +64,8 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 	{
 		particleArray[i].Draw(CAMERA);
 	}
-
-	DrawFunc3D::DrawLine(CAMERA, startPos, endPos, Color(255, 0, 0, 255), 1.0f);
+	for (int i = 0; i < roadArray.size(); ++i)
+	{
+		roadArray[i].Draw(CAMERA);
+	}
 }
