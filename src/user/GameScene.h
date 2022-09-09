@@ -67,6 +67,7 @@ private:
 
 	bool m_emissive = false;
 
+
 public:
 	GameScene();
 	void OnInitialize()override;

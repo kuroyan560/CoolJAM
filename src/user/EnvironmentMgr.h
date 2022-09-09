@@ -4,6 +4,8 @@
 #include<string>
 #include<array>
 #include"Transform.h"
+#include"LineLight.h"
+
 class Model;
 class ModelObject;
 class Camera;
@@ -35,6 +37,8 @@ private:
 
 	//ステータス切り替わり時間
 	int m_statusChangeTime = 250;
+
+	std::unique_ptr<LineLight> lineLight;
 
 public:
 	EnvironmentMgr();

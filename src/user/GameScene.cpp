@@ -44,6 +44,7 @@ GameScene::GameScene()
 
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
+
 }
 
 void GameScene::OnInitialize()
@@ -61,7 +62,6 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
-
 }
 
 void GameScene::OnUpdate()
@@ -104,6 +104,7 @@ void GameScene::OnUpdate()
 	m_gameCam->SetTarget(m_nowTarget);
 
 	m_environmentMgr->Update();
+
 }
 
 void GameScene::OnDraw()
@@ -152,6 +153,7 @@ void GameScene::OnDraw()
 
 	//プレイヤー描画
 	m_player->Draw(nowCam);
+
 
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
