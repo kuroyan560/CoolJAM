@@ -37,7 +37,7 @@ GameScene::GameScene()
 	m_bulletMgr = std::make_shared<BulletMgr>();
 
 	//敵ウェーブ管理クラス
-	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>();
+	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
 
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");

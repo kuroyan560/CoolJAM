@@ -7,18 +7,30 @@ EnemyWave::EnemyWave(const int& WaveStartFrame)
 	/*===== コンストラクタ =====*/
 
 	m_waveStartFrame = WaveStartFrame;
+	m_nowWaveFrame = 0;
 
 }
 
-void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const int& NowFrame, const Vec3<float>& PlayerPos, const float& MapSize)
+void EnemyWave::Init()
+{
+
+	/*===== 初期化処理 =====*/
+
+	m_nowWaveFrame = 0;
+
+}
+
+void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== 更新処理 ====*/
 
+	++m_nowWaveFrame;
+
 	for (auto& index : m_enemys) {
 
 		// 生成フレームが合っていなかったら処理を飛ばす。
-		if (index.m_generateFrame != NowFrame) continue;
+		if (index.m_generateFrame != m_nowWaveFrame) continue;
 
 		// IDによって処理を分ける。
 		Vec3<float> forwardVec = index.m_forwardVec;

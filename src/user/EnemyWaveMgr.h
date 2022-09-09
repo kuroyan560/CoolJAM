@@ -20,7 +20,7 @@ public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
-	EnemyWaveMgr();
+	EnemyWaveMgr(const float& MapSize);
 	void Init();
 	void Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void AddWave(std::shared_ptr<EnemyWave> Wave);

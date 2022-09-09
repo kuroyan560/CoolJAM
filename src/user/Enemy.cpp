@@ -124,6 +124,22 @@ void Enemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3
 	}
 
 	break;
+	case ENEMY_INFO::ID::TORUS_MOVE:
+		/*== 円状に動く敵 ==*/
+		m_scale = STRAIGHT_SCALE;
+		m_hp = STRAIGHT_HP;
+		break;
+	case ENEMY_INFO::ID::PRESS:
+		/*== 押して倒す敵 ==*/
+		m_scale = PRESS_SCALE;
+		m_hp = PRESS_HP;
+		break;
+	case ENEMY_INFO::ID::DASH:
+		/*== 円状に動く敵 ==*/
+		m_scale = STRAIGHT_SCALE;
+		m_hp = STRAIGHT_HP;
+		m_forwardVec = Vec3<float>(PlayerPos - m_pos).GetNormal();
+		break;
 	default:
 		// パラメータが設定されていないです！
 		assert(0);
@@ -184,20 +200,6 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 		// 移動させる。
 		m_pos += m_forwardVec * m_speed;
 
-		// マップ外に出たら。
-		if (MapSize <= m_pos.Length()) {
-
-			m_pos = m_pos.GetNormal() * MapSize;
-
-			--m_hp;
-			if (m_hp <= 0) {
-
-				Init();
-
-			}
-
-		}
-
 
 	}
 
@@ -245,6 +247,61 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 		break;
 
+	case ENEMY_INFO::ID::TORUS_MOVE:
+
+		/*== 円状に動く敵 ==*/
+
+	{
+
+		// 中心からの距離
+		float centerDistance = m_pos.Length();
+
+		// 移動する前の座標
+		Vec3<float> prevPos = m_pos;
+
+		// 移動させる。
+		m_speed = SPEED;
+		m_pos += m_forwardVec * m_speed;
+
+		// 押し戻す。
+		if (centerDistance <= m_pos.Length()) {
+
+			m_pos = m_pos.GetNormal() * centerDistance;
+
+		}
+
+		// 正面ベクトルを回転。
+		m_forwardVec = Vec3<float>(m_pos - prevPos).GetNormal();
+
+		break;
+
+	}
+	case ENEMY_INFO::ID::DASH:
+
+		/*== ダッシュする敵 ==*/
+	{
+
+		// 左右判定をする。
+		float cross = m_forwardVec.Cross(PlayerPos - m_pos).y;
+		if (cross != 0) {
+
+			cross = cross < 0 ? -1.0f : 1.0f;
+			float handleRot = TRACKING_ROT * cross;
+
+			// 移動方向ベクトルを角度に直して値を加算する。
+			float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+			forwardVecAngle += handleRot;
+
+			// 加算した角度をベクトルに直す。
+			m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
+
+		}
+
+
+	}
+	break;
+
+
 	default:
 		break;
 	}
@@ -260,6 +317,20 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
+
+	// マップ外に出たら。
+	if (MapSize <= m_pos.Length()) {
+
+		m_pos = m_pos.GetNormal() * MapSize;
+
+		--m_hp;
+		if (m_hp <= 0) {
+
+			Init();
+
+		}
+
+	}
 
 }
 
@@ -358,6 +429,22 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 		}
 
 	}
+	// 押して倒す敵だったら。
+	if (m_id == ENEMY_INFO::ID::PRESS) {
+
+		// プレイヤー弾との当たり判定。
+		Vec3<float> hitBulletPos;
+		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
+
+		// IDがTRACKだったらノックバックさせる。
+		if (0 < hitCount && m_id == ENEMY_INFO::ID::PRESS) {
+
+			m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
+			m_knockBackSpeed = PRESS_KNOCK_BACK_SPEED;
+
+		}
+
+	}
 	else {
 
 		// プレイヤー弾との当たり判定。
@@ -365,7 +452,7 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
 
 		// IDがTRACKだったらノックバックさせる。
-		if (0 < hitCount && m_id == ENEMY_INFO::ID::TRACKING) {
+		if (0 < hitCount && (m_id == ENEMY_INFO::ID::TRACKING || m_id == ENEMY_INFO::ID::DASH)) {
 
 			m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
 			m_knockBackSpeed = KNOCK_BACK_SPEED;

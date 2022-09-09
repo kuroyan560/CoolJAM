@@ -1,85 +1,35 @@
 #include "EnemyWaveMgr.h"
 #include "EnemyWave.h"
 
-EnemyWaveMgr::EnemyWaveMgr()
+EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 {
 
 	/*===== コンストラクタ =====*/
 
 	m_frameTimer = 0;
 
-	const float MAP_SIZE = 100.0f;
-
 	// WAVE1を作成。
 	std::shared_ptr<EnemyWave> wave1 = std::make_shared<EnemyWave>(0);
 
-	// 盾の敵
-	wave1->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::UNION, 120);
+	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 60);
+	wave1->AddEnemy(Vec3<float>(-50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 1.0f), ENEMY_INFO::ID::TORUS_MOVE, 60);
+	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(-1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 60);
+	wave1->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::TORUS_MOVE, 60);
 
-	// 上下左右から真っ直ぐ来る敵
-	for (int index = 0; index < 100; ++index) {
+	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::PRESS, 60);
 
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE / 2.0f, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE / 2.0f, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE / 2.0f), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE / 2.0f), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
+	//// マップの四方に敵を配置。
+	//wave1->AddEnemy(Vec3<float>(MapSize / 2.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
+	//wave1->AddEnemy(Vec3<float>(-MapSize / 2.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
+	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
+	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, -MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
 
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE / 2.0f, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE / 2.0f, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE / 2.0f), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE / 2.0f), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+	//// マップの四方に敵を配置。
+	//wave1->AddEnemy(Vec3<float>(MapSize / 2.0f, 0.0f, MapSize / 2.0f).GetNormal() * (MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 210);
+	//wave1->AddEnemy(Vec3<float>(-MapSize / 2.0f, 0.0f, -MapSize / 2.0f).GetNormal() * (MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 210);
+	//wave1->AddEnemy(Vec3<float>(-MapSize / 2.0f, 0.0f, MapSize / 2.0f).GetNormal() * (MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 210);
+	//wave1->AddEnemy(Vec3<float>(MapSize / 2.0f, 0.0f, -MapSize / 2.0f).GetNormal() * (MapSize / 2.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 210);
 
-		//// 上下左右から真っ直ぐ来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
-
-		//// 上下左右から真っ直ぐ来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
-
-		//// 上下左右から真っ直ぐ来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
-
-		//// 斜めから中心に向かって来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
-
-		//// 斜めから中心に向かって来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
-
-		//// 斜めから中心に向かって来る敵
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
-		//wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
-
-	}
-
-
-	//for (int index = 0; index < 20; ++index) {
-
-	//	wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 360 + index * 20);
-
-	//}
-
-
-	for (int index = 0; index < 100; ++index) {
-
-		wave1->AddEnemy(Vec3<float>(), Vec3<float>(0,0,1), ENEMY_INFO::ID::TRACKING, 60 + index * 20);
-
-	}
 
 	// WAVE1を追加。
 	m_waves.emplace_back(wave1);
@@ -106,7 +56,7 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& P
 	// ウェーブの更新処理
 	for (auto& index : m_waves) {
 
-		index->Update(EnemyMgr, m_frameTimer, PlayerPos, MapSize);
+		index->Update(EnemyMgr, PlayerPos, MapSize);
 
 	}
 

@@ -24,6 +24,7 @@ private:
 	Vec3<float> m_knockBackVec;
 	float m_knockBackSpeed;
 	const float KNOCK_BACK_SPEED = 2.5f;
+	const float PRESS_KNOCK_BACK_SPEED = 1.0f;
 	float m_scale;				// 大きさ
 	float m_speed;				// 移動速度
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
@@ -61,6 +62,7 @@ private:
 	const float TRACKING_SCALE = 3.0f;
 	const float SHIELD_SCALE = 12.0f;
 	const float UNION_SCALE = 6.0f;
+	const float PRESS_SCALE = 32.0f;
 
 	// HP
 	const int STOPPING_HP = 10;
@@ -69,6 +71,7 @@ private:
 	const int TRACKING_HP = 4;
 	const int SHIELD_HP = 30;
 	const int UNION_HP = 5;
+	const int PRESS_HP = 60;
 
 	// 縁
 	const float EDGE = 10.0f;
@@ -97,6 +100,7 @@ public:
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }
 	float GetScale() { return m_scale; }
+	ENEMY_INFO::ID GetEnemyID() { return m_id; }
 
 	// マップ内に収まるようにする。
 	Vec3<float> KeepInMap(Vec3<float>& Pos, const float& MapSize);
