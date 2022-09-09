@@ -108,7 +108,7 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 		}
 
 		// ˆÚ“®‘¬“x‚ğ•âŠÔB
-		m_speed += (SPEED - m_speed) / 10.0f;
+		m_speed += (TRACKING_SPEED - m_speed) / 10.0f;
 
 		// ˆÚ“®‚³‚¹‚éB
 		m_pos += m_forwardVec * m_speed;
