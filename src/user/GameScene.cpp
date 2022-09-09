@@ -121,7 +121,7 @@ void GameScene::OnDraw()
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	/*--- 通常描画 ---*/
-		//デプスステンシルクリア
+	//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
 	//レンダーターゲットセット（バックバッファとデプスステンシル）
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);

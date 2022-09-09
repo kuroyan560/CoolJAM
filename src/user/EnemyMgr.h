@@ -32,7 +32,7 @@ public:
 	bool CheckEnemyEdge(const Vec3<float>& Pos, const float& Size);
 
 	// “G‚Æ‚ÌÕ“Ë”»’èB
-	bool CheckHitEnemy(const Vec3<float>& Pos, const float& Size);
+	bool CheckHitEnemy(const Vec3<float>& Pos, const float& Size, Vec3<float>& EnemyHitPos);
 
 	// w’è‚Ì”ÍˆÍ‚Ì“G‚ğ“|‚·B
 	void AttackEnemy(const Vec3<float>& Pos, const float& Size);

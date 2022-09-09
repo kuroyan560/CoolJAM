@@ -494,6 +494,12 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
+	if (0 < hitCount) {
+
+		// 当たった判定。
+		Damage();
+
+	}
 
 	// 敵とのエッジの判定。
 	if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
@@ -516,20 +522,28 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	}
 
 	// 敵との当たり判定。
-	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
+	Vec3<float> enemyHitPos;
+	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE, enemyHitPos)) {
 
-		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-		float prevHP = m_hp;
-		--m_hp;
-		if (m_hp <= 0) m_hp = 0;
-		if (m_hp <= 2 && 2 < prevHP) {
-			m_isChangeRed = true;
-			m_colorEasingTimer = 0;
-		}
 
+	}
+
+}
+
+void Player::Damage()
+{
+
+	/*===== HPを1減らす =====*/
+
+	m_damageEffectTimer = 0;
+	m_damageEffectCount = 0;
+	m_isDamageEffect = true;
+	float prevHP = m_hp;
+	--m_hp;
+	if (m_hp <= 0) m_hp = 0;
+	if (m_hp <= 2 && 2 < prevHP) {
+		m_isChangeRed = true;
+		m_colorEasingTimer = 0;
 	}
 
 }
