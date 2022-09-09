@@ -13,54 +13,64 @@ EnemyWaveMgr::EnemyWaveMgr()
 	// WAVE1ÇçÏê¨ÅB
 	std::shared_ptr<EnemyWave> wave1 = std::make_shared<EnemyWave>(0);
 
-	// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60);
-	wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 60);
-	wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 60);
 
 	// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90);
-	wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 90);
-	wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 90);
-
-	// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120);
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120);
-
-	// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150);
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150);
-
-	// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180);
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180);
-
-	// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210);
-	wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210);
-	wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210);
-
-	for (int index = 0; index < 20; ++index) {
-
-		wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 360 + index * 20);
-
-	}
-
-
 	for (int index = 0; index < 100; ++index) {
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE / 2.0f, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE / 2.0f, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE / 2.0f), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE / 2.0f), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+		// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
 
-		wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 1000 + index * 20);
+		// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STRAIGHT, 90 + index * 600);
+
+		// è„â∫ç∂âEÇ©ÇÁê^Ç¡íºÇÆóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 + index * 600);
+
+		// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 150 + index * 600);
+
+		// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180 + index * 600);
+
+		// éŒÇﬂÇ©ÇÁíÜêSÇ…å¸Ç©Ç¡ÇƒóàÇÈìG
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, MAP_SIZE), Vec3<float>(-1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, MAP_SIZE), Vec3<float>(1, 0, -1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, -MAP_SIZE), Vec3<float>(-1, 0, 1).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 210 + index * 600);
 
 	}
+
+
+	//for (int index = 0; index < 20; ++index) {
+
+	//	wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 360 + index * 20);
+
+	//}
+
+
+	//for (int index = 0; index < 100; ++index) {
+
+	//	wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 1000 + index * 20);
+
+	//}
 
 	// WAVE1Çí«â¡ÅB
 	m_waves.emplace_back(wave1);
