@@ -77,6 +77,7 @@ private:
 	//ƒ‚ƒfƒ‹
 	std::shared_ptr<Model>m_model;
 
+	float inputATan2f;
 	const Vec3<float> GREEN_HSV = Vec3<float>(152.857f, 223.125f, 0.959f);
 	const Vec3<float> RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.879f);
 	const Vec3<float> DARK_RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.289f);
@@ -102,6 +103,9 @@ public:
 	Vec3<float> GetMovedVec() { return Vec3<float>(m_pos - m_prevPos).GetNormal(); }
 	int GetBrakeBoostTimer() { return m_brakeBoostTimer; }
 
+	Vec3<float>* GetPosPtr() { return &m_pos; };
+	const float *GetInputRadianPtr() { return &inputATan2f; };
+	float GetInputRadian() { return inputATan2f; };
 
 private:
 

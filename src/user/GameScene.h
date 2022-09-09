@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Vec.h"
 #include<memory>
+#include"GrazeEmitter.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -40,6 +41,7 @@ private:
 	// 敵ウェーブクラス
 	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
 
+
 	//マップのサイズ
 	float MAP_SIZE = 200.0f;
 	const float EDGE_SCOPE = 10.0f;
@@ -55,6 +57,8 @@ private:
 
 	//メインレンダーターゲット
 	std::shared_ptr<RenderTarget>m_mainTarget;
+
+	std::unique_ptr<GrazeEmitter> m_grazeEmitter;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;

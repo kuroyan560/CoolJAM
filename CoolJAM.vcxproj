@@ -133,6 +133,7 @@
       <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -227,6 +228,9 @@
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
+    <ClCompile Include="src\user\GrazeEmitter.cpp" />
+    <ClCompile Include="src\user\GrazeParticle.cpp" />
+    <ClCompile Include="src\user\KazCollisionHelper.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
     <ClCompile Include="src\user\UnionEnemy.cpp" />
   </ItemGroup>
@@ -311,6 +315,9 @@
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
+    <ClInclude Include="src\user\GrazeEmitter.h" />
+    <ClInclude Include="src\user\GrazeParticle.h" />
+    <ClInclude Include="src\user\KazCollisionHelper.h" />
     <ClInclude Include="src\user\Player.h" />
     <ClInclude Include="src\user\UnionEnemy.h" />
   </ItemGroup>

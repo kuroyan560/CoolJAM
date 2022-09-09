@@ -83,6 +83,12 @@
     <Filter Include="src\user\敵のウェーブ">
       <UniqueIdentifier>{9bc20478-8dd0-455a-a9c0-dfc16ceec626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Helper">
+      <UniqueIdentifier>{229bfca0-0a1f-4a31-9cb3-76dcf4782ff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\WallGraze">
+      <UniqueIdentifier>{252f4fab-8f39-452a-82b8-241171d51bf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -288,6 +294,15 @@
     </ClCompile>
     <ClCompile Include="src\user\UnionEnemy.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazCollisionHelper.cpp">
+      <Filter>src\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GrazeEmitter.cpp">
+      <Filter>src\WallGraze</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GrazeParticle.cpp">
+      <Filter>src\WallGraze</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -536,6 +551,15 @@
     </ClInclude>
     <ClInclude Include="src\user\UnionEnemy.h">
       <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazCollisionHelper.h">
+      <Filter>src\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GrazeParticle.h">
+      <Filter>src\WallGraze</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GrazeEmitter.h">
+      <Filter>src\WallGraze</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
