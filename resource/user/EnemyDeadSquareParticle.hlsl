@@ -60,7 +60,7 @@ inout TriangleStream<GSOutput> output)
     float2 offset = squarePtSize / 2.0f;
     
     GSOutput element;
-    element.alpha = input[0].m_alpha;
+    element.alpha = input[0].m_alpha / 255.0f;
     
     float4x4 rotate = GetRoateMat(input[0].m_angle);
     
@@ -98,5 +98,8 @@ PSOutput PSmain(GSOutput input)
     PSOutput output;
     output.color = colorTex.Sample(smp, input.uv);
     output.emissive = output.color * emissiveStrongth;
+
+    output.color.a = input.alpha;
+    output.emissive.a = input.alpha;
     return output;
 }

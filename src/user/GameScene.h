@@ -59,7 +59,7 @@ private:
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
-	bool m_emissive = true;
+	bool m_emissive = false;
 
 
 	std::array<EnemyDeadEmitter, 10> m_emitter;

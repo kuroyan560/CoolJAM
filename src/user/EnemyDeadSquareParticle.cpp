@@ -15,8 +15,8 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 	m_initFlag = 1;
 	m_angle = { 0,0,0 };
 
-	float minVel = -0.5f;
-	float maxVel = 0.5f;
+	float minVel = -30.5f;
+	float maxVel = 30.5f;
 	m_angleVel = {
 		KuroFunc::GetRand(minVel, maxVel),
 		KuroFunc::GetRand(minVel, maxVel),
@@ -37,7 +37,6 @@ void EnemyDeadSquareParticle::Update()
 			m_alpha = 0;
 			m_initFlag = 0;
 		}
-
 	}
 }
 
