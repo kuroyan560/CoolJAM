@@ -99,7 +99,7 @@ PSOutput PSmain(GSOutput input)
     output.color = colorTex.Sample(smp, input.uv);
     output.emissive = output.color * emissiveStrongth;
 
-    output.color.a = input.alpha;
-    output.emissive.a = input.alpha;
+    output.color.a *= input.alpha;
+    output.emissive.a *= input.alpha;
     return output;
 }
