@@ -81,7 +81,7 @@ void Player::Init()
 
 	}
 
-	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 1.0f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 
 	//ダッシュ時のエフェクト
 	dashLight.Init(&m_pos);
@@ -110,16 +110,6 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	UpdateEffect();
 
 
-	if (true)
-	{
-		m_outlineModel.PowerUpEffect(50);
-	}
-	if (false)
-	{
-		m_outlineModel.EnoughPowerEffect();
-	}
-
-	m_outlineModel.Update();
 
 }
 
@@ -206,6 +196,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		m_brakeTimer = 0;
 
 	}
+
 
 }
 
@@ -296,9 +287,6 @@ void Player::UpdateEffect()
 
 		}
 	}
-
-	//ダッシュ時のエフェクト
-	dashLight.Update(UsersInput::Instance()->KeyInput(DIK_SPACE));
 
 
 
@@ -404,6 +392,25 @@ void Player::UpdateEffect()
 
 	}
 
+
+	//パワーが溜まり切った演出
+	if (false)
+	{
+		m_outlineModel.PowerUpEffect(50);
+	}
+
+	bool dashFlag = 1.0f <= m_brakeBoostTimer;
+	//ダッシュ中の演出
+	if (dashFlag)
+	{
+		m_outlineModel.EnoughPowerEffect();
+	}
+
+	//プレイヤーのアウトライン用
+	m_outlineModel.Update();
+
+	//ダッシュ時のエフェクト
+	dashLight.Update(dashFlag);
 }
 
 #include"DrawFunc3D.h"
@@ -444,7 +451,6 @@ void Player::Draw(Camera& Cam) {
 
 		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 	}
-	
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {

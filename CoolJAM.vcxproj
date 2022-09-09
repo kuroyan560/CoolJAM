@@ -224,7 +224,6 @@
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\KazDrawFunc.cpp" />
-    <ClCompile Include="src\user\PlayerModelOutline.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\Enemy.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
@@ -232,6 +231,7 @@
     <ClCompile Include="src\user\GameScene.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
+    <ClCompile Include="src\user\PlayerModelOutline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -311,7 +311,6 @@
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\KazDrawFunc.h" />
-    <ClInclude Include="src\user\PlayerModelOutline.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\Enemy.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
@@ -319,6 +318,7 @@
     <ClInclude Include="src\user\GameScene.h" />
     <ClInclude Include="src\user\Player.h" />
     <ClInclude Include="src\user\PlayerDashLighting.h" />
+    <ClInclude Include="src\user\PlayerModelOutline.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
