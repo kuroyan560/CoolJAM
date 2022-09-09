@@ -11,14 +11,16 @@ class PlayerDashLighting
 public:
 	PlayerDashLighting();
 	void Init(Vec3<float> *POS);
-	void Update();
+	void Update(bool ENABLE_FLAG);
 	void Draw(Camera &Cam);
 
 private:
 	Vec3<float> *pos;
-	Vec3<float> startPos, endPos;
-
-	std::array<DashLightingParticle, 20> particleArray;
+	std::array<DashLightingParticle, 40> particleArray;
 	int particleInitNum;
 	int timer;
+
+
+	Vec3<float> startPos, endPos;
+	bool prevFlag;
 };

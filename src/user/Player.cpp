@@ -285,7 +285,7 @@ void Player::UpdateEffect()
 	}
 
 	//ダッシュ時のエフェクト
-	dashLight.Update();
+	dashLight.Update(UsersInput::Instance()->KeyInput(DIK_SPACE));
 
 
 

@@ -11,12 +11,17 @@ void PlayerDashLighting::Init(Vec3<float> *POS)
 	timer = 0;
 }
 
-void PlayerDashLighting::Update()
+void PlayerDashLighting::Update(bool ENABLE_FLAG)
 {
 	++timer;
-	if (5 <= timer)
+	if (2 <= timer && ENABLE_FLAG)
 	{
-		particleArray[particleInitNum].Init(*pos);
+		Vec3<float>emittPos;
+		emittPos.x = pos->x + KuroFunc::GetRand(-3.0f, 3.0f);
+		emittPos.y = KuroFunc::GetRand(-3.0f, 3.0f);
+		emittPos.z = pos->z + KuroFunc::GetRand(-3.0f, 3.0f);
+		particleArray[particleInitNum].Init(emittPos);
+
 		++particleInitNum;
 		timer = 0;
 	}
@@ -29,6 +34,16 @@ void PlayerDashLighting::Update()
 	{
 		particleArray[i].Update();
 	}
+
+	if (ENABLE_FLAG && !prevFlag)
+	{
+		startPos = *pos;
+	}
+	if(ENABLE_FLAG)
+	{
+		endPos = *pos;
+	}
+	prevFlag = ENABLE_FLAG;
 }
 
 void PlayerDashLighting::Draw(Camera &CAMERA)
@@ -37,4 +52,6 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 	{
 		particleArray[i].Draw(CAMERA);
 	}
+
+	DrawFunc3D::DrawLine(CAMERA, startPos, endPos, Color(255, 0, 0, 255), 1.0f);
 }
