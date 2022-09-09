@@ -117,6 +117,9 @@ void GSmain(
     point VSInput input[1],
 inout TriangleStream<GSOutput> output)
 {
+    if (!input[0].m_initFlg)
+        return;
+    
     float offset = linePtThickness / 2.0f;
     float4 col;
     col.r = input[0].m_color.r / 255.0f;

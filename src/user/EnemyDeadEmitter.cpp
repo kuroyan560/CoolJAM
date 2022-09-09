@@ -73,12 +73,6 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 {
 	GeneratePipeline();
 
-	//std::shared_ptr<Model>model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
-	for (int i = 0; i < m_lineParticle.size(); ++i)
-	{
-		m_SquareParticle[i] = std::make_unique<EnemyDeadSquareParticle>();
-	}
-
 	//ラインパーティクルバッファ
 	m_linePtBuff = D3D12App::Instance()->GenerateVertexBuffer(
 		sizeof(EnemyDeadLineParticle),
@@ -128,7 +122,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 		int min = 0 + nowPerCount * 90;
 		int max = min + 90;
 		int random = KuroFunc::GetRand(min, max);
-		m_SquareParticle[i]->Init(POS, KuroFunc::GetRand(0.4f, 1.0f), random);
+		m_SquareParticle[i].Init(POS, KuroFunc::GetRand(0.4f, 1.0f), random);
 	}
 }
 
@@ -140,7 +134,7 @@ void EnemyDeadEmitter::Update()
 	}
 	for (int i = 0; i < m_SquareParticle.size(); ++i)
 	{
-		m_SquareParticle[i]->Update();
+		m_SquareParticle[i].Update();
 	}
 }
 

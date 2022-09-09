@@ -54,6 +54,9 @@ void GSmain(
     point VSInput input[1],
 inout TriangleStream<GSOutput> output)
 {
+    if (!input[0].m_initFlg)
+        return;
+    
     float2 offset = squarePtSize / 2.0f;
     
     GSOutput element;

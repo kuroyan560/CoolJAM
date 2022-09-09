@@ -40,6 +40,6 @@ void EnemyDeadLineParticle::Draw(Camera &CAMERA)
 {
 	if (m_initFlag)
 	{
-		DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 255, m_alpha), 0.3f);
+		//DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 255, m_alpha), 0.3f);
 	}
 }
