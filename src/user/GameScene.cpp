@@ -157,7 +157,8 @@ void GameScene::OnDraw()
 
 	for (int i = 0; i < m_emitter.size(); ++i)
 	{
-		m_emitter[i].Draw(nowCam, m_mainTarget, m_emissiveMap, m_depthStencil);
+		//m_mainTarget -> backBuffに変更
+		m_emitter[i].Draw(nowCam, backBuff, m_emissiveMap, m_depthStencil);
 	}
 
 	/*--- エミッシブマップに描画 ---*/
