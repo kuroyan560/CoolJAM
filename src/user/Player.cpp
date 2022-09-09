@@ -81,6 +81,7 @@ void Player::Init()
 
 	}
 
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 1.0f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 
 	//ダッシュ時のエフェクト
 	dashLight.Init(&m_pos);
@@ -107,6 +108,18 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	// エフェクト全般の更新処理
 	UpdateEffect();
+
+
+	if (true)
+	{
+		m_outlineModel.PowerUpEffect(50);
+	}
+	if (false)
+	{
+		m_outlineModel.EnoughPowerEffect();
+	}
+
+	m_outlineModel.Update();
 
 }
 
@@ -423,15 +436,15 @@ void Player::Draw(Camera& Cam) {
 	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 25.0f));
 
 	// クォータニオンをかける。
-	auto resultQ = resultY * resultX;
+	m_rotation = resultY * resultX;
 
-	m_transform.SetRotate(resultQ);
+	m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
 
 		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-
 	}
+	
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {
@@ -442,7 +455,7 @@ void Player::Draw(Camera& Cam) {
 
 	}
 
-
+	m_outlineModel.Draw(Cam);
 	dashLight.Draw(Cam);
 
 }

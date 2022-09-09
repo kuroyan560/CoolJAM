@@ -290,6 +290,10 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\user\DashLightingParticle.cpp">
+    <ClCompile Include="src\user\PlayerModelOutline.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -539,5 +543,9 @@
     </ClInclude>
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\DashLightingParticle.h" />
+    <ClInclude Include="src\user\PlayerModelOutline.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h" />
   </ItemGroup>
 </Project>
