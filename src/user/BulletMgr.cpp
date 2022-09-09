@@ -153,8 +153,21 @@ int BulletMgr::CheckHitPlayerBulletAngle(const Vec3<float>& EnemyPos, const floa
 		bool isHit = Vec3<float>(EnemyPos - index->GetPos()).Length() <= index->GetCheckHitScale() + EnemySize;
 		if (!isHit) continue;
 
-		++hitCount;
-		index->Init();
+		// Šp“x‚Ì·‚ğ‹‚ß‚éB
+		float dot = Vec3<float>(index->GetPos() - EnemyPos).GetNormal().Dot(EnemyForwardVec);
+		// ·‚ªˆø”ˆÈã‚¾‚Á‚½‚çB
+		if (dot < ShieldAngle) {
+
+			++hitCount;
+			index->Init();
+
+		}
+		else {
+
+			index->Init();
+			continue;
+
+		}
 
 	}
 

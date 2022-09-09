@@ -216,15 +216,12 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 
 	}
 
+	int hitCount = 0;
 	// 盾持ちの敵だったら・
-	//if (m_id == ENEMY_INFO::ID::SHIELD) {
-
-
-	//}
-	//else {
+	if (m_id == ENEMY_INFO::ID::SHIELD) {
 
 		// プレイヤー弾との当たり判定。
-		int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale);
+		hitCount = BulletMgr.lock()->CheckHitPlayerBulletAngle(m_pos, m_scale, m_forwardVec, 0.0f);
 		m_hp -= hitCount;
 		if (m_hp <= 0) {
 
@@ -232,7 +229,19 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 
 		}
 
-	//}
+	}
+	else {
+
+		// プレイヤー弾との当たり判定。
+		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale);
+		m_hp -= hitCount;
+		if (m_hp <= 0) {
+
+			Init();
+
+		}
+
+	}
 
 	// 弾に当たったかフラグ
 	if (0 < hitCount) {
