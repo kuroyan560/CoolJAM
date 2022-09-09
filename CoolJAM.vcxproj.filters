@@ -277,14 +277,17 @@
     <ClCompile Include="src\user\EnvironmentMgr.cpp">
       <Filter>src\user</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClCompile>
     <ClCompile Include="src\user\EnemyWave.cpp">
       <Filter>src\user\敵のウェーブ</Filter>
     </ClCompile>
     <ClCompile Include="src\user\EnemyWaveMgr.cpp">
       <Filter>src\user\敵のウェーブ</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\DriftParticle.cpp">
-      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    <ClCompile Include="src\user\UnionEnemy.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,14 +525,17 @@
     <ClInclude Include="src\user\EnvironmentMgr.h">
       <Filter>src\user</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\DriftParticle.h">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClInclude>
     <ClInclude Include="src\user\EnemyWave.h">
       <Filter>src\user\敵のウェーブ</Filter>
     </ClInclude>
     <ClInclude Include="src\user\EnemyWaveMgr.h">
       <Filter>src\user\敵のウェーブ</Filter>
     </ClInclude>
-    <ClInclude Include="src\user\DriftParticle.h">
-      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    <ClInclude Include="src\user\UnionEnemy.h">
+      <Filter>src\user\敵</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

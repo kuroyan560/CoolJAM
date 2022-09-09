@@ -2,6 +2,7 @@
 #include "Importer.h"
 #include "Model.h"
 #include "BulletMgr.h"
+#include "UnionEnemy.h"
 
 std::shared_ptr<Model> Enemy::s_model;
 std::shared_ptr<Model> Enemy::s_modelHit;
@@ -26,6 +27,13 @@ Enemy::Enemy() {
 	}
 	m_transform.SetScale(1.0f);
 
+	// UNIONの敵の周りの敵を生成。
+	for (auto& index : m_unionEnemy) {
+
+		index = std::make_shared<UnionEnemy>(s_model, s_modelHit);
+
+	}
+
 }
 
 void Enemy::Init()
@@ -42,6 +50,12 @@ void Enemy::Init()
 	m_hp = 0;
 
 	m_transform.SetScale(1.0f);
+
+	for (auto& index : m_unionEnemy) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -61,25 +75,48 @@ void Enemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3
 	switch (m_id)
 	{
 	case ENEMY_INFO::ID::STOPPING:
+		/*== 止まっている敵 ==*/
 		m_scale = STOPPING_SCALE;
 		m_hp = STOPPING_HP;
 		break;
 	case ENEMY_INFO::ID::STRAIGHT:
+		/*== まっすぐ進む敵 ==*/
 		m_scale = STRAIGHT_SCALE;
 		m_hp = STRAIGHT_HP;
 		break;
 	case ENEMY_INFO::ID::PLAYER_STRAIGHT:
+		/*== プレイヤーに向かってまっすぐ進む敵 ==*/
 		m_scale = PLAYER_STRAIGHT_SCALE;
 		m_hp = PLAYER_STRAIGHT_HP;
 		break;
 	case ENEMY_INFO::ID::TRACKING:
+		/*== プレイヤーを追尾する敵 ==*/
 		m_scale = TRACKING_SCALE;
 		m_hp = TRACKING_HP;
 		break;
 	case ENEMY_INFO::ID::SHIELD:
+		/*== 盾を持った敵 ==*/
 		m_scale = SHIELD_SCALE;
 		m_hp = SHIELD_HP;
 		break;
+	case ENEMY_INFO::ID::UNION:
+		/*== 集合体の敵 ==*/
+	{
+		m_scale = UNION_SCALE;
+		m_hp = UNION_HP;
+		const int UNION_COUNT = static_cast<int>(m_unionEnemy.size());
+		const float UNION_ROTATE = DirectX::XM_2PI / static_cast<float>(UNION_COUNT);
+		float nowRotate = UNION_ROTATE;
+		float moveScale = m_scale + m_unionEnemy[0]->GetScale();
+		for (int index = 0; index < UNION_COUNT; ++index) {
+
+			m_unionEnemy[index]->Generate(m_pos + Vec3<float>(cosf(nowRotate) * moveScale, 0, sinf(nowRotate) * moveScale));
+			nowRotate += UNION_ROTATE;
+
+		}
+	}
+
+	break;
 	default:
 		// パラメータが設定されていないです！
 		assert(0);
@@ -170,6 +207,22 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 
 	}
 
+	break;
+
+	case ENEMY_INFO::ID::UNION:
+
+		/*-- 集合体の敵 --*/
+
+		for (auto& index : m_unionEnemy) {
+
+			if (!index->GetIsActive()) continue;
+
+			index->Update();
+
+		}
+
+		break;
+
 	default:
 		break;
 	}
@@ -200,6 +253,19 @@ void Enemy::Draw(Camera& Cam)
 
 	}
 
+	// IDが集合体の敵だったら集合体を描画する。
+	if (m_id == ENEMY_INFO::ID::UNION) {
+
+		for (auto& index : m_unionEnemy) {
+
+			if (!index->GetIsActive()) continue;
+
+			index->Draw(Cam);
+
+		}
+
+	}
+
 }
 
 void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
@@ -217,7 +283,7 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 	}
 
 	int hitCount = 0;
-	// 盾持ちの敵だったら・
+	// 盾持ちの敵だったら。
 	if (m_id == ENEMY_INFO::ID::SHIELD) {
 
 		// プレイヤー弾との当たり判定。
@@ -226,6 +292,37 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 		if (m_hp <= 0) {
 
 			Init();
+
+		}
+
+	}
+	// 集合体の敵だったら。
+	else if (m_id == ENEMY_INFO::ID::UNION) {
+
+		// 集合体との当たり判定を行う。
+		int activeCount = 0;
+		for (auto& index : m_unionEnemy) {
+
+			if (!index->GetIsActive()) continue;
+
+			// 当たり判定を行う。
+			int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(index->GetPos(), index->GetScale());
+			index->Damage(hitCount);
+
+			++activeCount;
+
+		}
+
+		// 本体との当たり判定
+		int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale);
+		if (activeCount <= 0) {
+
+			m_hp -= hitCount;
+			if (m_hp <= 0) {
+
+				Init();
+
+			}
 
 		}
 
@@ -267,11 +364,19 @@ void Enemy::Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerP
 	/*===== 弾射出処理 =====*/
 
 	if (!m_debugIsShotEnemy) return;
+	if (!(m_id == ENEMY_INFO::ID::UNION)) return;
 
 	++m_shotTimer;
 	if (SHOT_TIMER < m_shotTimer) {
 
-		BulletMgr.lock()->GenerateEnemyBullet(m_pos, Vec3(PlayerPos - m_pos).GetNormal());
+		// 集合体の周りから弾を出す。
+		for (auto& index : m_unionEnemy) {
+
+			if (!index->GetIsActive()) continue;
+
+			BulletMgr.lock()->GenerateEnemyBullet(m_pos, Vec3(index->GetPos() - m_pos).GetNormal());
+
+		}
 
 		m_shotTimer = 0;
 

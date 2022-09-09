@@ -8,6 +8,7 @@
 class Model;
 class Camera;
 class BulletMgr;
+class UnionEnemy;
 
 class Enemy {
 
@@ -30,10 +31,13 @@ private:
 
 	int m_hp;
 	int m_shotTimer;
-	const int SHOT_TIMER = 3000;
+	const int SHOT_TIMER = 300;
 
 	//モデル
 	Transform m_transform;
+
+	// UNIONの敵の周りの敵
+	std::array<std::shared_ptr<UnionEnemy>, 6> m_unionEnemy;
 
 	//enum class ID {
 
@@ -42,6 +46,7 @@ private:
 	//	PLAYER_STRAIGHT,	// 生成位置からプレイヤーの方向に真っ直ぐ動く敵。
 	//	TRACKING,	// 追尾する敵。
 	//	SHIELD,		// 盾持ちの敵。
+	//	UNION,		// 集合体の敵。
 	//	ID_COUNT,
 
 	//};
@@ -52,6 +57,7 @@ private:
 	const float PLAYER_STRAIGHT_SCALE = 3.0f;
 	const float TRACKING_SCALE = 3.0f;
 	const float SHIELD_SCALE = 12.0f;
+	const float UNION_SCALE = 6.0f;
 
 	// HP
 	const int STOPPING_HP = 10;
@@ -59,6 +65,7 @@ private:
 	const int PLAYER_STRAIGHT_HP = 7;
 	const int TRACKING_HP = 4;
 	const int SHIELD_HP = 30;
+	const int UNION_HP = 1;		// 集合の敵は全部の子分がいなくなった瞬間に死亡する。
 
 	// 縁
 	const float EDGE = 10.0f;

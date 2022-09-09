@@ -14,7 +14,7 @@ EnemyWaveMgr::EnemyWaveMgr()
 	std::shared_ptr<EnemyWave> wave1 = std::make_shared<EnemyWave>(0);
 
 	// ‚‚Ì“G
-	wave1->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::SHIELD, 120);
+	wave1->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::UNION, 120);
 
 	// ã‰º¶‰E‚©‚ç^‚Á’¼‚®—ˆ‚é“G
 	for (int index = 0; index < 100; ++index) {
