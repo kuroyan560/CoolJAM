@@ -1,6 +1,7 @@
 #include"../engine/ModelInfo.hlsli"
 #include"../engine/Camera.hlsli"
 #include"../engine/LightInfo.hlsli"
+#include"../engine/Math.hlsli"
 
 cbuffer cbuff0 : register(b0)
 {
@@ -109,6 +110,94 @@ struct PSOutput
     float depth : SV_Target2;
 };
 
+static float3 s_baseColor;
+static float s_metalness;
+static float s_roughness;
+
+//Schlickによる近似式
+float SchlickFresnel(float f0, float f90, float cosine)
+{
+    float m = saturate(1 - cosine);
+    float m2 = m * m;
+    float m5 = m2 * m2 * m;
+    return lerp(f0, f90, m5);
+}
+
+//UE4のGGX分布
+float DistributionGGX(float alpha, float NdotH)
+{
+    if (!any(alpha))
+        return 0.0f;
+    float alpha2 = alpha * alpha;
+    float t = NdotH * NdotH * (alpha2 - 1.0f) + 1.0f;
+    return alpha2 / (PI * t * t);
+}
+
+float3 SchlickFresnel3(float3 f0, float3 f90, float cosine)
+{
+    float m = saturate(1 - cosine);
+    float m2 = m * m;
+    float m5 = m2 * m2 * m;
+    return lerp(f0, f90, m5);
+}
+
+float3 DisneyFresnel(float LdotH)
+{
+    float luminance = 0.3f * s_baseColor.r + 0.6 * s_baseColor.g + 0.1f * s_baseColor.b;
+    float3 tintColor = s_baseColor / luminance;
+    float3 nonMetalColor = material.specular_pbr * 0.08f * tintColor;
+    float3 specularColor = lerp(nonMetalColor, s_baseColor, s_metalness);
+    return SchlickFresnel3(specularColor, float3(1, 1, 1), LdotH);
+}
+
+//UE4のSmithモデル
+float GeometricSmith(float cosine)
+{
+    float k = (s_roughness + 1.0f);
+    k = k * k / 8.0f;
+    return cosine / (cosine * (1.0f - k) + k);
+}
+
+//鏡面反射の計算
+float3 CookTorranceSpecular(float NdotL, float NdotV, float NdotH, float LdotH)
+{
+    float Ds = DistributionGGX(s_roughness * s_roughness, NdotH);
+    float3 Fs = DisneyFresnel(LdotH);
+    float Gs = GeometricSmith(NdotL) * GeometricSmith(NdotV);
+    float m = 4.0f * NdotL * NdotV;
+    return Ds * Fs * Gs / m;
+}
+
+//双方向反射分布関数
+float3 BRDF(float3 LigDirection, float3 LigColor, float3 WorldNormal, float3 WorldPos, float3 EyePos)
+{
+    float3 L = -LigDirection;
+    float3 V = normalize(EyePos - WorldPos);
+    float NdotL = dot(WorldNormal, L);
+    float NdotV = dot(WorldNormal, V);
+    if (NdotL <= 0 || NdotV <= 0)
+    {
+        return float3(0, 0, 0);
+    }
+    
+    float3 H = normalize(L + V);
+    float NdotH = dot(WorldNormal, H);
+    float LdotH = dot(L, H);
+    
+    float diffuseReflectance = 1.0f / PI;
+    
+    float energyBias = 0.5f * s_roughness;
+    float Fd90 = energyBias + 2.0f * LdotH * LdotH * s_roughness;
+    float FL = SchlickFresnel(1.0f, Fd90, NdotL);
+    float FV = SchlickFresnel(1.0f, Fd90, NdotV);
+    float energyFactor = lerp(1.0f, 1.0f / 1.51f, s_roughness);
+    float Fd = FL * FV * energyFactor;
+    
+    float3 diffuseColor = diffuseReflectance * Fd * s_baseColor * (1 - s_metalness);
+    float3 specularColor = CookTorranceSpecular(NdotL, NdotV, NdotH, LdotH) * LigColor;
+    
+    return (diffuseColor + specularColor);
+}
 
 PSOutput PSmain(VSOutput input) : SV_TARGET
 {
@@ -121,11 +210,15 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     {
         float3 normal = input.normal;
         float3 vnormal = normalize(mul(cam.view, normal));
+        
+        s_baseColor = material.baseColor;
+        s_metalness = material.metalness;
+        s_roughness = material.roughness;
     
      //ライトの影響
         float3 ligEffect = { 0.0f, 0.0f, 0.0f };
     
-    //ディレクションライト
+   //ディレクションライト
         for (int i = 0; i < ligNum.dirLigNum; ++i)
         {
             if (!dirLight[i].active)
@@ -133,9 +226,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         
             float3 dir = dirLight[i].direction;
             float3 ligCol = dirLight[i].color.xyz * dirLight[i].color.w;
-            ligEffect += CalcLambertDiffuse(dir, ligCol, normal) * (material.diffuse * material.diffuseFactor);
-            ligEffect += CalcPhongSpecular(dir, ligCol, normal, input.worldpos, cam.eyePos) * (material.specular * material.specularFactor);
-            ligEffect += CalcLimLight(dir, ligCol, normal, vnormal);
+            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos);
         }
     //ポイントライト
         for (int i = 0; i < ligNum.ptLigNum; ++i)
@@ -147,10 +238,6 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
             dir = normalize(dir);
             float3 ligCol = pointLight[i].color.xyz * pointLight[i].color.w;
         
-        //減衰なし状態
-            float3 diffPoint = CalcLambertDiffuse(dir, ligCol, normal);
-            float3 specPoint = CalcPhongSpecular(dir, ligCol, normal, input.worldpos, cam.eyePos);
-        
         //距離による減衰
             float3 distance = length(input.worldpos - pointLight[i].pos);
 		//影響率は距離に比例して小さくなっていく
@@ -160,12 +247,8 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
                 affect = 0.0f;
 		//影響を指数関数的にする
             affect = pow(affect, 3.0f);
-            diffPoint *= affect;
-            specPoint *= affect;
         
-            ligEffect += diffPoint * (material.diffuse * material.diffuseFactor);
-            ligEffect += specPoint * (material.specular * material.specularFactor);
-            ligEffect += CalcLimLight(dir, ligCol, normal, vnormal);
+            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
         }
     //スポットライト
         for (int i = 0; i < ligNum.spotLigNum; ++i)
@@ -177,10 +260,6 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
             ligDir = normalize(ligDir);
             float3 ligCol = spotLight[i].color.xyz * spotLight[i].color.w;
         
-        //減衰なし状態
-            float3 diffSpotLight = CalcLambertDiffuse(ligDir, ligCol, normal);
-            float3 specSpotLight = CalcPhongSpecular(ligDir, ligCol, normal, input.worldpos, cam.eyePos);
-        
         //スポットライトとの距離を計算
             float3 distance = length(input.worldpos - spotLight[i].pos);
        	//影響率は距離に比例して小さくなっていく
@@ -190,11 +269,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
                 affect = 0.0f;
     //影響を指数関数的にする
             affect = pow(affect, 3.0f);
-            diffSpotLight *= affect;
-            specSpotLight *= affect;
     
-            float3 spotlim = CalcLimLight(ligDir, ligCol, normal, vnormal) * affect;
-        
             float3 dir = normalize(spotLight[i].target - spotLight[i].pos);
             float angle = dot(ligDir, dir);
             angle = abs(acos(angle));
@@ -203,9 +278,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
                 affect = 0.0f;
             affect = pow(affect, 0.5f);
         
-            ligEffect += diffSpotLight * affect * (material.diffuse * material.diffuseFactor);
-            ligEffect += specSpotLight * affect * (material.specular * material.specularFactor);
-            ligEffect += spotlim * affect;
+            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
         }
     //天球
         for (int i = 0; i < ligNum.hemiSphereNum; ++i)
@@ -216,12 +289,10 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
             float t = dot(normal.xyz, hemiSphereLight[i].groundNormal);
             t = (t + 1.0f) / 2.0f;
             float3 hemiLight = lerp(hemiSphereLight[i].groundColor, hemiSphereLight[i].skyColor, t);
-            ligEffect += hemiLight;
+            ligEffect *= hemiLight;
         }
     
-        float4 result = colorTex.Sample(smp, input.uv);
-        result.xyz = (material.ambient + ligEffect) * result.xyz;
-        result.w *= (1.0f - material.transparent);
+        float4 result = float4(ligEffect, 1.0f - material.transparent);
         
         output.color = result;
     }
