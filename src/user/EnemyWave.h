@@ -13,6 +13,7 @@ namespace ENEMY_INFO {
 		STRAIGHT,	// まっすぐ動く敵。
 		PLAYER_STRAIGHT,	// 生成位置からプレイヤーの方向に真っ直ぐ動く敵。
 		TRACKING,	// 追尾する敵。
+		SHIELD,		// 盾持ちの敵。
 		ID_COUNT,
 
 	};

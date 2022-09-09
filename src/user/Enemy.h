@@ -35,10 +35,36 @@ private:
 	//モデル
 	Transform m_transform;
 
-	const std::array<float, 5> SCALE = { 6,3,3,3,3 };
-	const std::array<float, 5> EDGE_SCALE = { 10,7,7,4,4 };	// 近くにいる判定の大きさ。
-	const std::array<int, 5> HP = { 10,5,3, 3, 3 };
+	//enum class ID {
+
+	//	STOPPING,	// 動かない敵。
+	//	STRAIGHT,	// まっすぐ動く敵。
+	//	PLAYER_STRAIGHT,	// 生成位置からプレイヤーの方向に真っ直ぐ動く敵。
+	//	TRACKING,	// 追尾する敵。
+	//	SHIELD,		// 盾持ちの敵。
+	//	ID_COUNT,
+
+	//};
+
+	// スケール
+	const float STOPPING_SCALE = 6.0f;
+	const float STRAIGHT_SCALE = 3.0f;
+	const float PLAYER_STRAIGHT_SCALE = 3.0f;
+	const float TRACKING_SCALE = 3.0f;
+	const float SHIELD_SCALE = 12.0f;
+
+	// HP
+	const int STOPPING_HP = 10;
+	const int STRAIGHT_HP = 7;
+	const int PLAYER_STRAIGHT_HP = 7;
+	const int TRACKING_HP = 4;
+	const int SHIELD_HP = 30;
+
+	// 縁
+	const float EDGE = 10.0f;
+
 	const float TRACKING_ROT = 0.05f;
+	const float SHIELD_ROT = 0.01f;
 
 	ENEMY_INFO::ID m_id;
 
@@ -60,7 +86,7 @@ public:
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }
-	float GetScale() { return SCALE[static_cast<int>(m_id)]; }
+	float GetScale() { return m_scale; }
 
 	// 近くにいるか。
 	bool CheckIsEdge(const Vec3<float>& Pos, const float& Size);

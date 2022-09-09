@@ -110,29 +110,28 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	/*====== 入力処理 =====*/
 
-	// スティックの入力を取得。
-	Vec2<float> stickInput = UsersInput::Instance()->GetLeftStickVecRawFuna(0);
-
 	// マウスの入力からベクトルを求める。
 	Vec2<float> screenPos = KuroFunc::ConvertWorldToScreen(m_pos, Cam.GetViewMat(), Cam.GetProjectionMat(), WindowSize);
 	Vec2<float> mouseDir = Vec2<float>(UsersInput::Instance()->GetMousePos() - screenPos).GetNormal();
 	m_inputVec = Vec3<float>(mouseDir.y, 0.0f, mouseDir.x);
 
-	// デッドラインを設ける。
-	const float INPUT_DEADLINE = 0.25f;
-	// 入力されていたら。
-	if (INPUT_DEADLINE < stickInput.Length()) {
-
-		// 入力を保存。
-		m_inputVec = Vec3<float>(stickInput.y, 0.0f, stickInput.x);
-
-	}
-
 	// 正面ベクトルを保存。
 	m_prevForwardVec = m_forwardVec;
 
+	// スクリーン座標系での正面ベクトル。
+	float screenForwardAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+	Vec2<float> screenForwardVec = Vec2<float>(cosf(screenForwardAngle), sinf(screenForwardAngle));
+
+	// ベクトルの角度の差を求める。
+	bool isForward = true;
+	if (screenForwardVec.Dot(mouseDir) < 0.99f) {
+
+		isForward = false;
+
+	}
+
 	// ブレーキ入力を保存。
-	m_isBrake = UsersInput::Instance()->ControllerInput(0, A) || UsersInput::Instance()->MouseInput(LEFT);
+	m_isBrake = UsersInput::Instance()->MouseInput(LEFT) && !isForward;
 	if (m_isBrake) {
 
 		++m_brakeTimer;

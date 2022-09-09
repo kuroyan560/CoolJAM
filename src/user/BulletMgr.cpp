@@ -139,6 +139,29 @@ int BulletMgr::CheckHitPlayerBullet(const Vec3<float>& EnemyPos, const float& En
 
 }
 
+int BulletMgr::CheckHitPlayerBulletAngle(const Vec3<float>& EnemyPos, const float& EnemySize, const Vec3<float>& EnemyForwardVec, const float ShieldAngle)
+{
+
+	/*===== プレイヤー弾との当たり判定 =====*/
+
+	int hitCount = 0;
+	for (auto& index : m_playerBullet) {
+
+		if (!index->GetIsActive()) continue;
+
+		// 当たり判定を行う。
+		bool isHit = Vec3<float>(EnemyPos - index->GetPos()).Length() <= index->GetCheckHitScale() + EnemySize;
+		if (!isHit) continue;
+
+		++hitCount;
+		index->Init();
+
+	}
+
+	return hitCount;
+
+}
+
 int BulletMgr::CheckHitEnemyBullet(const Vec3<float>& PlayerPos, const float& PlayerSize) {
 
 	/*===== 敵弾との当たり判定 =====*/
