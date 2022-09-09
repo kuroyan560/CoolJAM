@@ -68,7 +68,7 @@ private:
 	//ŠÂ‹«“Š‡
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 
-	bool m_emissive = false;
+	bool m_emissive = true;
 
 public:
 	GameScene();
