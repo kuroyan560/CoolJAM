@@ -16,10 +16,17 @@ EnemyWaveMgr::EnemyWaveMgr()
 
 	// 上下左右から真っ直ぐ来る敵
 	for (int index = 0; index < 100; ++index) {
+
+		wave1->AddEnemy(Vec3<float>(MAP_SIZE / 2.0f, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(-MAP_SIZE / 2.0f, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE / 2.0f), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
+		wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE / 2.0f), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::TRACKING, 60 + index * 600);
+
 		wave1->AddEnemy(Vec3<float>(MAP_SIZE / 2.0f, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
 		wave1->AddEnemy(Vec3<float>(-MAP_SIZE / 2.0f, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
 		wave1->AddEnemy(Vec3<float>(0, 0, MAP_SIZE / 2.0f), Vec3<float>(0, 0, -1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
 		wave1->AddEnemy(Vec3<float>(0, 0, -MAP_SIZE / 2.0f), Vec3<float>(0, 0, 1), ENEMY_INFO::ID::STOPPING, 60 + index * 600);
+
 		// 上下左右から真っ直ぐ来る敵
 		wave1->AddEnemy(Vec3<float>(MAP_SIZE, 0, 0), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);
 		wave1->AddEnemy(Vec3<float>(-MAP_SIZE, 0, 0), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 60 + index * 600);

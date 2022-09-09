@@ -34,9 +34,9 @@ private:
 	//ƒ‚ƒfƒ‹
 	Transform m_transform;
 
-	const std::array<float, 4> SCALE = { 6,3,3,1 };
-	const std::array<float, 4> EDGE_SCALE = { 10,7,7,4 };	// ‹ß‚­‚É‚¢‚é”»’è‚Ì‘å‚«‚³B
-	const std::array<int, 3> HP = { 10,5,3 };
+	const std::array<float, 5> SCALE = { 6,3,3,3,3 };
+	const std::array<float, 5> EDGE_SCALE = { 10,7,7,4,4 };	// ‹ß‚­‚É‚¢‚é”»’è‚Ì‘å‚«‚³B
+	const std::array<int, 5> HP = { 10,5,3, 3, 3 };
 	const float TRACKING_ROT = 0.05f;
 
 	ENEMY_INFO::ID m_id;

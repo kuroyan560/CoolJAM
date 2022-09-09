@@ -139,6 +139,7 @@ void GameScene::OnDraw()
 	m_bulletMgr->Draw(nowCam);
 
 	// マップを描画
+	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
 	/*--- エミッシブマップに描画 ---*/
@@ -189,6 +190,7 @@ void GameScene::OnImguiDebug()
 	ImGui::Checkbox("Emissive", &m_emissive);
 	bool isBrakeBoostMode = 0 < m_player->GetBrakeBoostTimer();
 	ImGui::Checkbox("isBrakeBoostMode", &isBrakeBoostMode);
+	ImGui::DragFloat("MapSize", &MAP_SIZE, 1.0f);
 	ImGui::DragFloat("PlayerMaxSpeed", &m_player->MAX_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerMinSpeed", &m_player->MIN_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerDriftSpeed", &m_player->BRAKE_SPEED, 0.1f);
