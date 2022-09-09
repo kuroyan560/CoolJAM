@@ -89,6 +89,17 @@ void GameScene::OnUpdate()
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
 
+
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE))
+	{
+		m_emitter[0].Init(m_player->GetPos());
+	}
+	//死亡演出
+	for (int i = 0; i < m_emitter.size(); ++i)
+	{
+		m_emitter[i].Update();
+	}
+
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
 	const float CAMERA_DISTANCE = 60.0f;
 
@@ -138,9 +149,16 @@ void GameScene::OnDraw()
 	//弾を描画。
 	m_bulletMgr->Draw(nowCam);
 
+
+
 	// マップを描画
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
+
+	for (int i = 0; i < m_emitter.size(); ++i)
+	{
+		m_emitter[i].Draw(nowCam, m_mainTarget, m_emissiveMap, m_depthStencil);
+	}
 
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア
