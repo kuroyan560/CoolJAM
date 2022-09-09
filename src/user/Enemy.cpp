@@ -19,6 +19,8 @@ Enemy::Enemy() {
 	m_hitEffectTimer = 0;
 	m_shotTimer = 0;
 	m_hp = 0;
+	m_knockBackSpeed = 0.00001f;
+	m_knockBackVec = Vec3<float>();
 
 	if (!s_model)
 	{
@@ -48,6 +50,8 @@ void Enemy::Init()
 	m_hitEffectTimer = 0;
 	m_shotTimer = 0;
 	m_hp = 0;
+	m_knockBackSpeed = 0.00001f;
+	m_knockBackVec = Vec3<float>();
 
 	m_transform.SetScale(1.0f);
 
@@ -71,6 +75,8 @@ void Enemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
+	m_knockBackSpeed = 0.00001f;
+	m_knockBackVec = Vec3<float>();
 
 	switch (m_id)
 	{
@@ -93,6 +99,7 @@ void Enemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3
 		/*== プレイヤーを追尾する敵 ==*/
 		m_scale = TRACKING_SCALE;
 		m_hp = TRACKING_HP;
+		m_forwardVec = Vec3<float>(PlayerPos - m_pos).GetNormal();
 		break;
 	case ENEMY_INFO::ID::SHIELD:
 		/*== 盾を持った敵 ==*/
@@ -177,6 +184,21 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 		// 移動させる。
 		m_pos += m_forwardVec * m_speed;
 
+		// マップ外に出たら。
+		if (MapSize <= m_pos.Length()) {
+
+			m_pos = m_pos.GetNormal() * MapSize;
+
+			--m_hp;
+			if (m_hp <= 0) {
+
+				Init();
+
+			}
+
+		}
+
+
 	}
 
 	break;
@@ -227,8 +249,14 @@ void Enemy::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Playe
 		break;
 	}
 
+	// ノックバックの移動。
+	m_pos += m_knockBackVec * m_knockBackSpeed;
+
+	// ノックバックの移動を減らす。
+	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+
 	// 当たり判定
-	CheckHitBullet(BulletMgr, MapSize);
+	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
 
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
@@ -268,7 +296,7 @@ void Enemy::Draw(Camera& Cam)
 
 }
 
-void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize)
+void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
 {
 
 	/*===== 当たり判定 =====*/
@@ -306,7 +334,8 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 			if (!index->GetIsActive()) continue;
 
 			// 当たり判定を行う。
-			int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(index->GetPos(), index->GetScale());
+			Vec3<float> hitBulletPos;
+			int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(index->GetPos(), index->GetScale(), hitBulletPos);
 			index->Damage(hitCount);
 
 			++activeCount;
@@ -314,10 +343,12 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 		}
 
 		// 本体との当たり判定
-		int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale);
+		Vec3<float> hitBulletPos;
+		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
 		if (activeCount <= 0) {
 
 			m_hp -= hitCount;
+			hitCount = 0;
 			if (m_hp <= 0) {
 
 				Init();
@@ -330,7 +361,17 @@ void Enemy::CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& Map
 	else {
 
 		// プレイヤー弾との当たり判定。
-		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale);
+		Vec3<float> hitBulletPos;
+		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
+
+		// IDがTRACKだったらノックバックさせる。
+		if (0 < hitCount && m_id == ENEMY_INFO::ID::TRACKING) {
+
+			m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
+			m_knockBackSpeed = KNOCK_BACK_SPEED;
+
+		}
+
 		m_hp -= hitCount;
 		if (m_hp <= 0) {
 
@@ -381,6 +422,22 @@ void Enemy::Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerP
 		m_shotTimer = 0;
 
 	}
+
+}
+
+Vec3<float> Enemy::KeepInMap(Vec3<float>& Pos, const float& MapSize)
+{
+
+	/*===== マップ内に収まるようにする =====*/
+
+	Vec3<float> pos = Pos;
+	if (MapSize <= pos.Length()) {
+
+		pos = pos.GetNormal() * MapSize;
+
+	}
+
+	return pos;
 
 }
 

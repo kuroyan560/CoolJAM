@@ -75,11 +75,11 @@ EnemyWaveMgr::EnemyWaveMgr()
 	//}
 
 
-	//for (int index = 0; index < 100; ++index) {
+	for (int index = 0; index < 100; ++index) {
 
-	//	wave1->AddEnemy(Vec3<float>(), Vec3<float>(), ENEMY_INFO::ID::PLAYER_STRAIGHT, 1000 + index * 20);
+		wave1->AddEnemy(Vec3<float>(), Vec3<float>(0,0,1), ENEMY_INFO::ID::TRACKING, 60 + index * 20);
 
-	//}
+	}
 
 	// WAVE1Çí«â¡ÅB
 	m_waves.emplace_back(wave1);

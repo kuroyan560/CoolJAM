@@ -117,7 +117,7 @@ void BulletMgr::GenerateEnemyBullet(const Vec3<float>& GeneratePos, const Vec3<f
 
 }
 
-int BulletMgr::CheckHitPlayerBullet(const Vec3<float>& EnemyPos, const float& EnemySize) {
+int BulletMgr::CheckHitPlayerBullet(const Vec3<float>& EnemyPos, const float& EnemySize, Vec3<float>& HitBulletPos) {
 
 	/*===== ƒvƒŒƒCƒ„[’e‚Æ‚Ì“–‚½‚è”»’è =====*/
 
@@ -131,6 +131,7 @@ int BulletMgr::CheckHitPlayerBullet(const Vec3<float>& EnemyPos, const float& En
 		if (!isHit) continue;
 
 		++hitCount;
+		HitBulletPos = index->GetPos();
 		index->Init();
 
 	}
