@@ -217,6 +217,7 @@
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\DashLightingParticle.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
+    <ClCompile Include="src\user\PlayerDashLighting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -300,6 +302,7 @@
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\DashLightingParticle.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnemyWave.h" />
@@ -311,6 +314,7 @@
     <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
     <ClInclude Include="src\user\Player.h" />
+    <ClInclude Include="src\user\PlayerDashLighting.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">

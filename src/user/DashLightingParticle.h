@@ -16,6 +16,9 @@ public:
 private:
 	Vec3<float> m_pos;
 	Vec3<float> m_startPos, m_endPos;
-
+	float angle;
+	float angleVel;
+	int alpha;
+	bool initFlag;
 };
 

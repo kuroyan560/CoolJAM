@@ -81,6 +81,11 @@ void Player::Init()
 
 	}
 
+
+	//ダッシュ時のエフェクト
+	dashLight.Init(&m_pos);
+
+
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
@@ -247,6 +252,7 @@ void Player::UpdateEffect()
 
 	}
 
+
 	// ダメージエフェクトの更新処理
 	if (m_isDamageEffect) {
 
@@ -276,8 +282,11 @@ void Player::UpdateEffect()
 			m_damageEffectTimer = 0;
 
 		}
-
 	}
+
+	//ダッシュ時のエフェクト
+	dashLight.Update();
+
 
 
 	// デバッグ用
@@ -432,6 +441,9 @@ void Player::Draw(Camera& Cam) {
 		index->Draw(Cam);
 
 	}
+
+
+	dashLight.Draw(Cam);
 
 }
 

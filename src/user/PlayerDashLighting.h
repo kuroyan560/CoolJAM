@@ -3,6 +3,7 @@
 #include<memory>
 #include<array>
 #include<DirectXMath.h>
+#include"DashLightingParticle.h"
 
 class Camera;
 class PlayerDashLighting
@@ -17,5 +18,7 @@ private:
 	Vec3<float> *pos;
 	Vec3<float> startPos, endPos;
 
+	std::array<DashLightingParticle, 20> particleArray;
+	int particleInitNum;
+	int timer;
 };
-

@@ -4,6 +4,7 @@
 #include<memory>
 #include<array>
 #include<DirectXMath.h>
+#include"PlayerDashLighting.h"
 
 class Model;
 class Camera;
@@ -81,7 +82,7 @@ private:
 	const Vec3<float> RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.879f);
 	const Vec3<float> DARK_RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.289f);
 
-
+	PlayerDashLighting dashLight;
 public:
 
 	float MIN_SPEED = 0.7f;	// ç≈è¨ÇÃà⁄ìÆë¨ìx

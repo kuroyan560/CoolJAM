@@ -286,6 +286,12 @@
     <ClCompile Include="src\user\DriftParticle.cpp">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\PlayerDashLighting.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DashLightingParticle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -531,5 +537,7 @@
     <ClInclude Include="src\user\DriftParticle.h">
       <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\PlayerDashLighting.h" />
+    <ClInclude Include="src\user\DashLightingParticle.h" />
   </ItemGroup>
 </Project>
