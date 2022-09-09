@@ -12,9 +12,6 @@ EnvironmentMgr::EnvironmentMgr()
 
 	m_pillarModelArray[STATUS::DEFAULT] = Importer::Instance()->LoadModel(DIR, "pillar_mono.glb");
 	m_pillarModelArray[STATUS::FEVER] = Importer::Instance()->LoadModel(DIR, "pillar_fever.glb");
-
-	//lineLight = std::make_unique<LineLight>();
-	//lineLight->Init();
 }
 
 void EnvironmentMgr::Init()
@@ -22,10 +19,13 @@ void EnvironmentMgr::Init()
 	m_nextStatus = STATUS::NONE;
 	m_nowStatus = STATUS::DEFAULT;
 	m_statusChangeRate = 1.0f;
+	initLineLightFlag = false;
 }
 
 void EnvironmentMgr::Update()
 {
+	static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
+
 	//ステータス切り替わり
 	if (m_nextStatus != STATUS::NONE)
 	{
@@ -37,8 +37,25 @@ void EnvironmentMgr::Update()
 			m_nowStatus = m_nextStatus;
 			m_nextStatus = STATUS::NONE;
 			m_statusChangeRate = 1.0f;
+			initLineLightFlag = true;
 		}
 	}
+
+	if (!initLineLightFlag && !lineLight)
+	{
+		std::vector<Vec3<float>>posArray;
+		for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)
+		{
+			Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
+			posArray.push_back(
+				{ cos(posAngle) * m_pillarPosRadius, m_pillarPosY, sin(posAngle) * m_pillarPosRadius }
+			);
+		}
+		lineLight = std::make_unique<LineLight>(posArray);
+		lineLight->Init();
+		initLineLightFlag = true;
+	}
+
 
 	//デバッグ
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_S) && m_nextStatus == STATUS::NONE)
@@ -46,7 +63,11 @@ void EnvironmentMgr::Update()
 		ChangeStatus(STATUS(1 - m_nowStatus));
 	}
 
-	//lineLight->Update();
+
+	if (initLineLightFlag && lineLight)
+	{
+		lineLight->Update();
+	}
 
 }
 
@@ -92,8 +113,10 @@ void EnvironmentMgr::Draw(Camera &Cam)
 	}
 
 
-	//lineLight->Draw(Cam);
-
+	if (initLineLightFlag && lineLight)
+	{
+		lineLight->Draw(Cam);
+	}
 }
 
 void EnvironmentMgr::OnImguiDebug()

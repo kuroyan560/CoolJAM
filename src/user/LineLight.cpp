@@ -3,7 +3,7 @@
 
 LineLight::LineLight(const std::vector<Vec3<float>> &POS_ARRAY)
 {
-	model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+	model = Importer::Instance()->LoadModel("resource/user/", "block.glb");
 
 	lightBlocks.reserve(POS_ARRAY.size());
 	lightBlocks.resize(POS_ARRAY.size());
@@ -15,7 +15,7 @@ LineLight::LineLight(const std::vector<Vec3<float>> &POS_ARRAY)
 
 void LineLight::Init()
 {
-	for (int i = 0; i < POS_ARRAY.size(); ++i)
+	for (int i = 0; i < lightBlocks.size(); ++i)
 	{
 		lightBlocks[i]->Init();
 	}
@@ -23,7 +23,7 @@ void LineLight::Init()
 
 void LineLight::Update()
 {
-	for (int i = 0; i < modelArray.size(); ++i)
+	for (int i = 0; i < lightBlocks.size(); ++i)
 	{
 		lightBlocks[i]->Update();
 	}
@@ -31,7 +31,7 @@ void LineLight::Update()
 
 void LineLight::Draw(Camera &CAMERA)
 {
-	for (int i = 0; i < modelArray.size(); ++i)
+	for (int i = 0; i < lightBlocks.size(); ++i)
 	{
 		lightBlocks[i]->Draw(CAMERA);
 	}

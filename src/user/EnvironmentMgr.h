@@ -38,7 +38,9 @@ private:
 	//ステータス切り替わり時間
 	int m_statusChangeTime = 250;
 
+	bool initLineLightFlag;
 	std::unique_ptr<LineLight> lineLight;
+
 
 public:
 	EnvironmentMgr();

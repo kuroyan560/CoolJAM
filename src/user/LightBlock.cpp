@@ -5,7 +5,8 @@ LightBlock::LightBlock(const Vec3<float> &POS, std::shared_ptr<Model> MODEL) :M_
 {
 	m_model = MODEL;
 	m_pos = POS;
-	m_timer = 30;
+	m_timer = KuroFunc::GetRand(60.0f, 120.0f);
+	m_tranform.SetScale({ 2.0f,6.0f,2.0f });
 }
 
 void LightBlock::Init()
@@ -21,7 +22,7 @@ void LightBlock::Update()
 	{
 		m_pos.y = M_MAX_HIGHT;
 	}
-	m_transform.SetPos(m_pos);
+	m_tranform.SetPos(m_pos);
 }
 
 void LightBlock::Draw(Camera &CAMERA)
