@@ -28,7 +28,7 @@ private:
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
 	Vec3<float> m_prevForwardVec;// 前フレームの移動方向ベクトル。
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
-	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
+	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(1.0f, 0.0f, 1.0f).GetNormal();
 	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
 	const float BOOST_SCALE = 2.0f;

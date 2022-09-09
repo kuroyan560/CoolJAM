@@ -149,6 +149,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			Vec3<float> mouseWorldPos;
 			bool isHit = CheckHitRayToStagePolygon(mousePos, Vec3<float>(mousePosFar - mousePos).GetNormal(), mouseWorldPos);
 
+			// マウスのY座標は0固定。
+			mouseWorldPos.y = 0;
+
 			// 杭のいちを設定。
 			m_pileTransform.SetPos(mouseWorldPos);
 
@@ -159,7 +162,13 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		// 杭座標から離れすぎないようにする。
 		if (pileLength < Vec3<float>(m_pileTransform.GetPos() - m_pos).Length()) {
 
-			m_pos = m_pileTransform.GetPos() + Vec3<float>(m_pos - m_pileTransform.GetPos()).GetNormal() * pileLength;
+			Vec3<float> pushBackPrevPos = m_pos;
+			Vec3<float> pushBackNormal = Vec3<float>(m_pos - m_pileTransform.GetPos()).GetNormal();
+
+			// 押し戻す。
+			m_pos = m_pileTransform.GetPos() + (pushBackNormal * pileLength);
+
+			m_forwardVec = Vec3<float>(m_pos - m_prevPos).GetNormal();
 
 		}
 
@@ -170,27 +179,27 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		// ブレーキブーストのタイマーを初期化する。
 		m_brakeBoostTimer = 0;
 
-		// ベクトルをすごくゆっくり補完する。
-		float cross = m_forwardVec.Cross(m_inputVec).y;
-		float dot = m_forwardVec.Dot(m_inputVec);
-		if (dot < 0.0f) {
+		//// ベクトルをすごくゆっくり補完する。
+		//float cross = m_forwardVec.Cross(m_inputVec).y;
+		//float dot = m_forwardVec.Dot(m_inputVec);
+		//if (dot < 0.0f) {
 
-			cross = 1.0f * (cross < 0 ? -1.0f : 1.0f);
+		//	cross = 1.0f * (cross < 0 ? -1.0f : 1.0f);
 
-		}
-		float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
-		if (cross != 0) {
+		//}
+		//float nowAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+		//if (cross != 0) {
 
-			// 保管量
-			float rot = 0.04f * cross;
+		//	// 保管量
+		//	float rot = 0.04f * cross;
 
-			float rotAngle = nowAngle + rot;
+		//	float rotAngle = nowAngle + rot;
 
-			m_forwardVec = Vec3<float>(sinf(rotAngle), 0.0f, cosf(rotAngle));
+		//	m_forwardVec = Vec3<float>(sinf(rotAngle), 0.0f, cosf(rotAngle));
 
-		}
+		//}
 
-		GenerateDriftParticle(nowAngle, cross);
+		//GenerateDriftParticle(nowAngle, cross);
 
 	}
 	else {
@@ -219,6 +228,15 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
+
+	// デバッグキー
+	if (UsersInput::Instance()->KeyInput(DIK_R)) {
+
+		m_pos = Vec3<float>(0, 0, 0);
+
+	}
+
+
 }
 
 void Player::Move()
@@ -229,7 +247,7 @@ void Player::Move()
 	// ブレーキ状態の有無に応じて移動速度を変える。
 	if (m_isBrake) {
 
-		m_speed += (BRAKE_SPEED - m_speed) / 10.0f;
+		//m_speed += (BRAKE_SPEED - m_speed) / 10.0f;
 
 	}
 
@@ -239,17 +257,15 @@ void Player::Move()
 	// 移動させる。
 	m_pos += m_forwardVec * m_speed;
 
+	// プレイヤーのY座標は0固定。
+	m_pos.y = 0;
+
 	// 正面ベクトルが回転した量を計算する。
-	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
-
-		int a = 0;
-
-	}
-
 	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
 	float subAngle = forwardVecAngle - prevForwardVecAngle;
 
+	// 回転量を計算する。
 	if (subAngle != 0) {
 
 		m_rotX = -subAngle;
@@ -501,7 +517,8 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 	if (m_isBrake) {
 
-		Vec2<float> inputVec = Vec2<float>(m_inputVec.x, m_inputVec.z);
+		Vec2<float> inputVec = Vec2<float>(m_pileTransform.GetPos().x, m_pileTransform.GetPos().z) - Vec2<float>(m_pos.x, m_pos.z);
+		inputVec.Normalize();
 		float brakeRate = 0;
 
 		// 経過時間から割合を求める。
