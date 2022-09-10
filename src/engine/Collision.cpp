@@ -13,8 +13,8 @@ std::shared_ptr<GraphicsPipeline> CollisionPrimitive::GetPrimitivePipeline()
 	{
 		//パイプライン設定
 		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-		PIPELINE_OPTION.m_wireFrame = true;
-		PIPELINE_OPTION.m_calling = false;
+		PIPELINE_OPTION.m_fillMode = D3D12_FILL_MODE_WIREFRAME;
+		PIPELINE_OPTION.m_calling = D3D12_CULL_MODE_NONE;
 
 		//シェーダー情報
 		static Shaders SHADERS;
@@ -219,7 +219,7 @@ void CollisionMesh::DebugDraw(const bool& Hit, Camera& Cam)
 	{
 		//パイプライン設定
 		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		PIPELINE_OPTION.m_wireFrame = true;
+		PIPELINE_OPTION.m_fillMode = D3D12_FILL_MODE_WIREFRAME;
 
 		//シェーダー情報
 		static Shaders SHADERS;

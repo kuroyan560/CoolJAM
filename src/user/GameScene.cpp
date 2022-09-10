@@ -100,6 +100,7 @@ void GameScene::OnUpdate()
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
 
+
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
 	const float CAMERA_DISTANCE = 80.0f;
 
@@ -162,17 +163,17 @@ void GameScene::OnDraw()
 	m_player->Draw(*nowCam);
 
 	//敵を描画
-	m_enemyMgr->Draw();
+	m_enemyMgr->Draw(*nowCam, backBuff, m_emissiveMap, m_depthStencil);
 
 	//弾を描画。
 	m_bulletMgr->Draw();
 
-	// フィーバーゲージを描画。
-	m_feverGauge->Draw();
-
 	// マップを描画
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc_Append::DrawModel(m_mapModel);
+
+	// フィーバーゲージを描画。
+	m_feverGauge->Draw();
 
 	//m_gameTimer->Draw();
 

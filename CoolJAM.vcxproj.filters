@@ -88,79 +88,539 @@
     <ClCompile Include="src\user\FeverGauge.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
-    <ClInclude Include="lib\dxcompiler\inc\dxcapi.h" />
-    <ClInclude Include="lib\imgui\imconfig.h" />
-    <ClInclude Include="lib\imgui\imgui.h" />
-    <ClInclude Include="lib\imgui\imgui_impl_dx12.h" />
-    <ClInclude Include="lib\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="lib\imgui\imgui_internal.h" />
-    <ClInclude Include="lib\imgui\imstb_rectpack.h" />
-    <ClInclude Include="lib\imgui\imstb_textedit.h" />
-    <ClInclude Include="lib\imgui\imstb_truetype.h" />
-    <ClInclude Include="lib\magic_enum\magic_enum.h" />
-    <ClInclude Include="src\engine\Animation.h" />
-    <ClInclude Include="src\engine\AudioApp.h" />
-    <ClInclude Include="src\engine\Camera.h" />
-    <ClInclude Include="src\engine\Collider.h" />
-    <ClInclude Include="src\engine\Collision.h" />
-    <ClInclude Include="src\engine\Common\Angle.h" />
-    <ClInclude Include="src\engine\Common\Color.h" />
-    <ClInclude Include="src\engine\Common\Command.h" />
-    <ClInclude Include="src\engine\Common\KuroFunc.h" />
-    <ClInclude Include="src\engine\Common\KuroMath.h" />
-    <ClInclude Include="src\engine\Common\Observer.h" />
-    <ClInclude Include="src\engine\Common\Primitive.h" />
-    <ClInclude Include="src\engine\Common\Singleton.h" />
-    <ClInclude Include="src\engine\Common\Subject.h" />
-    <ClInclude Include="src\engine\Common\Transform.h" />
-    <ClInclude Include="src\engine\Common\Transform2D.h" />
-    <ClInclude Include="src\engine\Common\ValueMinMax.h" />
-    <ClInclude Include="src\engine\Common\Vec.h" />
-    <ClInclude Include="src\engine\CubeMap.h" />
-    <ClInclude Include="src\engine\D3D12App.h" />
-    <ClInclude Include="src\engine\D3D12Data.h" />
-    <ClInclude Include="src\engine\DebugCamera.h" />
-    <ClInclude Include="src\engine\DescriptorHeap.h" />
-    <ClInclude Include="src\engine\DOF.h" />
-    <ClInclude Include="src\engine\DrawFuncBillBoard.h" />
-    <ClInclude Include="src\engine\LightBloomDevice.h" />
-    <ClInclude Include="src\engine\DrawFunc2D.h" />
-    <ClInclude Include="src\engine\DrawFunc2D_FillTex.h" />
-    <ClInclude Include="src\engine\DrawFunc2D_Mask.h" />
-    <ClInclude Include="src\engine\DrawFunc2D_Shadow.h" />
-    <ClInclude Include="src\engine\DrawFunc2D_Color.h" />
-    <ClInclude Include="src\engine\DrawFunc3D.h" />
-    <ClInclude Include="src\engine\Fps.h" />
-    <ClInclude Include="src\engine\GaussianBlur.h" />
-    <ClInclude Include="src\engine\GraphicsManager.h" />
-    <ClInclude Include="src\engine\ImguiApp.h" />
-    <ClInclude Include="src\engine\ImguiDebugInterface.h" />
-    <ClInclude Include="src\engine\Importer.h" />
-    <ClInclude Include="src\engine\ImportHeader.h" />
-    <ClInclude Include="src\engine\KuroEngine.h" />
-    <ClInclude Include="src\engine\Light.h" />
-    <ClInclude Include="src\engine\LightManager.h" />
-    <ClInclude Include="src\engine\Material.h" />
-    <ClInclude Include="src\engine\Mesh.h" />
-    <ClInclude Include="src\engine\Model.h" />
-    <ClInclude Include="src\engine\ModelAnimator.h" />
-    <ClInclude Include="src\engine\ModelMesh.h" />
-    <ClInclude Include="src\engine\NoiseGenerator.h" />
-    <ClInclude Include="src\engine\Object.h" />
-    <ClInclude Include="src\engine\ShadowMapDevice.h" />
-    <ClInclude Include="src\engine\Skeleton.h" />
-    <ClInclude Include="src\engine\Sprite.h" />
-    <ClInclude Include="src\engine\SpriteMesh.h" />
-    <ClInclude Include="src\engine\Sprite_Shadow.h" />
-    <ClInclude Include="src\engine\StreamReader.h" />
-    <ClInclude Include="src\engine\Swapchain.h" />
-    <ClInclude Include="src\engine\UsersInput.h" />
-    <ClInclude Include="src\engine\WinApp.h" />
-    <ClInclude Include="src\user\BaseEnemy.h" />
-    <ClInclude Include="src\user\BulletMgr.h" />
-    <ClInclude Include="src\user\ColorPalette.h" />
-    <ClInclude Include="src\user\DashLightingParticle.h" />
+    <ClCompile Include="src\engine\D3D12App.cpp">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\D3D12Data.cpp">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DescriptorHeap.cpp">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Swapchain.cpp">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\GraphicsManager.cpp">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\LightManager.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\SpriteMesh.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\AudioApp.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Fps.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ImguiApp.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\UsersInput.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\WinApp.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\KuroEngine.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\GaussianBlur.cpp">
+      <Filter>src\engine\ユーザー向け\ポストエフェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Sprite.cpp">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Sprite_Shadow.cpp">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_impl_dx12.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\main.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\KuroFunc.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\KuroMath.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\Primitive.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\Subject.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\Transform.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Common\Transform2D.cpp">
+      <Filter>src\engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Model.cpp">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Importer.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Material.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Skeleton.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ModelMesh.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc2D_Color.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc2D.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc2D_FillTex.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc2D_Mask.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc2D_Shadow.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFunc3D.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Camera.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DebugCamera.cpp">
+      <Filter>src\engine\ユーザー向け</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Light.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\CubeMap.cpp">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ShadowMapDevice.cpp">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Object.cpp">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ModelAnimator.cpp">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GameScene.cpp">
+      <Filter>src\user\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Collider.cpp">
+      <Filter>src\engine\ユーザー向け\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Collision.cpp">
+      <Filter>src\engine\ユーザー向け\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ImguiDebugInterface.cpp">
+      <Filter>src\engine\ユーザー向け</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\NoiseGenerator.cpp">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\LightBloomDevice.cpp">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DOF.cpp">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DrawFuncBillBoard.cpp">
+      <Filter>src\engine\ユーザー向け\描画便利関数\BillBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\Player.cpp">
+      <Filter>src\user\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GameManager.cpp">
+      <Filter>src\user\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyMgr.cpp">
+      <Filter>src\user\敵</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\PlayerBullet.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\BulletMgr.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyBullet.cpp">
+      <Filter>src\user\弾</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnvironmentMgr.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyWave.cpp">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyWaveMgr.cpp">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\UnionEnemy.cpp">
+      <Filter>src\user\敵</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\PlayerStraightEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\PressEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\ShieldEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\StoppingEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\StraightEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\TrackingEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\UnionBaseEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\TorusMoveEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\ElecMushiEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\GameTimer.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\BaseEnemy.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DrawFunc_Append.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadEmitter.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadLineParticle.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\engine\D3D12App.h">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\D3D12Data.h">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DescriptorHeap.h">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Swapchain.h">
+      <Filter>src\engine\DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\GraphicsManager.h">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Light.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\LightManager.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Mesh.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\SpriteMesh.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\AudioApp.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Fps.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ImguiApp.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\UsersInput.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\WinApp.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\KuroEngine.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\GaussianBlur.h">
+      <Filter>src\engine\ユーザー向け\ポストエフェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Sprite.h">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Sprite_Shadow.h">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui_impl_dx12.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Angle.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Color.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Command.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\KuroFunc.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\KuroMath.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Observer.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Primitive.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Singleton.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Subject.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Transform.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Transform2D.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\Vec.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Model.h">
+      <Filter>src\engine\ユーザー向け\オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Importer.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Material.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Skeleton.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ImportHeader.h">
+      <Filter>src\engine\フレームワーク\情報コンテナ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ModelMesh.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc2D_Color.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc2D.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc2D_FillTex.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc2D_Mask.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc2D_Shadow.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFunc3D.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Camera.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DebugCamera.h">
+      <Filter>src\engine\ユーザー向け</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Animation.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\StreamReader.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Object.h">
+      <Filter>src\engine\ユーザー向け</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\CubeMap.h">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ShadowMapDevice.h">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ModelAnimator.h">
+      <Filter>src\engine\レンダリング関連\レンダーオブジェクト\モデル情報</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GameScene.h">
+      <Filter>src\user\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Collider.h">
+      <Filter>src\engine\ユーザー向け\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Collision.h">
+      <Filter>src\engine\ユーザー向け\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Common\ValueMinMax.h">
+      <Filter>src\engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ImguiDebugInterface.h">
+      <Filter>src\engine\ユーザー向け</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\NoiseGenerator.h">
+      <Filter>src\engine\フレームワーク</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\LightBloomDevice.h">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DOF.h">
+      <Filter>src\engine\レンダリング関連</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DrawFuncBillBoard.h">
+      <Filter>src\engine\ユーザー向け\描画便利関数\BillBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\magic_enum\magic_enum.h">
+      <Filter>magic_enum</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h">
+      <Filter>dxcompiler</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dxcompiler\inc\dxcapi.h">
+      <Filter>dxcompiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\Player.h">
+      <Filter>src\user\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GameManager.h">
+      <Filter>src\user\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyMgr.h">
+      <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PlayerBullet.h">
+      <Filter>src\user\弾</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\BulletMgr.h">
+      <Filter>src\user\弾</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyBullet.h">
+      <Filter>src\user\弾</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnvironmentMgr.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DriftParticle.h">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyWave.h">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\EnemyWaveMgr.h">
+      <Filter>src\user\敵のウェーブ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\UnionEnemy.h">
+      <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\BaseEnemy.h">
+      <Filter>src\user\敵\敵基底クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\StoppingEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\StraightEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PlayerStraightEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\TrackingEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\ShieldEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\UnionBaseEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PressEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\TorusMoveEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\ElecMushiEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\GameTimer.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
     <ClInclude Include="src\user\DashLightingRoad.h" />
     <ClInclude Include="src\user\DrawFunc_Append.h" />
     <ClInclude Include="src\user\DriftParticle.h" />

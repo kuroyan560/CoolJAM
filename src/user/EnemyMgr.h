@@ -2,6 +2,7 @@
 #include <array>
 #include <memory>
 #include "Vec.h"
+#include"EnemyDeadEmitter.h"
 
 class BaseEnemy;
 class Camera;
@@ -15,6 +16,8 @@ private:
 	/*===== ƒƒ“ƒo•Ï” =====*/
 
 	std::array<std::shared_ptr<BaseEnemy>, 64> m_enemy;
+	std::array<EnemyDeadEmitter, 64> m_deadEffectEmitterArray;
+	std::array<bool, 64> m_initDeadEffectArray;
 
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
@@ -28,7 +31,7 @@ public:
 	EnemyMgr();
 	void Init();
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	void Draw();
+	void Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil);
 
 	// ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌêŠ‚ğ‚©‚¦‚·B
 	Vec3<float> SearchNearestEnemy(const Vec3<float>& Pos);
