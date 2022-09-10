@@ -172,13 +172,4 @@ void EnemyDeadEmitter::Draw(Camera& CAMERA,
 		},
 		pos.z,
 		true);
-
-	//for (int i = 0; i < m_lineParticle.size(); ++i)
-	//{
-	//	m_lineParticle[i].Draw(CAMERA);
-	//}
-	//for (int i = 0; i < m_SquareParticle.size(); ++i)
-	//{
-	//	m_SquareParticle[i]->Draw(CAMERA);
-	//}
 }
