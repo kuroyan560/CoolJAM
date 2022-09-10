@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Vec.h"
 #include<memory>
+#include"GameTimer.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -68,6 +69,8 @@ private:
 
 	//ŠÂ‹«“Š‡
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
+
+	std::unique_ptr<GameTimer>m_gameTimer;
 
 	bool m_emissive = false;
 

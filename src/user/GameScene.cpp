@@ -48,6 +48,8 @@ GameScene::GameScene()
 
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
+
+	m_gameTimer = std::make_unique<GameTimer>();
 }
 
 void GameScene::OnInitialize()
@@ -65,7 +67,6 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
-
 }
 
 void GameScene::OnUpdate()
@@ -118,11 +119,19 @@ void GameScene::OnUpdate()
 	}
 	m_feverGameTimer->Update();
 
+	if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
+	{
+		m_gameTimer->Init(10);
+		m_gameTimer->Start();
+	}
+	m_gameTimer->Update();
+
+
+
 }
 
 void GameScene::OnDraw()
 {
-
 	/*===== 描画処理 =====*/
 
 	//デプスステンシルクリア
@@ -159,6 +168,9 @@ void GameScene::OnDraw()
 	// フィーバータイムのUIを描画。
 	m_feverGameTimer->Draw();
 
+	m_gameTimer->Draw();
+
+
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
@@ -170,12 +182,14 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
+
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
 	if (m_emissive)
 	{
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
+
 
 	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG

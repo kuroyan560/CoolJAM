@@ -292,6 +292,12 @@
     <ClCompile Include="src\user\UnionEnemy.cpp">
       <Filter>src\user\敵</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\GameTimer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp">
       <Filter>src\user\敵\敵継承クラス</Filter>
     </ClCompile>
@@ -318,6 +324,7 @@
     </ClCompile>
     <ClCompile Include="src\user\ElecMushiEnemy.cpp">
       <Filter>src\user\敵\敵継承クラス</Filter>
+      >>>>>>> merge_to_BonusStage
     </ClCompile>
     <ClCompile Include="src\user\GameTimer.cpp">
       <Filter>src\user</Filter>
@@ -570,41 +577,39 @@
     <ClInclude Include="src\user\UnionEnemy.h">
       <Filter>src\user\敵</Filter>
     </ClInclude>
-    <ClInclude Include="src\user\BaseEnemy.h">
-      <Filter>src\user\敵\敵基底クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\StoppingEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\StraightEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\PlayerStraightEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\TrackingEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\ShieldEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\UnionBaseEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\PressEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\TorusMoveEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\ElecMushiEnemy.h">
-      <Filter>src\user\敵\敵継承クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\GameTimer.h">
-      <Filter>src\user</Filter>
-    </ClInclude>
+    <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\KazDrawFunc.h">
-      <Filter>src\user</Filter>
     </ClInclude>
-  </ItemGroup>
+      <Filter>src</Filter>
+      <ClInclude Include="src\user\BaseEnemy.h">
+        <Filter>src\user\敵\敵基底クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\StoppingEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\StraightEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\PlayerStraightEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\TrackingEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\ShieldEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\UnionBaseEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\PressEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\TorusMoveEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+      <ClInclude Include="src\user\ElecMushiEnemy.h">
+        <Filter>src\user\敵\敵継承クラス</Filter>
+      </ClInclude>
+    </ItemGroup>
 </Project>
