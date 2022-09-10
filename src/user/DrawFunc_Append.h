@@ -31,6 +31,11 @@ class DrawFunc_Append
 	static std::weak_ptr<Camera>s_nowCam;
 	static std::weak_ptr<LightManager>s_nowLigMgr;
 
+	static std::weak_ptr<RenderTarget>s_main;
+	static std::weak_ptr<RenderTarget>s_emissiveMap;
+	static std::weak_ptr<RenderTarget>s_depthMap;
+	static std::weak_ptr<DepthStencil>s_depthStencil;
+
 public:
 	//呼び出しカウントリセット
 	static void FrameInit(

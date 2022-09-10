@@ -119,6 +119,6 @@ void DriftParticle::Draw() {
 
 	m_transform.SetPos(m_pos);
 	m_transform.SetScale(m_scale);
-	DrawFunc_Append::DrawModel(s_model, m_transform, 1.0f, { false,true,false });
+	DrawFunc_Append::DrawModel(s_model, m_transform, { 0.0f,1.0f,0.0f });
 
 }

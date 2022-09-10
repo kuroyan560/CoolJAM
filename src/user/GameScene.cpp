@@ -99,6 +99,7 @@ void GameScene::OnUpdate()
 	// ’e‚ðXVB
 	m_bulletMgr->Update(MAP_SIZE);
 
+
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
 	const float CAMERA_DISTANCE = 80.0f;
 
@@ -168,14 +169,17 @@ void GameScene::OnDraw()
 	m_player->Draw(*nowCam);
 
 	//“G‚ð•`‰æ
-	m_enemyMgr->Draw();
+	m_enemyMgr->Draw(*nowCam, backBuff, m_emissiveMap, m_depthStencil);
 
 	//’e‚ð•`‰æB
 	m_bulletMgr->Draw();
 
+
+
 	// ƒ}ƒbƒv‚ð•`‰æ
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc_Append::DrawModel(m_mapModel);
+
 
 	// ƒtƒB[ƒo[ƒ^ƒCƒ€‚ÌUI‚ð•`‰æB
 	m_feverGameTimer->Draw();

@@ -5,8 +5,14 @@
 #include"LightManager.h"
 
 int DrawFunc_Append::s_drawModelCount = 0;
+int DrawFunc_Append::s_drawLineCount = 0;
 std::weak_ptr<Camera>DrawFunc_Append::s_nowCam;
 std::weak_ptr<LightManager>DrawFunc_Append::s_nowLigMgr;
+
+std::weak_ptr<RenderTarget>DrawFunc_Append::s_main;
+std::weak_ptr<RenderTarget>DrawFunc_Append::s_emissiveMap;
+std::weak_ptr<RenderTarget>DrawFunc_Append::s_depthMap;
+std::weak_ptr<DepthStencil>DrawFunc_Append::s_depthStencil;
 
 void DrawFunc_Append::FrameInit(
 	std::shared_ptr<RenderTarget>Main, 
@@ -26,6 +32,10 @@ void DrawFunc_Append::FrameInit(
 
 	KuroEngine::Instance()->Graphics().SetRenderTargets(
 		{ Main,EmissiveMap,DepthMap }, DepthStencil);
+	s_main = Main;
+	s_emissiveMap = EmissiveMap;
+	s_depthMap = DepthMap;
+	s_depthStencil = DepthStencil;
 
 	s_nowCam = NowCamera;
 	s_nowLigMgr = NowLigMgr;
@@ -124,7 +134,10 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 		RenderTargetSwitch m_drawSwitch;
 	};
 
-	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
+	KuroEngine::Instance()->Graphics().SetRenderTargets(
+		{ s_main.lock(),s_emissiveMap.lock(),s_depthMap.lock() }, s_depthStencil.lock());
+
+	const auto targetFormat = s_main.lock()->GetDesc().Format;
 
 	//パイプライン未生成
 	if (!PIPELINE[targetFormat][BlendMode])

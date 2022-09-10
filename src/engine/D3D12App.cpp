@@ -1534,7 +1534,7 @@ std::shared_ptr<GraphicsPipeline>D3D12App::GenerateGraphicsPipeline(
 			D3D12_INPUT_ELEMENT_DESC input =
 			{
 				param.m_semantics.c_str(),	//セマンティック名
-				0,				//同じセマンティック名が複数あるときに使うインデックス
+				param.m_semanticIdx,				//同じセマンティック名が複数あるときに使うインデックス
 				param.m_format,	//要素数とビット数を表す
 				0,	//入力スロットインデックス
 				D3D12_APPEND_ALIGNED_ELEMENT,	//データのオフセット値（D3D12_APPEND_ALIGNED_ELEMENTだと自動設定）
@@ -1561,15 +1561,9 @@ std::shared_ptr<GraphicsPipeline>D3D12App::GenerateGraphicsPipeline(
 		// ラスタライザステート
 		desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		//カリングモード
-		if (!Option.m_calling)
-		{
-			desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-		}
-		//ワイヤーフレーム
-		if (Option.m_wireFrame)
-		{
-			desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-		}
+		desc.RasterizerState.CullMode = Option.m_calling;
+		//フィルモード
+		desc.RasterizerState.FillMode = Option.m_fillMode;
 		//深度テスト
 		if (Option.m_depthTest)
 		{
@@ -1629,9 +1623,9 @@ std::shared_ptr<GraphicsPipeline>D3D12App::GenerateGraphicsPipeline(
 	//シェーダーオブジェクトセット
 	if (ShaderInfo.m_vs.Get())desc.VS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_vs->GetBufferPointer(), ShaderInfo.m_vs->GetBufferSize());
 	if (ShaderInfo.m_ps.Get())desc.PS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_ps->GetBufferPointer(), ShaderInfo.m_ps->GetBufferSize());
-	if(ShaderInfo.m_ds.Get())desc.DS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_ds->GetBufferPointer(), ShaderInfo.m_ds->GetBufferSize());
-	if(ShaderInfo.m_hs.Get())desc.HS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_hs->GetBufferPointer(), ShaderInfo.m_hs->GetBufferSize());
-	if(ShaderInfo.m_gs.Get())desc.GS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_gs->GetBufferPointer(), ShaderInfo.m_gs->GetBufferSize());
+	if (ShaderInfo.m_ds.Get())desc.DS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_ds->GetBufferPointer(), ShaderInfo.m_ds->GetBufferSize());
+	if (ShaderInfo.m_hs.Get())desc.HS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_hs->GetBufferPointer(), ShaderInfo.m_hs->GetBufferSize());
+	if (ShaderInfo.m_gs.Get())desc.GS = CD3DX12_SHADER_BYTECODE(ShaderInfo.m_gs->GetBufferPointer(), ShaderInfo.m_gs->GetBufferSize());
 
 	//グラフィックスパイプラインの生成
 	ComPtr<ID3D12PipelineState>pipeline;
