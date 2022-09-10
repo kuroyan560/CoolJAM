@@ -304,6 +304,9 @@
     <ClCompile Include="src\user\GrazeParticle.cpp">
       <Filter>src\WallGraze</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -561,5 +564,6 @@
     <ClInclude Include="src\user\GrazeEmitter.h">
       <Filter>src\WallGraze</Filter>
     </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h" />
   </ItemGroup>
 </Project>

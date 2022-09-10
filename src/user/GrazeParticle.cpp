@@ -4,6 +4,7 @@
 #include"../engine/DrawFunc3D.h"
 #include"KazCollisionHelper.h"
 #include"../engine/D3D12App.h"
+#include"KazDrawFunc.h"
 
 GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(60)
 {
@@ -72,7 +73,7 @@ void GrazeParticle::Draw(Camera& CAMERA)
 {
 	if (initFlag)
 	{
-		DrawFuncBillBoard::Graph(CAMERA, m_pos, m_size, texBuff);
+		KazDrawFunc::DrawBillBoardGraph(CAMERA, m_pos, m_size, texBuff);
 	}
 }
 
