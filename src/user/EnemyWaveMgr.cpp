@@ -44,7 +44,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 
 	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(0, true);
-	wave2->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
+	wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
 	m_waves.emplace_back(wave2);
 
 }
