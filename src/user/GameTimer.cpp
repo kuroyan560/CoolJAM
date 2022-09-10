@@ -3,7 +3,7 @@
 #include"../Common/KuroMath.h"
 #include"WinApp.h"
 #include"AudioApp.h"
-#include"../engine/DrawFunc2D.h"
+#include"../user/KazDrawFunc.h"
 
 
 GameTimer::GameTimer()
@@ -104,7 +104,7 @@ void GameTimer::Finalize()
 
 void GameTimer::Update()
 {
-	if (interruput) {
+	if (interruput && false) {
 
 		// タイマーが計測していない間はサイズを0に近づける。
 
@@ -249,7 +249,7 @@ void GameTimer::Draw()
 
 		if (num == 0) num = 1;
 
-		DrawFunc2D::DrawRotaGraph2D(WinApp::Instance()->GetExpandWinCenter(), Vec2<float>(centerCountDownSize, centerCountDownSize), 0, textureBufferArray[num], centerCoundDownAlpha);
+		KazDrawFunc::DrawRotaGraph2D(WinApp::Instance()->GetExpandWinCenter(), Vec2<float>(centerCountDownSize, centerCountDownSize), 0, textureBufferArray[num], centerCoundDownAlpha);
 
 	}
 	else {
@@ -262,19 +262,19 @@ void GameTimer::Draw()
 		{
 			offset = i;
 			centralPos = { timerPos.x + i * texSize.x, timerPos.y + offsetY };
-			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
+			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
 		}
 
 		++offset;
 		centralPos = { timerPos.x + offset * texSize.x,timerPos.y + offsetY };
-		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
+		KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
 		++offset;
 
 		//秒
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
 			centralPos = { timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
-			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
+			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
 		}
 
 	}

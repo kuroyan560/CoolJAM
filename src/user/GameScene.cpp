@@ -65,6 +65,7 @@ void GameScene::OnInitialize()
 	m_environmentMgr->Init();
 
 	m_gameTimer->Init(120);
+	m_gameTimer->Start();
 
 }
 
@@ -158,6 +159,9 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
+
+	m_gameTimer->Draw();
+
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
 	if (m_emissive)
@@ -165,7 +169,6 @@ void GameScene::OnDraw()
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
 
-	m_gameTimer->Draw();
 
 	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG

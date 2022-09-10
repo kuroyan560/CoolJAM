@@ -292,6 +292,9 @@
     <ClCompile Include="src\user\GameTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -541,5 +544,8 @@
       <Filter>src\user\敵</Filter>
     </ClInclude>
     <ClInclude Include="src\user\GameTimer.h" />
+    <ClInclude Include="src\user\KazDrawFunc.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
