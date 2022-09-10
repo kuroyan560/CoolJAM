@@ -60,7 +60,7 @@ void LightBloomDevice::Draw(std::weak_ptr<RenderTarget>EmissiveMap, std::weak_pt
 
 	//エミッシブマップをしきい値などに応じて加工
 	KuroEngine::Instance()->Graphics().SetComputePipeline(s_filterPipeline);
-	Vec3<int>threadNum = { emissiveMap->GetGraphSize().x / THREAD_DIV,emissiveMap->GetGraphSize().y / THREAD_DIV,1 };
+	Vec3<int>threadNum = { emissiveMap->GetGraphSize().x / THREAD_DIV + 1,emissiveMap->GetGraphSize().y / THREAD_DIV + 1,1 };
 
 	KuroEngine::Instance()->Graphics().Dispatch(threadNum,
 		{
