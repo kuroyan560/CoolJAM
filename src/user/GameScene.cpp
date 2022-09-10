@@ -148,6 +148,9 @@ void GameScene::OnDraw()
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
+	m_gameTimer->Draw();
+
+
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
@@ -159,8 +162,6 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
-
-	m_gameTimer->Draw();
 
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
