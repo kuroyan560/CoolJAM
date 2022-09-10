@@ -10,7 +10,7 @@
 /// <summary>
 /// ƒQ[ƒ€‚Ì‘S‘Ì‚ÌŠÔ‚ğŒvZ‚µ‚Ü‚·
 /// </summary>
-class GameTimer :public Singleton<GameTimer>
+class GameTimer
 {
 	bool interruput;
 public:
@@ -62,7 +62,7 @@ public:
 
 	bool FinishAllEffect();
 
-
+	bool IsStart();
 	void Debug();
 
 private:
@@ -74,6 +74,8 @@ private:
 	float flame;
 	bool startFlag;
 	bool timeUpFlag;
+	bool finishAllEffectFlag;
+	int timeUpInterval;
 
 	std::vector<int> minitueHandle;
 	std::vector<int> timeHandle;
@@ -108,4 +110,8 @@ private:
 
 	std::array<std::shared_ptr<TextureBuffer>, 12>textureBufferArray;
 
+	float startRate;
+	float endRate;
+	float startEasePosX;
+	float endEasePosX;
 };

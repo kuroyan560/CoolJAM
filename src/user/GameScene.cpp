@@ -63,10 +63,6 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
-
-	m_gameTimer->Init(120);
-	m_gameTimer->Start();
-
 }
 
 void GameScene::OnUpdate()
@@ -110,7 +106,17 @@ void GameScene::OnUpdate()
 
 	m_environmentMgr->Update();
 
+
+	if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
+	{
+		m_gameTimer->Init(10);
+		m_gameTimer->Start();
+	}
 	m_gameTimer->Update();
+
+
+
+
 }
 
 void GameScene::OnDraw()

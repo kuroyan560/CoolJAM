@@ -4,6 +4,7 @@
 #include"WinApp.h"
 #include"AudioApp.h"
 #include"../user/KazDrawFunc.h"
+#include"../engine/Common/KuroMath.h"
 
 
 GameTimer::GameTimer()
@@ -24,7 +25,7 @@ GameTimer::GameTimer()
 	//TexHandleMgr::LoadDivGraph("resource/ChainCombat/UI/num.png", 12, { 12, 1 }, number.data());
 
 	//スコア無効、タイマーを中心に描画
-	timerPos.x = texSize.x * 2.0f - 42;
+	timerPos.x = 0.0f - 150.0f;
 	timerPos.y = 46.0f;
 
 	//countDownSE[0] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_1.wav", 0.2f);
@@ -46,7 +47,7 @@ void GameTimer::Init(int TIME)
 	timerAlpha = 255;
 	centerCountDownSize = 0;
 	centerCoundDownAlpha = 0;
-
+	timeUpInterval = 0;
 
 	countDownNum = 3;
 
@@ -96,6 +97,13 @@ void GameTimer::Init(int TIME)
 
 	//登場演出のため最初は動かない
 	interruput = true;
+
+	startEasePosX = 0.0f;
+	endEasePosX = 0.0f;
+	startRate = 0.0f;
+	endRate = 0.0f;
+
+	finishAllEffectFlag = false;
 }
 
 void GameTimer::Finalize()
@@ -121,16 +129,45 @@ void GameTimer::Update()
 
 	}
 
-	startFlag = countDownFlag;
-	if (startFlag && !timeUpFlag)
+
+	if (startFlag)
 	{
-
-		//時間切れ
-		if (timer <= 1 && flame <= 0)
+		if (startRate <= 1.0f)
 		{
-			timeUpFlag = true;
+			startRate += 1.0f / 30.0f;
 		}
+		if (1.0f <= startRate)
+		{
+			startRate = 1.0f;
+		}
+	}
+	if (timeUpFlag)
+	{
+		if (endRate <= 1.0f)
+		{
+			endRate += 1.0f / 30.0f;
+		}
+		if (1.0f <= endRate)
+		{
+			endRate = 1.0f;
+		}
+	}
 
+	//時間切れ
+	timeUpFlag = startFlag && timer <= 0 && flame <= 0;
+	if (timeUpFlag)
+	{
+		++timeUpInterval;
+	}
+	if (120 <= timeUpInterval)
+	{
+		finishAllEffectFlag = true;
+	}
+
+
+	startFlag = countDownFlag;
+	if (1.0f <= startRate && !timeUpFlag)
+	{
 		//時間のカウント
 		if (0 < flame)
 		{
@@ -149,27 +186,9 @@ void GameTimer::Update()
 
 				centerCoundDownAlpha = 0;
 				centerCountDownSize = 10.0f;
-
-
 			}
 
-			// タイマーが10以下だったら強調表示をする。
-			if (timer <= 10 && 5 < timer) {
-
-				// 10 ~ 5になるにあたってだんだん演出を派手にする。
-				float rate = (timer - 5.0f) / 5.0f;
-				rate = 1.0f - rate + 0.5f;
-
-				timerSize = 5.0f * rate;
-				timerAlpha = 0;
-
-			}
-			else {
-
-				timerSize = 1.8f;
-
-			}
-
+			timerSize = 1.8f;
 		}
 
 		int minite = timer;
@@ -188,46 +207,10 @@ void GameTimer::Update()
 		//ミリ秒
 		int tmp = (flame / 60) * 100;
 		miriHandle = CountNumber(tmp);
+
 	}
 
-	if (timeUpFlag)
 	{
-		finishTimer++;
-		if (180 <= finishTimer)
-		{
-
-		}
-	}
-
-	// 残り五秒以下だったら
-	if (isLessThan5SecondsLeft) {
-
-		// UIのサイズを0に近づける。
-		timerSize += (-timerSize) / 5.0f;
-
-		// UIのアルファ値を0に近づける。
-		timerAlpha += (-timerAlpha) / 5.0f;
-
-		// 残りの時間に応じてサイズに加算する量を足す。
-		float rate = 1.0f - (timer / 5.0f);
-
-		rate *= 1.0f;
-
-		// タイマーが0だったらサイズなどなどを0に近づける
-		if (timer == 0) {
-
-			centerCountDownSize -= centerCountDownSize / 5.0f;
-
-		}
-		else {
-
-			centerCountDownSize += (1.3f + rate - centerCountDownSize) / 5.0f;
-			centerCoundDownAlpha += (255 - centerCoundDownAlpha) / 5.0f;
-
-		}
-
-	}
-	else {
 
 		// UIのサイズをデフォルトに近づける。
 		timerSize += (OFFSET_SIZE - timerSize) / 5.0f;
@@ -237,22 +220,27 @@ void GameTimer::Update()
 
 	}
 
+
+
 }
 
 void GameTimer::Draw()
 {
+	{
+		float easePosX = 0.0;
+		float winSizeX = WinApp::Instance()->GetExpandWinSize().x / 2.0f;
+		if (startFlag)
+		{
+			startEasePosX = KuroMath::Ease(Out, Cubic, startRate, 0.0f, 1.0f) * winSizeX;
+			easePosX = startEasePosX;
+		}
+		if (timeUpFlag)
+		{
+			endEasePosX = startEasePosX + KuroMath::Ease(In, Cubic, endRate, 0.0f, 1.0f) * (winSizeX + 200.0f);
+			easePosX = endEasePosX;
+		}
 
-	// 五秒以下だったら
-	if (isLessThan5SecondsLeft) {
 
-		int num = timer;
-
-		if (num == 0) num = 1;
-
-		KazDrawFunc::DrawRotaGraph2D(WinApp::Instance()->GetExpandWinCenter(), Vec2<float>(centerCountDownSize, centerCountDownSize), 0, textureBufferArray[num], centerCoundDownAlpha);
-
-	}
-	else {
 
 		Vec2<float>centralPos;
 		int offset = 0;
@@ -261,19 +249,19 @@ void GameTimer::Draw()
 		for (int i = 0; i < minitueHandle.size(); i++)
 		{
 			offset = i;
-			centralPos = { timerPos.x + i * texSize.x, timerPos.y + offsetY };
+			centralPos = { easePosX + timerPos.x + i * texSize.x, timerPos.y + offsetY };
 			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
 		}
 
 		++offset;
-		centralPos = { timerPos.x + offset * texSize.x,timerPos.y + offsetY };
+		centralPos = { easePosX + timerPos.x + offset * texSize.x,timerPos.y + offsetY };
 		KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
 		++offset;
 
 		//秒
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
-			centralPos = { timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
+			centralPos = { easePosX + timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
 			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
 		}
 
@@ -308,7 +296,7 @@ bool GameTimer::StartGame()
 
 bool GameTimer::FinishAllEffect()
 {
-	return false;
+	return finishAllEffectFlag;
 }
 
 void GameTimer::Debug()
@@ -344,4 +332,9 @@ std::vector<int> GameTimer::CountNumber(int TIME)
 	}
 	std::reverse(Number.begin(), Number.end());
 	return Number;
+}
+
+bool GameTimer::IsStart()
+{
+	return startFlag;
 }
