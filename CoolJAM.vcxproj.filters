@@ -446,6 +446,12 @@
     <ClCompile Include="src\user\KazDrawFunc.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\LineLight.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\LightBlock.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -773,5 +779,9 @@
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\PlayerModelOutline.h" />
     <ClInclude Include="src\user\FeverGauge.h" />
+    <ClInclude Include="src\user\LineLight.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\LightBlock.h" />
   </ItemGroup>
 </Project>

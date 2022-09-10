@@ -26,10 +26,13 @@ void EnvironmentMgr::Init()
 	m_nextStatus = STATUS::NONE;
 	m_nowStatus = STATUS::DEFAULT;
 	m_statusChangeRate = 1.0f;
+	initLineLightFlag = false;
 }
 
 void EnvironmentMgr::Update()
 {
+	static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
+
 	//ステータス切り替わり
 	if (m_nextStatus != STATUS::NONE)
 	{
@@ -41,14 +44,38 @@ void EnvironmentMgr::Update()
 			m_nowStatus = m_nextStatus;
 			m_nextStatus = STATUS::NONE;
 			m_statusChangeRate = 1.0f;
+			initLineLightFlag = true;
 		}
 	}
+
+	if (!initLineLightFlag && !lineLight)
+	{
+		std::vector<Vec3<float>>posArray;
+		for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)
+		{
+			Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
+			posArray.push_back(
+				{ cos(posAngle) * m_pillarPosRadius, m_pillarPosY, sin(posAngle) * m_pillarPosRadius }
+			);
+		}
+		lineLight = std::make_unique<LineLight>(posArray);
+		lineLight->Init();
+		initLineLightFlag = true;
+	}
+
 
 	//デバッグ
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_S) && m_nextStatus == STATUS::NONE)
 	{
 		ChangeStatus(STATUS(1 - m_nowStatus));
 	}
+
+
+	if (initLineLightFlag && lineLight)
+	{
+		lineLight->Update();
+	}
+
 }
 
 #include"DrawFunc3D.h"
@@ -95,6 +122,12 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nextStatus], transform);
 
 		}
+	}
+
+
+	if (initLineLightFlag && lineLight)
+	{
+		lineLight->Draw(Cam);
 	}
 }
 

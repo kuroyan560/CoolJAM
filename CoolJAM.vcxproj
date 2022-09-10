@@ -234,6 +234,8 @@
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp" />
     <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp" />
     <ClCompile Include="src\user\KazDrawFunc.cpp" />
+    <ClCompile Include="src\user\LightBlock.cpp" />
+    <ClCompile Include="src\user\LineLight.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
@@ -342,6 +344,8 @@
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
     <ClInclude Include="src\user\EnemyDeadSquareParticle.h" />
     <ClInclude Include="src\user\KazDrawFunc.h" />
+    <ClInclude Include="src\user\LightBlock.h" />
+    <ClInclude Include="src\user\LineLight.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />

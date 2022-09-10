@@ -59,7 +59,6 @@ GameScene::GameScene()
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 
-	//m_gameTimer = std::make_unique<GameTimer>();
 }
 
 void GameScene::OnInitialize()
@@ -193,6 +192,7 @@ void GameScene::OnDraw()
 	DrawFunc3D::DrawLine(*nowCam, m_player->GetPos(),
 		m_player->GetPos() + vel
 		, Color(255, 0, 255, 255), 1.0f);
+
 
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成

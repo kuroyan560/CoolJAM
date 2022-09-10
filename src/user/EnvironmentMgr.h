@@ -4,6 +4,8 @@
 #include<string>
 #include<array>
 #include"Transform.h"
+#include"LineLight.h"
+
 #include"Light.h"
 class Model;
 class ModelObject;
@@ -43,6 +45,10 @@ private:
 
 	//ディレクションライト
 	Light::Direction m_dirLigDef;
+
+	bool initLineLightFlag;
+	std::unique_ptr<LineLight> lineLight;
+
 
 public:
 	EnvironmentMgr();
