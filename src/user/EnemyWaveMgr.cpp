@@ -13,16 +13,16 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	// WAVE1ÇçÏê¨ÅB
 	std::shared_ptr<EnemyWave> wave1 = std::make_shared<EnemyWave>(0, false);
 
-	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
-	//wave1->AddEnemy(Vec3<float>(-50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 1.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
-	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(-1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
-	//wave1->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
+	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
+	wave1->AddEnemy(Vec3<float>(-50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 1.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
+	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(-1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
+	wave1->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::ELEC_MUSHI, 60);
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
 
 	for (int index = 0; index < 200; ++index) {
 
-		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TRACKING, 60 + index * 60);
+		//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TRACKING, 60 + index * 60);
 
 	}
 

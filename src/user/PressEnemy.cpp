@@ -29,10 +29,11 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 	m_id = ID;
 	m_defPos = Pos;
 	m_pos = Pos;
-	m_knockBackSpeed = 0.0001f;
+	m_knockBackSpeed = 0.0f;
 	m_knockBackVec = Vec3<float>();
 	m_shotTimer = 0;
 	m_returnDefPosSpeed = 0;
+	m_returnDefTimer = 0;
 	m_forwardVec = ForwardVec;
 	m_speed = 0;
 	m_isActive = true;
@@ -52,10 +53,14 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 	m_pos += m_knockBackVec * m_knockBackSpeed;
 
 	// ノックバックの移動を減らす。
-	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	--m_returnDefTimer;
+	if (0 < m_knockBackSpeed) {
+		m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	}
 
 	// ノックバックの移動量が一定以下だったら初期位置に戻す。
-	if (m_knockBackSpeed < 0.1f && RETURN_DEFPOS_SPEED <= Vec3<float>(m_pos - m_defPos).Length()) {
+	if (m_returnDefTimer < 0) m_returnDefTimer = 0;
+	if (m_returnDefTimer <= 0 && RETURN_DEFPOS_SPEED <= Vec3<float>(m_pos - m_defPos).Length()) {
 
 		// 初期位置までの座標。
 		Vec3<float> defPosDir = Vec3<float>(m_defPos - m_pos).GetNormal();
@@ -77,6 +82,35 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
 
+}
+
+#include"DrawFunc_Append.h"
+void PressEnemy::Draw()
+{
+
+	/*===== 描画処理 =====*/
+
+	m_transform.SetPos(m_pos);
+	if (0 < m_hitEffectTimer) {
+
+		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_modelHit, m_transform);
+
+	}
+	else {
+
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
+
+	}
+
+}
+
+void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
+{
+
+	/*===== 弾との当たり判定 =====*/
+
 	// マップ外に出たら。
 	if (MapSize <= m_pos.Length()) {
 
@@ -91,42 +125,6 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 
 	}
 
-}
-
-#include "DrawFunc3D.h"
-void PressEnemy::Draw(Camera& Cam)
-{
-
-	/*===== 描画処理 =====*/
-
-	m_transform.SetPos(m_pos);
-	if (0 < m_hitEffectTimer) {
-
-		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
-
-	}
-	else {
-
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-
-	}
-
-}
-
-void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
-{
-
-	/*===== 弾との当たり判定 =====*/
-
-	// マップ外判定。
-	if (MapSize + MapSize / 2.0f <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		Init();
-
-	}
-
 	int hitCount = 0;
 	// プレイヤー弾との当たり判定。
 	Vec3<float> hitBulletPos;
@@ -136,7 +134,15 @@ void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float&
 	if (0 < hitCount && m_id == ENEMY_INFO::ID::PRESS) {
 
 		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
-		m_knockBackSpeed = PRESS_KNOCK_BACK_SPEED;
+		m_knockBackSpeed += ADD_KNOCK_BACK_SPEED;
+		// ノックバックの移動量が最大値を超えないようにする。
+		if (MAX_KNOCK_BACK_SPEED < m_knockBackSpeed) {
+
+			m_knockBackSpeed = MAX_KNOCK_BACK_SPEED;
+
+		}
+
+		m_returnDefTimer = RETURN_DEF_TIMER;
 
 	}
 

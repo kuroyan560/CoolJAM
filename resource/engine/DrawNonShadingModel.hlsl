@@ -9,6 +9,7 @@ cbuffer cbuff0 : register(b0)
 cbuffer cbuff1 : register(b1)
 {
     matrix world;
+    float alpha;
 }
 
 cbuffer cbuff2 : register(b2)
@@ -81,6 +82,7 @@ float4 PSmain(VSOutput input) : SV_TARGET
 {
     float4 col = tex.Sample(smp, input.uv);
     col.xyz += material.baseColor;
+    col.w *= alpha;
     return col;
 }
 

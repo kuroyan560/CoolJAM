@@ -42,11 +42,11 @@ public:
 	//ê¸ï`âÊ
 	static void DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
 	//í èÌï`âÊ
-	static void DrawNonShadingModel(const std::weak_ptr<Model>Model, Transform& Transform, Camera& Camera, std::shared_ptr<ModelAnimator> Animator = nullptr, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
-	static void DrawNonShadingModel(const std::weak_ptr<ModelObject>ModelObject, Camera& Camera, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans)
+	static void DrawNonShadingModel(const std::weak_ptr<Model>Model, Transform& Transform, Camera& Camera, const float& Alpha = 1.0f, std::shared_ptr<ModelAnimator> Animator = nullptr, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
+	static void DrawNonShadingModel(const std::weak_ptr<ModelObject>ModelObject, Camera& Camera, const float& Alpha = 1.0f, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans)
 	{
 		auto obj = ModelObject.lock();
-		DrawNonShadingModel(obj->m_model, obj->m_transform, Camera, obj->m_animator, BlendMode);
+		DrawNonShadingModel(obj->m_model, obj->m_transform, Camera, Alpha, obj->m_animator, BlendMode);
 	}
 	//âeÇ¬Ç´ï`âÊ
 	static void DrawADSShadingModel(LightManager& LigManager, const std::weak_ptr<Model>Model, Transform& Transform, Camera& Cam, std::shared_ptr<ModelAnimator> Animator = nullptr, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);

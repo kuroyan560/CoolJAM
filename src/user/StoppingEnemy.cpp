@@ -30,6 +30,8 @@ void StoppingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 	m_pos = Pos;
 	m_shotTimer = 0;
 	m_forwardVec = ForwardVec;
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0.00001f;
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
@@ -43,6 +45,12 @@ void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 {
 
 	/*===== 更新処理 =====*/
+
+	// ノックバックの移動。
+	m_pos += m_knockBackVec * m_knockBackSpeed;
+
+	// ノックバックの移動を減らす。
+	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
@@ -66,8 +74,8 @@ void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 
 }
 
-#include "DrawFunc3D.h"
-void StoppingEnemy::Draw(Camera& Cam)
+#include"DrawFunc_Append.h"
+void StoppingEnemy::Draw()
 {
 
 	/*===== 描画処理 =====*/
@@ -75,12 +83,14 @@ void StoppingEnemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_modelHit, m_transform);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 
 	}
 
@@ -104,6 +114,14 @@ void StoppingEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const flo
 	// プレイヤー弾との当たり判定。
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
+
+	// ノックバックさせる。
+	if (0 < hitCount) {
+
+		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
+		m_knockBackSpeed = KNOCK_BACK_SPEED;
+
+	}
 
 	m_hp -= hitCount;
 	if (m_hp <= 0) {

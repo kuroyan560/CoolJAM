@@ -56,7 +56,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 
 
 		auto i = &index - &m_enemy[0];
-		if (!index->GetIsActive() && m_initDeadEffectArray[i])
+		if (!index->m_isActive && m_initDeadEffectArray[i])
 		{
 			m_deadEffectEmitterArray[i].Init(index->GetPos());
 			m_initDeadEffectArray[i] = false;
@@ -66,7 +66,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 
 
 
-		if (!index->GetIsActive()) continue;
+		if (!index->m_isActive) continue;
 
 		index->Update(BulletMgr, PlayerPos, MapSize);
 	}
@@ -86,9 +86,9 @@ void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
 
-		if (!index->GetIsActive()) continue;
+		if (!index->m_isActive) continue;
 
-		index->Draw(NowCam);
+		index->Draw();
 
 
 	}
@@ -116,7 +116,7 @@ void EnemyMgr::Generate(const Vec3<float> &PlayerPos, const Vec3<float> &Generat
 
 		}
 
-		if (index->GetIsActive()) continue;
+		if (index->m_isActive) continue;
 
 		GenerateEnemy(index, PlayerPos, GeneratePos, ForwardVec, EnemyID, MapSize);
 
@@ -189,14 +189,14 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float> &Pos) {
 	Vec3<float> nearestPos = Vec3<float>(-1, -1, -1);
 	for (auto &index : m_enemy) {
 
-		if (!index->GetIsActive()) continue;
+		if (!index->m_isActive) continue;
 
 		// 距離を求める。
-		float length = Vec3<float>(index->GetPos() - Pos).Length();
+		float length = Vec3<float>(index->m_pos - Pos).Length();
 		if (nearestLength < length) continue;
 
 		nearestLength = length;
-		nearestPos = index->GetPos();
+		nearestPos = index->m_pos;
 
 	}
 
@@ -235,12 +235,12 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float> &Pos, const float &Size)
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
 
-		if (!index->GetIsActive()) continue;
+		if (!index->m_isActive) continue;
 
 		// 二点間の距離
-		float length = Vec3<float>(Pos - index->GetPos()).Length();
+		float length = Vec3<float>(Pos - index->m_pos).Length();
 
-		if (!(length < Size + index->GetScale())) continue;
+		if (!(length < Size + index->m_scale)) continue;
 
 		isHit = true;
 		index->Init();
@@ -260,16 +260,16 @@ void EnemyMgr::AttackEnemy(const Vec3<float> &Pos, const float &Size) {
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
 
-		if (!index->GetIsActive()) continue;
+		if (!index->m_isActive) continue;
 
 		// 敵の座標
-		Vec3<float> enemyPos = index->GetPos();
-		float enemySize = index->GetScale();
+		Vec3<float> enemyPos = index->m_pos;
+		float enemySize = index->m_scale;
 
 		// 当たり判定
 		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
 
-		index->Init();
+		index->Damage(1);
 
 	}
 

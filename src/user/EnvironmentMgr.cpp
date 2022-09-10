@@ -2,6 +2,7 @@
 #include"Importer.h"
 #include"UsersInput.h"
 #include"Object.h"
+#include"LightManager.h"
 
 EnvironmentMgr::EnvironmentMgr()
 {
@@ -12,6 +13,12 @@ EnvironmentMgr::EnvironmentMgr()
 
 	m_pillarModelArray[STATUS::DEFAULT] = Importer::Instance()->LoadModel(DIR, "pillar_mono.glb");
 	m_pillarModelArray[STATUS::FEVER] = Importer::Instance()->LoadModel(DIR, "pillar_fever.glb");
+
+	m_ligMgr = std::make_shared<LightManager>();
+
+	//ディレクションライト
+	m_dirLigDef.SetDir({ 0,-1,0 });
+	m_ligMgr->RegisterDirLight(&m_dirLigDef);
 }
 
 void EnvironmentMgr::Init()
@@ -45,6 +52,7 @@ void EnvironmentMgr::Update()
 }
 
 #include"DrawFunc3D.h"
+#include"DrawFunc_Append.h"
 void EnvironmentMgr::Draw(Camera &Cam)
 {
 	static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
@@ -60,7 +68,9 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			Transform transform;
 			Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
 			transform.SetPos({ cos(posAngle) * m_pillarPosRadius,m_pillarPosY,sin(posAngle) * m_pillarPosRadius });
-			DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nowStatus], transform, Cam);
+
+			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nowStatus], transform);
+			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nowStatus], transform, Cam);
 		}
 	}
 
@@ -81,7 +91,9 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			Angle posAngle = rotate + Angle(PILLAR_POS_ANGLE_OFFSET * pillarIdx);
 			float posRadius = KuroMath::Ease(Out, Back, m_statusChangeRate, 0.0f, m_pillarPosRadius);
 			transform.SetPos({ cos(posAngle) * posRadius,m_pillarPosY,sin(posAngle) * posRadius });
-			DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nextStatus], transform, Cam);
+			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nextStatus], transform, Cam);
+			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nextStatus], transform);
+
 		}
 	}
 }

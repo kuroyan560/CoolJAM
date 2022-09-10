@@ -28,16 +28,17 @@ void ElecMushiEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 	m_id = ID;
 	m_pos = Pos;
-	m_knockBackVec = Vec3<float>();
-	m_knockBackSpeed = 0.00001f;
 	m_shotTimer = 0;
 	m_forwardVec = ForwardVec;
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
+	m_sineWaveTimer = 0;
 	m_scale = PLAYER_STRAIGHT_SCALE;
 	m_hp = PLAYER_STRAIGHT_HP;
 	m_transform.SetScale(m_scale);
+	m_defLength = m_pos.Length();
+	m_sineWaveLength = 0;
 
 }
 
@@ -46,8 +47,8 @@ void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 
 	/*===== 更新処理 =====*/
 
-	// 中心からの距離
-	float centerDistance = m_pos.Length();
+	// SIN波で動いた量を打ち消す。
+	m_pos -= m_pos.GetNormal() * m_sineWaveLength;
 
 	// 移動する前の座標
 	Vec3<float> prevPos = m_pos;
@@ -57,20 +58,23 @@ void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 	m_pos += m_forwardVec * m_speed;
 
 	// 押し戻す。
-	if (centerDistance <= m_pos.Length()) {
+	if (m_defLength <= m_pos.Length()) {
 
-		m_pos = m_pos.GetNormal() * centerDistance;
+		m_pos = m_pos.GetNormal() * m_defLength;
 
 	}
 
 	// 正面ベクトルを回転。
 	m_forwardVec = Vec3<float>(m_pos - prevPos).GetNormal();
 
-	// ノックバックの移動。
-	m_pos += m_knockBackVec * m_knockBackSpeed;
 
-	// ノックバックの移動を減らす。
-	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	// Sine波を更新。
+	m_sineWaveTimer += ADD_SINE_WAVE_TIMER;
+	float sineWave = sinf(m_sineWaveTimer);
+	m_sineWaveLength = sineWave * SINE_WAVE_LENGTH;
+
+	// Sine波の動きも考慮した位置に配置。
+	m_pos = m_pos.GetNormal() * (m_sineWaveLength + m_defLength);
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
@@ -82,7 +86,8 @@ void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 }
 
 #include"DrawFunc3D.h"
-void ElecMushiEnemy::Draw(Camera& Cam)
+#include"DrawFunc_Append.h"
+void ElecMushiEnemy::Draw()
 {
 
 	/*===== 描画処理 =====*/
@@ -90,12 +95,14 @@ void ElecMushiEnemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_modelHit, m_transform);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transfsorm, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 
 	}
 
@@ -127,14 +134,6 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 	// プレイヤー弾との当たり判定。
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
-
-	// ノックバックさせる。
-	if (0 < hitCount) {
-
-		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
-		m_knockBackSpeed = KNOCK_BACK_SPEED;
-
-	}
 
 	m_hp -= hitCount;
 	if (m_hp <= 0) {

@@ -440,9 +440,10 @@ void Player::UpdateEffect()
 	dashLight.Update(dashFlag);
 }
 
-#include"DrawFunc3D.h"
-void Player::Draw(Camera& Cam) {
 
+#include"DrawFunc_Append.h"
+void Player::Draw(Camera& Cam) 
+{
 	/*===== 描画処理 =====*/
 
 	m_transform.SetPos(m_pos);
@@ -476,7 +477,8 @@ void Player::Draw(Camera& Cam) {
 
 	if (m_isDamageEffectDrawPlayer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 	}
 
 	// ドリフトパーティクルの描画処理
@@ -484,7 +486,7 @@ void Player::Draw(Camera& Cam) {
 
 		if (!index->GetIsActive()) continue;
 
-		index->Draw(Cam);
+		index->Draw();
 
 	}
 
@@ -523,6 +525,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 }
 
+#include"DrawFunc3D.h"
 void Player::DrawDebugInfo(Camera& Cam) {
 
 	/*===== デバッグ情報を描画 =====*/

@@ -216,7 +216,9 @@
     <ClCompile Include="src\engine\Swapchain.cpp" />
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
+    <ClCompile Include="src\user\BaseEnemy.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\DrawFunc_Append.cpp" />
     <ClCompile Include="src\user\DashLightingParticle.cpp" />
     <ClCompile Include="src\user\DashLightingRoad.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
@@ -322,6 +324,7 @@
     <ClInclude Include="src\user\ColorPalette.h" />
     <ClInclude Include="src\user\DashLightingParticle.h" />
     <ClInclude Include="src\user\DashLightingRoad.h" />
+    <ClInclude Include="src\user\DrawFunc_Append.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />

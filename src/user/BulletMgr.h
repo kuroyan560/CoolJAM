@@ -25,7 +25,7 @@ public:
 	BulletMgr();
 	void Init();
 	void Update(const float& MapSize);
-	void Draw(Camera& NowCam);
+	void Draw();
 
 	void GeneratePlayerBullet(const Vec3<float>& GeneratePos, const Vec3<float>& ForwardVec);
 	void GenerateEnemyBullet(const Vec3<float>& GeneratePos, const Vec3<float>& ForwardVec);

@@ -292,12 +292,6 @@
     <ClCompile Include="src\user\UnionEnemy.cpp">
       <Filter>src\user\敵</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\GameTimer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\user\KazDrawFunc.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp">
       <Filter>src\user\敵\敵継承クラス</Filter>
     </ClCompile>
@@ -324,7 +318,6 @@
     </ClCompile>
     <ClCompile Include="src\user\ElecMushiEnemy.cpp">
       <Filter>src\user\敵\敵継承クラス</Filter>
-      >>>>>>> merge_to_BonusStage
     </ClCompile>
     <ClCompile Include="src\user\GameTimer.cpp">
       <Filter>src\user</Filter>
@@ -332,20 +325,14 @@
     <ClCompile Include="src\user\KazDrawFunc.cpp">
       <Filter>src\user</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\PlayerDashLighting.cpp">
+    <ClCompile Include="src\user\BaseEnemy.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\DashLightingParticle.cpp">
-    </ClCompile>
-    <ClCompile Include="src\user\PlayerModelOutline.cpp">
+    <ClCompile Include="src\user\DrawFunc_Append.cpp">
       <Filter>src\user</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\KazDrawFunc.cpp">
-      <Filter>src</Filter>
-      <Filter>src\user</Filter>
-    </ClCompile>
-    <ClCompile Include="src\user\DashLightingRoad.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClCompile>
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp">
       <Filter>src\user\Effect</Filter>
@@ -631,13 +618,7 @@
     <ClInclude Include="src\user\ElecMushiEnemy.h">
       <Filter>src\user\敵\敵継承クラス</Filter>
     </ClInclude>
-    <ClInclude Include="src\user\PlayerDashLighting.h" />
-    <ClInclude Include="src\user\DashLightingParticle.h" />
-    <ClInclude Include="src\user\PlayerModelOutline.h">
-      <Filter>src\user</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\KazDrawFunc.h" />
-    <ClInclude Include="src\user\PlayerModelOutline.h">
+    <ClInclude Include="src\user\GameTimer.h">
       <Filter>src\user</Filter>
     </ClInclude>
     <ClInclude Include="src\user\KazDrawFunc.h">
@@ -645,41 +626,13 @@
     </ClInclude>
     <ClInclude Include="src\user\DashLightingRoad.h" />
     <ClInclude Include="src\user\ColorPalette.h">
+    </ClInclude>
+      <Filter>src\user</Filter>
+    <ClInclude Include="src\user\DrawFunc_Append.h">
       <Filter>src\user</Filter>
     </ClInclude>
-  </ItemGroup>
-    <ClInclude Include="src\user\GameTimer.h" />
-    <ClInclude Include="src\user\KazDrawFunc.h">
+    <ClInclude Include="src\user\DriftParticle.h">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClInclude>
-      <Filter>src</Filter>
-      <ClInclude Include="src\user\BaseEnemy.h">
-        <Filter>src\user\敵\敵基底クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\StoppingEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\StraightEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\PlayerStraightEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\TrackingEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\ShieldEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\UnionBaseEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\PressEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\TorusMoveEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
-      <ClInclude Include="src\user\ElecMushiEnemy.h">
-        <Filter>src\user\敵\敵継承クラス</Filter>
-      </ClInclude>
+  </ItemGroup>
 </Project>

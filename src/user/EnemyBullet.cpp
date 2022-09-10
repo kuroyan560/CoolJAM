@@ -59,12 +59,12 @@ void EnemyBullet::Update(const float& MapSize) {
 
 }
 
-#include"DrawFunc3D.h"
-void EnemyBullet::Draw(Camera& NowCam) {
+#include"DrawFunc_Append.h"
+void EnemyBullet::Draw() {
 
 	/*===== ï`âÊèàóù =====*/
 
 	m_transform.SetPos(m_pos);
-	DrawFunc3D::DrawNonShadingModel(s_model, m_transform, NowCam);
+	DrawFunc_Append::DrawModel(s_model, m_transform);
 
 }

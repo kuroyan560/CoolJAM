@@ -72,8 +72,8 @@ void PlayerStraightEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<
 
 }
 
-#include"DrawFunc3D.h"
-void PlayerStraightEnemy::Draw(Camera& Cam)
+#include"DrawFunc_Append.h"
+void PlayerStraightEnemy::Draw()
 {
 
 	/*===== •`‰æˆ— =====*/
@@ -81,12 +81,14 @@ void PlayerStraightEnemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_modelHit, m_transform);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 
 	}
 
