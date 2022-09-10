@@ -112,7 +112,7 @@ void PlayerModelOutline::Update()
 void PlayerModelOutline::Draw(Camera &CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_color, CAMERA);
-	DrawFuncBillBoard::Graph(CAMERA, m_transform.GetPos(), waveTextureSize, waveTex);
+	//DrawFuncBillBoard::Graph(CAMERA, m_transform.GetPos(), waveTextureSize, waveTex);
 }
 
 void PlayerModelOutline::EnoughPowerEffect()
