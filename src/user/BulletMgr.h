@@ -15,6 +15,7 @@ private:
 
 	std::array<std::shared_ptr<PlayerBullet>, 64> m_playerBullet;
 	std::array<std::shared_ptr<EnemyBullet>, 64> m_enemyBullet;
+	bool isKillElecMushi;
 
 
 public:
@@ -32,5 +33,9 @@ public:
 	int CheckHitPlayerBullet(const Vec3<float>& EnemyPos, const float& EnemySize, Vec3<float>& HitBulletPos);
 	int CheckHitPlayerBulletAngle(const Vec3<float>& EnemyPos, const float& EnemySize, const Vec3<float>& EnemyForwardVec, const float ShieldAngle);
 	int CheckHitEnemyBullet(const Vec3<float>& PlayerPos, const float& PlayerSize);
+
+	void KillElecMushi() { isKillElecMushi = true; }
+	void BrakeIsKillElecMushi() { isKillElecMushi = false; }
+	bool GetIsKillElecMushi() { return isKillElecMushi; }
 
 };

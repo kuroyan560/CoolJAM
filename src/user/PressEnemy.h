@@ -13,12 +13,14 @@ private:
 	std::shared_ptr<Model> m_modelHit;
 
 
+	Vec3<float> m_defPos;
 	Vec3<float> m_pos;			// 座標
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	Vec3<float> m_knockBackVec;
 	float m_knockBackSpeed;
 	float m_scale;				// 大きさ
 	float m_speed;				// 移動速度
+	float m_returnDefPosSpeed;	// 初期位置に戻る際のスピード
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
 	bool m_isActive;			// 生存フラグ
 	int m_hitEffectTimer;		// 弾に当たったフラグ
@@ -28,6 +30,8 @@ private:
 	int m_hp;
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
+
+	const float RETURN_DEFPOS_SPEED = 0.5f;
 
 	//モデル
 	Transform m_transform;

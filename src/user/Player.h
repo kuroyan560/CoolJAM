@@ -39,6 +39,7 @@ private:
 	bool m_isFever;
 	int m_feverTime;
 	const int FEVER_TIME = 600;
+	const int FEVER_TIME_GAME_TIMER = 10;
 	const float FEVER_ATTACK_SCALE = 10.0f;
 
 	// HP関係
@@ -108,6 +109,7 @@ public:
 	Vec3<float> GetMovedVec() { return Vec3<float>(m_pos - m_prevPos).GetNormal(); }
 	int GetBrakeBoostTimer() { return m_brakeBoostTimer; }
 	float GetMaxFeverTime() { return FEVER_TIME; }
+	float GetMaxFeverTimeGameTimer() { return FEVER_TIME_GAME_TIMER; }
 	bool GetIsFever() { return m_isFever; }
 
 
@@ -117,7 +119,7 @@ private:
 	void Input(Camera& Cam, const Vec2<float>& WindowSize);
 
 	// 移動処理
-	void Move();
+	void Move(std::weak_ptr<BulletMgr> BulletMgr);
 
 	// エフェクト全般の更新処理
 	void UpdateEffect();

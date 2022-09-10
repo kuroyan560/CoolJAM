@@ -35,7 +35,7 @@ GameScene::GameScene()
 
 	//フィーバーのタイマーを設定。
 	m_feverGameTimer = std::make_unique<GameTimer>();
-	m_feverGameTimer->Init(m_player->GetMaxFeverTime());
+	m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
 
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
@@ -49,7 +49,7 @@ GameScene::GameScene()
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 
-	m_gameTimer = std::make_unique<GameTimer>();
+	//m_gameTimer = std::make_unique<GameTimer>();
 }
 
 void GameScene::OnInitialize()
@@ -95,7 +95,7 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
-	const float CAMERA_DISTANCE = 60.0f;
+	const float CAMERA_DISTANCE = 80.0f;
 
 	// カメラを補間。
 	m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
@@ -115,16 +115,18 @@ void GameScene::OnUpdate()
 		m_feverGameTimer->Start();
 	}
 	else {
-		m_feverGameTimer->FinishAllEffect();
+		if (m_feverGameTimer->FinishAllEffect()) {
+			m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
+		}
 	}
 	m_feverGameTimer->Update();
 
-	if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
-	{
-		m_gameTimer->Init(10);
-		m_gameTimer->Start();
-	}
-	m_gameTimer->Update();
+	//if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
+	//{
+	//	m_gameTimer->Init(10);
+	//	m_gameTimer->Start();
+	//}
+	//m_gameTimer->Update();
 
 
 
@@ -168,7 +170,7 @@ void GameScene::OnDraw()
 	// フィーバータイムのUIを描画。
 	m_feverGameTimer->Draw();
 
-	m_gameTimer->Draw();
+	//m_gameTimer->Draw();
 
 
 	/*--- エミッシブマップに描画 ---*/
