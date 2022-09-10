@@ -14,18 +14,20 @@ class ModelAnimator;
 //レンダーターゲットへの描画スイッチ
 struct RenderTargetSwitch
 {
-	bool m_main = true;
-	bool m_emissive = true;
-	bool m_depth = true;
+	float m_main = 1.0f;
+	float m_emissive = 1.0f;
+	float m_depth = 1.0f;
+	float pad;
 
 	RenderTargetSwitch() {}
-	RenderTargetSwitch(const bool& Main, const bool& Emissive, const bool& Depth)
+	RenderTargetSwitch(const float& Main, const float& Emissive, const float& Depth)
 		:m_main(Main), m_emissive(Emissive), m_depth(Depth) {}
 };
 
 class DrawFunc_Append
 {
-	static int s_drawCount;
+	static int s_drawModelCount;
+	static int s_drawLineCount;
 	static std::weak_ptr<Camera>s_nowCam;
 	static std::weak_ptr<LightManager>s_nowLigMgr;
 
@@ -40,17 +42,35 @@ public:
 		std::shared_ptr<LightManager>NowLigMgr
 	);
 
+	/// <summary>
+	/// 線描画
+	/// </summary>
+	/// <param name="From">始点</param>
+	/// <param name="To">終点</param>
+	/// <param name="LineColor">色</param>
+	/// <param name="Thickness">太さ</param>
+	/// <param name="Switch">描画先レンダーターゲット設定フラグ</param>
+	/// <param name="BlendMode">ブレンドモード</param>
+	static void DrawLine(const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness,
+		const RenderTargetSwitch& Switch = RenderTargetSwitch(), const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
+
+	/// <summary>
+	/// モデル描画
+	/// </summary>
+	/// <param name="Model">モデル</param>
+	/// <param name="Transform">モデルのトランスフォーム</param>
+	/// <param name="Switch">描画先レンダーターゲット設定フラグ</param>
+	/// <param name="Animator">モデルのアニメーター</param>
+	/// <param name="BlendMode">ブレンドモード</param>
 	static void DrawModel(const std::weak_ptr<Model>Model, Transform& Transform, 
-		const float& Alpha = 1.0f,
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(),
 		std::shared_ptr<ModelAnimator> Animator = nullptr,
 		AlphaBlendMode BlendMode = AlphaBlendMode_None);
 	static void DrawModel(const std::weak_ptr<ModelObject>ModelObject,
-		const float& Alpha = 1.0f, 
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(), 
 		AlphaBlendMode BlendMode = AlphaBlendMode_None)
 	{
 		auto obj = ModelObject.lock();
-		DrawModel(obj->m_model, obj->m_transform, Alpha, Switch, obj->m_animator, BlendMode);
+		DrawModel(obj->m_model, obj->m_transform, Switch, obj->m_animator, BlendMode);
 	}
 };
