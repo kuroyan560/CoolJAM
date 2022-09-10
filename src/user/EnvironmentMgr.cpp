@@ -124,11 +124,11 @@ void EnvironmentMgr::Draw(Camera &Cam)
 		}
 	}
 
-
 	if (initLineLightFlag && lineLight)
 	{
 		lineLight->Draw(Cam);
 	}
+
 }
 
 void EnvironmentMgr::OnImguiDebug()
