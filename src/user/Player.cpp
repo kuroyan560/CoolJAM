@@ -497,12 +497,12 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 
-	// 敵とのエッジの判定。
-	if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
+	//// 敵とのエッジの判定。
+	//if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
 
-		m_isEdge = true;
+	//	m_isEdge = true;
 
-	}
+	//}
 
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
 	--m_brakeBoostTimer;

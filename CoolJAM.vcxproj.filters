@@ -83,6 +83,12 @@
     <Filter Include="src\user\敵のウェーブ">
       <UniqueIdentifier>{9bc20478-8dd0-455a-a9c0-dfc16ceec626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\user\敵\敵基底クラス">
+      <UniqueIdentifier>{f841f696-8694-4f07-83e8-009df5dbedd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\user\敵\敵継承クラス">
+      <UniqueIdentifier>{624aa7d5-b0d9-410f-b376-2c762851cbcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\D3D12App.cpp">
@@ -288,6 +294,30 @@
     </ClCompile>
     <ClCompile Include="src\user\UnionEnemy.cpp">
       <Filter>src\user\敵</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\PlayerStraightEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\PressEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\ShieldEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\StoppingEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\StraightEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\TrackingEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\UnionBaseEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\TorusMoveEnemy.cpp">
+      <Filter>src\user\敵\敵継承クラス</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -536,6 +566,33 @@
     </ClInclude>
     <ClInclude Include="src\user\UnionEnemy.h">
       <Filter>src\user\敵</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\BaseEnemy.h">
+      <Filter>src\user\敵\敵基底クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\StoppingEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\StraightEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PlayerStraightEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\TrackingEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\ShieldEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\UnionBaseEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PressEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\TorusMoveEnemy.h">
+      <Filter>src\user\敵\敵継承クラス</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

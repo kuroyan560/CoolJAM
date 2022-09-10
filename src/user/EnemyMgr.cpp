@@ -1,18 +1,29 @@
 #include "EnemyMgr.h"
-#include "Enemy.h"
 #include "KuroFunc.h"
 #include <limits>
+#include "PlayerStraightEnemy.h"
+#include "PressEnemy.h"
+#include "StraightEnemy.h"
+#include "ShieldEnemy.h"
+#include "StoppingEnemy.h"
+#include "TrackingEnemy.h"
+#include "TorusMoveEnemy.h"
+#include "UnionBaseEnemy.h"
+#include "../engine/Importer.h"
 
 EnemyMgr::EnemyMgr()
 {
 
 	/*===== コンストラクタ =====*/
 
-	for (auto& index : m_enemy) {
+	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 
-		index = std::make_shared<Enemy>();
+	//for (auto& index : m_enemy) {
 
-	}
+		//index = std::make_shared<Enemy>();
+
+	//}
 
 }
 
@@ -23,8 +34,10 @@ void EnemyMgr::Init()
 
 	for (auto& index : m_enemy) {
 
-		index->Init();
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
 
+		index->Init();
 
 	}
 
@@ -36,6 +49,9 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Pl
 	/*===== 更新処理 =====*/
 
 	for (auto& index : m_enemy) {
+
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
 
 		if (!index->GetIsActive()) continue;
 
@@ -52,6 +68,9 @@ void EnemyMgr::Draw(Camera& NowCam)
 
 	for (auto& index : m_enemy) {
 
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
+
 		if (!index->GetIsActive()) continue;
 
 		index->Draw(NowCam);
@@ -67,17 +86,71 @@ void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const Vec3<float>& Generat
 
 	for (auto& index : m_enemy) {
 
+		// 生成されていなかったら
+		if (!index.operator bool()) {
+
+			GenerateEnemy(index, PlayerPos, GeneratePos, ForwardVec, EnemyID, MapSize);
+
+			break;
+
+		}
+
 		if (index->GetIsActive()) continue;
 
-		// 敵のID
-		ENEMY_INFO::ID enemyID = static_cast<ENEMY_INFO::ID>(EnemyID);
-
-		// 生成する。
-		index->Generate(enemyID, PlayerPos, GeneratePos, ForwardVec);
+		GenerateEnemy(index, PlayerPos, GeneratePos, ForwardVec, EnemyID, MapSize);
 
 		break;
 
 	}
+
+}
+
+void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize)
+{
+
+	/*===== 敵を生成する ======*/
+
+	// Enemyの中身が入っていたらリセットを掛ける。
+	if (Enemy.operator bool()) {
+		Enemy.reset();
+	}
+
+	ENEMY_INFO::ID enemyID = static_cast<ENEMY_INFO::ID>(EnemyID);
+	switch (enemyID)
+	{
+	case ENEMY_INFO::ID::STOPPING:
+		Enemy = std::make_shared<StoppingEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::STRAIGHT:
+		Enemy = std::make_shared<StraightEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::PLAYER_STRAIGHT:
+		Enemy = std::make_shared<PlayerStraightEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::TRACKING:
+		Enemy = std::make_shared<TrackingEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::SHIELD:
+		Enemy = std::make_shared<ShieldEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::UNION:
+		Enemy = std::make_shared<UnionBaseEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::TORUS_MOVE:
+		Enemy = std::make_shared<TorusMoveEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::PRESS:
+		Enemy = std::make_shared<PressEnemy>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::DASH:
+		//Enemy = std::make_shared<DATABITS_16>(m_model, m_modelHit);
+		break;
+	default:
+		break;
+	}
+
+	// 生成する。
+	Enemy->Generate(enemyID, PlayerPos, GeneratePos, ForwardVec);
 
 }
 
@@ -104,25 +177,25 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 
 }
 
-bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
-
-	/*===== エッジの判定 =====*/
-
-	for (auto& index : m_enemy) {
-
-		if (!index->GetIsActive()) continue;
-
-		if (index->CheckIsEdge(Pos, Size)) {
-
-			return true;
-
-		}
-
-	}
-
-	return false;
-
-}
+//bool EnemyMgr::CheckEnemyEdge(const Vec3<float>& Pos, const float& Size) {
+//
+//	/*===== エッジの判定 =====*/
+//
+//	for (auto& index : m_enemy) {
+//
+//		if (!index->GetIsActive()) continue;
+//
+//		if (index->CheckIsEdge(Pos, Size)) {
+//
+//			return true;
+//
+//		}
+//
+//	}
+//
+//	return false;
+//
+//}
 
 bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 {
@@ -132,9 +205,15 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 	bool isHit = false;
 	for (auto& index : m_enemy) {
 
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
+
 		if (!index->GetIsActive()) continue;
 
-		if (!index->CheckHit(Pos, Size)) continue;
+		// 二点間の距離
+		float length = Vec3<float>(Pos - index->GetPos()).Length();
+
+		if (!(length < Size + index->GetScale())) continue;
 
 		isHit = true;
 		index->Init();
@@ -150,6 +229,9 @@ void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
 	/*===== 指定の範囲の敵を倒す =====*/
 
 	for (auto& index : m_enemy) {
+
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
 
 		if (!index->GetIsActive()) continue;
 
