@@ -193,7 +193,7 @@ void GameScene::OnDraw()
 
 	//ƒvƒŒƒCƒ„[•`‰æ
 	m_player->Draw(*nowCam);
-	m_grazeEmitter->Draw(*nowCam);
+	//m_grazeEmitter->Draw(*nowCam);
 
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);

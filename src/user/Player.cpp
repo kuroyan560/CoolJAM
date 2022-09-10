@@ -42,7 +42,7 @@ Player::Player()
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 
-	for (auto& index : m_driftParticle) {
+	for (auto &index : m_driftParticle) {
 
 		index = std::make_shared<DriftParticle>();
 
@@ -80,7 +80,7 @@ void Player::Init()
 	m_isFever = false;
 	m_feverTime = 0;
 
-	for (auto& index : m_driftParticle) {
+	for (auto &index : m_driftParticle) {
 
 		index->Init();
 
@@ -94,7 +94,7 @@ void Player::Init()
 
 }
 
-void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
+void Player::Update(Camera &Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float> &WindowSize, const float &MapSize, const float &EdgeScope)
 {
 
 	/*===== 更新処理 =====*/
@@ -118,7 +118,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 }
 
-void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
+void Player::Input(Camera &Cam, const Vec2<float> &WindowSize)
 {
 
 	/*====== 入力処理 =====*/
@@ -276,7 +276,7 @@ void Player::UpdateEffect()
 	/*===== エフェクト全般の更新処理 =====*/
 
 	// ドリフトパーティクルの更新処理
-	for (auto& index : m_driftParticle) {
+	for (auto &index : m_driftParticle) {
 
 		if (!index->GetIsActive()) continue;
 
@@ -443,7 +443,7 @@ void Player::UpdateEffect()
 
 
 #include"DrawFunc_Append.h"
-void Player::Draw(Camera& Cam) 
+void Player::Draw(Camera &Cam)
 {
 	/*===== 描画処理 =====*/
 
@@ -474,18 +474,16 @@ void Player::Draw(Camera& Cam)
 	// クォータニオンをかける。
 	m_rotation = resultY * resultX;
 
+	inputATan2f = atan2f(m_inputVec.x, m_inputVec.z);
 	m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
-	inputATan2f = atan2f(m_inputVec.x, m_inputVec.z);
-	m_transform.SetRotate(DirectX::XMMatrixRotationY(inputATan2f));
-
 		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 		DrawFunc_Append::DrawModel(m_model, m_transform);
 	}
 
 	// ドリフトパーティクルの描画処理
-	for (auto& index : m_driftParticle) {
+	for (auto &index : m_driftParticle) {
 
 		if (!index->GetIsActive()) continue;
 
@@ -529,7 +527,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 }
 
 #include"DrawFunc3D.h"
-void Player::DrawDebugInfo(Camera& Cam) {
+void Player::DrawDebugInfo(Camera &Cam) {
 
 	/*===== デバッグ情報を描画 =====*/
 
@@ -548,7 +546,7 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 }
 
-void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
+void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float &MapSize, const float &EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
@@ -607,7 +605,7 @@ void Player::Finalize()
 
 }
 
-float Player::Saturate(const float& Value)
+float Player::Saturate(const float &Value)
 {
 
 	/*===== 01に納める。 =====*/
@@ -619,7 +617,7 @@ float Player::Saturate(const float& Value)
 	return value;
 }
 
-void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
+void Player::GenerateDriftParticle(const float &NowAngle, const float &Cross) {
 
 	++m_driftParticleDelay;
 	if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
@@ -628,7 +626,7 @@ void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
 		Vec3<float> generatePos;
 		int generateCount = 0;
 		const float MAX_GENERATE_COUNT = 3.0f;
-		for (auto& index : m_driftParticle) {
+		for (auto &index : m_driftParticle) {
 
 			if (index->GetIsActive()) continue;
 
@@ -692,7 +690,7 @@ void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
 
 }
 
-Vec3<float> Player::RGBtoHSV(const Vec3<float>& RGB)
+Vec3<float> Player::RGBtoHSV(const Vec3<float> &RGB)
 {
 	double hue = 0;
 	double s = 0;
@@ -736,7 +734,7 @@ Vec3<float> Player::RGBtoHSV(const Vec3<float>& RGB)
 
 }
 
-Vec3<float> Player::HSVtoRGB(const Vec3<float>& HSV)
+Vec3<float> Player::HSVtoRGB(const Vec3<float> &HSV)
 {
 	/*HSV -> RGB*/
 
@@ -783,7 +781,7 @@ Vec3<float> Player::HSVtoRGB(const Vec3<float>& HSV)
 	return rgb;
 }
 
-void Player::SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int& rgb)
+void Player::SearchMaxMinColor(Vec3<float> &Color, double &max, double &min, int &rgb)
 {
 
 	float r = Color.x;
@@ -820,7 +818,7 @@ void Player::SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int
 
 }
 
-bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX)
+bool Player::ChangeBodyColorEasing(const float &AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float> &StartColor, const Vec3<float> &EndColor, const bool &IsEaseX)
 {
 
 	/*===== 色をイージングで変える =====*/
