@@ -216,6 +216,7 @@
     <ClCompile Include="src\engine\Swapchain.cpp" />
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
+    <ClCompile Include="src\user\BaseEnemy.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\ElecMushiEnemy.cpp" />

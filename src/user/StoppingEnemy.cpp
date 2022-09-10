@@ -30,6 +30,8 @@ void StoppingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 	m_pos = Pos;
 	m_shotTimer = 0;
 	m_forwardVec = ForwardVec;
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0.00001f;
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
@@ -43,6 +45,12 @@ void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 {
 
 	/*===== 更新処理 =====*/
+
+	// ノックバックの移動。
+	m_pos += m_knockBackVec * m_knockBackSpeed;
+
+	// ノックバックの移動を減らす。
+	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
@@ -104,6 +112,14 @@ void StoppingEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const flo
 	// プレイヤー弾との当たり判定。
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
+
+	// ノックバックさせる。
+	if (0 < hitCount) {
+
+		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
+		m_knockBackSpeed = KNOCK_BACK_SPEED;
+
+	}
 
 	m_hp -= hitCount;
 	if (m_hp <= 0) {

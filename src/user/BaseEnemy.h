@@ -11,14 +11,28 @@ class BaseEnemy {
 
 public:
 
-	/*===== メンバ変数 =====*/
+	/*===== メンバ関数 =====*/
+
+	// モデル。
+	std::shared_ptr<Model> m_model;
+	std::shared_ptr<Model> m_modelHit;
+
+	Vec3<float> m_pos;	// 座標
+	int m_hp;			// HP
+	float m_scale;		// 大きさ
+	bool m_isActive;	// 生存フラグ
+	ENEMY_INFO::ID m_id;
+
+
+public:
+
+	/*===== メンバ関数 =====*/
 
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void Draw(Camera& Cam) = 0;
-	virtual bool GetIsActive() = 0;
-	virtual float GetScale() = 0;
-	virtual Vec3<float> GetPos() = 0;
+
+	void Damage(const int& Amount);
 
 };

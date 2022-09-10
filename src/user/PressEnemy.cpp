@@ -29,7 +29,7 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 	m_id = ID;
 	m_defPos = Pos;
 	m_pos = Pos;
-	m_knockBackSpeed = 0.0001f;
+	m_knockBackSpeed = 0.0f;
 	m_knockBackVec = Vec3<float>();
 	m_shotTimer = 0;
 	m_returnDefPosSpeed = 0;
@@ -77,20 +77,6 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
 
-	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
-
 }
 
 #include "DrawFunc3D.h"
@@ -118,12 +104,17 @@ void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float&
 
 	/*===== 弾との当たり判定 =====*/
 
-	// マップ外判定。
-	if (MapSize + MapSize / 2.0f <= m_pos.Length()) {
+	// マップ外に出たら。
+	if (MapSize <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
-		Init();
+		--m_hp;
+		if (m_hp <= 0) {
+
+			Init();
+
+		}
 
 	}
 
@@ -136,7 +127,11 @@ void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float&
 	if (0 < hitCount && m_id == ENEMY_INFO::ID::PRESS) {
 
 		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
-		m_knockBackSpeed = PRESS_KNOCK_BACK_SPEED;
+		m_knockBackSpeed += m_knockBackSpeed;
+		// ノックバックの移動量が最大値を超えないようにする。
+		if (MAX_KNOCK_BACK_SPEED < m_knockBackSpeed) {
+			m_knockBackSpeed = MAX_KNOCK_BACK_SPEED;
+		}
 
 	}
 
