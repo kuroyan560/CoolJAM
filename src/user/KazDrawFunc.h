@@ -16,6 +16,17 @@
 class KazDrawFunc
 {
 public:
+	//専用頂点
+	class Vertex
+	{
+	public:
+		Vec3<float>m_pos;
+		Vec2<float>m_size;
+		Color m_col;
+		Vertex(const Vec3<float> &Pos, const Vec2<float> &Size, const Color &Color)
+			:m_pos(Pos), m_size(Size), m_col(Color) {}
+	};
+
 	static int s_drawNonShadingModelSignalColor;
 	static int s_drawBillBoardGraph;
 	static int s_drawRotaGraph2D;
@@ -37,16 +48,4 @@ public:
 	static void DrawRotaGraph2D(const Vec2<float> &Center, const Vec2<float> &ExtRate, const float &Radian,
 		const std::shared_ptr<TextureBuffer> &Tex, const float &Alpha = 1.0f, const Vec2<float> &RotaCenterUV = { 0.5f,0.5f },
 		const AlphaBlendMode &BlendMode = AlphaBlendMode_Trans, const Vec2<bool> &Mirror = { false,false });
-private:
-	//専用頂点
-	class Vertex
-	{
-	public:
-		Vec3<float>m_pos;
-		Vec2<float>m_size;
-		Color m_col;
-		Vertex(const Vec3<float> &Pos, const Vec2<float> &Size, const Color &Color)
-			:m_pos(Pos), m_size(Size), m_col(Color) {}
-	};
-
 };
