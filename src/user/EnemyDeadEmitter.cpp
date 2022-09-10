@@ -17,7 +17,7 @@ void EnemyDeadEmitter::GeneratePipeline()
 
 	std::vector<RenderTargetInfo>renderTarget =
 	{
-		RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, AlphaBlendMode_Trans),
+		RenderTargetInfo(D3D12App::Instance()->GetBackBuffFormat(), AlphaBlendMode_Trans),
 		RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, AlphaBlendMode_Trans),
 	};
 
