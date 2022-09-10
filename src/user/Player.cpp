@@ -36,6 +36,8 @@ Player::Player()
 	m_damageEffectTimer = 0;
 	m_damageEffectCount = 0;
 	m_hp = MAX_HP;
+	m_isFever = false;
+	m_feverTime = 0;
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 
@@ -74,6 +76,8 @@ void Player::Init()
 	m_damageEffectTimer = 0;
 	m_damageEffectCount = 0;
 	m_hp = MAX_HP;
+	m_isFever = false;
+	m_feverTime = 0;
 
 	for (auto& index : m_driftParticle) {
 
@@ -124,7 +128,13 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	// ベクトルの角度の差を求める。
 	bool isForward = true;
-	if (screenForwardVec.Dot(mouseDir) < 0.99f) {
+	// 現在ドリフト中かどうかで入力を受け付ける角度を決める。
+	if (m_isBrake && screenForwardVec.Dot(mouseDir) < 0.99f) {
+
+		isForward = false;
+
+	}
+	if (!m_isBrake && screenForwardVec.Dot(mouseDir) < 0.9f) {
 
 		isForward = false;
 
@@ -195,10 +205,34 @@ void Player::Move()
 
 	/*===== 移動処理 =====*/
 
-	// ブレーキ状態の有無に応じて移動速度を変える。
-	if (m_isBrake) {
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
 
-		m_speed += (BRAKE_SPEED - m_speed) / 10.0f;
+		m_isFever = true;
+		m_feverTime = FEVER_TIME;
+
+	}
+
+	// フィーバー状態だったら
+	if (m_isFever) {
+
+		--m_feverTime;
+		if (m_feverTime <= 0) {
+
+			m_isFever = false;
+
+		}
+
+		m_speed += (MAX_SPEED - m_speed) / 2.0f;
+
+	}
+	else {
+
+		// ブレーキ状態の有無に応じて移動速度を変える。
+		if (m_isBrake) {
+
+			m_speed += (BRAKE_SPEED - m_speed) / 10.0f;
+
+		}
 
 	}
 
@@ -207,13 +241,6 @@ void Player::Move()
 
 	// 移動させる。
 	m_pos += m_forwardVec * m_speed;
-
-	// 正面ベクトルが回転した量を計算する。
-	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
-
-		int a = 0;
-
-	}
 
 	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
@@ -497,13 +524,6 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 
-	//// 敵とのエッジの判定。
-	//if (EnemyMgr.lock()->CheckEnemyEdge(m_pos, SCALE)) {
-
-	//	m_isEdge = true;
-
-	//}
-
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
 	--m_brakeBoostTimer;
 	if (0 < m_brakeBoostTimer) {
@@ -514,6 +534,13 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	else {
 
 		m_brakeBoostTimer = 0;
+
+	}
+
+	// フィーバー状態だったら
+	if (m_isFever) {
+
+		EnemyMgr.lock()->AttackEnemy(m_pos, FEVER_ATTACK_SCALE);
 
 	}
 

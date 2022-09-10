@@ -31,7 +31,7 @@ void TrackingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 	m_knockBackVec = Vec3<float>();
 	m_knockBackSpeed = 0.00001f;
 	m_shotTimer = 0;
-	m_forwardVec = ForwardVec;
+	m_forwardVec = Vec3<float>(PlayerPos - m_pos).GetNormal();
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
@@ -45,6 +45,22 @@ void TrackingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 {
 
 	/*===== 更新処理 =====*/
+
+	// 左右判定をする。
+	float cross = m_forwardVec.Cross(PlayerPos - m_pos).y;
+	if (cross != 0) {
+
+		cross = cross < 0 ? -1.0f : 1.0f;
+		float handleRot = TRACKING_ROT * cross;
+
+		// 移動方向ベクトルを角度に直して値を加算する。
+		float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
+		forwardVecAngle += handleRot;
+
+		// 加算した角度をベクトルに直す。
+		m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
+
+	}
 
 	// 移動速度を補間。
 	m_speed += (SPEED - m_speed) / 10.0f;

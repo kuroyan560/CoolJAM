@@ -9,6 +9,7 @@
 #include "TrackingEnemy.h"
 #include "TorusMoveEnemy.h"
 #include "UnionBaseEnemy.h"
+#include "ElecMushiEnemy.h"
 #include "../engine/Importer.h"
 
 EnemyMgr::EnemyMgr()
@@ -18,6 +19,7 @@ EnemyMgr::EnemyMgr()
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
 	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
+	m_elecMushi = Importer::Instance()->LoadModel("resource/user/", "enemy_elecMushi.glb");
 
 	//for (auto& index : m_enemy) {
 
@@ -144,6 +146,9 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 		break;
 	case ENEMY_INFO::ID::DASH:
 		//Enemy = std::make_shared<DATABITS_16>(m_model, m_modelHit);
+		break;
+	case ENEMY_INFO::ID::ELEC_MUSHI:
+		Enemy = std::make_shared<ElecMushiEnemy>(m_elecMushi, m_modelHit);
 		break;
 	default:
 		break;

@@ -15,9 +15,6 @@ private:
 
 	Vec3<float> m_pos;			// 座標
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
-	Vec3<float> m_knockBackVec;
-	float m_knockBackSpeed;
-	const float KNOCK_BACK_SPEED = 2.5f;
 	float m_scale;				// 大きさ
 	float m_speed;				// 移動速度
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。

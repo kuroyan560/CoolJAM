@@ -1,7 +1,7 @@
-#include "TorusMoveEnemy.h"
+#include "ElecMushiEnemy.h"
 #include "BulletMgr.h"
 
-TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
+ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
 
 	/*===== コンストラクタ =====*/
@@ -12,7 +12,7 @@ TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void TorusMoveEnemy::Init()
+void ElecMushiEnemy::Init()
 {
 
 	/*===== 初期化処理 =====*/
@@ -21,13 +21,15 @@ void TorusMoveEnemy::Init()
 
 }
 
-void TorusMoveEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void ElecMushiEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== 生成処理 =====*/
 
 	m_id = ID;
 	m_pos = Pos;
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0.00001f;
 	m_shotTimer = 0;
 	m_forwardVec = ForwardVec;
 	m_speed = 0;
@@ -39,7 +41,7 @@ void TorusMoveEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 }
 
-void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== 更新処理 =====*/
@@ -64,6 +66,12 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 	// 正面ベクトルを回転。
 	m_forwardVec = Vec3<float>(m_pos - prevPos).GetNormal();
 
+	// ノックバックの移動。
+	m_pos += m_knockBackVec * m_knockBackSpeed;
+
+	// ノックバックの移動を減らす。
+	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
 
@@ -87,7 +95,7 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 }
 
 #include"DrawFunc3D.h"
-void TorusMoveEnemy::Draw(Camera& Cam)
+void ElecMushiEnemy::Draw(Camera& Cam)
 {
 
 	/*===== 描画処理 =====*/
@@ -106,7 +114,7 @@ void TorusMoveEnemy::Draw(Camera& Cam)
 
 }
 
-void TorusMoveEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
+void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
 {
 
 	/*===== 弾との当たり判定 =====*/
@@ -124,6 +132,14 @@ void TorusMoveEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 	// プレイヤー弾との当たり判定。
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
+
+	// ノックバックさせる。
+	if (0 < hitCount) {
+
+		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
+		m_knockBackSpeed = KNOCK_BACK_SPEED;
+
+	}
 
 	m_hp -= hitCount;
 	if (m_hp <= 0) {
@@ -151,7 +167,7 @@ void TorusMoveEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 
 }
 
-void TorusMoveEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos)
+void ElecMushiEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos)
 {
 
 	/*===== 弾を撃つ処理 =====*/

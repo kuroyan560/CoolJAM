@@ -18,6 +18,7 @@ namespace ENEMY_INFO {
 		TORUS_MOVE,		// 中心を回るように動く。
 		PRESS,			// 押し戻す敵。
 		DASH,			// ダッシュする敵。
+		ELEC_MUSHI,		// エレキ虫
 		ID_COUNT,
 
 	};

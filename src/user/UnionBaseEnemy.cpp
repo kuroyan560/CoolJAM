@@ -119,6 +119,14 @@ void UnionBaseEnemy::Draw(Camera& Cam)
 
 	}
 
+	for (auto& index : m_unionEnemy) {
+
+		if (!index->GetIsActive()) continue;
+
+		index->Draw(Cam);
+
+	}
+
 }
 
 void UnionBaseEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
@@ -163,13 +171,6 @@ void UnionBaseEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 			Init();
 
 		}
-
-	}
-
-	m_hp -= hitCount;
-	if (m_hp <= 0) {
-
-		Init();
 
 	}
 

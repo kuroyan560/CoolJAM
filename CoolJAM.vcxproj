@@ -218,6 +218,7 @@
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
+    <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="src\user\BaseEnemy.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
+    <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnemyWave.h" />
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
