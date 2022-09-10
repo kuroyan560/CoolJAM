@@ -58,7 +58,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 		auto i = &index - &m_enemy[0];
 		if (!index->m_isActive && m_initDeadEffectArray[i])
 		{
-			m_deadEffectEmitterArray[i].Init(index->GetPos());
+			m_deadEffectEmitterArray[i].Init(index->m_pos);
 			m_initDeadEffectArray[i] = false;
 		}
 		m_deadEffectEmitterArray[i].Update();

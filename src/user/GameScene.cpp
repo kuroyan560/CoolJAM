@@ -169,7 +169,7 @@ void GameScene::OnDraw()
 	m_player->Draw(*nowCam);
 
 	//“G‚ð•`‰æ
-	m_enemyMgr->Draw(nowCam, backBuff, m_emissiveMap, m_depthStencil);
+	m_enemyMgr->Draw(*nowCam, backBuff, m_emissiveMap, m_depthStencil);
 
 	//’e‚ð•`‰æB
 	m_bulletMgr->Draw();
