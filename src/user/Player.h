@@ -116,6 +116,7 @@ public:
 	float GetMaxFeverTime() { return FEVER_TIME; }
 	float GetMaxFeverTimeGameTimer() { return FEVER_TIME_GAME_TIMER; }
 	bool GetIsFever() { return m_isFever; }
+	float GetPlayerFeverRate() { return static_cast<float>(m_feverTime) / static_cast<float>(FEVER_TIME); }
 
 
 private:
