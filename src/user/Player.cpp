@@ -427,7 +427,7 @@ void Player::UpdateEffect()
 		m_outlineModel.EnoughPowerEffect();
 	}
 
-	bool dashFlag = 1.0f <= m_brakeBoostTimer && !UsersInput::Instance()->MouseInput(LEFT);
+	bool dashFlag = 1.0f <= m_brakeBoostTimer;
 	//ダッシュ中の演出
 	if (dashFlag)
 	{

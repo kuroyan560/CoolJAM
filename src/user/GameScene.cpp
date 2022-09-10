@@ -14,6 +14,7 @@
 #include"../engine/Common/Angle.h"
 #include"KazCollisionHelper.h"
 #include"../engine/DrawFuncBillBoard.h"
+#include"FeverGauge.h"
 
 GameScene::GameScene()
 {
@@ -40,12 +41,11 @@ GameScene::GameScene()
 	m_enemyMgr = std::make_shared<EnemyMgr>();
 	m_enemyMgr->Init();
 
-	//フィーバーのタイマーを設定。
-	m_feverGameTimer = std::make_unique<GameTimer>();
-	m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
-
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
+
+	// フィーバーゲージ
+	m_feverGauge = std::make_unique<FeverGauge>();
 
 	//敵ウェーブ管理クラス
 	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
@@ -70,6 +70,7 @@ void GameScene::OnInitialize()
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
 	m_enemyWaveMgr->Init();
+	m_feverGauge->Init();
 
 	m_baseEye = Vec3<float>(m_player->GetPos() + Vec3<float>(30.0f, 30.0f, 0.0f));
 	m_nowEye = m_baseEye;
@@ -123,16 +124,8 @@ void GameScene::OnUpdate()
 
 	m_environmentMgr->Update();
 
-	// フィーバータイムのUIを更新。
-	if (m_player->GetIsFever()) {
-		m_feverGameTimer->Start();
-	}
-	else {
-		if (m_feverGameTimer->FinishAllEffect()) {
-			m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
-		}
-	}
-	m_feverGameTimer->Update();
+	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
+
 
 	//if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
 	//{
@@ -145,6 +138,7 @@ void GameScene::OnUpdate()
 
 }
 
+#include "DrawFunc2D.h"
 void GameScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
@@ -168,8 +162,8 @@ void GameScene::OnDraw()
 		m_environmentMgr->GetLigMgr()
 	);
 
-/*--- 通常描画 ---*/
-	//環境描画
+	/*--- 通常描画 ---*/
+		//環境描画
 	m_environmentMgr->Draw(*nowCam);
 
 	//プレイヤー描画
@@ -181,15 +175,12 @@ void GameScene::OnDraw()
 	//弾を描画。
 	m_bulletMgr->Draw();
 
-
-
 	// マップを描画
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc_Append::DrawModel(m_mapModel);
 
-
-	// フィーバータイムのUIを描画。
-	m_feverGameTimer->Draw();
+	// フィーバーゲージを描画。
+	m_feverGauge->Draw();
 
 	//プレイヤー描画
 	m_player->Draw(*nowCam);

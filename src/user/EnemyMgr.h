@@ -4,7 +4,6 @@
 #include "Vec.h"
 #include"EnemyDeadEmitter.h"
 
-
 class BaseEnemy;
 class Camera;
 class BulletMgr;

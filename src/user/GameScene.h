@@ -20,6 +20,8 @@ class BulletMgr;
 class EnvironmentMgr;
 class EnemyWaveMgr;
 class GameTimer;
+class TextureBuffer;
+class FeverGauge;
 
 class GameScene : public BaseScene
 {
@@ -43,8 +45,8 @@ private:
 	// 敵ウェーブクラス
 	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
 
-	// フィーバーのタイマー用UI
-	std::unique_ptr<GameTimer> m_feverGameTimer;
+	// フィーバーゲージ
+	std::unique_ptr<FeverGauge> m_feverGauge;
 
 	//マップのサイズ
 	float MAP_SIZE = 150.0f;

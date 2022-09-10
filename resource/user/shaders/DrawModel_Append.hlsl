@@ -1,7 +1,7 @@
-#include"../engine/ModelInfo.hlsli"
-#include"../engine/Camera.hlsli"
-#include"../engine/LightInfo.hlsli"
-#include"../engine/Math.hlsli"
+#include"../../engine/ModelInfo.hlsli"
+#include"../../engine/Camera.hlsli"
+#include"../../engine/LightInfo.hlsli"
+#include"../../engine/Math.hlsli"
 
 cbuffer cbuff0 : register(b0)
 {
@@ -22,10 +22,9 @@ StructuredBuffer<HemiSphereLight> hemiSphereLight : register(t3);
 cbuffer cbuff2 : register(b2)
 {
     matrix world;
-    float instanceAlpha;
-    bool drawMainFlg;
-    bool drawEmissiveFlg;
-    bool drawDepthFlg;
+    float mainDrawRate;
+    float emissiveDrawRate;
+    float depthDrawRate;
 }
 
 cbuffer cbuff3 : register(b3)
@@ -206,7 +205,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     output.emissive = float4(0, 0, 0, 0);
     output.depth = 0.0f;
 
-    if(drawMainFlg)
+    if (any(mainDrawRate))
     {
         float3 normal = input.normal;
         float3 vnormal = normalize(mul(cam.view, normal));
@@ -297,13 +296,19 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         output.color = result;
     }
     
-    output.color.w *= instanceAlpha;
+    output.color.w *= mainDrawRate;
     
-    output.emissive = emissiveMap.Sample(smp, input.uv);
-    output.emissive.xyz += material.emissive;
-    output.emissive.w *= instanceAlpha;
-    
-    output.depth = input.depthInView;
+    if(any(emissiveDrawRate))
+    {
+        output.emissive = emissiveMap.Sample(smp, input.uv);
+        output.emissive.xyz += material.emissive;
+        output.emissive.w *= emissiveDrawRate * material.emissiveFactor;
+    }
+        
+    if(any(depthDrawRate))
+    {
+        output.depth = input.depthInView;
+    }
     
     ////–¾‚é‚³ŒvŽZ
     //float bright = dot(result.xyz, float3(0.2125f, 0.7154f, 0.0721f));
