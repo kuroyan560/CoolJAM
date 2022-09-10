@@ -44,6 +44,8 @@ GameScene::GameScene()
 
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
+
+	m_gameTimer = std::make_unique<GameTimer>();
 }
 
 void GameScene::OnInitialize()
@@ -61,6 +63,8 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
+
+	m_gameTimer->Init(120);
 
 }
 
@@ -104,11 +108,12 @@ void GameScene::OnUpdate()
 	m_gameCam->SetTarget(m_nowTarget);
 
 	m_environmentMgr->Update();
+
+	m_gameTimer->Update();
 }
 
 void GameScene::OnDraw()
 {
-
 	/*===== 描画処理 =====*/
 
 	//デプスステンシルクリア
@@ -159,6 +164,8 @@ void GameScene::OnDraw()
 	{
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
+
+	m_gameTimer->Draw();
 
 	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG

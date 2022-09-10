@@ -15,7 +15,6 @@ EnemyWave::EnemyWave(const int &WaveStartFrame, const bool &BounusStageFlag)
 
 void EnemyWave::Init()
 {
-
 	/*===== ‰Šú‰»ˆ— =====*/
 
 	m_nowWaveFrame = 0;
