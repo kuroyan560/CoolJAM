@@ -727,3 +727,36 @@ float4 Posterize(float4 input,float step)
     float3 xyz = Posterize(input.xyz, step);
     return float4(xyz.x, xyz.y, xyz.z, Posterize(input.w, step));
 }
+
+//âÒì]çsóÒÇãÅÇﬂÇÈ
+matrix GetRoateMat(float3 Angle)
+{
+    //ÉâÉWÉAÉìÇ…íºÇ∑
+    Angle.x = PI / 180 * Angle.x;
+    Angle.y = PI / 180 * Angle.y;
+    Angle.z = PI / 180 * Angle.z;
+    
+    matrix matX =
+    {
+        1, 0, 0, 0,
+        0, cos(Angle.x), -sin(Angle.x), 0,
+        0, sin(Angle.x), cos(Angle.x), 0,
+        0, 0, 0, 1
+    };
+    matrix matY =
+    {
+        cos(Angle.y), -sin(Angle.y), 0, 0,
+        sin(Angle.y), cos(Angle.y), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    };
+    matrix matZ =
+    {
+        cos(Angle.z), 0, sin(Angle.z), 0,
+        0, 1, 0, 0,
+        -sin(Angle.z), 0, cos(Angle.z), 0,
+        0, 0, 0, 1
+    };
+
+    return mul(mul(matX, matY), matZ);
+}

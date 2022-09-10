@@ -1533,6 +1533,8 @@ std::shared_ptr<Model> Importer::LoadGLTFModel(const std::string& Dir, const std
 		}
 	}
 
+	RegisterImportModel(Dir, FileName, result);
+
 	return result;
 }
 
@@ -1540,6 +1542,10 @@ std::shared_ptr<Model> Importer::LoadModel(const std::string& Dir, const std::st
 {
 	//ファイルが存在しているか確認
 	ErrorMessage("LoadModel", !KuroFunc::ExistFile(Dir + FileName), Dir + FileName + " wasn't found.\n");
+
+	//既にロード済ならそのポインタを返す
+	auto result = m_models.find(Dir + FileName);
+	if (result != m_models.end())return m_models[Dir + FileName];
 
 	//拡張子取得
 	const auto ext = "." + KuroFunc::GetExtension(FileName);

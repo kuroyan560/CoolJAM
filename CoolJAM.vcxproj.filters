@@ -347,6 +347,15 @@
     <ClCompile Include="src\user\DashLightingRoad.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadEmitter.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\EnemyDeadLineParticle.cpp">
+      <Filter>src\user\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">

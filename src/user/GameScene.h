@@ -6,6 +6,7 @@
 #include"Vec.h"
 #include<memory>
 #include"GameTimer.h"
+#include"EnemyDeadEmitter.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -58,21 +59,20 @@ private:
 	Vec3<float> m_baseTarget;
 	Vec3<float> m_nowTarget;
 
-	//メインレンダーターゲット
-	std::shared_ptr<RenderTarget>m_mainTarget;
-
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;
 
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
-	//環境統括
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
 	bool m_emissive = false;
+
+
+	std::array<EnemyDeadEmitter, 10> m_emitter;
 
 public:
 	GameScene();
