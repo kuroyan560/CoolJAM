@@ -67,12 +67,15 @@ private:
 	//エミッシブマップ
 	std::shared_ptr<RenderTarget>m_emissiveMap;
 
+	//デプスマップ
+	std::shared_ptr<RenderTarget>m_depthMap;
+
 	//環境統括
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
-	bool m_emissive = false;
+	bool m_emissive = true;
 
 public:
 	GameScene();

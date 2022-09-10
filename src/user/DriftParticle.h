@@ -17,7 +17,7 @@ private:
 	Transform m_transform;
 
 	// モデル
-	static std::shared_ptr<Model>m_model;
+	static std::shared_ptr<Model>s_model;
 
 	// 基本的な変数
 	Vec3<float> m_pos;			// 座標
@@ -45,7 +45,7 @@ public:
 	void Init();
 	void Generate(const Vec3<float>& Pos, const float& Angle, const float& Rate);
 	void Update(const Vec3<float>& Pos);
-	void Draw(Camera& Cam);
+	void Draw();
 
 	bool GetIsActive() { return m_isActive; }
 

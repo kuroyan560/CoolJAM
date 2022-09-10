@@ -59,11 +59,11 @@ void PlayerBullet::Update(const float& MapSize) {
 
 }
 
-#include"DrawFunc3D.h"
-void PlayerBullet::Draw(Camera& NowCam) {
+#include"DrawFunc_Append.h"
+void PlayerBullet::Draw() {
 
 	/*===== ï`âÊèàóù =====*/
 
 	m_transform.SetPos(m_pos);
-	DrawFunc3D::DrawNonShadingModel(s_model, m_transform, NowCam);
+	DrawFunc_Append::DrawModel(s_model, m_transform);
 }

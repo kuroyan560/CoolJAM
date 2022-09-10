@@ -55,8 +55,8 @@ void UnionEnemy::Update()
 
 }
 
-#include "DrawFunc3D.h"
-void UnionEnemy::Draw(Camera& Cam)
+#include"DrawFunc_Append.h"
+void UnionEnemy::Draw()
 {
 
 	/*===== •`‰æˆ— =====*/
@@ -64,12 +64,14 @@ void UnionEnemy::Draw(Camera& Cam)
 	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
-		DrawFunc3D::DrawNonShadingModel(m_hitModel, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_hitModel, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_hitModel, m_transform);
 
 	}
 	else {
 
-		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 
 	}
 

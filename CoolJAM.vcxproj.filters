@@ -328,6 +328,12 @@
     <ClCompile Include="src\user\BaseEnemy.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\DrawFunc_Append.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DriftParticle.cpp">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -608,6 +614,16 @@
     </ClInclude>
     <ClInclude Include="src\user\KazDrawFunc.h">
       <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DashLightingRoad.h" />
+    <ClInclude Include="src\user\ColorPalette.h">
+    </ClInclude>
+      <Filter>src\user</Filter>
+    <ClInclude Include="src\user\DrawFunc_Append.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DriftParticle.h">
+      <Filter>src\user\Player\ドリフトのパーティクル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

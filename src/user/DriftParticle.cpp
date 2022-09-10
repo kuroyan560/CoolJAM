@@ -2,17 +2,13 @@
 #include "Importer.h"
 #include "Model.h"
 
-std::shared_ptr<Model> DriftParticle::m_model;
+std::shared_ptr<Model>DriftParticle::s_model;
 
 DriftParticle::DriftParticle() {
 
 	/*===== コンストラクタ =====*/
 	// モデル
-	static int first = 0;
-	if (first == 0) {
-		++first;
-		m_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
-	}
+	if(!s_model)s_model = Importer::Instance()->LoadModel("resource/user/", "playerDriftParticle.glb");;
 
 	// 基本的な変数
 	m_pos = Vec3<float>();			// 座標
@@ -116,13 +112,13 @@ void DriftParticle::Update(const Vec3<float>& Pos) {
 
 }
 
-#include "DrawFunc3D.h"
-void DriftParticle::Draw(Camera& Cam) {
+#include "DrawFunc_Append.h"
+void DriftParticle::Draw() {
 
 	/*===== 描画処理 =====*/
 
 	m_transform.SetPos(m_pos);
 	m_transform.SetScale(m_scale);
-	DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+	DrawFunc_Append::DrawModel(s_model, m_transform, 1.0f, { false,true,false });
 
 }
