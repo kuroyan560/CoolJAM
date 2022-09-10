@@ -3,6 +3,7 @@
 
 DashLightingParticle::DashLightingParticle() :initFlag(false)
 {
+	firstDrawFlag = false;
 }
 
 void DashLightingParticle::Init(const Vec3<float> &POS)
@@ -35,8 +36,9 @@ void DashLightingParticle::Update()
 
 void DashLightingParticle::Draw(Camera &CAMERA)
 {
-	if (initFlag)
+	if (initFlag || !firstDrawFlag)
 	{
 		DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f);
+		firstDrawFlag = true;
 	}
 }

@@ -21,5 +21,6 @@ private:
 	int indexNum;
 	Color color;
 	bool initFlag;
+	bool firstDrawFlag;
 };
 

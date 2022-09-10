@@ -8,6 +8,7 @@ DashLightingRoad::DashLightingRoad():color(ColorPalette::S_GREEN_COLOR), initFla
 {
 	indexNum = INDEX;
 	++INDEX;
+	firstDrawFlag = false;
 }
 
 void DashLightingRoad::Init(const Vec3<float> &POS)
@@ -41,8 +42,9 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX)
 
 void DashLightingRoad::Draw(Camera &Cam)
 {
-	if (initFlag)
+	if (initFlag || !firstDrawFlag)
 	{
 		DrawFunc3D::DrawLine(Cam, startPos, endPos, color, 1.0f, AlphaBlendMode_Add);
+		firstDrawFlag = true;
 	}
 }

@@ -20,5 +20,6 @@ private:
 	float angleVel;
 	int alpha;
 	bool initFlag;
+	bool firstDrawFlag;
 };
 
