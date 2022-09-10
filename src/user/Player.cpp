@@ -85,6 +85,12 @@ void Player::Init()
 
 	}
 
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
+
+	//ダッシュ時のエフェクト
+	dashLight.Init(&m_pos);
+
+
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
@@ -106,6 +112,8 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	// エフェクト全般の更新処理
 	UpdateEffect();
+
+
 
 }
 
@@ -198,6 +206,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 	}
 
+
 }
 
 void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
@@ -274,6 +283,7 @@ void Player::UpdateEffect()
 
 	}
 
+
 	// ダメージエフェクトの更新処理
 	if (m_isDamageEffect) {
 
@@ -303,8 +313,8 @@ void Player::UpdateEffect()
 			m_damageEffectTimer = 0;
 
 		}
-
 	}
+
 
 
 	// デバッグ用
@@ -409,6 +419,25 @@ void Player::UpdateEffect()
 
 	}
 
+
+	//パワーが溜まり切った演出
+	if (UsersInput::Instance()->KeyInput(DIK_A))
+	{
+		m_outlineModel.EnoughPowerEffect();
+	}
+
+	bool dashFlag = 1.0f <= m_brakeBoostTimer && !UsersInput::Instance()->MouseInput(LEFT);
+	//ダッシュ中の演出
+	if (dashFlag)
+	{
+		m_outlineModel.PowerUpEffect(50);
+	}
+
+	//プレイヤーのアウトライン用
+	m_outlineModel.Update();
+
+	//ダッシュ時のエフェクト
+	dashLight.Update(dashFlag);
 }
 
 #include"DrawFunc3D.h"
@@ -441,14 +470,13 @@ void Player::Draw(Camera& Cam) {
 	auto resultX = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(m_forwardVec.x, m_forwardVec.y, m_forwardVec.z, 1.0f), m_rotX * 25.0f));
 
 	// クォータニオンをかける。
-	auto resultQ = resultY * resultX;
+	m_rotation = resultY * resultX;
 
-	m_transform.SetRotate(resultQ);
+	m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
 
 		DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-
 	}
 
 	// ドリフトパーティクルの描画処理
@@ -459,6 +487,9 @@ void Player::Draw(Camera& Cam) {
 		index->Draw(Cam);
 
 	}
+
+	m_outlineModel.Draw(Cam);
+	dashLight.Draw(Cam);
 
 }
 

@@ -218,6 +218,8 @@
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BaseEnemy.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\DashLightingParticle.cpp" />
+    <ClCompile Include="src\user\DashLightingRoad.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
@@ -240,6 +242,8 @@
     <ClCompile Include="src\user\TrackingEnemy.cpp" />
     <ClCompile Include="src\user\UnionBaseEnemy.cpp" />
     <ClCompile Include="src\user\UnionEnemy.cpp" />
+    <ClCompile Include="src\user\PlayerDashLighting.cpp" />
+    <ClCompile Include="src\user\PlayerModelOutline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -313,6 +317,9 @@
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BaseEnemy.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\ColorPalette.h" />
+    <ClInclude Include="src\user\DashLightingParticle.h" />
+    <ClInclude Include="src\user\DashLightingRoad.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
@@ -335,6 +342,8 @@
     <ClInclude Include="src\user\TrackingEnemy.h" />
     <ClInclude Include="src\user\UnionBaseEnemy.h" />
     <ClInclude Include="src\user\UnionEnemy.h" />
+    <ClInclude Include="src\user\PlayerDashLighting.h" />
+    <ClInclude Include="src\user\PlayerModelOutline.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">

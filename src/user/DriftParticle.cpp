@@ -7,7 +7,6 @@ std::shared_ptr<Model> DriftParticle::m_model;
 DriftParticle::DriftParticle() {
 
 	/*===== コンストラクタ =====*/
-
 	// モデル
 	static int first = 0;
 	if (first == 0) {
