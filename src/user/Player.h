@@ -4,6 +4,8 @@
 #include<memory>
 #include<array>
 #include<DirectXMath.h>
+#include"PlayerDashLighting.h"
+#include"PlayerModelOutline.h"
 
 class Model;
 class Camera;
@@ -27,6 +29,7 @@ private:
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
 	Vec3<float> m_prevForwardVec;// 前フレームの移動方向ベクトル。
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
+	DirectX::XMMATRIX m_rotation;	//クォータニオン
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
 	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
@@ -83,11 +86,13 @@ private:
 	//モデル
 	std::shared_ptr<Model>m_model;
 
+	//アウトライン用のモデル
+	PlayerModelOutline m_outlineModel;
 	const Vec3<float> GREEN_HSV = Vec3<float>(152.857f, 223.125f, 0.959f);
 	const Vec3<float> RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.879f);
 	const Vec3<float> DARK_RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.289f);
 
-
+	PlayerDashLighting dashLight;
 public:
 
 	float MIN_SPEED = 0.7f;	// 最小の移動速度

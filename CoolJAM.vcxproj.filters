@@ -319,6 +319,21 @@
     <ClCompile Include="src\user\ElecMushiEnemy.cpp">
       <Filter>src\user\敵\敵継承クラス</Filter>
     </ClCompile>
+    <ClCompile Include="src\user\PlayerDashLighting.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DashLightingParticle.cpp">
+    </ClCompile>
+    <ClCompile Include="src\user\PlayerModelOutline.cpp">
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\KazDrawFunc.cpp">
+      <Filter>src</Filter>
+      <Filter>src\user</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user\DashLightingRoad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\D3D12App.h">
@@ -593,6 +608,22 @@
     </ClInclude>
     <ClInclude Include="src\user\ElecMushiEnemy.h">
       <Filter>src\user\敵\敵継承クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\PlayerDashLighting.h" />
+    <ClInclude Include="src\user\DashLightingParticle.h" />
+    <ClInclude Include="src\user\PlayerModelOutline.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h" />
+    <ClInclude Include="src\user\PlayerModelOutline.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\KazDrawFunc.h">
+      <Filter>src\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user\DashLightingRoad.h" />
+    <ClInclude Include="src\user\ColorPalette.h">
+      <Filter>src\user</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
