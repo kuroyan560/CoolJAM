@@ -10,18 +10,21 @@ private:
 
 
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
-	Vec3<float> m_knockBackVec;
-	float m_knockBackSpeed;
-	const float KNOCK_BACK_SPEED = 2.5f;
 	float m_speed;				// 移動速度
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
 	int m_hitEffectTimer;		// 弾に当たったフラグ
 	const int HIT_EFFECT_TIMER = 10;
 
+	float m_sineWaveTimer;
+	const float ADD_SINE_WAVE_TIMER = 0.1f;
+	const float SINE_WAVE_LENGTH = 10.0f;
+	float m_sineWaveLength;
+	float m_defLength;
+
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
 
-	//モデル
+	// モデル
 	Transform m_transform;
 
 	// スケール

@@ -33,6 +33,7 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 	m_knockBackVec = Vec3<float>();
 	m_shotTimer = 0;
 	m_returnDefPosSpeed = 0;
+	m_returnDefTimer = 0;
 	m_forwardVec = ForwardVec;
 	m_speed = 0;
 	m_isActive = true;
@@ -52,10 +53,14 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 	m_pos += m_knockBackVec * m_knockBackSpeed;
 
 	// ノックバックの移動を減らす。
-	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	--m_returnDefTimer;
+	if (0 < m_knockBackSpeed) {
+		m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	}
 
 	// ノックバックの移動量が一定以下だったら初期位置に戻す。
-	if (m_knockBackSpeed < 0.1f && RETURN_DEFPOS_SPEED <= Vec3<float>(m_pos - m_defPos).Length()) {
+	if (m_returnDefTimer < 0) m_returnDefTimer = 0;
+	if (m_returnDefTimer <= 0 && RETURN_DEFPOS_SPEED <= Vec3<float>(m_pos - m_defPos).Length()) {
 
 		// 初期位置までの座標。
 		Vec3<float> defPosDir = Vec3<float>(m_defPos - m_pos).GetNormal();
@@ -127,11 +132,15 @@ void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float&
 	if (0 < hitCount && m_id == ENEMY_INFO::ID::PRESS) {
 
 		m_knockBackVec = Vec3<float>(m_pos - PlayerPos).GetNormal();
-		m_knockBackSpeed += m_knockBackSpeed;
+		m_knockBackSpeed += ADD_KNOCK_BACK_SPEED;
 		// ノックバックの移動量が最大値を超えないようにする。
 		if (MAX_KNOCK_BACK_SPEED < m_knockBackSpeed) {
+
 			m_knockBackSpeed = MAX_KNOCK_BACK_SPEED;
+
 		}
+
+		m_returnDefTimer = RETURN_DEF_TIMER;
 
 	}
 

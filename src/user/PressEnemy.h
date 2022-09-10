@@ -19,12 +19,15 @@ private:
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
 	int m_hitEffectTimer;		// 弾に当たったフラグ
 	const int HIT_EFFECT_TIMER = 10;
-	const float PRESS_KNOCK_BACK_SPEED = 0.4f;
+	const float MAX_KNOCK_BACK_SPEED = 3.5f;
+	const float ADD_KNOCK_BACK_SPEED = 0.2f;
+	int m_returnDefTimer;
+	const int RETURN_DEF_TIMER = 120;
 
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
 
-	const float RETURN_DEFPOS_SPEED = 0.5f;
+	const float RETURN_DEFPOS_SPEED = 0.2f;
 
 	//モデル
 	Transform m_transform;
