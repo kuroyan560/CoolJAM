@@ -95,10 +95,16 @@ void DrawFunc3D::DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float
 	s_drawLineCount++;
 }
 
-void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform& Transform, Camera& Cam, std::shared_ptr<ModelAnimator> Animator, const AlphaBlendMode& BlendMode)
+void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform& Transform, Camera& Cam, const float& Alpha, std::shared_ptr<ModelAnimator> Animator, const AlphaBlendMode& BlendMode)
 {
-	static std::map < DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
-	static std::vector<std::shared_ptr<ConstantBuffer>>TRANSFORM_BUFF;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
+	static std::vector<std::shared_ptr<ConstantBuffer>>DRWA_DATA_BUFF;
+
+	struct DrawData
+	{
+		Matrix m_transformMat;
+		float m_alpha = 1.0f;
+	};
 
 	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
 
@@ -117,7 +123,7 @@ void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform
 		static std::vector<RootParam>ROOT_PARAMETER =
 		{
 			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"カメラ情報バッファ"),
-			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"トランスフォームバッファ"),
+			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"描画データバッファ"),
 			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"ボーン行列バッファ"),
 			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_SRV,"カラーテクスチャ"),
 			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"マテリアル基本情報バッファ"),
@@ -131,12 +137,15 @@ void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform
 
 	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(PIPELINE[targetFormat][BlendMode]);
 
-	if (TRANSFORM_BUFF.size() < (s_drawNonShadingCount + 1))
+	if (DRWA_DATA_BUFF.size() < (s_drawNonShadingCount + 1))
 	{
-		TRANSFORM_BUFF.emplace_back(D3D12App::Instance()->GenerateConstantBuffer(sizeof(Matrix), 1, nullptr, ("DrawShadingModel_Transform -" + std::to_string(s_drawNonShadingCount)).c_str()));
+		DRWA_DATA_BUFF.emplace_back(D3D12App::Instance()->GenerateConstantBuffer(sizeof(DrawData), 1, nullptr, ("DrawShadingModel_DrawData -" + std::to_string(s_drawNonShadingCount)).c_str()));
 	}
 
-	TRANSFORM_BUFF[s_drawNonShadingCount]->Mapping(&Transform.GetMat());
+	DrawData drawData;
+	drawData.m_transformMat = Transform.GetMat();
+	drawData.m_alpha = Alpha;
+	DRWA_DATA_BUFF[s_drawNonShadingCount]->Mapping(&drawData);
 
 	auto model = Model.lock();
 	std::shared_ptr<ConstantBuffer>boneBuff;
@@ -150,7 +159,7 @@ void DrawFunc3D::DrawNonShadingModel(const std::weak_ptr<Model> Model, Transform
 			mesh.mesh->idxBuff,
 			{
 				{Cam.GetBuff(),CBV},
-				{TRANSFORM_BUFF[s_drawNonShadingCount],CBV},
+				{DRWA_DATA_BUFF[s_drawNonShadingCount],CBV},
 				{boneBuff,CBV},
 				{mesh.material->texBuff[COLOR_TEX],SRV},
 				{mesh.material->buff,CBV}

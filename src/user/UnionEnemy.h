@@ -34,7 +34,7 @@ public:
 	void Init();
 	void Generate(const Vec3<float>& Pos);
 	void Update();
-	void Draw(Camera& Cam);
+	void Draw();
 
 	bool GetIsActive() { return m_isActive; }
 	Vec3<float> GetPos() { return m_pos; }

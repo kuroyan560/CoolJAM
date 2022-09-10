@@ -37,11 +37,6 @@ namespace Light
 			constData.dir = Direction;
 			dirty = true;
 		}
-		void SetDir(const Vec3<Angle>& Rotate, const Vec3<float>& Dir = DEFAULT_DIR)
-		{
-			const auto dir = KuroMath::TransformVec3(Dir, KuroMath::RotateMat(Rotate));
-			SetDir(dir);
-		}
 		void SetActive(const bool& Active)
 		{
 			unsigned int val = Active ? 1 : 0;
