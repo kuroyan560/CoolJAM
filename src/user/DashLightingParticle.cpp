@@ -1,5 +1,5 @@
 #include "DashLightingParticle.h"
-#include"../engine/DrawFunc3D.h"
+#include"DrawFunc_Append.h"
 
 DashLightingParticle::DashLightingParticle() :initFlag(false)
 {
@@ -38,7 +38,9 @@ void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	if (initFlag || !firstDrawFlag)
 	{
-		DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f);
+		//DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f);
+		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
+			RenderTargetSwitch(1.0f, 1.0f, 0.0f));
 		firstDrawFlag = true;
 	}
 }
