@@ -27,5 +27,5 @@ void LightBlock::Update()
 
 void LightBlock::Draw(Camera &CAMERA)
 {
-	DrawFunc3D::DrawNonShadingModel(m_model, m_tranform, CAMERA);
+	DrawFunc3D::DrawNonShadingModel(m_model, m_tranform, CAMERA, nullptr, AlphaBlendMode_Add);
 }
