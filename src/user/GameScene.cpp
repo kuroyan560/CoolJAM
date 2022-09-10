@@ -9,6 +9,7 @@
 #include"WinApp.h"
 #include"EnvironmentMgr.h"
 #include"EnemyWaveMgr.h"
+#include"GameTimer.h"
 
 GameScene::GameScene()
 {
@@ -32,6 +33,10 @@ GameScene::GameScene()
 	m_enemyMgr = std::make_shared<EnemyMgr>();
 	m_enemyMgr->Init();
 
+	//フィーバーのタイマーを設定。
+	m_feverGameTimer = std::make_unique<GameTimer>();
+	m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
+
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
 
@@ -43,6 +48,8 @@ GameScene::GameScene()
 
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
+
+	//m_gameTimer = std::make_unique<GameTimer>();
 }
 
 void GameScene::OnInitialize()
@@ -60,7 +67,6 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
-
 }
 
 void GameScene::OnUpdate()
@@ -89,7 +95,7 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	Vec3<float> playerVecX = -m_player->GetForwardVec();
-	const float CAMERA_DISTANCE = 60.0f;
+	const float CAMERA_DISTANCE = 80.0f;
 
 	// カメラを補間。
 	m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
@@ -103,11 +109,31 @@ void GameScene::OnUpdate()
 	m_gameCam->SetTarget(m_nowTarget);
 
 	m_environmentMgr->Update();
+
+	// フィーバータイムのUIを更新。
+	if (m_player->GetIsFever()) {
+		m_feverGameTimer->Start();
+	}
+	else {
+		if (m_feverGameTimer->FinishAllEffect()) {
+			m_feverGameTimer->Init(m_player->GetMaxFeverTimeGameTimer());
+		}
+	}
+	m_feverGameTimer->Update();
+
+	//if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
+	//{
+	//	m_gameTimer->Init(10);
+	//	m_gameTimer->Start();
+	//}
+	//m_gameTimer->Update();
+
+
+
 }
 
 void GameScene::OnDraw()
 {
-
 	/*===== 描画処理 =====*/
 
 	//デプスステンシルクリア
@@ -141,6 +167,12 @@ void GameScene::OnDraw()
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
 
+	// フィーバータイムのUIを描画。
+	m_feverGameTimer->Draw();
+
+	//m_gameTimer->Draw();
+
+
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
@@ -152,12 +184,14 @@ void GameScene::OnDraw()
 	//プレイヤー描画
 	m_player->Draw(nowCam);
 
+
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
 	if (m_emissive)
 	{
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
+
 
 	/* --- デバッグ描画 ---*/
 #ifdef _DEBUG

@@ -21,6 +21,8 @@ BulletMgr::BulletMgr() {
 
 	}
 
+	isKillElecMushi = false;
+
 }
 
 void BulletMgr::Init() {
@@ -38,6 +40,8 @@ void BulletMgr::Init() {
 		index->Init();
 
 	}
+
+	isKillElecMushi = false;
 
 }
 

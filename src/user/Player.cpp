@@ -102,7 +102,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	Input(Cam, WindowSize);
 
 	// ˆÚ“®ˆ—
-	Move();
+	Move(BulletMgr);
 
 	// ’e”­Ëˆ—
 	Shot(BulletMgr, EnemyMgr);
@@ -209,15 +209,16 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 }
 
-void Player::Move()
+void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
 {
 
 	/*===== ˆÚ“®ˆ— =====*/
 
-	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+	if (BulletMgr.lock()->GetIsKillElecMushi()) {
 
 		m_isFever = true;
 		m_feverTime = FEVER_TIME;
+		BulletMgr.lock()->BrakeIsKillElecMushi();
 
 	}
 

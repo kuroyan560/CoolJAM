@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Vec.h"
 #include<memory>
+#include"GameTimer.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -17,6 +18,7 @@ class EnemyMgr;
 class BulletMgr;
 class EnvironmentMgr;
 class EnemyWaveMgr;
+class GameTimer;
 
 class GameScene : public BaseScene
 {
@@ -39,6 +41,9 @@ private:
 
 	// 敵ウェーブクラス
 	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
+
+	// フィーバーのタイマー用UI
+	std::unique_ptr<GameTimer> m_feverGameTimer;
 
 	//マップのサイズ
 	float MAP_SIZE = 150.0f;
@@ -64,6 +69,8 @@ private:
 
 	//環境統括
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
+
+	std::unique_ptr<GameTimer>m_gameTimer;
 
 	bool m_emissive = false;
 

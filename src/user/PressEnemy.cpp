@@ -27,10 +27,12 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 	/*===== 生成処理 =====*/
 
 	m_id = ID;
+	m_defPos = Pos;
 	m_pos = Pos;
 	m_knockBackSpeed = 0.0001f;
 	m_knockBackVec = Vec3<float>();
 	m_shotTimer = 0;
+	m_returnDefPosSpeed = 0;
 	m_forwardVec = ForwardVec;
 	m_speed = 0;
 	m_isActive = true;
@@ -46,17 +48,28 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 
 	/*===== 更新処理 =====*/
 
-	// 移動速度を補間。
-	m_speed += (SPEED - m_speed) / 10.0f;
-
-	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
-
 	// ノックバックの移動。
 	m_pos += m_knockBackVec * m_knockBackSpeed;
 
 	// ノックバックの移動を減らす。
 	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+
+	// ノックバックの移動量が一定以下だったら初期位置に戻す。
+	if (m_knockBackSpeed < 0.1f && RETURN_DEFPOS_SPEED <= Vec3<float>(m_pos - m_defPos).Length()) {
+
+		// 初期位置までの座標。
+		Vec3<float> defPosDir = Vec3<float>(m_defPos - m_pos).GetNormal();
+		m_pos += defPosDir * m_returnDefPosSpeed;
+
+		// 移動速度を規定値に近づける。
+		m_returnDefPosSpeed += (RETURN_DEFPOS_SPEED - m_returnDefPosSpeed) / 20.0f;
+
+	}
+	else {
+
+		m_returnDefPosSpeed = 0;
+
+	}
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);

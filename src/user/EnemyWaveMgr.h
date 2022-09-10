@@ -14,7 +14,7 @@ private:
 
 	std::vector<std::shared_ptr<EnemyWave>> m_waves;	// ウェーブ
 	int m_frameTimer;									// フレームのタイマー
-
+	int nowWaveCount;
 
 public:
 
@@ -25,4 +25,5 @@ public:
 	void Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void AddWave(std::shared_ptr<EnemyWave> Wave);
 
+	bool IsNowWaveBounusStage();
 };

@@ -78,19 +78,6 @@ void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 	// 射出処理
 	Shot(BulletMgr, PlayerPos);
 
-	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
 
 }
 
@@ -119,12 +106,20 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 
 	/*===== 弾との当たり判定 =====*/
 
-	// マップ外判定。
-	if (MapSize + MapSize / 2.0f <= m_pos.Length()) {
+	// マップ外に出たら。
+	if (MapSize <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
-		Init();
+		--m_hp;
+		if (m_hp <= 0) {
+
+
+			// エレキ虫が死んだ。
+			BulletMgr.lock()->KillElecMushi();
+			Init();
+
+		}
 
 	}
 
@@ -143,6 +138,9 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 
 	m_hp -= hitCount;
 	if (m_hp <= 0) {
+
+		// エレキ虫が死んだ。
+		BulletMgr.lock()->KillElecMushi();
 
 		Init();
 
