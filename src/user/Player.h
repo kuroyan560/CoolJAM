@@ -35,6 +35,12 @@ private:
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
+	// フィーバー状態か
+	bool m_isFever;
+	int m_feverTime;
+	const int FEVER_TIME = 600;
+	const float FEVER_ATTACK_SCALE = 10.0f;
+
 	// HP関係
 	int m_hp;		// プレイヤーのHP
 	const int MAX_HP = 5;

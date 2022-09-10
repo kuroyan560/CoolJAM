@@ -42,7 +42,7 @@ private:
 	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
 
 	//マップのサイズ
-	float MAP_SIZE = 200.0f;
+	float MAP_SIZE = 150.0f;
 	const float EDGE_SCOPE = 10.0f;
 
 	//ライトブルーム

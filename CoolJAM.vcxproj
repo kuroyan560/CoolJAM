@@ -218,6 +218,7 @@
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
+    <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
@@ -225,11 +226,18 @@
     <ClCompile Include="src\user\GameTimer.cpp" />
     <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
-    <ClCompile Include="src\user\Enemy.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
+    <ClCompile Include="src\user\PlayerStraightEnemy.cpp" />
+    <ClCompile Include="src\user\PressEnemy.cpp" />
+    <ClCompile Include="src\user\ShieldEnemy.cpp" />
+    <ClCompile Include="src\user\StoppingEnemy.cpp" />
+    <ClCompile Include="src\user\StraightEnemy.cpp" />
+    <ClCompile Include="src\user\TorusMoveEnemy.cpp" />
+    <ClCompile Include="src\user\TrackingEnemy.cpp" />
+    <ClCompile Include="src\user\UnionBaseEnemy.cpp" />
     <ClCompile Include="src\user\UnionEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -302,8 +310,10 @@
     <ClInclude Include="src\engine\Swapchain.h" />
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
+    <ClInclude Include="src\user\BaseEnemy.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
+    <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
     <ClInclude Include="src\user\EnemyWave.h" />
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
@@ -311,11 +321,18 @@
     <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
-    <ClInclude Include="src\user\Enemy.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
     <ClInclude Include="src\user\Player.h" />
+    <ClInclude Include="src\user\PlayerStraightEnemy.h" />
+    <ClInclude Include="src\user\PressEnemy.h" />
+    <ClInclude Include="src\user\ShieldEnemy.h" />
+    <ClInclude Include="src\user\StoppingEnemy.h" />
+    <ClInclude Include="src\user\StraightEnemy.h" />
+    <ClInclude Include="src\user\TorusMoveEnemy.h" />
+    <ClInclude Include="src\user\TrackingEnemy.h" />
+    <ClInclude Include="src\user\UnionBaseEnemy.h" />
     <ClInclude Include="src\user\UnionEnemy.h" />
   </ItemGroup>
   <ItemGroup>

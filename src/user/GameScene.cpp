@@ -5,7 +5,6 @@
 #include"Importer.h"
 #include"DrawFunc2D.h"
 #include"EnemyMgr.h"
-#include"Enemy.h"
 #include"BulletMgr.h"
 #include"WinApp.h"
 #include"EnvironmentMgr.h"
@@ -211,7 +210,6 @@ void GameScene::OnImguiDebug()
 	ImGui::DragFloat("PlayerMaxSpeed", &m_player->MAX_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerMinSpeed", &m_player->MIN_SPEED, 0.1f);
 	ImGui::DragFloat("PlayerDriftSpeed", &m_player->BRAKE_SPEED, 0.1f);
-	ImGui::Checkbox("ShootEnemy", &Enemy::m_debugIsShotEnemy);
 	ImGui::End();
 
 	//ゲームマネージャimguiデバッグ
