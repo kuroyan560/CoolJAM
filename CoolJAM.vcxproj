@@ -133,6 +133,7 @@
       <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -228,14 +229,17 @@
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\GameTimer.cpp" />
-    <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp" />
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp" />
     <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp" />
+    <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
     <ClCompile Include="src\user\GameScene.cpp" />
+    <ClCompile Include="src\user\GrazeEmitter.cpp" />
+    <ClCompile Include="src\user\GrazeParticle.cpp" />
+    <ClCompile Include="src\user\KazCollisionHelper.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp" />
     <ClCompile Include="src\user\PressEnemy.cpp" />
@@ -332,14 +336,17 @@
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\GameTimer.h" />
-    <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
     <ClInclude Include="src\user\EnemyDeadSquareParticle.h" />
+    <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
     <ClInclude Include="src\user\GameScene.h" />
+    <ClInclude Include="src\user\GrazeEmitter.h" />
+    <ClInclude Include="src\user\GrazeParticle.h" />
+    <ClInclude Include="src\user\KazCollisionHelper.h" />
     <ClInclude Include="src\user\Player.h" />
     <ClInclude Include="src\user\PlayerStraightEnemy.h" />
     <ClInclude Include="src\user\PressEnemy.h" />
