@@ -265,9 +265,6 @@
     <ClCompile Include="src\user\GameManager.cpp">
       <Filter>src\user\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\user\Enemy.cpp">
-      <Filter>src\user\敵</Filter>
-    </ClCompile>
     <ClCompile Include="src\user\EnemyMgr.cpp">
       <Filter>src\user\敵</Filter>
     </ClCompile>
@@ -536,9 +533,6 @@
     </ClInclude>
     <ClInclude Include="src\user\GameManager.h">
       <Filter>src\user\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\user\Enemy.h">
-      <Filter>src\user\敵</Filter>
     </ClInclude>
     <ClInclude Include="src\user\EnemyMgr.h">
       <Filter>src\user\敵</Filter>
