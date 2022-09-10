@@ -57,7 +57,7 @@ public:
 	/// <param name="To">終点</param>
 	/// <param name="LineColor">色</param>
 	/// <param name="Thickness">太さ</param>
-	/// <param name="Switch">描画先レンダーターゲット設定フラグ</param>
+	/// <param name="Switch">レンダーターゲットへの描画レート（アルファ）※Depthは 0 or 1</param>
 	/// <param name="BlendMode">ブレンドモード</param>
 	static void DrawLine(const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness,
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(), const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
@@ -67,7 +67,7 @@ public:
 	/// </summary>
 	/// <param name="Model">モデル</param>
 	/// <param name="Transform">モデルのトランスフォーム</param>
-	/// <param name="Switch">描画先レンダーターゲット設定フラグ</param>
+	/// <param name="Switch">レンダーターゲットへの描画レート（アルファ）※Depthは 0 or 1</param>
 	/// <param name="Animator">モデルのアニメーター</param>
 	/// <param name="BlendMode">ブレンドモード</param>
 	static void DrawModel(const std::weak_ptr<Model>Model, Transform& Transform, 

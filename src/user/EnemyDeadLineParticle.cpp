@@ -1,6 +1,6 @@
 #include "EnemyDeadLineParticle.h"
-#include"../engine/DrawFunc3D.h"
 #include"../engine/Common/Angle.h"
+#include"DrawFunc_Append.h"
 
 EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(0)
 {
@@ -44,6 +44,6 @@ void EnemyDeadLineParticle::Draw(Camera &CAMERA)
 {
 	if (m_initFlag)
 	{
-		//DrawFunc3D::DrawLine(CAMERA, m_startPos, m_endPos, Color(255, 255, 255, m_alpha), 0.3f);
+		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(), 0.3f, RenderTargetSwitch(m_alpha, 1.0f, 0.0f));
 	}
 }
