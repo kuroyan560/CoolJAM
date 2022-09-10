@@ -21,4 +21,12 @@ public:
 	virtual float GetScale() = 0;
 	virtual Vec3<float> GetPos() = 0;
 
+	ENEMY_INFO::ID GetId()
+	{
+		return baseEnemy_id;
+	};
+
+protected:
+	ENEMY_INFO::ID baseEnemy_id;
+
 };

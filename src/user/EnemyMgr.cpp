@@ -10,6 +10,7 @@
 #include "TorusMoveEnemy.h"
 #include "UnionBaseEnemy.h"
 #include "ElecMushiEnemy.h"
+#include "CoinEnemy.h"
 #include "../engine/Importer.h"
 
 EnemyMgr::EnemyMgr()
@@ -150,6 +151,9 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 	case ENEMY_INFO::ID::ELEC_MUSHI:
 		Enemy = std::make_shared<ElecMushiEnemy>(m_elecMushi, m_modelHit);
 		break;
+	case ENEMY_INFO::ID::COIN:
+		Enemy = std::make_shared<CoinEnemy>(m_elecMushi, m_modelHit);
+		break;
 	default:
 		break;
 	}
@@ -220,7 +224,14 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 
 		if (!(length < Size + index->GetScale())) continue;
 
-		isHit = true;
+		if (index->GetId() != ENEMY_INFO::ID::COIN)
+		{
+			isHit = true;
+		}
+		else
+		{
+			isHit = false;
+		}
 		index->Init();
 
 	}

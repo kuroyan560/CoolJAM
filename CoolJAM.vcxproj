@@ -217,6 +217,7 @@
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
+    <ClCompile Include="src\user\CoinEnemy.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
@@ -312,6 +313,7 @@
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BaseEnemy.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
+    <ClInclude Include="src\user\CoinEnemy.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
