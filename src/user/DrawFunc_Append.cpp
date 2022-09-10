@@ -14,6 +14,12 @@ std::weak_ptr<RenderTarget>DrawFunc_Append::s_emissiveMap;
 std::weak_ptr<RenderTarget>DrawFunc_Append::s_depthMap;
 std::weak_ptr<DepthStencil>DrawFunc_Append::s_depthStencil;
 
+void DrawFunc_Append::SetRegisteredTargets()
+{
+	KuroEngine::Instance()->Graphics().SetRenderTargets(
+		{ s_main.lock(),s_emissiveMap.lock(),s_depthMap.lock() }, s_depthStencil.lock());
+}
+
 void DrawFunc_Append::FrameInit(
 	std::shared_ptr<RenderTarget>Main, 
 	std::shared_ptr<RenderTarget>EmissiveMap,
@@ -30,8 +36,6 @@ void DrawFunc_Append::FrameInit(
 	KuroEngine::Instance()->Graphics().ClearRenderTarget(DepthMap);
 	KuroEngine::Instance()->Graphics().ClearDepthStencil(DepthStencil);
 
-	KuroEngine::Instance()->Graphics().SetRenderTargets(
-		{ Main,EmissiveMap,DepthMap }, DepthStencil);
 	s_main = Main;
 	s_emissiveMap = EmissiveMap;
 	s_depthMap = DepthMap;
@@ -39,85 +43,98 @@ void DrawFunc_Append::FrameInit(
 
 	s_nowCam = NowCamera;
 	s_nowLigMgr = NowLigMgr;
+
+	SetRegisteredTargets();
 }
 
 void DrawFunc_Append::DrawLine(const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness, const RenderTargetSwitch& Switch, const AlphaBlendMode& BlendMode)
 {
-	//if (!LineColor.m_a)return;
+	if (!LineColor.m_a)return;
 
-	//static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
-	//static std::vector<std::shared_ptr<VertexBuffer>>LINE_VERTEX_BUFF;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
+	static std::vector<std::shared_ptr<VertexBuffer>>LINE_VERTEX_BUFF;
 
-	//const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
+	SetRegisteredTargets();
 
-	////DrawLine専用頂点
-	//class LineVertex
-	//{
-	//public:
-	//	Vec3<float>m_fromPos;
-	//	Vec3<float>m_toPos;
-	//	Color m_color;
-	//	float m_thickness;
-	//	RenderTargetSwitch m_drawSwitch;
-	//	LineVertex(const Vec3<float>& FromPos, const Vec3<float>& ToPos, const Color& Color,
-	//		const float& Thickness, const RenderTargetSwitch& TargetSwitch)
-	//		:m_fromPos(FromPos), m_toPos(ToPos), m_color(Color), m_thickness(Thickness), m_drawSwitch(TargetSwitch) {}
-	//};
+	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
 
-	////パイプライン未生成
-	//if (!PIPELINE[targetFormat][BlendMode])
-	//{
-	//	//パイプライン設定
-	//	static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-	//	PIPELINE_OPTION.m_calling = false;
+	//DrawLine専用頂点
+	class LineVertex
+	{
+	public:
+		Vec3<float>m_fromPos;
+		Vec3<float>m_toPos;
+		Color m_color;
+		float m_thickness;
+		RenderTargetSwitch m_drawSwitch;
+		LineVertex(const Vec3<float>& FromPos, const Vec3<float>& ToPos, const Color& Color,
+			const float& Thickness, const RenderTargetSwitch& TargetSwitch)
+			:m_fromPos(FromPos), m_toPos(ToPos), m_color(Color), m_thickness(Thickness), m_drawSwitch(TargetSwitch) {}
+	};
 
-	//	//シェーダー情報
-	//	static Shaders SHADERS;
-	//	SHADERS.m_vs = D3D12App::Instance()->CompileShader("resource/users/DrawLine_Append.hlsl", "VSmain", "vs_6_4");
-	//	SHADERS.m_gs = D3D12App::Instance()->CompileShader("resource/users/DrawLine_Append.hlsl", "GSmain", "gs_6_4");
-	//	SHADERS.m_ps = D3D12App::Instance()->CompileShader("resource/users/DrawLine_Append.hlsl", "PSmain", "ps_6_4");
+	//パイプライン未生成
+	if (!PIPELINE[targetFormat][BlendMode])
+	{
+		//パイプライン設定
+		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+		PIPELINE_OPTION.m_calling = D3D12_CULL_MODE_NONE;
 
-	//	//インプットレイアウト
-	//	static std::vector<InputLayoutParam>INPUT_LAYOUT =
-	//	{
-	//		InputLayoutParam("FROM_POS",DXGI_FORMAT_R32G32B32_FLOAT),
-	//		InputLayoutParam("TO_POS",DXGI_FORMAT_R32G32B32_FLOAT),
-	//		InputLayoutParam("COLOR",DXGI_FORMAT_R32G32B32A32_FLOAT),
-	//		InputLayoutParam("THICKNESS",DXGI_FORMAT_R32_FLOAT),
-	//	};
+		//シェーダー情報
+		static Shaders SHADERS;
+		SHADERS.m_vs = D3D12App::Instance()->CompileShader("resource/user/shaders/DrawLine3D_Append.hlsl", "VSmain", "vs_6_4");
+		SHADERS.m_gs = D3D12App::Instance()->CompileShader("resource/user/shaders/DrawLine3D_Append.hlsl", "GSmain", "gs_6_4");
+		SHADERS.m_ps = D3D12App::Instance()->CompileShader("resource/user/shaders/DrawLine3D_Append.hlsl", "PSmain", "ps_6_4");
 
-	//	//ルートパラメータ
-	//	static std::vector<RootParam>ROOT_PARAMETER =
-	//	{
-	//		RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"カメラ情報バッファ"),
-	//	};
+		//インプットレイアウト
+		static std::vector<InputLayoutParam>INPUT_LAYOUT =
+		{
+			InputLayoutParam("FROM_POS",DXGI_FORMAT_R32G32B32_FLOAT),
+			InputLayoutParam("TO_POS",DXGI_FORMAT_R32G32B32_FLOAT),
+			InputLayoutParam("COLOR",DXGI_FORMAT_R32G32B32A32_FLOAT),
+			InputLayoutParam("THICKNESS",DXGI_FORMAT_R32_FLOAT),
+			InputLayoutParam("MAIN",DXGI_FORMAT_R32_FLOAT),
+			InputLayoutParam("EMISSIVE",DXGI_FORMAT_R32_FLOAT),
+			InputLayoutParam("DEPTH",DXGI_FORMAT_R32_FLOAT),
+		};
 
-	//	//レンダーターゲット描画先情報
-	//	std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(targetFormat, BlendMode) };
-	//	//パイプライン生成
-	//	PIPELINE[targetFormat][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(false, false) });
-	//}
+		//ルートパラメータ
+		static std::vector<RootParam>ROOT_PARAMETER =
+		{
+			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_CBV,"カメラ情報バッファ"),
+		};
 
-	//KuroEngine::Instance()->Graphics().SetGraphicsPipeline(PIPELINE[targetFormat][BlendMode]);
+		//レンダーターゲット描画先情報
+		std::vector<RenderTargetInfo>RENDER_TARGET_INFO =
+		{
+			RenderTargetInfo(targetFormat, BlendMode),
+			RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, BlendMode),
+			RenderTargetInfo(DXGI_FORMAT_R32_FLOAT, AlphaBlendMode_None)
+		};
 
-	//if (LINE_VERTEX_BUFF.size() < (s_drawLineCount + 1))
-	//{
-	//	LINE_VERTEX_BUFF.emplace_back(D3D12App::Instance()->GenerateVertexBuffer(sizeof(LineVertex), 1, nullptr, ("DrawLine3D -" + std::to_string(s_drawLineCount)).c_str()));
-	//}
+		//パイプライン生成
+		PIPELINE[targetFormat][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(false, false) });
+	}
 
-	//LineVertex vertex(From, To, LineColor, Thickness);
-	//LINE_VERTEX_BUFF[s_drawLineCount]->Mapping(&vertex);
-	//Vec3<float>center = From.GetCenter(To);
+	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(PIPELINE[targetFormat][BlendMode]);
 
-	//KuroEngine::Instance()->Graphics().ObjectRender(
-	//	LINE_VERTEX_BUFF[s_drawLineCount],
-	//	{
-	//		{Cam.GetBuff(),CBV}
-	//	},
-	//	center.z,
-	//	true);
+	if (LINE_VERTEX_BUFF.size() < (s_drawLineCount + 1))
+	{
+		LINE_VERTEX_BUFF.emplace_back(D3D12App::Instance()->GenerateVertexBuffer(sizeof(LineVertex), 1, nullptr, ("DrawLine3D_Append -" + std::to_string(s_drawLineCount)).c_str()));
+	}
 
-	//s_drawLineCount++;
+	LineVertex vertex(From, To, LineColor, Thickness, Switch);
+	LINE_VERTEX_BUFF[s_drawLineCount]->Mapping(&vertex);
+	Vec3<float>center = From.GetCenter(To);
+
+	KuroEngine::Instance()->Graphics().ObjectRender(
+		LINE_VERTEX_BUFF[s_drawLineCount],
+		{
+			{s_nowCam.lock()->GetBuff(),CBV}
+		},
+		center.z,
+		true);
+
+	s_drawLineCount++;
 }
 
 void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Transform,
@@ -134,8 +151,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 		RenderTargetSwitch m_drawSwitch;
 	};
 
-	KuroEngine::Instance()->Graphics().SetRenderTargets(
-		{ s_main.lock(),s_emissiveMap.lock(),s_depthMap.lock() }, s_depthStencil.lock());
+	SetRegisteredTargets();
 
 	const auto targetFormat = s_main.lock()->GetDesc().Format;
 
@@ -147,8 +163,8 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 
 		//シェーダー情報
 		static Shaders SHADERS;
-		SHADERS.m_vs = D3D12App::Instance()->CompileShader("resource/user/DrawModel_Append.hlsl", "VSmain", "vs_6_4");
-		SHADERS.m_ps = D3D12App::Instance()->CompileShader("resource/user/DrawModel_Append.hlsl", "PSmain", "ps_6_4");
+		SHADERS.m_vs = D3D12App::Instance()->CompileShader("resource/user/shaders/DrawModel_Append.hlsl", "VSmain", "vs_6_4");
+		SHADERS.m_ps = D3D12App::Instance()->CompileShader("resource/user/shaders/DrawModel_Append.hlsl", "PSmain", "ps_6_4");
 
 		//ルートパラメータ
 		static std::vector<RootParam>ROOT_PARAMETER =

@@ -36,8 +36,11 @@ class DrawFunc_Append
 	static std::weak_ptr<RenderTarget>s_depthMap;
 	static std::weak_ptr<DepthStencil>s_depthStencil;
 
+	//登録されたレンダーターゲットをセット
+	static void SetRegisteredTargets();
+
 public:
-	//呼び出しカウントリセット
+	//各レンダーターゲット、カメラ、ライトマネージャの登録
 	static void FrameInit(
 		std::shared_ptr<RenderTarget>Main,
 		std::shared_ptr<RenderTarget>EmissiveMap,
