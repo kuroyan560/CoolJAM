@@ -5,7 +5,7 @@ EnemyDeadSquareParticle::EnemyDeadSquareParticle()
 {
 }
 
-void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGLE)
+void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGLE, const Color &COLOR)
 {
 	m_pos = POS;
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
@@ -22,6 +22,7 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 		KuroFunc::GetRand(minVel, maxVel),
 		KuroFunc::GetRand(minVel, maxVel)
 	};
+
 }
 
 void EnemyDeadSquareParticle::Update()

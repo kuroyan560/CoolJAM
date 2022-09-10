@@ -39,9 +39,9 @@ void EnemyDeadEmitter::GeneratePipeline()
 			shaders,
 			EnemyDeadLineParticle::GetInputLayout(),
 			rootParams,
-			renderTarget, 
+			renderTarget,
 			{ WrappedSampler(false,false) });
-	//四角パーティクル
+		//四角パーティクル
 	}
 	{
 		Shaders shaders;
@@ -97,6 +97,8 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 
 void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 {
+	Color color(KuroFunc::GetRand(0, 255), KuroFunc::GetRand(0, 255), KuroFunc::GetRand(0, 255), 255);
+
 	//四分割して最低個数を出す
 	const int PER_NUM = m_lineParticle.size() / 4;
 	int nowPerCount = 0;
@@ -109,7 +111,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 		int min = 0 + nowPerCount * 90;
 		int max = min + 90;
 		int random = KuroFunc::GetRand(min, max);
-		m_lineParticle[i].Init(POS, KuroFunc::GetRand(1.3f, 2.0f), random);
+		m_lineParticle[i].Init(POS, KuroFunc::GetRand(1.3f, 2.0f), random, color);
 	}
 
 	nowPerCount = 0;
@@ -122,7 +124,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 		int min = 0 + nowPerCount * 90;
 		int max = min + 90;
 		int random = KuroFunc::GetRand(min, max);
-		m_SquareParticle[i].Init(POS, KuroFunc::GetRand(0.4f, 1.0f), random);
+		m_SquareParticle[i].Init(POS, KuroFunc::GetRand(0.4f, 1.0f), random, color);
 	}
 }
 
@@ -138,9 +140,9 @@ void EnemyDeadEmitter::Update()
 	}
 }
 
-void EnemyDeadEmitter::Draw(Camera& CAMERA, 
-	std::weak_ptr<RenderTarget>MAIN, 
-	std::weak_ptr<RenderTarget>EMMISIVE_MAP, 
+void EnemyDeadEmitter::Draw(Camera &CAMERA,
+	std::weak_ptr<RenderTarget>MAIN,
+	std::weak_ptr<RenderTarget>EMMISIVE_MAP,
 	std::weak_ptr<DepthStencil>DEPTH_STENCIL)
 {
 	//パーティクル情報をGPUバッファに転送
@@ -149,12 +151,12 @@ void EnemyDeadEmitter::Draw(Camera& CAMERA,
 
 	//レンダーターゲットセット
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ MAIN.lock(),EMMISIVE_MAP.lock() }, DEPTH_STENCIL.lock());
-	
+
 	//ラインパーティクル描画
 	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(s_linePtGraphicsPipeline);
 	KuroEngine::Instance()->Graphics().ObjectRender(
 		m_linePtBuff,
-		{ 
+		{
 			RegisterDescriptorData(CAMERA.GetBuff(),CBV),
 			RegisterDescriptorData(m_emiBuff,CBV),
 		},
@@ -165,7 +167,7 @@ void EnemyDeadEmitter::Draw(Camera& CAMERA,
 	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(s_squarePtGraphicsPipeline);
 	KuroEngine::Instance()->Graphics().ObjectRender(
 		m_squarePtBuff,
-		{ 
+		{
 			RegisterDescriptorData(CAMERA.GetBuff(),CBV),
 			RegisterDescriptorData(m_emiBuff,CBV),
 			RegisterDescriptorData(s_ptTex,SRV),

@@ -6,7 +6,7 @@ EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(0)
 {
 }
 
-void EnemyDeadLineParticle::Init(const Vec3<float> &POS,float SPEED, int ANGLE)
+void EnemyDeadLineParticle::Init(const Vec3<float> &POS, float SPEED, int ANGLE, const Color &COLOR)
 {
 	m_pos = POS;
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
@@ -14,7 +14,11 @@ void EnemyDeadLineParticle::Init(const Vec3<float> &POS,float SPEED, int ANGLE)
 	m_alpha = 255;
 	m_dispappearTime = 255 / 30;
 	m_initFlag = 1;
-	m_rgb = { 255,255,255 };
+	m_rgb = {
+		static_cast<int>(COLOR.m_r * 255.0f),
+		static_cast<int>(COLOR.m_g * 255.0f),
+		static_cast<int>(COLOR.m_b * 255.0f)
+	};
 }
 
 void EnemyDeadLineParticle::Update()

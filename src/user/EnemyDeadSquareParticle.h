@@ -25,7 +25,7 @@ public:
 	}
 
 	EnemyDeadSquareParticle();
-	void Init(const Vec3<float> &POS, float SPEED, int ANGLE);
+	void Init(const Vec3<float> &POS, float SPEED, int ANGLE, const Color &COLOR);
 	void Update();
 	void Draw(Camera &CAMERA);
 

@@ -6,7 +6,6 @@
 #include"Vec.h"
 #include<memory>
 #include"GameTimer.h"
-#include"EnemyDeadEmitter.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -71,8 +70,6 @@ private:
 
 	bool m_emissive = false;
 
-
-	std::array<EnemyDeadEmitter, 10> m_emitter;
 
 public:
 	GameScene();

@@ -34,7 +34,7 @@ void EnemyMgr::Init()
 
 	/*===== ‰Šú‰»ˆ— =====*/
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”ò‚Î‚·B
 		if (!index.operator bool()) continue;
@@ -45,30 +45,43 @@ void EnemyMgr::Init()
 
 }
 
-void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 
 	/*===== XVˆ— =====*/
 
-	for (auto& index : m_enemy) {
-
+	for (auto &index : m_enemy) {
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”ò‚Î‚·B
 		if (!index.operator bool()) continue;
+
+
+		auto i = &index - &m_enemy[0];
+		if (!index->GetIsActive() && m_initDeadEffectArray[i])
+		{
+			m_deadEffectEmitterArray[i].Init(index->GetPos());
+			m_initDeadEffectArray[i] = false;
+		}
+		m_deadEffectEmitterArray[i].Update();
+
+
+
 
 		if (!index->GetIsActive()) continue;
 
 		index->Update(BulletMgr, PlayerPos, MapSize);
-
 	}
+
+
+
 
 }
 
-void EnemyMgr::Draw(Camera& NowCam)
+void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil)
 {
 
 	/*===== •`‰æˆ— =====*/
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”ò‚Î‚·B
 		if (!index.operator bool()) continue;
@@ -77,16 +90,22 @@ void EnemyMgr::Draw(Camera& NowCam)
 
 		index->Draw(NowCam);
 
+
+	}
+
+	for (auto &index : m_deadEffectEmitterArray)
+	{
+		index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
 	}
 
 }
 
-void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize)
+void EnemyMgr::Generate(const Vec3<float> &PlayerPos, const Vec3<float> &GeneratePos, const Vec3<float> ForwardVec, const int &EnemyID, const float &MapSize)
 {
 
 	/*===== ¶¬ˆ— =====*/
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚ç
 		if (!index.operator bool()) {
@@ -101,13 +120,16 @@ void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const Vec3<float>& Generat
 
 		GenerateEnemy(index, PlayerPos, GeneratePos, ForwardVec, EnemyID, MapSize);
 
+		auto i = &index - &m_enemy[0];
+		m_initDeadEffectArray[i] = true;
+
 		break;
 
 	}
 
 }
 
-void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize)
+void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy> &Enemy, const Vec3<float> &PlayerPos, const Vec3<float> &GeneratePos, const Vec3<float> ForwardVec, const int &EnemyID, const float &MapSize)
 {
 
 	/*===== “G‚ğ¶¬‚·‚é ======*/
@@ -159,13 +181,13 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 
 }
 
-Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
+Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float> &Pos) {
 
 	/*===== ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌÀ•W‚ğ‹‚ß‚é =====*/
 
 	float nearestLength = std::numeric_limits<float>().max();
 	Vec3<float> nearestPos = Vec3<float>(-1, -1, -1);
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		if (!index->GetIsActive()) continue;
 
@@ -202,13 +224,13 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 //
 //}
 
-bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
+bool EnemyMgr::CheckHitEnemy(const Vec3<float> &Pos, const float &Size)
 {
 
 	/*===== “G‚Æ‚Ì‚ ‚½‚è”»’è =====*/
 
 	bool isHit = false;
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”ò‚Î‚·B
 		if (!index.operator bool()) continue;
@@ -229,11 +251,11 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 
 }
 
-void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size) {
+void EnemyMgr::AttackEnemy(const Vec3<float> &Pos, const float &Size) {
 
 	/*===== w’è‚Ì”ÍˆÍ‚Ì“G‚ğ“|‚· =====*/
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”ò‚Î‚·B
 		if (!index.operator bool()) continue;
