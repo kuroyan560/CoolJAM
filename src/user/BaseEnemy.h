@@ -31,7 +31,7 @@ public:
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
-	virtual void Draw(Camera& Cam) = 0;
+	virtual void Draw() = 0;
 
 	void Damage(const int& Amount);
 

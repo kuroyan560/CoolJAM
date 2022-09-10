@@ -35,7 +35,7 @@ public:
 	void Init()override;
 	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)override;
 	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
-	void Draw(Camera& Cam)override;
+	void Draw()override;
 
 private:
 
