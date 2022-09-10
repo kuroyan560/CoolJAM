@@ -9,6 +9,7 @@
 #include"WinApp.h"
 #include"EnvironmentMgr.h"
 #include"EnemyWaveMgr.h"
+#include"GameTimer.h"
 
 GameScene::GameScene()
 {
@@ -31,6 +32,10 @@ GameScene::GameScene()
 	//敵を生成。
 	m_enemyMgr = std::make_shared<EnemyMgr>();
 	m_enemyMgr->Init();
+
+	//フィーバーのタイマーを設定。
+	m_feverGameTimer = std::make_unique<GameTimer>();
+	m_feverGameTimer->Init(m_player->GetMaxFeverTime());
 
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
@@ -103,6 +108,16 @@ void GameScene::OnUpdate()
 	m_gameCam->SetTarget(m_nowTarget);
 
 	m_environmentMgr->Update();
+
+	// フィーバータイムのUIを更新。
+	if (m_player->GetIsFever()) {
+		m_feverGameTimer->Start();
+	}
+	else {
+		m_feverGameTimer->FinishAllEffect();
+	}
+	m_feverGameTimer->Update();
+
 }
 
 void GameScene::OnDraw()
@@ -140,6 +155,9 @@ void GameScene::OnDraw()
 	// マップを描画
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
 	DrawFunc3D::DrawNonShadingModel(m_mapModel, nowCam);
+
+	// フィーバータイムのUIを描画。
+	m_feverGameTimer->Draw();
 
 	/*--- エミッシブマップに描画 ---*/
 		//デプスステンシルクリア

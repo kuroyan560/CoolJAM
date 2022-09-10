@@ -223,6 +223,7 @@
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
+    <ClCompile Include="src\user\GameTimer.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="src\user\EnemyWave.h" />
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
+    <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
