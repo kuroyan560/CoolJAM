@@ -32,6 +32,7 @@ void Combine(uint2 DTid : SV_DispatchThreadID)
     combineCol += img_1[DTid];
     combineCol += img_2[DTid];
     combineCol += img_3[DTid];
+    combineCol.a /= 4.0f;
     
     outputPixels[DTid] = combineCol;
 }
