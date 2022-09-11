@@ -48,6 +48,8 @@ Player::Player()
 
 	}
 
+	m_dashLight = std::make_unique<PlayerDashLighting>();
+
 }
 
 void Player::Init()
@@ -89,7 +91,7 @@ void Player::Init()
 	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 
 	//ダッシュ時のエフェクト
-	m_dashLight.Init(&m_pos);
+	m_dashLight->Init(&m_pos);
 
 
 }
@@ -438,7 +440,7 @@ void Player::UpdateEffect()
 	m_outlineModel.Update();
 
 	//ダッシュ時のエフェクト
-	m_dashLight.Update(dashFlag);
+	m_dashLight->Update(dashFlag);
 }
 
 
@@ -483,7 +485,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	if (!IsTitle) {
 
 		m_outlineModel.Draw(Cam);
-		m_dashLight.Draw(Cam);
+		m_dashLight->Draw(Cam);
 
 	}
 
