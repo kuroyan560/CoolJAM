@@ -43,15 +43,6 @@ void GrazeParticle::Update(float MAP_SIZE)
 {
 	if (initFlag)
 	{
-
-		/*if (!initWallFlag)
-		{
-			
-			
-			initWallFlag = true;
-		}*/
-
-		//m_pos += m_vel;
 		m_pos = KazCollisionHelper::KeepInMap(m_pos, MAP_SIZE);
 
 		//サイズ縮小ーーーーー

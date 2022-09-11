@@ -95,8 +95,7 @@ void GameScene::OnUpdate()
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
 
-	float distance = MAP_SIZE - m_player->GetPos().Length();
-	m_grazeEmitter->Update(MAP_SIZE, distance <= 20.0f);
+	m_grazeEmitter->Update(MAP_SIZE);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();

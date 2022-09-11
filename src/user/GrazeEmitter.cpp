@@ -13,7 +13,7 @@ void GrazeEmitter::Init(const Vec3<float> *POS, const float *VEL)
 	initTimer = 0;
 }
 
-void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
+void GrazeEmitter::Update(float MAP_SIZE)
 {
 	float centralDir = Angle::ConvertToRadian(90);
 	//プレイヤーの真後ろに角度を合わせ、ランダムで放射状に発射されるようにする
@@ -54,7 +54,7 @@ void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
 		{
 			if (!m_particleArray[i].IsAlive())
 			{
-				m_particleArray[i].Init(pos, dir, 10.0f * rate);
+				m_particleArray[i].Init(pos, dir, 7.0f * rate);
 				break;
 			}
 		}
