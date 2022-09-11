@@ -15,7 +15,7 @@ DashLightingRoad::DashLightingRoad():color(ColorPalette::S_GREEN_COLOR), initFla
 void DashLightingRoad::Init(const Vec3<float> &POS)
 {
 	startPos = POS;
-	color.m_a = 255;
+	color.m_a = 1.0f;
 	initFlag = true;
 }
 
@@ -45,7 +45,7 @@ void DashLightingRoad::Draw(Camera &Cam)
 {
 	if (initFlag || !firstDrawFlag)
 	{
-		DrawFunc_Append::DrawLine(startPos, endPos, color, 1.0f, RenderTargetSwitch(0.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
+		DrawFunc_Append::DrawLine(startPos, endPos, color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
 		firstDrawFlag = true;
 	}
 }
