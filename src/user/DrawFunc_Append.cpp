@@ -61,8 +61,8 @@ void DrawFunc_Append::RegisterRenderTargets(DXGI_FORMAT MainFormat, std::shared_
 				InputLayoutParam("FROM_POS",DXGI_FORMAT_R32G32B32_FLOAT),
 				InputLayoutParam("TO_POS",DXGI_FORMAT_R32G32B32_FLOAT),
 				InputLayoutParam("COLOR",DXGI_FORMAT_R32G32B32A32_FLOAT),
+				InputLayoutParam("DRAW_RATE",DXGI_FORMAT_R32G32B32_FLOAT),
 				InputLayoutParam("THICKNESS",DXGI_FORMAT_R32_FLOAT),
-				InputLayoutParam("DRAW_RATE",DXGI_FORMAT_R32G32B32A32_FLOAT),
 			};
 
 			//ルートパラメータ
@@ -161,11 +161,12 @@ void DrawFunc_Append::DrawLine(const Vec3<float>& From, const Vec3<float>& To, c
 		Vec3<float>m_fromPos;
 		Vec3<float>m_toPos;
 		Color m_color;
+		Vec3<float>m_drawRate;
 		float m_thickness;
-		RenderTargetSwitch m_drawSwitch;
 		LineVertex(const Vec3<float>& FromPos, const Vec3<float>& ToPos, const Color& Color,
 			const float& Thickness, const RenderTargetSwitch& TargetSwitch)
-			:m_fromPos(FromPos), m_toPos(ToPos), m_color(Color), m_thickness(Thickness), m_drawSwitch(TargetSwitch) {}
+			:m_fromPos(FromPos), m_toPos(ToPos), m_color(Color), 
+			m_drawRate({ TargetSwitch.m_main,TargetSwitch.m_emissive,TargetSwitch.m_depth}), m_thickness(Thickness) {}
 	};
 
 	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(s_drawLinePipeline[s_main.lock()->GetDesc().Format][BlendMode]);
