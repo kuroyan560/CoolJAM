@@ -17,8 +17,17 @@ EnvironmentMgr::EnvironmentMgr() :PILLAR_POS_ANGLE_OFFSET(Angle::ROUND() / PILLA
 	m_ligMgr = std::make_shared<LightManager>();
 
 	//ディレクションライト
-	m_dirLigDef.SetDir({ 0,-1,0 });
-	m_ligMgr->RegisterDirLight(&m_dirLigDef);
+	m_dirLigDef_0.SetDir({ 0,-1,0 });
+	m_dirLigDef_1.SetDir({ 0,-0.5f,1 });
+	m_dirLigDef_2.SetDir({ 0,0,1 });
+	m_ligMgr->RegisterDirLight(&m_dirLigDef_0);
+	m_ligMgr->RegisterDirLight(&m_dirLigDef_1);
+	m_ligMgr->RegisterDirLight(&m_dirLigDef_2);
+
+	//天球ライト
+	m_hemiLig.SetSkyColor(Color());
+	m_hemiLig.SetGroundColor(Color(0.2f, 0.2f, 0.2f, 1.0f));
+	m_ligMgr->RegisterHemiSphereLight(&m_hemiLig);
 
 	std::vector<Vec3<float> *>posArray;
 	for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)

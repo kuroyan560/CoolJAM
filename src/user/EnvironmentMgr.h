@@ -44,7 +44,10 @@ private:
 	std::shared_ptr<LightManager>m_ligMgr;
 
 	//ディレクションライト
-	Light::Direction m_dirLigDef;
+	Light::Direction m_dirLigDef_0;
+	Light::Direction m_dirLigDef_1;
+	Light::Direction m_dirLigDef_2;
+	Light::HemiSphere m_hemiLig;
 
 
 	//柱の座標
