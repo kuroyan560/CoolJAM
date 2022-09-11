@@ -128,7 +128,7 @@ void GameScene::OnUpdate()
 	m_gameCam->SetPos(m_nowEye);
 	m_gameCam->SetTarget(m_nowTarget);
 
-	m_environmentMgr->Update();
+	m_environmentMgr->Update(m_player->GetPos());
 
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 

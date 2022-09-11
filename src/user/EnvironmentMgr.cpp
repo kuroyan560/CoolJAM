@@ -3,6 +3,7 @@
 #include"UsersInput.h"
 #include"Object.h"
 #include"LightManager.h"
+#include"ColorPalette.h"
 
 EnvironmentMgr::EnvironmentMgr() :PILLAR_POS_ANGLE_OFFSET(Angle::ROUND() / PILLAR_NUM)
 {
@@ -23,6 +24,10 @@ EnvironmentMgr::EnvironmentMgr() :PILLAR_POS_ANGLE_OFFSET(Angle::ROUND() / PILLA
 	m_ligMgr->RegisterDirLight(&m_dirLigDef_0);
 	m_ligMgr->RegisterDirLight(&m_dirLigDef_1);
 	m_ligMgr->RegisterDirLight(&m_dirLigDef_2);
+
+	m_ptLig.SetColor(ColorPalette::S_PINK_COLOR);
+	m_ptLig.SetInfluenceRange(15.0f);
+	m_ligMgr->RegisterPointLight(&m_ptLig);
 
 	//天球ライト
 	m_hemiLig.SetSkyColor(Color());
@@ -45,8 +50,9 @@ void EnvironmentMgr::Init()
 	m_statusChangeRate = 1.0f;
 }
 
-void EnvironmentMgr::Update()
+void EnvironmentMgr::Update(const Vec3<float>& PlayerPos)
 {
+	m_ptLig.SetPos(PlayerPos);
 
 	//ステータス切り替わり
 	if (m_nextStatus != STATUS::NONE)
