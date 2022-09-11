@@ -62,7 +62,7 @@ GameScene::GameScene()
 	const auto backBuffFormat = backBuff->GetDesc().Format;
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
-	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat,AlphaBlendMode_Add);
+	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
 }
 
 void GameScene::OnInitialize()
