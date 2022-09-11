@@ -33,6 +33,6 @@ public:
 	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void Draw() = 0;
 
-	void Damage(const int& Amount);
+	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
 };
