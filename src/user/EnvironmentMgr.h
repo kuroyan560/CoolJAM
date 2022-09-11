@@ -4,6 +4,8 @@
 #include<string>
 #include<array>
 #include"Transform.h"
+#include"LineLight.h"
+
 #include"Light.h"
 class Model;
 class ModelObject;
@@ -43,6 +45,15 @@ private:
 
 	//ディレクションライト
 	Light::Direction m_dirLigDef;
+
+
+	//柱の座標
+	std::array<Vec3<float>, PILLAR_NUM> m_pillarPosArray;
+
+	//光線管理
+	std::unique_ptr<LineLight> m_lineLight;
+
+	const Angle PILLAR_POS_ANGLE_OFFSET;
 
 public:
 	EnvironmentMgr();

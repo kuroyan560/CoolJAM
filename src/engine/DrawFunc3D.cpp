@@ -4,10 +4,11 @@
 #include"LightManager.h"
 #include"CubeMap.h"
 #include"ModelAnimator.h"
-#include<map>
 
 //DrawLine
 int DrawFunc3D::s_drawLineCount = 0;
+std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>DrawFunc3D::s_drawLinePipeline;
+
 //DrawNonShadingModel
 int DrawFunc3D::s_drawNonShadingCount = 0;
 //DrawADSShadingModel
@@ -20,27 +21,10 @@ int DrawFunc3D::s_drawToonCount = 0;
 int DrawFunc3D::s_drawShadowFallCount = 0;
 
 
-void DrawFunc3D::DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness, const AlphaBlendMode& BlendMode)
+void DrawFunc3D::GenerateDrawLinePipeline(DXGI_FORMAT Format, const AlphaBlendMode& BlendMode)
 {
-	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>PIPELINE;
-	static std::vector<std::shared_ptr<VertexBuffer>>LINE_VERTEX_BUFF;
-
-	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
-
-	//DrawLine専用頂点
-	class LineVertex
-	{
-	public:
-		Vec3<float>fromPos;
-		Vec3<float>toPos;
-		Color color;
-		float thickness;
-		LineVertex(const Vec3<float>& FromPos, const Vec3<float>& ToPos, const Color& Color, const float& Thickness)
-			:fromPos(FromPos), toPos(ToPos), color(Color), thickness(Thickness) {}
-	};
-
 	//パイプライン未生成
-	if (!PIPELINE[targetFormat][BlendMode])
+	if (!s_drawLinePipeline[Format][BlendMode])
 	{
 		//パイプライン設定
 		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -68,12 +52,33 @@ void DrawFunc3D::DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float
 		};
 
 		//レンダーターゲット描画先情報
-		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(targetFormat, BlendMode) };
+		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(Format, BlendMode) };
 		//パイプライン生成
-		PIPELINE[targetFormat][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, {WrappedSampler(false, false)});
+		s_drawLinePipeline[Format][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, INPUT_LAYOUT, ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(false, false) });
 	}
+}
 
-	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(PIPELINE[targetFormat][BlendMode]);
+void DrawFunc3D::DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness, const AlphaBlendMode& BlendMode)
+{
+	static std::vector<std::shared_ptr<VertexBuffer>>LINE_VERTEX_BUFF;
+
+	const auto targetFormat = KuroEngine::Instance()->Graphics().GetRecentRenderTargetFormat(0);
+
+	//DrawLine専用頂点
+	class LineVertex
+	{
+	public:
+		Vec3<float>fromPos;
+		Vec3<float>toPos;
+		Color color;
+		float thickness;
+		LineVertex(const Vec3<float>& FromPos, const Vec3<float>& ToPos, const Color& Color, const float& Thickness)
+			:fromPos(FromPos), toPos(ToPos), color(Color), thickness(Thickness) {}
+	};
+
+	GenerateDrawLinePipeline(targetFormat, BlendMode);
+
+	KuroEngine::Instance()->Graphics().SetGraphicsPipeline(s_drawLinePipeline[targetFormat][BlendMode]);
 
 	if (LINE_VERTEX_BUFF.size() < (s_drawLineCount + 1))
 	{

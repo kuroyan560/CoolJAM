@@ -11,6 +11,9 @@
 #include"EnemyWaveMgr.h"
 #include"GameTimer.h"
 #include"DrawFunc_Append.h"
+#include"../engine/Common/Angle.h"
+#include"KazCollisionHelper.h"
+#include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
 
 GameScene::GameScene()
@@ -18,10 +21,13 @@ GameScene::GameScene()
 	//バックバッファ情報取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
+	/*===== コンストラクタ =====*/
+
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
 	m_player = std::make_unique<Player>();
+	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
 	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
@@ -53,7 +59,10 @@ GameScene::GameScene()
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 
-	//m_gameTimer = std::make_unique<GameTimer>();
+	const auto backBuffFormat = backBuff->GetDesc().Format;
+	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
+	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
+	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
 }
 
 void GameScene::OnInitialize()
@@ -72,27 +81,28 @@ void GameScene::OnInitialize()
 	m_nowTarget = m_baseTarget;
 
 	m_environmentMgr->Init();
+	m_player->Init();
+	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
+
 }
 
 void GameScene::OnUpdate()
 {
-
 	/*===== 更新処理 =====*/
+	//現在のカメラ取得
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
 
-	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	float distance = MAP_SIZE - m_player->GetPos().Length();
+	m_grazeEmitter->Update(MAP_SIZE, distance <= 20.0f);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
 
 	// プレイヤー更新処理
 	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
-
-	// 敵ウェーブ管理クラスを更新。
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 
 	// 敵更新処理
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
@@ -140,9 +150,6 @@ void GameScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
 
-	//デプスステンシルクリア
-	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
@@ -152,9 +159,6 @@ void GameScene::OnDraw()
 	//DrawFunc初期化
 	DrawFunc_Append::FrameInit(
 		backBuff,
-		m_emissiveMap,
-		m_depthMap,
-		m_depthStencil,
 		nowCam,
 		m_environmentMgr->GetLigMgr()
 	);
@@ -179,7 +183,14 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
-	//m_gameTimer->Draw();
+	float radian = Angle::ConvertToRadian(90);
+	float cosRadian = cosf(m_player->GetInputRadian() + radian);
+	float sinRadian = sinf(m_player->GetInputRadian() + radian);
+	Vec3<float>vel(cosRadian * 100.0f, 0.0f, sinRadian * -100.0f);
+	DrawFunc3D::DrawLine(*nowCam, m_player->GetPos(),
+		m_player->GetPos() + vel
+		, Color(255, 0, 255, 255), 1.0f);
+
 
 	/*--- エミッシブマップ合成 ---*/
 		//ライトブルームデバイスを使って加算合成
@@ -227,6 +238,11 @@ void GameScene::OnImguiDebug()
 
 	//ゲームマネージャimguiデバッグ
 	GameManager::Instance()->ImGuiDebug();
+	ImGui::Begin("Player");
+	ImGui::Text("POS_X:%f", m_player->GetPos().x);
+	ImGui::Text("POS_Y:%f", m_player->GetPos().y);
+	ImGui::Text("POS_Z:%f", m_player->GetPos().z);
+	ImGui::End();
 }
 
 void GameScene::OnFinalize()

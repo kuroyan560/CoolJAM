@@ -11,9 +11,7 @@ struct VSInput
     float4 to : TO_POS;
     float4 color : COLOR;
     float thickness : THICKNESS;
-    float mainDrawRate : MAIN;
-    float emissiveDrawRate : EMISSIVE;
-    float depthDrawRate : DEPTH;
+    float4 drawRate : DRAW_RATE;
 };
 
 VSInput VSmain(VSInput input)
@@ -115,9 +113,9 @@ inout TriangleStream<GSOutput> output)
     float4 p = from;
     
     element.col = input[0].color;
-    element.mainDrawRate = input[0].mainDrawRate;
-    element.emissiveDrawRate = input[0].emissiveDrawRate;
-    element.depthDrawRate = input[0].depthDrawRate;
+    element.mainDrawRate = input[0].drawRate.x;
+    element.emissiveDrawRate = input[0].drawRate.y;
+    element.depthDrawRate = input[0].drawRate.z;
     
     matrix rotate = Rotate(float3(0, 1, 0), to.xyz - from.xyz);
     

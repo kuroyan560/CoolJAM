@@ -4,7 +4,7 @@
 #include"Object.h"
 #include"LightManager.h"
 
-EnvironmentMgr::EnvironmentMgr()
+EnvironmentMgr::EnvironmentMgr() :PILLAR_POS_ANGLE_OFFSET(Angle::ROUND() / PILLAR_NUM)
 {
 	static const auto DIR = "resource/user/";
 
@@ -19,6 +19,14 @@ EnvironmentMgr::EnvironmentMgr()
 	//ディレクションライト
 	m_dirLigDef.SetDir({ 0,-1,0 });
 	m_ligMgr->RegisterDirLight(&m_dirLigDef);
+
+	std::vector<Vec3<float> *>posArray;
+	for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)
+	{
+		Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
+		posArray.push_back(&m_pillarPosArray[pillarIdx]);
+	}
+	m_lineLight = std::make_unique<LineLight>(posArray);
 }
 
 void EnvironmentMgr::Init()
@@ -30,32 +38,48 @@ void EnvironmentMgr::Init()
 
 void EnvironmentMgr::Update()
 {
+
 	//ステータス切り替わり
 	if (m_nextStatus != STATUS::NONE)
 	{
 		m_statusChangeRate += 1.0f / m_statusChangeTime;
 
+		//フィーバーから通常ステータスに切り替わる際に光線を追加で描画しない
+		if (m_nowStatus == STATUS::FEVER && m_nextStatus != STATUS::FEVER)
+		{
+			m_lineLight->Stop();
+		}
 		//切り替わり完了
 		if (1.0f <= m_statusChangeRate)
 		{
+			//次がフィーバーなら光線の描画を開始する
+			if (m_nextStatus == STATUS::FEVER)
+			{
+				m_lineLight->Init();
+			}
+
+
 			m_nowStatus = m_nextStatus;
 			m_nextStatus = STATUS::NONE;
 			m_statusChangeRate = 1.0f;
 		}
 	}
 
+
 	//デバッグ
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_S) && m_nextStatus == STATUS::NONE)
 	{
 		ChangeStatus(STATUS(1 - m_nowStatus));
 	}
+
+	m_lineLight->Update();
+
 }
 
 #include"DrawFunc3D.h"
 #include"DrawFunc_Append.h"
 void EnvironmentMgr::Draw(Camera &Cam)
 {
-	static const Angle PILLAR_POS_ANGLE_OFFSET = Angle::ROUND() / PILLAR_NUM;
 
 	if (m_nextStatus == STATUS::NONE || m_statusChangeRate < 0.3f)
 	{
@@ -67,8 +91,8 @@ void EnvironmentMgr::Draw(Camera &Cam)
 		{
 			Transform transform;
 			Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
-			transform.SetPos({ cos(posAngle) * m_pillarPosRadius,m_pillarPosY,sin(posAngle) * m_pillarPosRadius });
-
+			m_pillarPosArray[pillarIdx] = { cos(posAngle) * m_pillarPosRadius,m_pillarPosY,sin(posAngle) * m_pillarPosRadius };
+			transform.SetPos(m_pillarPosArray[pillarIdx]);
 			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nowStatus], transform);
 			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nowStatus], transform, Cam);
 		}
@@ -90,12 +114,18 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			Transform transform;
 			Angle posAngle = rotate + Angle(PILLAR_POS_ANGLE_OFFSET * pillarIdx);
 			float posRadius = KuroMath::Ease(Out, Back, m_statusChangeRate, 0.0f, m_pillarPosRadius);
-			transform.SetPos({ cos(posAngle) * posRadius,m_pillarPosY,sin(posAngle) * posRadius });
+			m_pillarPosArray[pillarIdx] = { cos(posAngle) * posRadius,m_pillarPosY,sin(posAngle) * posRadius };
+			transform.SetPos(m_pillarPosArray[pillarIdx]);
 			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nextStatus], transform, Cam);
 			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nextStatus], transform);
 
 		}
 	}
+
+
+	m_lineLight->Draw(Cam);
+
+
 }
 
 void EnvironmentMgr::OnImguiDebug()

@@ -6,6 +6,7 @@
 #include<memory>
 #include"Camera.h"
 #include"Object.h"
+#include<map>
 
 class Model;
 class LightManager;
@@ -16,6 +17,8 @@ class DrawFunc3D
 {
 	//DrawLine
 	static int s_drawLineCount;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>s_drawLinePipeline;
+
 	//DrawNonShadingModel
 	static int s_drawNonShadingCount;
 	//DrawADSShadingModel
@@ -39,6 +42,8 @@ public:
 		s_drawShadowFallCount = 0;
 	}
 
+	//線描画パイプライン事前生成
+	static void GenerateDrawLinePipeline(DXGI_FORMAT Format, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
 	//線描画
 	static void DrawLine(Camera& Cam, const Vec3<float>& From, const Vec3<float>& To, const Color& LineColor, const float& Thickness, const AlphaBlendMode& BlendMode = AlphaBlendMode_Trans);
 	//通常描画
