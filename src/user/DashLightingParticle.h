@@ -9,7 +9,7 @@ class Camera;
 class DashLightingParticle
 {
 public:
-	DashLightingParticle();
+	DashLightingParticle(std::shared_ptr<ModelObject> MODEL);
 	void Init(const Vec3<float> &POS);
 	void Update();
 	void Draw(Camera &CAMEARA);

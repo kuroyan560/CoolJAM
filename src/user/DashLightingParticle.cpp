@@ -1,10 +1,10 @@
 #include "DashLightingParticle.h"
 #include"DrawFunc_Append.h"
 
-DashLightingParticle::DashLightingParticle() :initFlag(false)
+DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL) :initFlag(false)
 {
 	firstDrawFlag = false;
-	m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
+	m_model = MODEL;
 }
 
 void DashLightingParticle::Init(const Vec3<float> &POS)
