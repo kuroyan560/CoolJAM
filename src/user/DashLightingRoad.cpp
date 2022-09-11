@@ -42,7 +42,7 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX)
 
 void DashLightingRoad::Draw(Camera &Cam)
 {
-	if (m_initFlag)
+	//if (m_initFlag)
 	{
 		DrawFunc_Append::DrawLine(m_startPos, m_endPos, m_color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
 	}

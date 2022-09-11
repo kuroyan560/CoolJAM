@@ -3,6 +3,7 @@
 #include<memory>
 #include<array>
 #include<DirectXMath.h>
+#include"../engine/Object.h"
 
 class Camera;
 class DashLightingParticle
@@ -21,5 +22,6 @@ private:
 	int alpha;
 	bool initFlag;
 	bool firstDrawFlag;
+	std::shared_ptr<ModelObject>m_model;
 };
 

@@ -10,7 +10,7 @@ class GrazeEmitter
 public:
 	GrazeEmitter();
 	void Init(const Vec3<float> *POS,const float *VEL);
-	void Update(float MAP_SIZE,bool HIT_FALG);
+	void Update(float MAP_SIZE);
 	void Draw(Camera& CAMERA);
 
 private:
