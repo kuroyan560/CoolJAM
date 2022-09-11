@@ -62,9 +62,7 @@ void DrawFunc_Append::RegisterRenderTargets(DXGI_FORMAT MainFormat, std::shared_
 				InputLayoutParam("TO_POS",DXGI_FORMAT_R32G32B32_FLOAT),
 				InputLayoutParam("COLOR",DXGI_FORMAT_R32G32B32A32_FLOAT),
 				InputLayoutParam("THICKNESS",DXGI_FORMAT_R32_FLOAT),
-				InputLayoutParam("MAIN",DXGI_FORMAT_R32_FLOAT),
-				InputLayoutParam("EMISSIVE",DXGI_FORMAT_R32_FLOAT),
-				InputLayoutParam("DEPTH",DXGI_FORMAT_R32_FLOAT),
+				InputLayoutParam("DRAW_RATE",DXGI_FORMAT_R32G32B32A32_FLOAT),
 			};
 
 			//ルートパラメータ

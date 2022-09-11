@@ -18,7 +18,7 @@ struct RenderTargetSwitch
 	float m_main = 1.0f;
 	float m_emissive = 1.0f;
 	float m_depth = 1.0f;
-	float pad;
+	float m_pad;
 
 	RenderTargetSwitch() {}
 	RenderTargetSwitch(const float& Main, const float& Emissive, const float& Depth)
