@@ -19,7 +19,7 @@ void LightBloomDevice::GeneratePipeline()
 			RootParam(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,"加工後エミッシブマップ"),
 		};
 		//パイプライン生成
-		s_filterPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,false) });
+		s_filterPipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,true) });
 	}
 	{
 		//シェーダー
