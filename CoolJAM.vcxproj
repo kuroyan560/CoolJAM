@@ -340,6 +340,7 @@
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\FeverGauge.h" />
+    <ClInclude Include="src\user\GameMode.h" />
     <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
