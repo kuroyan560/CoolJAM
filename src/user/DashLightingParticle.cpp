@@ -39,12 +39,16 @@ void DashLightingParticle::Update()
 	}
 }
 
+#include"ColorPalette.h"
 void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	//if (initFlag || !firstDrawFlag)
 	{
-		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
-			RenderTargetSwitch(1.0f, 1.0f, 0.0f));
+		float a = alpha / 255.0f;
+		Color col = ColorPalette::S_GREEN_COLOR;
+
+		DrawFunc_Append::DrawLine(m_startPos, m_endPos, col, 0.5f,
+			RenderTargetSwitch(a, a, 0.0f));
 		firstDrawFlag = true;
 	}
 }
