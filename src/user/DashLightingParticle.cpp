@@ -1,9 +1,9 @@
 #include "DashLightingParticle.h"
 #include"DrawFunc_Append.h"
 
-DashLightingParticle::DashLightingParticle() :initFlag(false)
+DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL) :initFlag(false)
 {
-	//m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
+	m_model = MODEL->m_model;
 }
 
 void DashLightingParticle::Init(const Vec3<float> &POS)
@@ -21,9 +21,9 @@ void DashLightingParticle::Init(const Vec3<float> &POS)
 	m_startPos = m_pos + Vec3<float>(cosfNum, h, sinfNum);
 	m_endPos = m_pos + -Vec3<float>(cosfNum, h, sinfNum);
 
-	//m_model->m_transform.SetPos(m_startPos);
-	//m_model->m_transform.SetScale({ 0.2f,1.0f,1.0f });
-	//m_model->m_transform.SetRotate(Vec3<float>(0, 0, 0));
+	m_transform.SetPos(m_startPos);
+	m_transform.SetScale({ 1.0f,1.0f,1.5f });
+	m_transform.SetRotate(Vec3<Angle>(KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360)));
 }
 
 void DashLightingParticle::Update()
@@ -42,7 +42,8 @@ void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	if (initFlag)
 	{
-		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
-			RenderTargetSwitch(1.0f, 1.0f, 0.0f));
+		//	DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
+		//		RenderTargetSwitch(1.0f, 1.0f, 0.0f));
+		DrawFunc_Append::DrawModel(m_model, m_transform);
 	}
 }

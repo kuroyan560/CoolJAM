@@ -11,11 +11,14 @@
 #include"LightManager.h"
 #include"CubeMap.h"
 #include"ModelAnimator.h"
+#include"DrawFunc_Append.h"
 #include<map>
 
 class KazDrawFunc
 {
 public:
+	static std::weak_ptr<Camera>s_nowCam;
+
 	//êÍópí∏ì_
 	class Vertex
 	{
@@ -30,6 +33,7 @@ public:
 	static int s_drawNonShadingModelSignalColor;
 	static int s_drawBillBoardGraph;
 	static int s_drawRotaGraph2D;
+	static int s_appendDrawModel;
 
 	static void CountReset();
 	static void DrawNonShadingModelSignalColor(const std::weak_ptr<Model> Model, Transform &Transform, Color &color, Camera &Cam, std::shared_ptr<ModelAnimator> Animator = nullptr, const AlphaBlendMode &BlendMode = AlphaBlendMode_Trans);
@@ -48,4 +52,6 @@ public:
 	static void DrawRotaGraph2D(const Vec2<float> &Center, const Vec2<float> &ExtRate, const float &Radian,
 		const std::shared_ptr<TextureBuffer> &Tex, const float &Alpha = 1.0f, const Vec2<float> &RotaCenterUV = { 0.5f,0.5f },
 		const AlphaBlendMode &BlendMode = AlphaBlendMode_Trans, const Vec2<bool> &Mirror = { false,false });
+
+
 };

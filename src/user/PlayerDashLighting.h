@@ -19,11 +19,12 @@ private:
 	Vec3<float> *m_pos;//プレイヤーの座標ポインタ
 	Vec3<float> m_startPos, m_endPos;//プレイヤーの座標ポインタ
 
-	std::array<DashLightingParticle, 40> m_particleArray;//電撃パーティクル
+	std::array<std::unique_ptr<DashLightingParticle>, 40> m_particleArray;//電撃パーティクル
 	int m_particleInitNum;
 	int m_timer;
 
 	bool m_prevFlag;
 	int m_roadIndex;
 	std::array<std::unique_ptr<DashLightingRoad>, 5> m_roadArray;			//加速時の道
+	std::shared_ptr<ModelObject>m_model;
 };
