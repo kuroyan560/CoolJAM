@@ -32,6 +32,11 @@ private:
 	std::shared_ptr<Model> m_mapModel;
 	Transform m_mapModelTransform;
 
+	// ƒ^ƒCƒgƒ‹‰æ‘œ
+	std::shared_ptr<TextureBuffer> m_titleTexture;
+	float m_titleAngle;
+	bool m_isTitle;
+
 	// UI
 	enum class SELECT {
 		MIN,

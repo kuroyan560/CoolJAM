@@ -45,6 +45,11 @@ TitleScene::TitleScene()
 	m_transitionEasingTimer = 0;
 	m_endEasingTransitionTimer = END_EASING_TIMER;
 
+	// タイトル画像をロード
+	m_titleTexture = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/title.png");
+	m_titleAngle = 0;
+	m_isTitle = true;
+
 	// UI用のテクスチャをロード
 	m_selectUI[0] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/title_select_tutorial.png");
 	m_selectUI[1] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/title_select_Gamel.png");
@@ -56,7 +61,7 @@ TitleScene::TitleScene()
 
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
-	m_isAppear = true;
+	m_isAppear = false;
 
 	m_nowSelect = SELECT::TUTORIAL;
 
@@ -78,7 +83,8 @@ void TitleScene::OnInitialize()
 
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
-	m_isAppear = true;
+	m_isTitle = true;
+	m_isAppear = false;
 
 	m_nowSelect = SELECT::TUTORIAL;
 
@@ -110,6 +116,9 @@ void TitleScene::OnUpdate()
 		m_rotateUI[0] = OFF_SCREEN_ROTATE[0] + (DEF_ROTATE[0] - OFF_SCREEN_ROTATE[0]) * easingAmount;
 		m_rotateUI[1] = OFF_SCREEN_ROTATE[1] + (DEF_ROTATE[1] - OFF_SCREEN_ROTATE[1]) * easingAmount;
 		m_rotateUI[2] = OFF_SCREEN_ROTATE[2] + (DEF_ROTATE[2] - OFF_SCREEN_ROTATE[2]) * easingAmount;
+
+		// タイトルを回転させる。
+		m_titleAngle = DirectX::XM_2PI - DirectX::XM_PI * easingAmount;
 
 		// タイマーを更新。
 		m_revolverEasingTimer += ADD_REVOLVER_EASING_TIMER;
@@ -197,6 +206,11 @@ void TitleScene::OnDraw()
 
 	}
 
+	// タイトルを描画。
+	Vec2<float> vec = Vec2<float>(cosf(m_titleAngle), sinf(m_titleAngle));
+	Vec2<float> centerPos = vec * 300.0f + Vec2<float>(0, 720.0f / 2.0f);
+	DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_titleAngle, m_titleTexture);
+
 
 	/*--- エミッシブマップ合成 ---*/
 	//ライトブルームデバイスを使って加算合成
@@ -249,22 +263,35 @@ void TitleScene::OnFinalize()
 void TitleScene::UpdateSelect() {
 
 
-	if ((UsersInput::Instance()->KeyInput(DIK_SPACE) || UsersInput::Instance()->KeyInput(DIK_RETURN)) && !m_isAppear) {
+	if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
 
-		m_isTransition = true;
+		// 出現中じゃなかったら。
+		if (!m_isTitle && !m_isAppear && !m_isTransition) {
 
-		m_revolverEasingTimer = 0;
-		//KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
+			m_isTransition = true;
 
-		if (m_nowSelect == SELECT::EXIT) {
+			m_revolverEasingTimer = 0;
+			//KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
 
-			exit(0);
+			if (m_nowSelect == SELECT::EXIT) {
+
+				exit(0);
+
+			}
+
+		}
+		// タイトル描画中だったら。
+		if (m_isTitle) {
+
+			m_isAppear = true;
+			m_isTitle = false;
 
 		}
 
 	}
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_UP) && !m_isAppear && !m_isTransition) {
+	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
+	if (100.0f < mouseMove && !m_isAppear && !m_isTransition) {
 
 		m_addRotateUI -= DirectX::XM_PIDIV2;
 
@@ -284,7 +311,7 @@ void TitleScene::UpdateSelect() {
 		}
 
 	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_DOWN) && !m_isAppear && !m_isTransition) {
+	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition) {
 
 		m_addRotateUI += DirectX::XM_PIDIV2;
 
