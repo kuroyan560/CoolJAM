@@ -45,7 +45,7 @@ void DashLightingRoad::Draw(Camera &Cam)
 {
 	if (initFlag || !firstDrawFlag)
 	{
-		DrawFunc_Append::DrawLine(startPos, endPos, color, 1.0f, RenderTargetSwitch(0.0f, 0.0f, 1.0f), AlphaBlendMode_Add);
+		DrawFunc_Append::DrawLine(startPos, endPos, color, 1.0f, RenderTargetSwitch(0.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
 		firstDrawFlag = true;
 	}
 }

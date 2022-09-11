@@ -179,6 +179,8 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
+	m_grazeEmitter->Draw(*nowCam);
+
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
 	float sinRadian = sinf(m_player->GetInputRadian() + radian);
