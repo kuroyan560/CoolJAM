@@ -184,9 +184,9 @@ void GameScene::OnDraw()
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
 	float sinRadian = sinf(m_player->GetInputRadian() + radian);
 	Vec3<float>vel(cosRadian * 100.0f, 0.0f, sinRadian * -100.0f);
-	DrawFunc3D::DrawLine(*nowCam, m_player->GetPos(),
-		m_player->GetPos() + vel
-		, Color(255, 0, 255, 255), 1.0f);
+	//DrawFunc3D::DrawLine(*nowCam, m_player->GetPos(),
+	//	m_player->GetPos() + vel
+	//	, Color(255, 0, 255, 255), 1.0f);
 
 
 	/*--- エミッシブマップ合成 ---*/
