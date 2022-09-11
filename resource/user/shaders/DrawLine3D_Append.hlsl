@@ -10,8 +10,8 @@ struct VSInput
     float4 from : FROM_POS;
     float4 to : TO_POS;
     float4 color : COLOR;
+    float3 drawRate : DRAW_RATE;
     float thickness : THICKNESS;
-    float4 drawRate : DRAW_RATE;
 };
 
 VSInput VSmain(VSInput input)
@@ -127,15 +127,15 @@ inout TriangleStream<GSOutput> output)
         element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
 
         output.RestartStrip();
     
-        element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
     
         element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
@@ -151,15 +151,15 @@ inout TriangleStream<GSOutput> output)
         element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
 
         output.RestartStrip();
     
-        element.pos = GetPos(from, float3(offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
     
         element.pos = GetPos(from, float3(offset, 0.0f, offset), rotate);
@@ -175,15 +175,15 @@ inout TriangleStream<GSOutput> output)
         element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
 
         output.RestartStrip();
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
     
         element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
@@ -199,15 +199,15 @@ inout TriangleStream<GSOutput> output)
         element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
 
         output.RestartStrip();
     
-        element.pos = GetPos(from, float3(offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
     
         element.pos = GetPos(from, float3(offset, 0.0f, offset), rotate);
@@ -241,24 +241,24 @@ inout TriangleStream<GSOutput> output)
     }
     //‰º–Ê
     {
-        element.pos = GetPos(from, float3(offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
 
         output.RestartStrip();
     
-        element.pos = GetPos(from, float3(offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, -offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, -offset), rotate);
         output.Append(element);
     
-        element.pos = GetPos(from, float3(-offset, 0.0f, offset), rotate);
+        element.pos = GetPos(to, float3(-offset, 0.0f, offset), rotate);
         output.Append(element);
         
         output.RestartStrip();
