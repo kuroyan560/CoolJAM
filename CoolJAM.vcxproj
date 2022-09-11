@@ -243,6 +243,7 @@
     <ClCompile Include="src\user\ShieldEnemy.cpp" />
     <ClCompile Include="src\user\StoppingEnemy.cpp" />
     <ClCompile Include="src\user\StraightEnemy.cpp" />
+    <ClCompile Include="src\user\TitleScene.cpp" />
     <ClCompile Include="src\user\TorusMoveEnemy.cpp" />
     <ClCompile Include="src\user\TrackingEnemy.cpp" />
     <ClCompile Include="src\user\UnionBaseEnemy.cpp" />
@@ -348,6 +349,7 @@
     <ClInclude Include="src\user\ShieldEnemy.h" />
     <ClInclude Include="src\user\StoppingEnemy.h" />
     <ClInclude Include="src\user\StraightEnemy.h" />
+    <ClInclude Include="src\user\TitleScene.h" />
     <ClInclude Include="src\user\TorusMoveEnemy.h" />
     <ClInclude Include="src\user\TrackingEnemy.h" />
     <ClInclude Include="src\user\UnionBaseEnemy.h" />

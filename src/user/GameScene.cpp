@@ -112,6 +112,10 @@ void GameScene::OnUpdate()
 	m_baseTarget.x += 3.0f;
 	m_nowTarget = m_baseTarget;
 
+	Vec3<float> eyeVec = Vec3<float>(m_baseEye - m_player->GetPos()).GetNormal();
+	float xzAngle = atan2f(eyeVec.x, eyeVec.z);
+
+
 	m_gameCam->SetPos(m_nowEye);
 	m_gameCam->SetTarget(m_nowTarget);
 

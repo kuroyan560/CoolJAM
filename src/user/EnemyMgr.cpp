@@ -34,7 +34,7 @@ void EnemyMgr::Init()
 
 	/*===== 初期化処理 =====*/
 
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
@@ -45,12 +45,12 @@ void EnemyMgr::Init()
 
 }
 
-void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize)
+void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== 更新処理 =====*/
 
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
 
@@ -76,12 +76,12 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 
 }
 
-void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil)
+void EnemyMgr::Draw(Camera& NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil)
 {
 
 	/*===== 描画処理 =====*/
 
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
@@ -93,19 +93,19 @@ void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 
 	}
 
-	for (auto &index : m_deadEffectEmitterArray)
+	for (auto& index : m_deadEffectEmitterArray)
 	{
 		index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
 	}
 
 }
 
-void EnemyMgr::Generate(const Vec3<float> &PlayerPos, const Vec3<float> &GeneratePos, const Vec3<float> ForwardVec, const int &EnemyID, const float &MapSize)
+void EnemyMgr::Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize)
 {
 
 	/*===== 生成処理 =====*/
 
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		// 生成されていなかったら
 		if (!index.operator bool()) {
@@ -129,7 +129,7 @@ void EnemyMgr::Generate(const Vec3<float> &PlayerPos, const Vec3<float> &Generat
 
 }
 
-void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy> &Enemy, const Vec3<float> &PlayerPos, const Vec3<float> &GeneratePos, const Vec3<float> ForwardVec, const int &EnemyID, const float &MapSize)
+void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize)
 {
 
 	/*===== 敵を生成する ======*/
@@ -181,13 +181,13 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy> &Enemy, const Vec3<float
 
 }
 
-Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float> &Pos) {
+Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
 
 	/*===== 一番近くにいる敵の座標を求める =====*/
 
 	float nearestLength = std::numeric_limits<float>().max();
 	Vec3<float> nearestPos = Vec3<float>(-1, -1, -1);
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		if (!index->m_isActive) continue;
 
@@ -197,6 +197,41 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float> &Pos) {
 
 		nearestLength = length;
 		nearestPos = index->m_pos;
+
+	}
+
+	return nearestPos;
+
+}
+
+Vec3<float> EnemyMgr::SearchNearestEnemyToVector(const Vec3<float>& Pos, const Vec3<float>& Vec, const float& ReceivingRate)
+{
+
+	/*===== 指定のベクトルに一番近い敵を探す =====*/
+
+	float nearestLength = -1;
+	Vec3<float> nearestPos = Vec3<float>(-1, -1, -1);
+
+	for (auto& index : m_enemy) {
+
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
+
+		if (!index->m_isActive) continue;
+
+		// 内積を求める。
+		float dot = Vec.Dot(Vec3<float>(index->m_pos - Pos).GetNormal());
+		if (dot < nearestLength) continue;
+
+		nearestLength = dot;
+		nearestPos = index->m_pos;
+
+	}
+
+	// 受け入れる範囲以下だったら。
+	if (nearestLength <= ReceivingRate) {
+
+		nearestPos = Vec3<float>(-1, -1, -1);
 
 	}
 
@@ -224,13 +259,13 @@ Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float> &Pos) {
 //
 //}
 
-bool EnemyMgr::CheckHitEnemy(const Vec3<float> &Pos, const float &Size)
+bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 {
 
 	/*===== 敵とのあたり判定 =====*/
 
 	bool isHit = false;
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
@@ -251,11 +286,11 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float> &Pos, const float &Size)
 
 }
 
-void EnemyMgr::AttackEnemy(const Vec3<float> &Pos, const float &Size) {
+void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr) {
 
 	/*===== 指定の範囲の敵を倒す =====*/
 
-	for (auto &index : m_enemy) {
+	for (auto& index : m_enemy) {
 
 		// 生成されていなかったら処理を飛ばす。
 		if (!index.operator bool()) continue;
@@ -269,7 +304,7 @@ void EnemyMgr::AttackEnemy(const Vec3<float> &Pos, const float &Size) {
 		// 当たり判定
 		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
 
-		index->Damage(1);
+		index->Damage(1, BulletMgr);
 
 	}
 

@@ -442,7 +442,7 @@ void Player::UpdateEffect()
 
 
 #include"DrawFunc_Append.h"
-void Player::Draw(Camera& Cam) 
+void Player::Draw(Camera& Cam, const bool& IsTitle)
 {
 	/*===== 描画処理 =====*/
 
@@ -453,17 +453,6 @@ void Player::Draw(Camera& Cam)
 	//movedVec.Normalize();
 	Vec2<float> inputVec = Vec2<float>(movedVec.x, movedVec.z);
 	float inputAngle = atan2f(inputVec.x, inputVec.y);
-
-	if (UsersInput::Instance()->KeyInput(DIK_O)) {
-
-		m_rotX += 0.01f;
-
-	}
-	if (UsersInput::Instance()->KeyInput(DIK_P)) {
-
-		m_rotX -= 0.01f;
-
-	}
 
 	// Y軸回転のクォータニオン求める。
 	auto resultY = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 1), inputAngle));
@@ -490,8 +479,12 @@ void Player::Draw(Camera& Cam)
 
 	}
 
-	m_outlineModel.Draw(Cam);
-	dashLight.Draw(Cam);
+	if (!IsTitle) {
+
+		m_outlineModel.Draw(Cam);
+		dashLight.Draw(Cam);
+
+	}
 
 }
 
@@ -507,16 +500,19 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 
 		m_shotTimer = 0;
 
-		//// 一番近くにいる敵を検索する。
-		//Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemy(m_pos);
+		// 一番近くにいる敵を検索する。
+		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.85f);
 
-		//// Vec3<float>(-1,-1,-1)だったら敵がいないので撃たない。
-		//if (nearestEnemy == Vec3<float>(-1, -1, -1)) return;
+		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
+		if (nearestEnemy != Vec3<float>(-1, -1, -1)) {
+
+			shotEnemyPos = nearestEnemy;
+
+		}
 
 		// 多少分散させる。
-		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
-		shotEnemyPos.x += KuroFunc::GetRand(-3.0f, 3.0f);
-		shotEnemyPos.z += KuroFunc::GetRand(-3.0f, 3.0f);
+		shotEnemyPos.x += KuroFunc::GetRand(-2.0f, 2.0f);
+		shotEnemyPos.z += KuroFunc::GetRand(-2.0f, 2.0f);
 
 		// 敵の方向に向かって弾を撃つ。
 		BulletMgr.lock()->GeneratePlayerBullet(m_pos, (shotEnemyPos - m_pos).GetNormal());
@@ -563,7 +559,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	--m_brakeBoostTimer;
 	if (0 < m_brakeBoostTimer) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE);
+		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
 
 	}
 	else {
@@ -575,7 +571,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, FEVER_ATTACK_SCALE);
+		EnemyMgr.lock()->AttackEnemy(m_pos, FEVER_ATTACK_SCALE, BulletMgr);
 
 	}
 
