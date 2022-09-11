@@ -6,6 +6,7 @@
 #include<memory>
 #include"Camera.h"
 #include"Object.h"
+#include<map>
 
 class Model;
 class LightManager;
@@ -26,8 +27,13 @@ struct RenderTargetSwitch
 
 class DrawFunc_Append
 {
-	static int s_drawModelCount;
 	static int s_drawLineCount;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>s_drawLinePipeline;
+
+	static int s_drawModelCount;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>s_drawModelPipeline;
+
+
 	static std::weak_ptr<Camera>s_nowCam;
 	static std::weak_ptr<LightManager>s_nowLigMgr;
 
@@ -40,12 +46,15 @@ class DrawFunc_Append
 	static void SetRegisteredTargets();
 
 public:
+	//各レンダーターゲットの登録
+	static void RegisterRenderTargets(
+		DXGI_FORMAT MainFormat,
+		std::shared_ptr<RenderTarget>EmissiveMap,
+		std::shared_ptr<RenderTarget>DepthMap,
+		std::shared_ptr<DepthStencil>DepthStencil);
 	//各レンダーターゲット、カメラ、ライトマネージャの登録
 	static void FrameInit(
 		std::shared_ptr<RenderTarget>Main,
-		std::shared_ptr<RenderTarget>EmissiveMap,
-		std::shared_ptr<RenderTarget>DepthMap,
-		std::shared_ptr<DepthStencil>DepthStencil,
 		std::shared_ptr<Camera>NowCamera,
 		std::shared_ptr<LightManager>NowLigMgr
 	);

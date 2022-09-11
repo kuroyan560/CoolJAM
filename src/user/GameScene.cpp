@@ -59,6 +59,9 @@ GameScene::GameScene()
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 
+	const auto backBuffFormat = backBuff->GetDesc().Format;
+	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
+	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 }
 
 void GameScene::OnInitialize()
@@ -142,9 +145,6 @@ void GameScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
 
-	//デプスステンシルクリア
-	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
@@ -154,9 +154,6 @@ void GameScene::OnDraw()
 	//DrawFunc初期化
 	DrawFunc_Append::FrameInit(
 		backBuff,
-		m_emissiveMap,
-		m_depthMap,
-		m_depthStencil,
 		nowCam,
 		m_environmentMgr->GetLigMgr()
 	);

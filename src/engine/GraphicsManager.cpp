@@ -78,23 +78,23 @@ void GraphicsManager::DispatchCommand::Execute(const ComPtr<ID3D12GraphicsComman
 }
 
 
-void GraphicsManager::SetRenderTargets(const std::vector<std::shared_ptr<RenderTarget>>& RTs, const std::shared_ptr<DepthStencil>& DS)
+void GraphicsManager::SetRenderTargets(std::vector<std::weak_ptr<RenderTarget>> RTs, std::weak_ptr<DepthStencil> DS)
 {
 	if (!m_renderCommands.empty())StackRenderCommands();	//Zバッファ＆透過するかどうかでソートしてグラフィックスコマンドリストに一括スタック
-	m_gCommands.emplace_back(std::make_shared<SetRenderTargetsCommand>(ConvertToWeakPtrArray(RTs), DS));
+	m_gCommands.emplace_back(std::make_shared<SetRenderTargetsCommand>(RTs, DS));
 
 	//最新のレンダーターゲットのフォーマットを記録しておく
 	m_recentRenderTargetFormat.clear();
 	for (auto& rt : RTs)
 	{
-		m_recentRenderTargetFormat.emplace_back(rt->GetDesc().Format);
+		m_recentRenderTargetFormat.emplace_back(rt.lock()->GetDesc().Format);
 	}
 }
 
-void GraphicsManager::SetGraphicsPipeline(const std::shared_ptr<GraphicsPipeline>& Pipeline)
+void GraphicsManager::SetGraphicsPipeline(std::weak_ptr<GraphicsPipeline> Pipeline)
 {
 	//新しいパイプラインのハンドル取得
-	const int newPipelineHandle = Pipeline->GetPipelineHandle();
+	const int newPipelineHandle = Pipeline.lock()->GetPipelineHandle();
 
 	//既にセットされていたものと同じならスルー
 	if (m_recentPipelineType == GRAPHICS && newPipelineHandle == m_recentPipelineHandle)return;
@@ -109,10 +109,10 @@ void GraphicsManager::SetGraphicsPipeline(const std::shared_ptr<GraphicsPipeline
 	m_recentPipelineHandle = newPipelineHandle;
 }
 
-void GraphicsManager::SetComputePipeline(const std::shared_ptr<ComputePipeline>& Pipeline)
+void GraphicsManager::SetComputePipeline(std::weak_ptr<ComputePipeline> Pipeline)
 {
 	//新しいパイプラインのハンドル取得
-	const int newPipelineHandle = Pipeline->GetPipelineHandle();
+	const int newPipelineHandle = Pipeline.lock()->GetPipelineHandle();
 
 	//既にセットされていたものと同じならスルー
 	if (m_recentPipelineType == COMPUTE && newPipelineHandle == m_recentPipelineHandle)return;
@@ -127,40 +127,40 @@ void GraphicsManager::SetComputePipeline(const std::shared_ptr<ComputePipeline>&
 	m_recentPipelineHandle = newPipelineHandle;
 }
 
-void GraphicsManager::ClearRenderTarget(const std::shared_ptr<RenderTarget>& RenderTarget)
+void GraphicsManager::ClearRenderTarget(std::weak_ptr<RenderTarget> RenderTarget)
 {
 	if (!m_renderCommands.empty())StackRenderCommands();	//Zバッファ＆透過するかどうかでソートしてグラフィックスコマンドリストに一括スタック
 	m_gCommands.emplace_back(std::make_shared<ClearRTVCommand>(RenderTarget));
 }
 
-void GraphicsManager::ClearDepthStencil(const std::shared_ptr<DepthStencil>& DepthStencil)
+void GraphicsManager::ClearDepthStencil(std::weak_ptr<DepthStencil> DepthStencil)
 {
 	if (!m_renderCommands.empty())StackRenderCommands();	//Zバッファ＆透過するかどうかでソートしてグラフィックスコマンドリストに一括スタック
 	m_gCommands.emplace_back(std::make_shared<ClearDSVCommand>(DepthStencil));
 }
 
-void GraphicsManager::CopyTexture(const std::shared_ptr<TextureBuffer>& DestTex, const std::shared_ptr<TextureBuffer>& SrcTex)
+void GraphicsManager::CopyTexture(std::weak_ptr<TextureBuffer> DestTex, std::weak_ptr<TextureBuffer> SrcTex)
 {
 	m_gCommands.emplace_back(std::make_shared<CopyTex>(DestTex, SrcTex));
 }
 
-void GraphicsManager::ObjectRender(const std::shared_ptr<VertexBuffer>& VertexBuff, const std::vector<RegisterDescriptorData>& DescDatas,
+void GraphicsManager::ObjectRender(std::weak_ptr<VertexBuffer> VertexBuff, std::vector<RegisterDescriptorData> DescDatas,
 	const float& Depth, const bool& TransFlg, const int& InstanceNum)
 {
 	//ソートするので gCommands ではなく一時的にrenderCommandsに積む
 	m_renderCommands.emplace_back(std::make_shared<RenderCommand>(VertexBuff, DescDatas, Depth, TransFlg, InstanceNum));
 }
 
-void GraphicsManager::ObjectRender(const std::shared_ptr<VertexBuffer>& VertexBuff,
-	const std::shared_ptr<IndexBuffer>& IndexBuff,
-	const std::vector<RegisterDescriptorData>& DescDatas,
+void GraphicsManager::ObjectRender(std::weak_ptr<VertexBuffer> VertexBuff,
+	std::weak_ptr<IndexBuffer> IndexBuff,
+	std::vector<RegisterDescriptorData> DescDatas,
 	const float& Depth, const bool& TransFlg, const int& InstanceNum)
 {
 	//ソートするので gCommands ではなく一時的にrenderCommandsに積む
 	m_renderCommands.emplace_back(std::make_shared<RenderCommand>(VertexBuff, IndexBuff, DescDatas, Depth, TransFlg, InstanceNum));
 }
 
-void GraphicsManager::Dispatch(const Vec3<int>& ThreadNum, const std::vector<RegisterDescriptorData>& DescDatas)
+void GraphicsManager::Dispatch(const Vec3<int>& ThreadNum, std::vector<RegisterDescriptorData> DescDatas)
 {
 	m_gCommands.emplace_back(std::make_shared<DispatchCommand>(ThreadNum, DescDatas));
 }

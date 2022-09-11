@@ -190,35 +190,35 @@ private:
 
 public:
 	//レンダーターゲットのセットコマンド積み上げ
-	void SetRenderTargets(const std::vector<std::shared_ptr<RenderTarget>>& RTs, const std::shared_ptr<DepthStencil>& DS = std::shared_ptr<DepthStencil>());
+	void SetRenderTargets(std::vector<std::weak_ptr<RenderTarget>> RTs, std::weak_ptr<DepthStencil> DS = std::weak_ptr<DepthStencil>());
 
 	//グラフィックスパイプラインのセットコマンド積み上げ
-	void SetGraphicsPipeline(const std::shared_ptr<GraphicsPipeline>& Pipeline);
+	void SetGraphicsPipeline(std::weak_ptr<GraphicsPipeline> Pipeline);
 
 	//コンピュートパイプラインのセットコマンド積み上げ
-	void SetComputePipeline(const std::shared_ptr<ComputePipeline>& Pipeline);
+	void SetComputePipeline(std::weak_ptr<ComputePipeline> Pipeline);
 
 	//レンダーターゲットのクリアコマンド積み上げ
-	void ClearRenderTarget(const std::shared_ptr<RenderTarget>& RenderTarget);
+	void ClearRenderTarget(std::weak_ptr<RenderTarget> RenderTarget);
 
 	//デプスステンシルのクリアコマンド積み上げ
-	void ClearDepthStencil(const std::shared_ptr<DepthStencil>& DepthStencil);
+	void ClearDepthStencil(std::weak_ptr<DepthStencil> DepthStencil);
 
 	//テクスチャコピーコマンド積み上げ
-	void CopyTexture(const std::shared_ptr<TextureBuffer>& DestTex, const std::shared_ptr<TextureBuffer>& SrcTex);
+	void CopyTexture(std::weak_ptr<TextureBuffer> DestTex, std::weak_ptr<TextureBuffer> SrcTex);
 
 	//オブジェクトのレンダリングコマンド積み上げ（インデックスなし）
-	void ObjectRender(const std::shared_ptr<VertexBuffer>& VertexBuff,
-		const std::vector<RegisterDescriptorData>& DescDatas,
+	void ObjectRender(std::weak_ptr<VertexBuffer> VertexBuff,
+		std::vector<RegisterDescriptorData> DescDatas,
 		const float& Depth, const bool& TransFlg, const int& InstanceNum = 1);
 
 	//オブジェクトのレンダリングコマンド積み上げ（インデックスなし）
-	void ObjectRender(const std::shared_ptr<VertexBuffer>& VertexBuff, const std::shared_ptr<IndexBuffer>& IndexBuff,
-		const std::vector<RegisterDescriptorData>& DescDatas,
+	void ObjectRender(std::weak_ptr<VertexBuffer> VertexBuff, std::weak_ptr<IndexBuffer> IndexBuff,
+		std::vector<RegisterDescriptorData> DescDatas,
 		const float& Depth, const bool& TransFlg, const int& InstanceNum = 1);
 
 	//ディスパッチコマンド積み上げ
-	void Dispatch(const Vec3<int>& ThreadNum,const std::vector<RegisterDescriptorData>& DescDatas);
+	void Dispatch(const Vec3<int>& ThreadNum,std::vector<RegisterDescriptorData> DescDatas);
 
 	//ExecuteIndirectコマンド積み上げ
 	void ExecuteIndirectDispatch(const std::shared_ptr<IndirectCommandBuffer>& CmdBuff, const std::shared_ptr<IndirectDevice>& IndirectDevice, const UINT& ArgBufferOffset = 0);
