@@ -59,7 +59,9 @@ GameScene::GameScene()
 	//環境マネージャ生成
 	m_environmentMgr = std::make_unique<EnvironmentMgr>();
 
-	DrawFunc_Append::RegisterRenderTargets(backBuff->GetDesc().Format, m_emissiveMap, m_depthMap, m_depthStencil);
+	const auto backBuffFormat = backBuff->GetDesc().Format;
+	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
+	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 }
 
 void GameScene::OnInitialize()
