@@ -15,12 +15,11 @@ public:
 	void Draw(Camera &Cam);
 
 private:
-	Vec3<float> startPos, endPos;
+	Vec3<float> m_startPos, m_endPos;
 
-	static int INDEX;
-	int indexNum;
-	Color color;
-	bool initFlag;
-	bool firstDrawFlag;
+	static int s_dashLightIndex;
+	int m_indexNum;
+	Color m_color;
+	bool m_initFlag;
 };
 

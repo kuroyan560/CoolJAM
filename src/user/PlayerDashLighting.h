@@ -16,14 +16,14 @@ public:
 	void Draw(Camera &Cam);
 
 private:
-	Vec3<float> *pos;//プレイヤーの座標ポインタ
-	Vec3<float> startPos, endPos;//プレイヤーの座標ポインタ
+	Vec3<float> *m_pos;//プレイヤーの座標ポインタ
+	Vec3<float> m_startPos, m_endPos;//プレイヤーの座標ポインタ
 
-	std::array<DashLightingParticle, 40> particleArray;//電撃パーティクル
-	int particleInitNum;
-	int timer;
+	std::array<DashLightingParticle, 40> m_particleArray;//電撃パーティクル
+	int m_particleInitNum;
+	int m_timer;
 
-	bool prevFlag;
-	int roadIndex;
-	std::array<DashLightingRoad, 5> roadArray;			//加速時の道
+	bool m_prevFlag;
+	int m_roadIndex;
+	std::array<DashLightingRoad, 5> m_roadArray;			//加速時の道
 };

@@ -30,7 +30,7 @@ private:
 	Vec3<float> m_prevForwardVec;// 前フレームの移動方向ベクトル。
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	DirectX::XMMATRIX m_rotation;	//クォータニオン
-	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(0.0f, 0.0f, 1.0f);
+	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(1.0f, 0.0f, 0.0f);
 	float m_speed;				// 移動速度
 	const float SCALE = 1.0f;
 	const float BOOST_SCALE = 5.0f;
@@ -107,7 +107,7 @@ public:
 	void Init();
 	void Finalize();
 	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope);
-	void Draw(Camera& Cam);
+	void Draw(Camera& Cam, const bool& IsTitle = false);
 	void DrawDebugInfo(Camera& Cam);
 
 	Vec3<float> GetPos() { return m_pos; }
