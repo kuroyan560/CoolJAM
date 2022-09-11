@@ -52,6 +52,10 @@ private:
 	float MAP_SIZE = 150.0f;
 	const float EDGE_SCOPE = 10.0f;
 
+	// チュートリアル、リザルトでのカメラの位置。
+	Vec3<float> CAMERA_HOME_TARGET_POSITION = Vec3<float>(MAP_SIZE / 5.0f, 0.0f, 0.0f);
+	Vec3<float> CAMERA_HOME_EYE_POSITION = Vec3<float>(MAP_SIZE, MAP_SIZE * 2.0f, 0.0f);
+
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
 

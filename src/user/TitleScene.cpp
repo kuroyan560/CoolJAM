@@ -8,6 +8,7 @@
 #include "Object.h"
 #include "../engine/Importer.h"
 #include "KuroMath.h"
+#include "GameMode.h"
 
 TitleScene::TitleScene()
 {
@@ -140,9 +141,9 @@ void TitleScene::OnUpdate()
 		m_revolverPos = REVOLVER_POS + (OFF_SCREEN_REVOLVER_POS - REVOLVER_POS) * easingAmount;
 
 		// 回転を求める。
-		m_rotateUI[0] = DEF_ROTATE[0] + (OFF_SCREEN_ROTATE[0] - DEF_ROTATE[0]) * easingAmount;
-		m_rotateUI[1] = DEF_ROTATE[1] + (OFF_SCREEN_ROTATE[1] - DEF_ROTATE[1]) * easingAmount;
-		m_rotateUI[2] = DEF_ROTATE[2] + (OFF_SCREEN_ROTATE[2] - DEF_ROTATE[2]) * easingAmount;
+		m_rotateUI[0] = m_exitRotateUI[0] + (OFF_SCREEN_ROTATE[0] - m_exitRotateUI[0]) * easingAmount;
+		m_rotateUI[1] = m_exitRotateUI[1] + (OFF_SCREEN_ROTATE[1] - m_exitRotateUI[1]) * easingAmount;
+		m_rotateUI[2] = m_exitRotateUI[2] + (OFF_SCREEN_ROTATE[2] - m_exitRotateUI[2]) * easingAmount;
 
 		// タイマーを更新。
 		m_revolverEasingTimer += ADD_REVOLVER_EASING_TIMER;
@@ -273,6 +274,16 @@ void TitleScene::UpdateSelect() {
 			m_revolverEasingTimer = 0;
 			//KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
 
+			// 回転量を保存。
+			for (int index = 0; index < 3; ++index) {
+
+				m_exitRotateUI[index] = m_rotateUI[index];
+
+			}
+
+			GameMode::Instance()->m_isGame = m_nowSelect == SELECT::GAME;
+			GameMode::Instance()->m_isTutorial = m_nowSelect == SELECT::TUTORIAL;
+
 			if (m_nowSelect == SELECT::EXIT) {
 
 				exit(0);
@@ -291,7 +302,7 @@ void TitleScene::UpdateSelect() {
 	}
 
 	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
-	if (100.0f < mouseMove && !m_isAppear && !m_isTransition) {
+	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition) {
 
 		m_addRotateUI -= DirectX::XM_PIDIV2;
 
@@ -311,8 +322,8 @@ void TitleScene::UpdateSelect() {
 		}
 
 	}
-	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition) {
 
+	if (100.0f < mouseMove && !m_isAppear && !m_isTransition) {
 		m_addRotateUI += DirectX::XM_PIDIV2;
 
 		switch (m_nowSelect)
@@ -392,22 +403,27 @@ void TitleScene::UpdateCamera() {
 
 		}
 
+		// 補間先注視点座標
+		Vec3<float> endTarget = (GameMode::Instance()->m_isGame ? END_GAME_TARGET_POS : END_TUTORIAL_TARGET_POS);
+		Vec3<float> endEye = (GameMode::Instance()->m_isGame ? END_GAME_EYE_POS : END_TUTORIAL_EYE_POS);
+		float endLength = (GameMode::Instance()->m_isGame ? END_GAME_LENGTH : END_TUTORIAL_LENGTH);
+
 		// イージング量を求める。
 		float easingAmount = KuroMath::Ease(InOut, Cubic, m_transitionEasingTimer, 0.0f, 1.0f);
 
 		// 注視点の高さを求める。
 		Vec3<float> nowTargetPos = nowCam.GetTarget();
-		nowTargetPos = DEF_TARGET_POS + (END_TARGET_POS - DEF_TARGET_POS) * easingAmount;
+		nowTargetPos = DEF_TARGET_POS + (endTarget - DEF_TARGET_POS) * easingAmount;
 		nowCam.SetTarget(nowTargetPos);
 
 		// 視点の高さを求める。
-		float nowEyeHeight = DEF_EYE_POS.y + (END_EYE_POS.y - DEF_EYE_POS.y) * easingAmount;
+		float nowEyeHeight = DEF_EYE_POS.y + (endEye.y - DEF_EYE_POS.y) * easingAmount;
 
 		// 現在の角度。
 		float nowAngle = DEF_ANGLE + (END_ANGLE - DEF_ANGLE) * easingAmount;
 
 		// 現在の長さ。
-		float nowLength = DEF_LENGTH + (END_LENGTH - DEF_LENGTH) * easingAmount;
+		float nowLength = DEF_LENGTH + (endLength - DEF_LENGTH) * easingAmount;
 
 		// 現在の視点座標を求める。
 		Vec3<float> nowEyePos = Vec3<float>(cosf(nowAngle) * nowLength, nowEyeHeight, sinf(nowAngle) * nowLength);
@@ -422,17 +438,17 @@ void TitleScene::UpdateCamera() {
 
 		// 注視点の高さを求める。
 		Vec3<float> nowTargetPos = nowCam.GetTarget();
-		nowTargetPos = DEF_TARGET_POS + (END_TARGET_POS - DEF_TARGET_POS) * easingAmount;
+		nowTargetPos = DEF_TARGET_POS + (END_GAME_TARGET_POS - DEF_TARGET_POS) * easingAmount;
 		nowCam.SetTarget(nowTargetPos);
 
 		// 視点の高さを求める。
-		float nowEyeHeight = DEF_EYE_POS.y + (END_EYE_POS.y - DEF_EYE_POS.y) * easingAmount;
+		float nowEyeHeight = DEF_EYE_POS.y + (END_GAME_EYE_POS.y - DEF_EYE_POS.y) * easingAmount;
 
 		// 現在の角度。
 		float nowAngle = DEF_ANGLE + CHANGE_ANGLE * easingAmount;
 
 		// 現在の長さ。
-		float nowLength = DEF_LENGTH + (END_LENGTH - DEF_LENGTH) * easingAmount;
+		float nowLength = DEF_LENGTH + (END_GAME_LENGTH - DEF_LENGTH) * easingAmount;
 
 		// 現在の視点座標を求める。
 		Vec3<float> nowEyePos = Vec3<float>(cosf(nowAngle) * nowLength, nowEyeHeight, sinf(nowAngle) * nowLength);

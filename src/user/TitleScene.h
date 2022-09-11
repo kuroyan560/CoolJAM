@@ -47,6 +47,7 @@ private:
 	};
 	std::array<std::shared_ptr<TextureBuffer>, 3> m_selectUI;
 	std::array<float, 3> m_rotateUI;
+	std::array<float, 3> m_exitRotateUI;
 	const std::array<float, 3> DEF_ROTATE = { DirectX::XM_PIDIV2 * 0.0f ,DirectX::XM_PIDIV2 * 1.0f ,DirectX::XM_PIDIV2 * 3.0f };
 	const std::array<float, 3> OFF_SCREEN_ROTATE = { DirectX::XM_PIDIV2 * 0.0f + 5.0f ,DirectX::XM_PIDIV2 * 1.0f + 5.0f ,DirectX::XM_PIDIV2 * 3.0f + 5.0f };
 
@@ -102,12 +103,16 @@ private:
 	const float DEF_ANGLE = 0.506614208f;
 	const float DEF_LENGTH = 10.9236498f;
 
+
 	// ÉJÉÅÉâÇÃï‚ä‘å„ÇÃà íu
-	Vec3<float> END_TARGET_POS = Vec3<float>(3.0f, 0.0f, 0.0f);
-	Vec3<float> END_EYE_POS = Vec3<float>(80.0f, 80.0f, 0.0f);
+	Vec3<float> END_GAME_TARGET_POS = Vec3<float>(0.0f, 0.0f, 0.0f);
+	Vec3<float> END_GAME_EYE_POS = Vec3<float>(80.0f, 80.0f, 0.0f);
+	Vec3<float> END_TUTORIAL_TARGET_POS = Vec3<float>(150.0f / 5.0f, 0.0f, 0.0f);
+	Vec3<float> END_TUTORIAL_EYE_POS = Vec3<float>(150.0f, 300.0f, 0.0f);
 	const float END_ANGLE = 0;
 	const float CHANGE_ANGLE = DEF_ANGLE - DEF_ANGLE + END_ANGLE;	// äpìxÇÃï€ä«ó 
-	const float END_LENGTH = 80.0f;
+	const float END_GAME_LENGTH = 80.0f;
+	const float END_TUTORIAL_LENGTH = 150.0f;
 
 
 public:
