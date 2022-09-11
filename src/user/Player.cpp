@@ -483,7 +483,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	if (!IsTitle) {
 
 		m_outlineModel.Draw(Cam);
-		dashLight.Draw(Cam);
+		m_dashLight.Draw(Cam);
 
 	}
 
