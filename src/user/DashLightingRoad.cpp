@@ -3,12 +3,8 @@
 #include"../user/ColorPalette.h"
 #include"../user/DrawFunc_Append.h"
 
-int DashLightingRoad::s_dashLightIndex = 0;
-
-DashLightingRoad::DashLightingRoad():m_color(ColorPalette::S_GREEN_COLOR), m_initFlag(false)
+DashLightingRoad::DashLightingRoad(int ROAD_INDEX) :m_color(ColorPalette::S_GREEN_COLOR), m_initFlag(false), m_indexNum(ROAD_INDEX)
 {
-	m_indexNum = s_dashLightIndex;
-	++s_dashLightIndex;
 }
 
 void DashLightingRoad::Init(const Vec3<float> &POS)
@@ -22,7 +18,6 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX)
 {
 	if (m_initFlag)
 	{
-		
 		if (m_indexNum != NOW_INDEX)
 		{
 			m_color.m_a -= (1.0f / 30.0f);
@@ -42,7 +37,7 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX)
 
 void DashLightingRoad::Draw(Camera &Cam)
 {
-	//if (m_initFlag)
+	if (m_initFlag)
 	{
 		DrawFunc_Append::DrawLine(m_startPos, m_endPos, m_color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
 	}

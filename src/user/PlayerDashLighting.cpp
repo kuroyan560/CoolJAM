@@ -3,6 +3,10 @@
 
 PlayerDashLighting::PlayerDashLighting()
 {
+	for (int i = 0; i < m_roadArray.size(); ++i)
+	{
+		m_roadArray[i] = std::make_unique<DashLightingRoad>(i);
+	}
 }
 
 void PlayerDashLighting::Init(Vec3<float> *POS)
@@ -44,7 +48,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 			m_roadIndex = 0;
 		}
 		m_startPos = *m_pos;
-		m_roadArray[m_roadIndex].Init(m_startPos);
+		m_roadArray[m_roadIndex]->Init(m_startPos);
 	}
 	if (ENABLE_FLAG)
 	{
@@ -54,7 +58,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{
-		m_roadArray[i].Update(m_endPos, m_roadIndex);
+		m_roadArray[i]->Update(m_endPos, m_roadIndex);
 	}
 }
 
@@ -66,6 +70,6 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 	}
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{
-		m_roadArray[i].Draw(CAMERA);
+		m_roadArray[i]->Draw(CAMERA);
 	}
 }

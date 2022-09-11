@@ -88,13 +88,13 @@ private:
 	std::shared_ptr<Model>m_model;
 
 	//アウトライン用のモデル
-	PlayerModelOutline m_outlineModel;
 	float inputATan2f;
 	const Vec3<float> GREEN_HSV = Vec3<float>(152.857f, 223.125f, 0.959f);
 	const Vec3<float> RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.879f);
 	const Vec3<float> DARK_RED_HSV = Vec3<float>(352.394f - 360.0f, 205.738f, 0.289f);
 
-	PlayerDashLighting m_dashLight;
+	PlayerModelOutline m_outlineModel;
+	std::unique_ptr<PlayerDashLighting> m_dashLight;
 public:
 
 	float MIN_SPEED = 0.7f;	// 最小の移動速度

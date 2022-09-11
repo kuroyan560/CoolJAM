@@ -43,7 +43,7 @@ private:
 	std::array<std::shared_ptr<TextureBuffer>, 3> m_selectUI;
 	std::array<float, 3> m_rotateUI;
 	const std::array<float, 3> DEF_ROTATE = { DirectX::XM_PIDIV2 * 0.0f ,DirectX::XM_PIDIV2 * 1.0f ,DirectX::XM_PIDIV2 * 3.0f };
-	const std::array<float, 3> OFF_SCREEN_ROTATE = { DirectX::XM_PIDIV2 * 0.0f * 10.0f ,DirectX::XM_PIDIV2 * 1.0f * 10.0f ,DirectX::XM_PIDIV2 * 3.0f * 10.0f };
+	const std::array<float, 3> OFF_SCREEN_ROTATE = { DirectX::XM_PIDIV2 * 0.0f + 5.0f ,DirectX::XM_PIDIV2 * 1.0f + 5.0f ,DirectX::XM_PIDIV2 * 3.0f + 5.0f };
 
 	const float MIN_SKIP_ROTATE = DirectX::XM_PIDIV2 * 2.0f - 0.1f;
 	const float MAX_SKIP_ROTATE = DirectX::XM_PIDIV2 * 3.0f - 0.1f;
