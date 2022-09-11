@@ -1,5 +1,6 @@
 #include "GrazeEmitter.h"
 #include"KazCollisionHelper.h"
+#include"../engine/UsersInput.h"
 
 GrazeEmitter::GrazeEmitter()
 {
@@ -12,7 +13,7 @@ void GrazeEmitter::Init(const Vec3<float> *POS, const float *VEL)
 	initTimer = 0;
 }
 
-void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
+void GrazeEmitter::Update(float MAP_SIZE)
 {
 	float centralDir = Angle::ConvertToRadian(90);
 	//プレイヤーの真後ろに角度を合わせ、ランダムで放射状に発射されるようにする
@@ -22,6 +23,11 @@ void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
 	float sinRadian = sinf(*m_velPtr + centralDir + randAngle);
 	Vec3<float>dir(cosRadian, 0.0f, -sinRadian);
 
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE))
+	{
+		bool debug = false;
+	}
+
 	++initTimer;
 	Vec3<float>pos = *m_posPtr;
 	int count = 0;
@@ -29,13 +35,17 @@ void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
 	{
 		pos += dir * 2.0f;
 		float length = pos.Length();
-		if (MAP_SIZE < length)
+		if (MAP_SIZE <= length)
 		{
 			count = i;
 			break;
 		}
+		if (i == 99)
+		{
+			count = i;
+		}
 	}
-	int countMax = 8;
+	int countMax = 3;
 	float rate = (1.0f - (static_cast<float>(count) / static_cast<float>(countMax)));
 	if (0 <= initTimer && count <= countMax)
 	{
@@ -44,7 +54,7 @@ void GrazeEmitter::Update(float MAP_SIZE, bool HIT_FLAG)
 		{
 			if (!m_particleArray[i].IsAlive())
 			{
-				m_particleArray[i].Init(*m_posPtr, dir, 10.0f * rate);
+				m_particleArray[i].Init(pos, dir, 7.0f * rate);
 				break;
 			}
 		}

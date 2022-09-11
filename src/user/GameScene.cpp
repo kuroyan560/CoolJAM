@@ -95,8 +95,7 @@ void GameScene::OnUpdate()
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
 
-	float distance = MAP_SIZE - m_player->GetPos().Length();
-	m_grazeEmitter->Update(MAP_SIZE, distance <= 20.0f);
+	m_grazeEmitter->Update(MAP_SIZE);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
@@ -178,6 +177,8 @@ void GameScene::OnDraw()
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
+
+	m_grazeEmitter->Draw(*nowCam);
 
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
