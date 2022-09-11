@@ -101,10 +101,15 @@ void TitleScene::OnUpdate()
 	if (m_isAppear) {
 
 		// イージング量を求める。
-		float easingAmount = KuroMath::Ease(InOut, Exp, m_revolverEasingTimer, 0.0f, 1.0f);
+		float easingAmount = KuroMath::Ease(Out, Cubic, m_revolverEasingTimer, 0.0f, 1.0f);
 
 		// 位置を求める。
-		/*m_revolverPos = */
+		m_revolverPos = OFF_SCREEN_REVOLVER_POS + (REVOLVER_POS - OFF_SCREEN_REVOLVER_POS) * easingAmount;
+
+		// 回転を求める。
+		m_rotateUI[0] = OFF_SCREEN_ROTATE[0] + (DEF_ROTATE[0] - OFF_SCREEN_ROTATE[0]) * easingAmount;
+		m_rotateUI[1] = OFF_SCREEN_ROTATE[1] + (DEF_ROTATE[1] - OFF_SCREEN_ROTATE[1]) * easingAmount;
+		m_rotateUI[2] = OFF_SCREEN_ROTATE[2] + (DEF_ROTATE[2] - OFF_SCREEN_ROTATE[2]) * easingAmount;
 
 		// タイマーを更新。
 		m_revolverEasingTimer += ADD_REVOLVER_EASING_TIMER;
@@ -119,15 +124,30 @@ void TitleScene::OnUpdate()
 	// 遷移中だったら。
 	else if (m_isTransition) {
 
+		// イージング量を求める。
+		float easingAmount = KuroMath::Ease(In, Cubic, m_revolverEasingTimer, 0.0f, 1.0f);
 
+		// 位置を求める。
+		m_revolverPos = REVOLVER_POS + (OFF_SCREEN_REVOLVER_POS - REVOLVER_POS) * easingAmount;
+
+		// 回転を求める。
+		m_rotateUI[0] = DEF_ROTATE[0] + (OFF_SCREEN_ROTATE[0] - DEF_ROTATE[0]) * easingAmount;
+		m_rotateUI[1] = DEF_ROTATE[1] + (OFF_SCREEN_ROTATE[1] - DEF_ROTATE[1]) * easingAmount;
+		m_rotateUI[2] = DEF_ROTATE[2] + (OFF_SCREEN_ROTATE[2] - DEF_ROTATE[2]) * easingAmount;
+
+		// タイマーを更新。
+		m_revolverEasingTimer += ADD_REVOLVER_EASING_TIMER;
+		if (1.0f <= m_revolverEasingTimer) {
+
+			m_revolverEasingTimer = 1.0f;
+
+		}
 
 	}
-	else {
 
-		// 選択中の更新処理
-		UpdateSelect();
+	// 選択中の更新処理
+	UpdateSelect();
 
-	}
 
 	// カメラの更新処理
 	UpdateCamera();
@@ -166,18 +186,16 @@ void TitleScene::OnDraw()
 	m_player->Draw(*nowCam, true);
 
 	// UI用を描画
-	//for (auto& index : m_selectUI) {
+	for (auto& index : m_selectUI) {
 
-	//	// ベクトルを求める。
-	//	Vec2<float> vec = Vec2<float>(cosf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]), sinf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]));
+		// ベクトルを求める。
+		Vec2<float> vec = Vec2<float>(cosf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]), sinf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]));
 
-	//	// 描画座標を求める。
-	//	Vec2<float> centerPos = vec * 300.0f;
-	//	centerPos.y += 720.0f / 2.0f;
+		Vec2<float> centerPos = m_revolverPos + vec * 300.0f;
 
-	//	DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_rotateUI[static_cast<int>(&index - &m_selectUI[0])], index);
+		DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_rotateUI[static_cast<int>(&index - &m_selectUI[0])], index);
 
-	//}
+	}
 
 
 	/*--- エミッシブマップ合成 ---*/
@@ -231,9 +249,11 @@ void TitleScene::OnFinalize()
 void TitleScene::UpdateSelect() {
 
 
-	if (UsersInput::Instance()->KeyInput(DIK_SPACE) || UsersInput::Instance()->KeyInput(DIK_RETURN)) {
+	if ((UsersInput::Instance()->KeyInput(DIK_SPACE) || UsersInput::Instance()->KeyInput(DIK_RETURN)) && !m_isAppear) {
 
 		m_isTransition = true;
+
+		m_revolverEasingTimer = 0;
 		//KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
 
 		if (m_nowSelect == SELECT::EXIT) {
@@ -244,7 +264,7 @@ void TitleScene::UpdateSelect() {
 
 	}
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_UP)) {
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_UP) && !m_isAppear && !m_isTransition) {
 
 		m_addRotateUI -= DirectX::XM_PIDIV2;
 
@@ -264,7 +284,7 @@ void TitleScene::UpdateSelect() {
 		}
 
 	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_DOWN)) {
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_DOWN) && !m_isAppear && !m_isTransition) {
 
 		m_addRotateUI += DirectX::XM_PIDIV2;
 
