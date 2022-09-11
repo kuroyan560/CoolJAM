@@ -3,7 +3,6 @@
 
 DashLightingParticle::DashLightingParticle() :initFlag(false)
 {
-	firstDrawFlag = false;
 	//m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
 }
 
@@ -41,10 +40,9 @@ void DashLightingParticle::Update()
 
 void DashLightingParticle::Draw(Camera &CAMERA)
 {
-	//if (initFlag || !firstDrawFlag)
+	if (initFlag)
 	{
 		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
 			RenderTargetSwitch(1.0f, 1.0f, 0.0f));
-		firstDrawFlag = true;
 	}
 }

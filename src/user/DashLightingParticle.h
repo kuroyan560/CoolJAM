@@ -21,7 +21,6 @@ private:
 	float angleVel;
 	int alpha;
 	bool initFlag;
-	bool firstDrawFlag;
 	std::shared_ptr<ModelObject>m_model;
 };
 
