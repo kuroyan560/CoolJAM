@@ -25,5 +25,5 @@ private:
 
 	bool m_prevFlag;
 	int m_roadIndex;
-	std::array<DashLightingRoad, 5> m_roadArray;			//‰Á‘¬Žž‚Ì“¹
+	std::array<std::unique_ptr<DashLightingRoad>, 5> m_roadArray;			//‰Á‘¬Žž‚Ì“¹
 };
