@@ -12,6 +12,7 @@ class Camera;
 class BulletMgr;
 class EnemyMgr;
 class DriftParticle;
+class PlayerHP;
 
 class Player
 {
@@ -47,7 +48,7 @@ private:
 
 	// HP関係
 	int m_hp;		// プレイヤーのHP
-	const int MAX_HP = 5;
+	static const int MAX_HP = 10;
 	int m_RedTime;		// HPが減った際の色変化に使用するタイマー。
 	const std::array<int, 4> RED_TIME = { 0,0,60,120 };	// [0]は使用しない。
 	float m_colorEasingTimer;	// HPが減った際の色変化のイージングに使用するタイマー
@@ -56,7 +57,7 @@ private:
 	bool m_isChangeRed;		// 赤に変更するか
 	bool m_isChangeGreen;	// 緑に変更するか。
 
-
+	std::array<std::shared_ptr<PlayerHP>, MAX_HP> m_hpUI;
 
 
 	// ダメージ時
@@ -120,7 +121,7 @@ public:
 	float GetPlayerFeverRate() { return static_cast<float>(m_feverTime) / static_cast<float>(FEVER_TIME); }
 
 	Vec3<float>* GetPosPtr() { return &m_pos; };
-	const float *GetInputRadianPtr() { return &inputATan2f; };
+	const float* GetInputRadianPtr() { return &inputATan2f; };
 	float GetInputRadian() { return inputATan2f; };
 
 private:
@@ -158,6 +159,21 @@ private:
 
 	// 車体の色を変える。
 	bool ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX);
+
+	// 指定の桁の数字を取得。
+	inline int GetDigits(int Value, int M, int N) {
+		int mod_value;
+		int result;
+
+		/* n桁目以下の桁を取得 */
+		mod_value = Value % (int)pow(10, N + 1);
+
+		/* m桁目以上の桁を取得 */
+		result = mod_value / pow(10, M);
+
+		return result;
+
+	}
 
 };
 

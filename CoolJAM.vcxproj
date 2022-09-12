@@ -247,6 +247,7 @@
     <ClCompile Include="src\user\GrazeParticle.cpp" />
     <ClCompile Include="src\user\KazCollisionHelper.cpp" />
     <ClCompile Include="src\user\Player.cpp" />
+    <ClCompile Include="src\user\PlayerHP.cpp" />
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp" />
     <ClCompile Include="src\user\PressEnemy.cpp" />
     <ClCompile Include="src\user\ShieldEnemy.cpp" />
@@ -362,6 +363,7 @@
     <ClInclude Include="src\user\GrazeParticle.h" />
     <ClInclude Include="src\user\KazCollisionHelper.h" />
     <ClInclude Include="src\user\Player.h" />
+    <ClInclude Include="src\user\PlayerHP.h" />
     <ClInclude Include="src\user\PlayerStraightEnemy.h" />
     <ClInclude Include="src\user\PressEnemy.h" />
     <ClInclude Include="src\user\ShieldEnemy.h" />

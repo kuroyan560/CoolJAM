@@ -60,7 +60,7 @@ private:
 	SELECT m_nowSelect;
 	Vec2<float> m_revolverPos;
 	const Vec2<float> REVOLVER_POS = Vec2<float>(0, 720.0f / 2.0f);
-	const Vec2<float> OFF_SCREEN_REVOLVER_POS = Vec2<float>(-500.0f, 720.0f / 2.0f);
+	const Vec2<float> OFF_SCREEN_REVOLVER_POS = Vec2<float>(-700.0f, 720.0f / 2.0f);
 	float m_revolverEasingTimer;
 	const float ADD_REVOLVER_EASING_TIMER = 0.03f;
 

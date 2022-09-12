@@ -25,6 +25,7 @@ cbuffer cbuff2 : register(b2)
     float mainDrawRate;
     float emissiveDrawRate;
     float depthDrawRate;
+    bool isShading;
 }
 
 cbuffer cbuff3 : register(b3)
@@ -204,96 +205,108 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     output.color = float4(0, 0, 0, 0);
     output.emissive = float4(0, 0, 0, 0);
     output.depth = 0.0f;
+    
+    float4 colorTexCol = colorTex.Sample(smp, input.uv);
+    float4 emissiveTexCol = emissiveMap.Sample(smp, input.uv);
 
     if (any(mainDrawRate))
     {
-        float3 normal = input.normal;
-        float3 vnormal = normalize(mul(cam.view, normal));
+        if(isShading)
+        {
+            float3 normal = input.normal;
+            float3 vnormal = normalize(mul(cam.view, normal));
         
-        s_baseColor = material.baseColor;
-        s_metalness = material.metalness;
-        s_roughness = material.roughness;
+            s_baseColor = material.baseColor + colorTexCol.rgb;
+            s_metalness = material.metalness;
+            s_roughness = material.roughness;
     
      //ライトの影響
-        float3 ligEffect = { 0.0f, 0.0f, 0.0f };
+            float3 ligEffect = { 0.0f, 0.0f, 0.0f };
     
    //ディレクションライト
-        for (int i = 0; i < ligNum.dirLigNum; ++i)
-        {
-            if (!dirLight[i].active)
-                continue;
+            for (int i = 0; i < ligNum.dirLigNum; ++i)
+            {
+                if (!dirLight[i].active)
+                    continue;
         
-            float3 dir = dirLight[i].direction;
-            float3 ligCol = dirLight[i].color.xyz * dirLight[i].color.w;
-            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos);
-        }
+                float3 dir = dirLight[i].direction;
+                float3 ligCol = dirLight[i].color.xyz * dirLight[i].color.w;
+                ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos);
+            }
     //ポイントライト
-        for (int i = 0; i < ligNum.ptLigNum; ++i)
-        {
-            if (!pointLight[i].active)
-                continue;
+            for (int i = 0; i < ligNum.ptLigNum; ++i)
+            {
+                if (!pointLight[i].active)
+                    continue;
         
-            float3 dir = input.worldpos - pointLight[i].pos;
-            dir = normalize(dir);
-            float3 ligCol = pointLight[i].color.xyz * pointLight[i].color.w;
+                float3 dir = input.worldpos - pointLight[i].pos;
+                dir = normalize(dir);
+                float3 ligCol = pointLight[i].color.xyz * pointLight[i].color.w;
         
         //距離による減衰
-            float3 distance = length(input.worldpos - pointLight[i].pos);
+                float3 distance = length(input.worldpos - pointLight[i].pos);
 		//影響率は距離に比例して小さくなっていく
-            float affect = 1.0f - 1.0f / pointLight[i].influenceRange * distance;
+                float affect = 1.0f - 1.0f / pointLight[i].influenceRange * distance;
 		//影響力がマイナスにならないように補正をかける
-            if (affect < 0.0f)
-                affect = 0.0f;
+                if (affect < 0.0f)
+                    affect = 0.0f;
 		//影響を指数関数的にする
-            affect = pow(affect, 3.0f);
+                affect = pow(affect, 3.0f);
         
-            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
-        }
+                ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
+            }
     //スポットライト
-        for (int i = 0; i < ligNum.spotLigNum; ++i)
-        {
-            if (!spotLight[i].active)
-                continue;
+            for (int i = 0; i < ligNum.spotLigNum; ++i)
+            {
+                if (!spotLight[i].active)
+                    continue;
         
-            float3 ligDir = input.worldpos - spotLight[i].pos;
-            ligDir = normalize(ligDir);
-            float3 ligCol = spotLight[i].color.xyz * spotLight[i].color.w;
+                float3 ligDir = input.worldpos - spotLight[i].pos;
+                ligDir = normalize(ligDir);
+                float3 ligCol = spotLight[i].color.xyz * spotLight[i].color.w;
         
         //スポットライトとの距離を計算
-            float3 distance = length(input.worldpos - spotLight[i].pos);
+                float3 distance = length(input.worldpos - spotLight[i].pos);
        	//影響率は距離に比例して小さくなっていく
-            float affect = 1.0f - 1.0f / spotLight[i].influenceRange * distance;
+                float affect = 1.0f - 1.0f / spotLight[i].influenceRange * distance;
         //影響力がマイナスにならないように補正をかける
-            if (affect < 0.0f)
-                affect = 0.0f;
+                if (affect < 0.0f)
+                    affect = 0.0f;
     //影響を指数関数的にする
-            affect = pow(affect, 3.0f);
+                affect = pow(affect, 3.0f);
     
-            float3 dir = normalize(spotLight[i].target - spotLight[i].pos);
-            float angle = dot(ligDir, dir);
-            angle = abs(acos(angle));
-            affect = 1.0f - 1.0f / spotLight[i].angle * angle;
-            if (affect < 0.0f)
-                affect = 0.0f;
-            affect = pow(affect, 0.5f);
+                float3 dir = normalize(spotLight[i].target - spotLight[i].pos);
+                float angle = dot(ligDir, dir);
+                angle = abs(acos(angle));
+                affect = 1.0f - 1.0f / spotLight[i].angle * angle;
+                if (affect < 0.0f)
+                    affect = 0.0f;
+                affect = pow(affect, 0.5f);
         
-            ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
-        }
+                ligEffect += BRDF(dir, ligCol, normal, input.worldpos, cam.eyePos) * affect;
+            }
     //天球
-        for (int i = 0; i < ligNum.hemiSphereNum; ++i)
-        {
-            if (!hemiSphereLight[i].active)
-                continue;
+            for (int i = 0; i < ligNum.hemiSphereNum; ++i)
+            {
+                if (!hemiSphereLight[i].active)
+                    continue;
         
-            float t = dot(normal.xyz, hemiSphereLight[i].groundNormal);
-            t = (t + 1.0f) / 2.0f;
-            float3 hemiLight = lerp(hemiSphereLight[i].groundColor, hemiSphereLight[i].skyColor, t);
-            ligEffect *= hemiLight;
-        }
+                float t = dot(normal.xyz, hemiSphereLight[i].groundNormal);
+                t = (t + 1.0f) / 2.0f;
+                float3 hemiLight = lerp(hemiSphereLight[i].groundColor, hemiSphereLight[i].skyColor, t);
+                ligEffect *= hemiLight;
+            }
     
-        float4 result = float4(ligEffect, 1.0f - material.transparent);
+            float4 result = float4(ligEffect, (1.0f - material.transparent) * colorTexCol.w);
         
-        output.color = result;
+            output.color = result;
+        }
+        else
+        {
+            output.color.xyz = material.baseColor.xyz + colorTexCol.xyz;
+            output.color.w *= colorTexCol.w;
+
+        }
     }
     
     output.color.w *= mainDrawRate;

@@ -201,7 +201,7 @@ void TitleScene::OnDraw()
 		// ベクトルを求める。
 		Vec2<float> vec = Vec2<float>(cosf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]), sinf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]));
 
-		Vec2<float> centerPos = m_revolverPos + vec * 300.0f;
+		Vec2<float> centerPos = m_revolverPos + vec * 400.0f;
 
 		DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_rotateUI[static_cast<int>(&index - &m_selectUI[0])], index);
 

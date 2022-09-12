@@ -44,7 +44,7 @@ public:
 	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// w’è‚ÌŒ…‚Ì”š‚ğæ“¾B
-	int GetDigits(int Value, int M, int N) {
+	inline int GetDigits(int Value, int M, int N) {
 		int mod_value;
 		int result;
 

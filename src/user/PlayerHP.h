@@ -7,7 +7,7 @@
 class Model;
 class Camera;
 
-class EnemyHP {
+class PlayerHP {
 
 private:
 
@@ -33,7 +33,7 @@ private:
 public:
 
 	// コンストラクタ
-	EnemyHP(const float& Angle);
+	PlayerHP(const float& Angle);
 	void Init();
 	void Update(const Vec3<float>& EnemyPos, const float& EnemySize);
 	void Draw();
