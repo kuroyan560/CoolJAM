@@ -3,11 +3,12 @@
 #include"../engine/Common/KuroMath.h"
 #include"../user/KazDrawFunc.h"
 #include"ColorPalette.h"
+#include"../engine/Importer.h"
 
 PlayerModelOutline::PlayerModelOutline()
 {
 	m_color = ColorPalette::S_GREEN_COLOR;
-	waveTex = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/PowerWave.png");
+	waveTex = Importer::Instance()->LoadModel("resource/user/Particle/", "powerWave.glb");
 }
 
 void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL)
@@ -21,7 +22,7 @@ void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, flo
 
 	m_enoughPowerRateData.Init();
 	m_powerUpRateData.Init();
-	waveTextureSize = { 0.0f,0.0f };
+	m_waveTextureSize = { 0.0f,0.0f };
 }
 
 void PlayerModelOutline::Update()
@@ -55,7 +56,6 @@ void PlayerModelOutline::Update()
 		{
 			m_powerUpRateData.m_countReversNum = m_powerUpRateData.m_countReversMaxNum;
 		}
-		m_color.m_a = 1.0f;
 	}
 	else
 	{
@@ -92,9 +92,13 @@ void PlayerModelOutline::Update()
 			m_enoughPowerRateData.m_expandVertexRate = 0.0f;
 		}
 
-		m_color.m_a = 1.0f;
-		waveTextureSize.x += 0.1f;
-		waveTextureSize.y += 0.1f;
+		m_color.m_a -= 1.0f / 30.0f;
+		m_waveTextureSize.x += 0.1f;
+		m_waveTextureSize.y += 0.1f;
+		if (m_color.m_a <= 0.0f)
+		{
+			m_color.m_a = 0.0f;
+		}
 	}
 	else
 	{
@@ -107,12 +111,16 @@ void PlayerModelOutline::Update()
 
 	m_enoughPowerFlag = false;
 	m_powerUpFlag = false;
+
+	m_waveTransform.SetPos(*m_pos);
+	m_waveTransform.SetScale({ m_waveTextureSize.x,m_waveTextureSize.y,m_waveTextureSize.x });
+	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_color, CAMERA);
-	//DrawFuncBillBoard::Graph(CAMERA, m_transform.GetPos(), waveTextureSize, waveTex);
+	DrawFunc_Append::DrawModel(waveTex, m_waveTransform, RenderTargetSwitch(m_color.m_a, 0.0f, 1.0f));
 }
 
 void PlayerModelOutline::EnoughPowerEffect()

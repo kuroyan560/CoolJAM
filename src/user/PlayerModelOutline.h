@@ -65,9 +65,9 @@ private:
 	OutlineRateData m_powerUpRateData;
 	//‹­‰»‰‰o‰‰o----------
 
-	Vec2<float>waveTextureSize;
-	std::shared_ptr<TextureBuffer>waveTex;
-
+	Vec2<float>m_waveTextureSize;
+	std::shared_ptr<Model> waveTex;
+	Transform m_waveTransform;
 	Color m_color;
 
 	void Rate(float *T, float RATE, float MAX_RATE)
