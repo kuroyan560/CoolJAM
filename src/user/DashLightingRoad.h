@@ -21,10 +21,9 @@ private:
 	int m_indexNum;
 	float m_lenghtRate;
 	bool m_initFlag;
-	int m_startTimer;
-	int m_timer;
-	float m_distance;
-
 	bool m_disappearFlag;
+	int m_timer;
+	int m_startTimer;
+	float m_distance;
 };
 

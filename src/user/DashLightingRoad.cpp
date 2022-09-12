@@ -29,15 +29,10 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX, bool DISAPP
 	if (m_indexNum == NOW_INDEX)
 	{
 		m_endPos = POS;
+		m_distance = m_endPos.Distance(m_startPos);
 	}
 
-	m_distance = m_endPos.Distance(m_startPos);
-	if (30.0f <= m_distance)
-	{
-		Vec3<float>distance = m_endPos - m_startPos;
-		distance.Normalize();
-		m_startPos = m_endPos - distance * 30.0f;
-	}
+
 
 
 	++m_startTimer;
@@ -69,11 +64,11 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX, bool DISAPP
 		{
 			m_lenghtRate = 1.0f;
 		}
-
-		Vec3<float>distance = m_endPos - m_startPos;
-		float easeRate = KuroMath::Ease(Out, Cubic, (1.0f - m_lenghtRate), 0.0f, 1.0f);
-		m_startPos = m_endPos + -distance * easeRate;
 	}
+	Vec3<float>distance = m_endPos - m_startPos;
+	float easeRate = KuroMath::Ease(Out, Cubic, (1.0f - m_lenghtRate), 0.0f, 1.0f);
+	m_startPos = m_endPos + -distance * easeRate;
+
 
 	if (m_distance <= 0.1f && 10 <= m_timer)
 	{
