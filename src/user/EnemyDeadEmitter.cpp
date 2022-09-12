@@ -94,6 +94,12 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 		&m_emitterInfo,
 		"EnemyDeadEmitter");
 
+
+	m_emitterInfo.m_linePtThickness = 5.0f;
+	m_emitterInfo.m_squarePtSize = 10.0f;
+
+
+
 	m_colorPatternArray[0] = Color(255, 0, 0, 255);
 	m_colorPatternArray[1] = Color(255, 255, 255, 255);
 	m_colorPatternArray[2] = Color(255, 255, 0, 255);

@@ -104,7 +104,7 @@ void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -182,7 +182,7 @@ void GameScene::OnDraw()
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 	//DrawFunc初期化
 	DrawFunc_Append::FrameInit(
