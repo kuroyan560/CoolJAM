@@ -328,6 +328,7 @@ class TextureBuffer : public DescriptorData
 	TextureBuffer() = delete;
 	TextureBuffer(const TextureBuffer& tmp) = delete;
 	TextureBuffer(TextureBuffer&& tmp) = delete;
+	std::string m_name;
 protected:
 	CD3DX12_RESOURCE_DESC m_texDesc;	//テクスチャ情報（幅、高さなど）
 
@@ -344,18 +345,21 @@ protected:
 	}
 
 public:
-	TextureBuffer(const ComPtr<ID3D12Resource>& Buff, const D3D12_RESOURCE_STATES& Barrier, const DescHandles& SRVHandles, const CD3DX12_RESOURCE_DESC& Desc)
-		:DescriptorData(Buff, Barrier), m_texDesc(Desc) 
+	TextureBuffer(const ComPtr<ID3D12Resource>& Buff, const D3D12_RESOURCE_STATES& Barrier,
+		const DescHandles& SRVHandles, const CD3DX12_RESOURCE_DESC& Desc, const std::string& Name)
+		:DescriptorData(Buff, Barrier), m_name(Name), m_texDesc(Desc)
 	{
 		m_handles.Initialize(SRV, SRVHandles);
 	}
-	TextureBuffer(const ComPtr<ID3D12Resource>& Buff, const D3D12_RESOURCE_STATES& Barrier, const DescHandles& SRVHandles, const D3D12_RESOURCE_DESC& Desc)
-		:DescriptorData(Buff, Barrier), m_texDesc(CD3DX12_RESOURCE_DESC(Desc)) 
+	TextureBuffer(const ComPtr<ID3D12Resource>& Buff, const D3D12_RESOURCE_STATES& Barrier,
+		const DescHandles& SRVHandles, const D3D12_RESOURCE_DESC& Desc, const std::string& Name)
+		:DescriptorData(Buff, Barrier), m_name(Name), m_texDesc(CD3DX12_RESOURCE_DESC(Desc))
 	{
 		m_handles.Initialize(SRV, SRVHandles);
 	}
-	TextureBuffer(const std::shared_ptr<GPUResource>& GPUResource, const DescHandles& SRVHandles, const D3D12_RESOURCE_DESC& Desc)
-	: DescriptorData(GPUResource), m_texDesc(CD3DX12_RESOURCE_DESC(Desc))
+	TextureBuffer(const std::shared_ptr<GPUResource>& GPUResource, const DescHandles& SRVHandles,
+		const D3D12_RESOURCE_DESC& Desc, const std::string& Name)
+		: DescriptorData(GPUResource), m_name(Name), m_texDesc(CD3DX12_RESOURCE_DESC(Desc))
 	{
 		m_handles.Initialize(SRV, SRVHandles);
 	}
@@ -391,8 +395,9 @@ public:
 		const DescHandles& SRVHandles,
 		const DescHandles& RTVHandles,
 		const CD3DX12_RESOURCE_DESC& Desc,
-		const Color& ClearValue = Color(0.0f, 0.0f, 0.0f, 0.0f))
-		:TextureBuffer(Buff, Barrier, SRVHandles, Desc)
+		const Color& ClearValue = Color(0.0f, 0.0f, 0.0f, 0.0f),
+		const std::string& Name = "")
+		:TextureBuffer(Buff, Barrier, SRVHandles, Desc, Name)
 	{
 		m_handles.Initialize(RTV, RTVHandles);
 		m_clearValue[0] = ClearValue.m_r;
@@ -405,8 +410,9 @@ public:
 		const DescHandles& SRVHandles,
 		const DescHandles& RTVHandles,
 		const CD3DX12_RESOURCE_DESC& Desc,
-		const Color& ClearValue = Color(0.0f, 0.0f, 0.0f, 0.0f))
-		:TextureBuffer(GPUResource, SRVHandles, Desc)
+		const Color& ClearValue = Color(0.0f, 0.0f, 0.0f, 0.0f),
+		const std::string& Name = "")
+		:TextureBuffer(GPUResource, SRVHandles, Desc, Name)
 	{
 		m_handles.Initialize(RTV, RTVHandles);
 		m_clearValue[0] = ClearValue.m_r;
