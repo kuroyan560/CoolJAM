@@ -124,7 +124,6 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 
-
 	// ゲームの状態に応じてカメラの位置を変える。
 	if (GameMode::Instance()->m_isGame) {
 
