@@ -9,6 +9,8 @@
 #include "../engine/Importer.h"
 #include "KuroMath.h"
 #include "GameMode.h"
+#include"AudioApp.h"
+
 
 TitleScene::TitleScene()
 {
@@ -68,6 +70,8 @@ TitleScene::TitleScene()
 
 	m_addRotateUI = 0;
 
+	m_selectSE = AudioApp::Instance()->LoadAudio("resource/user/sound/select.wav");
+	m_enterSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enter.wav");
 }
 
 void TitleScene::OnInitialize()
@@ -266,6 +270,8 @@ void TitleScene::UpdateSelect() {
 
 	if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
 
+		AudioApp::Instance()->PlayWaveDelay(m_enterSE);
+
 		// oŒ»’†‚¶‚á‚È‚©‚Á‚½‚çB
 		if (!m_isTitle && !m_isAppear && !m_isTransition) {
 
@@ -286,7 +292,7 @@ void TitleScene::UpdateSelect() {
 
 			if (m_nowSelect == SELECT::EXIT) {
 
-				exit(0);
+				KuroEngine::Instance()->GameEnd();
 
 			}
 
@@ -296,10 +302,11 @@ void TitleScene::UpdateSelect() {
 
 			m_isAppear = true;
 			m_isTitle = false;
-
 		}
 
 	}
+
+	auto oldSelect = m_nowSelect;
 
 	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
 	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition) {
@@ -342,6 +349,8 @@ void TitleScene::UpdateSelect() {
 		}
 
 	}
+
+	if (oldSelect != m_nowSelect)AudioApp::Instance()->PlayWaveDelay(m_selectSE);
 
 	float rotate = m_addRotateUI / 5.0f;
 	m_addRotateUI -= m_addRotateUI / 5.0f;

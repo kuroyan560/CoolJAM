@@ -114,9 +114,11 @@ private:
 	const float END_GAME_LENGTH = 80.0f;
 	const float END_TUTORIAL_LENGTH = 150.0f;
 
+	//SE
+	int m_selectSE;
+	int m_enterSE;
 
 public:
-
 	TitleScene();
 	void OnInitialize()override;
 	void OnUpdate()override;
