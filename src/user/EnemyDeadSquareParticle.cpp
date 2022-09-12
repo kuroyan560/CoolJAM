@@ -33,11 +33,19 @@ void EnemyDeadSquareParticle::Update()
 		m_pos += m_vel;
 		m_angle += m_angleVel;
 
-		//m_color.m_a += -(1.0f / static_cast<float>(m_dispappearTime));
-		if (m_color.m_a <= 0)
+
+		const Vec2<float> LIMIT_LINE = { 200.0f,200.0f };
+		if (m_pos.x <= LIMIT_LINE.x &&
+			m_pos.z <= LIMIT_LINE.y &&
+			-LIMIT_LINE.x <= m_pos.x &&
+			-LIMIT_LINE.y <= m_pos.z)
 		{
-			m_color.m_a = 0;
+			m_initFlag = 1;
+		}
+		else
+		{
 			m_initFlag = 0;
+			m_color.m_a = 0;
 		}
 	}
 }

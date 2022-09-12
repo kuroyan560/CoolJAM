@@ -52,7 +52,7 @@ private:
 	//頂点バッファ（四角パーティクルのバッファ）
 	std::shared_ptr<VertexBuffer>m_squarePtBuff;
 	std::array<EnemyDeadSquareParticle, PARTICLE_NUM>m_SquareParticle;
-	std::array<Color, 4>m_colorPatternArray;
+	std::array<Color, 3>m_colorPatternArray;
 
 	//定数バッファ（エミッターのバッファ）
 	std::shared_ptr<ConstantBuffer>m_emiBuff;
