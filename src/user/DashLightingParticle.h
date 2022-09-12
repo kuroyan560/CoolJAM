@@ -20,7 +20,7 @@ private:
 	Vec3<float> m_startPos, m_endPos;
 	float angle;
 	float angleVel;
-	int alpha;
+	float alpha;
 	bool initFlag;
 	std::shared_ptr<Model>m_model;
 	Transform m_transform;

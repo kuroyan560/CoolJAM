@@ -3,14 +3,12 @@
 int KazDrawFunc::s_drawNonShadingModelSignalColor = 0;
 int KazDrawFunc::s_drawRotaGraph2D = 0;
 int KazDrawFunc::s_drawBillBoardGraph = 0;
-std::weak_ptr<Camera>DrawFunc_Append::s_nowCam;
 
 void KazDrawFunc::CountReset()
 {
 	s_drawNonShadingModelSignalColor = 0;
 	s_drawRotaGraph2D = 0;
 	s_drawBillBoardGraph = 0;
-	s_appendDrawModel = 0;
 };
 
 void KazDrawFunc::DrawNonShadingModelSignalColor(const std::weak_ptr<Model> Model, Transform &Transform, Color &color, Camera &Cam, std::shared_ptr<ModelAnimator> Animator, const AlphaBlendMode &BlendMode)

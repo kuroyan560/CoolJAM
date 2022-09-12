@@ -1,5 +1,5 @@
 #include "CoinEnemy.h"
-#include"DrawFunc3D.h"
+#include"DrawFunc_Append.h"
 
 CoinEnemy::CoinEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -29,22 +29,7 @@ void CoinEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &Pl
 	m_transform.SetScale(m_scale);
 }
 
-void CoinEnemy::Draw(Camera &Cam)
+void CoinEnemy::Draw()
 {
-	DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
-}
-
-bool CoinEnemy::GetIsActive()
-{
-	return m_isActive;
-}
-
-float CoinEnemy::GetScale()
-{
-	return m_scale;
-}
-
-Vec3<float> CoinEnemy::GetPos()
-{
-	return m_pos;
+	DrawFunc_Append::DrawModel(m_model, m_transform);
 }
