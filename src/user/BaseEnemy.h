@@ -10,6 +10,9 @@ class BulletMgr;
 
 class BaseEnemy {
 
+	static int s_deadSE;
+	static int s_damageSE;
+
 public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
@@ -26,10 +29,12 @@ public:
 
 
 public:
+	static const int& DamageSE() { return s_damageSE; }
+	static const int& DeadSE() { return s_deadSE; }
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
-	BaseEnemy() {};
+	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
