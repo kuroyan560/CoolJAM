@@ -1,12 +1,24 @@
 #include "PlayerDashLighting.h"
-#include"../engine/DrawFunc3D.h"
+#include"DrawFunc3D.h"
+#include"Model.h"
 
 PlayerDashLighting::PlayerDashLighting()
 {
+	m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
+
+	m_model->m_model->m_meshes[0].material->constData.pbr.baseColor = { 1.0f,0.0f,0.0f };
+	m_model->m_model->m_meshes[0].material->CreateBuff();
+
+	for (int i = 0; i < m_particleArray.size(); ++i)
+	{
+		m_particleArray[i] = std::make_unique<DashLightingParticle>(m_model);
+	}
+
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{
 		m_roadArray[i] = std::make_unique<DashLightingRoad>(i);
 	}
+
 }
 
 void PlayerDashLighting::Init(Vec3<float> *POS)
@@ -25,7 +37,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 		emittPos.x = m_pos->x + KuroFunc::GetRand(-3.0f, 3.0f);
 		emittPos.y = KuroFunc::GetRand(-3.0f, 3.0f);
 		emittPos.z = m_pos->z + KuroFunc::GetRand(-3.0f, 3.0f);
-		m_particleArray[m_particleInitNum].Init(emittPos);
+		m_particleArray[m_particleInitNum]->Init(emittPos);
 
 		++m_particleInitNum;
 		m_timer = 0;
@@ -37,7 +49,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 
 	for (int i = 0; i < m_particleArray.size(); ++i)
 	{
-		m_particleArray[i].Update();
+		m_particleArray[i]->Update();
 	}
 
 	if (ENABLE_FLAG && !m_prevFlag)
@@ -66,7 +78,7 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 {
 	for (int i = 0; i < m_particleArray.size(); ++i)
 	{
-		m_particleArray[i].Draw(CAMERA);
+		m_particleArray[i]->Draw(CAMERA);
 	}
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{

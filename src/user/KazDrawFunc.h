@@ -11,6 +11,7 @@
 #include"LightManager.h"
 #include"CubeMap.h"
 #include"ModelAnimator.h"
+#include"DrawFunc_Append.h"
 #include<map>
 
 class KazDrawFunc
@@ -48,4 +49,6 @@ public:
 	static void DrawRotaGraph2D(const Vec2<float> &Center, const Vec2<float> &ExtRate, const float &Radian,
 		const std::shared_ptr<TextureBuffer> &Tex, const float &Alpha = 1.0f, const Vec2<float> &RotaCenterUV = { 0.5f,0.5f },
 		const AlphaBlendMode &BlendMode = AlphaBlendMode_Trans, const Vec2<bool> &Mirror = { false,false });
+
+
 };

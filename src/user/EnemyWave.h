@@ -19,6 +19,7 @@ namespace ENEMY_INFO {
 		PRESS,			// 押し戻す敵。
 		DASH,			// ダッシュする敵。
 		ELEC_MUSHI,		// エレキ虫
+		COIN,			// コイン
 		ID_COUNT,
 
 	};
