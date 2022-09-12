@@ -87,11 +87,14 @@ private:
 	// チュートリアルのステータス。
 	enum class TUTORIAL_STATUS {
 
-		MOUSE,
-		DAMAGE_WALL,
+		MOUSE,			// マウスの方向にいくチュートリアル
+		DAMAGE_WALL,	// ダメージ壁の説明
+		ENEMY,			// 真ん中に何もしてこない敵を配置
+		FEVER,			// フィーバー状態の説明
 
 	};
 
+	TUTORIAL_STATUS m_tutorialStatus;
 
 
 public:

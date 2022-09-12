@@ -34,7 +34,7 @@ private:
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(1.0f, 0.0f, 0.0f);
 	float m_speed;				// à⁄ìÆë¨ìx
 	const float SCALE = 1.0f;
-	const float BOOST_SCALE = 5.0f;
+	const float BOOST_SCALE = 20.0f;
 	bool m_isEdge;				// âèÇ…Ç¢ÇÈÇ©
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;

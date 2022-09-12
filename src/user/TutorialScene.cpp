@@ -67,6 +67,7 @@ TutorialScene::TutorialScene()
 
 	// チュートリアルのステータスを実装。
 	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
+
 }
 
 void TutorialScene::OnInitialize()
@@ -100,6 +101,9 @@ void TutorialScene::OnInitialize()
 		m_nowTarget = CAMERA_HOME_TARGET_POSITION;
 
 	}
+
+	// チュートリアルのステータスを実装。
+	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
 
 }
 
