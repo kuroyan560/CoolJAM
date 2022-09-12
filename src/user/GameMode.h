@@ -5,7 +5,14 @@ class GameMode : public Singleton<GameMode> {
 
 public:
 
-	bool m_isTutorial;
-	bool m_isGame;
+	enum class ID {
+
+		NONE,
+		TUTORIAL,
+		GAME,
+
+	};
+
+	ID m_id = ID::NONE;
 
 };

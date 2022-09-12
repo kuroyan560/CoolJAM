@@ -216,15 +216,10 @@ void TrackingEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const flo
 
 	}
 
-	m_hp -= hitCount;
-	if (m_hp <= 0) {
-
-		Init();
-
-	}
-
 	// ’e‚É“–‚½‚Á‚½‚©ƒtƒ‰ƒO
 	if (0 < hitCount) {
+
+		Damage(1, BulletMgr);
 
 		m_hitEffectTimer = HIT_EFFECT_TIMER;
 

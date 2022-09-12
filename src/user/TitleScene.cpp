@@ -9,7 +9,9 @@
 #include "../engine/Importer.h"
 #include "KuroMath.h"
 #include "GameMode.h"
+#include"AudioApp.h"
 #include "TitleUI.h"
+
 
 TitleScene::TitleScene()
 {
@@ -67,7 +69,8 @@ TitleScene::TitleScene()
 	m_titleUI[1] = std::make_shared<TitleUI>("resource/user/UI/title_select_Gamel.png", TitleUI::STATUS::MIDDLE, TitleUI::UI_STATUS::GAME);
 	m_titleUI[2] = std::make_shared<TitleUI>("resource/user/UI/title_select_Exit.png", TitleUI::STATUS::DOWN, TitleUI::UI_STATUS::EXIT);
 
-
+	m_selectSE = AudioApp::Instance()->LoadAudio("resource/user/sound/select.wav");
+	m_enterSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enter.wav");
 }
 
 void TitleScene::OnInitialize()
@@ -77,7 +80,6 @@ void TitleScene::OnInitialize()
 	m_isTransition = false;
 	m_transitionEasingTimer = 0;
 	m_endEasingTransitionTimer = END_EASING_TIMER;
-
 
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
@@ -277,6 +279,8 @@ void TitleScene::UpdateSelect() {
 
 	if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
 
+		AudioApp::Instance()->PlayWaveDelay(m_enterSE);
+
 		// 出現中じゃなかったら。
 		if (!m_isTitle && !m_isAppear && !m_isTransition) {
 
@@ -284,13 +288,16 @@ void TitleScene::UpdateSelect() {
 
 			m_revolverEasingTimer = 0;
 
-
-			GameMode::Instance()->m_isGame = m_nowSelect == SELECT::GAME;
-			GameMode::Instance()->m_isTutorial = m_nowSelect == SELECT::TUTORIAL;
+			if (m_nowSelect == SELECT::GAME) {
+				GameMode::Instance()->m_id = GameMode::ID::GAME;
+			}
+			if (m_nowSelect == SELECT::TUTORIAL) {
+				GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
+			}
 
 			if (m_nowSelect == SELECT::EXIT) {
 
-				exit(0);
+				KuroEngine::Instance()->GameEnd();
 
 			}
 
@@ -300,7 +307,6 @@ void TitleScene::UpdateSelect() {
 
 			m_isAppear = true;
 			m_isTitle = false;
-
 		}
 
 	}
@@ -312,6 +318,7 @@ void TitleScene::UpdateSelect() {
 		canTrans &= index->GetCanTrans();
 
 	}
+	auto oldSelect = m_nowSelect;
 
 	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
 	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition && !m_isTitle && canTrans) {
@@ -333,7 +340,7 @@ void TitleScene::UpdateSelect() {
 
 		for (auto& index : m_titleUI) {
 
-			index->TransDown();
+			index->TransUp();
 
 		}
 
@@ -358,11 +365,13 @@ void TitleScene::UpdateSelect() {
 
 		for (auto& index : m_titleUI) {
 
-			index->TransUp();
+			index->TransDown();
 
 		}
 
 	}
+
+	if (oldSelect != m_nowSelect)AudioApp::Instance()->PlayWaveDelay(m_selectSE);
 
 }
 
@@ -383,16 +392,26 @@ void TitleScene::UpdateCamera() {
 			--m_endEasingTransitionTimer;
 			if (m_endEasingTransitionTimer <= 0) {
 
-				KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
+				// 遷移先のシーンを決める。
+				int transitionSceneNum = 0;
+				if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
+					transitionSceneNum = 2;
+				}
+				else if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL) {
+					transitionSceneNum = 1;
+				}
+
+				KuroEngine::Instance()->ChangeScene(transitionSceneNum, m_sceneTransition.get());
 
 			}
 
 		}
 
 		// 補間先注視点座標
-		Vec3<float> endTarget = (GameMode::Instance()->m_isGame ? END_GAME_TARGET_POS : END_TUTORIAL_TARGET_POS);
-		Vec3<float> endEye = (GameMode::Instance()->m_isGame ? END_GAME_EYE_POS : END_TUTORIAL_EYE_POS);
-		float endLength = (GameMode::Instance()->m_isGame ? END_GAME_LENGTH : END_TUTORIAL_LENGTH);
+		bool isGame = GameMode::Instance()->m_id == GameMode::ID::GAME;
+		Vec3<float> endTarget = (isGame ? END_GAME_TARGET_POS : END_TUTORIAL_TARGET_POS);
+		Vec3<float> endEye = (isGame ? END_GAME_EYE_POS : END_TUTORIAL_EYE_POS);
+		float endLength = (isGame ? END_GAME_LENGTH : END_TUTORIAL_LENGTH);
 
 		// イージング量を求める。
 		float easingAmount = KuroMath::Ease(InOut, Cubic, m_transitionEasingTimer, 0.0f, 1.0f);

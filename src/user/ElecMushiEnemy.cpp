@@ -198,18 +198,10 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
 
-	m_hp -= hitCount;
-	if (m_hp <= 0) {
-
-		// エレキ虫が死んだ。
-		BulletMgr.lock()->KillElecMushi();
-
-		Init();
-
-	}
-
 	// 弾に当たったかフラグ
 	if (0 < hitCount) {
+
+		Damage(1, BulletMgr);
 
 		m_hitEffectTimer = HIT_EFFECT_TIMER;
 

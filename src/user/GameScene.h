@@ -81,7 +81,9 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
-	bool m_emissive = false;
+	int m_bgm;
+
+	bool m_emissive = true;
 
 
 

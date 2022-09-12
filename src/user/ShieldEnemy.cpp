@@ -196,12 +196,8 @@ void ShieldEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float
 
 		// プレイヤー弾との当たり判定。
 		hitCount = BulletMgr.lock()->CheckHitPlayerBulletAngle(m_pos, m_scale, m_forwardVec, 0.0f);
-		m_hp -= hitCount;
-		if (m_hp <= 0) {
 
-			Init();
-
-		}
+		Damage(1, BulletMgr);
 
 	}
 

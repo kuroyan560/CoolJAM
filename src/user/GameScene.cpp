@@ -64,6 +64,9 @@ GameScene::GameScene()
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
+	
+	//BGM読み込み
+	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
 }
 
 void GameScene::OnInitialize()
@@ -80,7 +83,7 @@ void GameScene::OnInitialize()
 	m_player->Init();
 	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
 
-	if (GameMode::Instance()->m_isGame) {
+	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
 		const float CAMERA_DISTANCE = 80.0f;
 		m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
@@ -98,6 +101,7 @@ void GameScene::OnInitialize()
 
 	}
 
+	AudioApp::Instance()->PlayWave(m_bgm, true);
 }
 
 void GameScene::OnUpdate()
@@ -127,7 +131,7 @@ void GameScene::OnUpdate()
 	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 
 	// ゲームの状態に応じてカメラの位置を変える。
-	if (GameMode::Instance()->m_isGame) {
+	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
 		Vec3<float> playerVecX = -m_player->GetForwardVec();
 		const float CAMERA_DISTANCE = 80.0f;
@@ -156,13 +160,11 @@ void GameScene::OnUpdate()
 	}
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
-	if (GameMode::Instance()->m_isTutorial && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
-		GameMode::Instance()->m_isTutorial = false;
-		GameMode::Instance()->m_isGame = true;
+	if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
+		GameMode::Instance()->m_id = GameMode::ID::GAME;
 	}
-	if (GameMode::Instance()->m_isGame && UsersInput::Instance()->KeyInput(DIK_SPACE)) {
-		GameMode::Instance()->m_isTutorial = true;
-		GameMode::Instance()->m_isGame = false;
+	if (GameMode::Instance()->m_id == GameMode::ID::GAME && UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
 	}
 
 	m_environmentMgr->Update(m_player->GetPos());
