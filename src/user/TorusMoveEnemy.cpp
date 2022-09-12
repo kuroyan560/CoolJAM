@@ -1,3 +1,4 @@
+
 #include "TorusMoveEnemy.h"
 #include "EnemyHP.h"
 #include "BulletMgr.h"
@@ -122,6 +123,7 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 		index->Invalidate();
 
 	}
+	// HP‚ª10‚æ‚è‚¨‚¨‚«‚©‚Á‚½‚çA1‚ÌˆÊ‚ğ”²‚«o‚µ‚ÄHPUI‚ğ‰Šú‰»‚·‚éB
 	if (10 < m_hp) {
 
 		for (int index = 0; index < GetDigits(m_hp, 0, 0); ++index) {

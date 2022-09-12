@@ -39,12 +39,14 @@ private:
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
+	// 動いた総量
+	float m_movedLength;
+
 	// フィーバー状態か
 	bool m_isFever;
 	int m_feverTime;
 	const int FEVER_TIME = 600;
 	const int FEVER_TIME_GAME_TIMER = 10;
-	const float FEVER_ATTACK_SCALE = 10.0f;
 
 	// HP関係
 	int m_hp;		// プレイヤーのHP
@@ -67,6 +69,9 @@ private:
 	const int DAMAGE_EFFECT_COUNT = 3;
 	bool m_isDamageEffect;		// ダメージエフェクト中か
 	bool m_isDamageEffectDrawPlayer;
+
+	// チュートリアル用。
+	int m_dashCounter;
 
 	// ドリフト
 	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
@@ -119,6 +124,9 @@ public:
 	float GetMaxFeverTimeGameTimer() { return FEVER_TIME_GAME_TIMER; }
 	bool GetIsFever() { return m_isFever; }
 	float GetPlayerFeverRate() { return static_cast<float>(m_feverTime) / static_cast<float>(FEVER_TIME); }
+	float GetMovedLength() { return m_movedLength; }
+	int GetDashCount() { return m_dashCounter; }
+	void ResetDashCount() { m_dashCounter = 0; }
 
 	Vec3<float>* GetPosPtr() { return &m_pos; };
 	const float* GetInputRadianPtr() { return &inputATan2f; };

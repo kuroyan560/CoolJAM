@@ -16,6 +16,7 @@
 #include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
 #include"GameMode.h"
+#include"TutorialText.h"
 
 TutorialScene::TutorialScene()
 {
@@ -65,8 +66,15 @@ TutorialScene::TutorialScene()
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
 
-	// チュートリアルのステータスを実装。
-	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
+	m_isCameraHomePosition = true;
+
+	m_tutorialText = std::make_shared<TutorialText>();
+	m_damageWallTimer = 0;
+	m_enemyTutorialAppearTimer = 0;
+	m_enemyTutorialExitTimer = 0;
+	m_feverTutorialAppearTimer = 0;
+	m_feverTutorialSpawnDelay = 0;
+	m_isFever = false;
 
 }
 
@@ -83,6 +91,16 @@ void TutorialScene::OnInitialize()
 	m_environmentMgr->Init();
 	m_player->Init();
 	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
+
+	m_isCameraHomePosition = true;
+
+	m_tutorialText->Init();
+	m_damageWallTimer = 0;
+	m_enemyTutorialAppearTimer = 0;
+	m_enemyTutorialExitTimer = 0;
+	m_feverTutorialAppearTimer = 0;
+	m_feverTutorialSpawnDelay = 0;
+	m_isFever = false;
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -102,14 +120,12 @@ void TutorialScene::OnInitialize()
 
 	}
 
-	// チュートリアルのステータスを実装。
-	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
-
 }
 
 void TutorialScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
+
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
@@ -130,11 +146,165 @@ void TutorialScene::OnUpdate()
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
 
+
+	switch (m_tutorialText->GetNowStatus())
+	{
+	case TutorialText::TUTORIAL_STATUS::MOUSE:
+
+	{
+
+		/*-- マウスのチュートリアルだったら --*/
+
+		// 一定量移動したら次のチュートリアルへ。
+		const float MOVE_AMOUNT = 200.0f;
+		if (MOVE_AMOUNT <= m_player->GetMovedLength()) {
+
+			m_tutorialText->Next();
+			m_player->ResetDashCount();
+
+		}
+
+	}
+
+	break;
+	case TutorialText::TUTORIAL_STATUS::DASH:
+
+	{
+
+		/*-- ダッシュのチュートリアルだったら --*/
+
+		// 三回ダッシュしたら次のチュートリアルへ。
+		const int DASH_COUNT = 3;
+		if (DASH_COUNT <= m_player->GetDashCount()) {
+
+			m_tutorialText->Next();
+
+		}
+
+	}
+
+	break;
+	case TutorialText::TUTORIAL_STATUS::DAMAGE_WALL:
+
+	{
+
+		/*-- ダメージ壁のチュートリアルだったら --*/
+
+		++m_damageWallTimer;
+		if (DAMAGE_WALL_TUTORIAL_TIMER <= m_damageWallTimer) {
+
+			m_tutorialText->Next();
+
+		}
+
+	}
+
+	break;
+	case TutorialText::TUTORIAL_STATUS::ENEMY:
+
+		/*-- 敵のチュートリアルだったら --*/
+
+		++m_enemyTutorialAppearTimer;
+		// タイマーがちょうどになったらカメラを寄せて敵を生成する。
+		if (m_enemyTutorialAppearTimer == ENEMY_TUTORIAL_APPEAR_TIMER) {
+
+			// カメラを寄せて、敵を生成する。
+			m_isCameraHomePosition = false;
+			m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::STOPPING), MAP_SIZE);
+
+		}
+		// タイマーが既定値を超えていて、敵が全て死んでいたら。
+		if (ENEMY_TUTORIAL_APPEAR_TIMER <= m_enemyTutorialAppearTimer) {
+
+			// 次へ。
+			if (m_enemyMgr->GetAllEnemyDead()) {
+
+				// 敵を倒してから次のチュートリアルに遷移するまでのタイマーを更新。
+				++m_enemyTutorialExitTimer;
+				if (ENEMY_TUTORIAL_EXIT_TIMER <= m_enemyTutorialExitTimer) {
+
+					m_tutorialText->Next();
+
+				}
+
+			}
+
+		}
+
+		break;
+	case TutorialText::TUTORIAL_STATUS::FEVER:
+
+		/*-- フィーバーのチュートリアルだったら --*/
+
+		++m_feverTutorialAppearTimer;
+		// フィーバーのチュートリアルのテキストを表示する時間。
+		if (m_feverTutorialAppearTimer < FEVER_TUTORIAL_APPEAR_TIMER) {
+
+			// カメラを引く。
+			m_isCameraHomePosition = true;
+
+		}
+		// タイマーが丁度のとき、カメラを寄せてフィーバー敵を生成する。
+		if (m_feverTutorialAppearTimer == FEVER_TUTORIAL_APPEAR_TIMER) {
+
+			// カメラを寄せる。
+			m_isCameraHomePosition = false;
+
+			// エレキ虫を生成する。
+			m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::ELEC_MUSHI), MAP_SIZE);
+
+		}
+
+		// フィーバー状態になったら敵を大量に生成する。
+		if (m_player->GetIsFever()) {
+
+			m_isFever = true;
+
+			++m_feverTutorialSpawnDelay;
+			if (FEVER_TUTORIAL_SPAWN_DELAY <= m_feverTutorialSpawnDelay) {
+
+				m_feverTutorialSpawnDelay = 0;
+
+				// 敵を生成する。
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, -1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MAP_SIZE);
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(-100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, 1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MAP_SIZE);
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(0.0f, 0.0f, 100.0f), Vec3<float>(1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MAP_SIZE);
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(0.0f, 0.0f, -100.0f), Vec3<float>(-1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MAP_SIZE);
+
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), MAP_SIZE);
+				m_enemyMgr->Generate(m_player->GetPos(), Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), MAP_SIZE);
+
+			}
+
+		}
+
+		// フィーバーになったことがあって、現在フィーバーじゃなかったら敵を一気に消す。
+		if (m_isFever && !m_player->GetIsFever()) {
+
+			m_enemyMgr->AllKill(m_bulletMgr);
+
+		}
+
+
+		break;
+	default:
+		break;
+	}
+
+
 	// 敵Waveクラスの更新処理。
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	//m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 
 	// ゲームの状態に応じてカメラの位置を変える。
-	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
+	if (m_isCameraHomePosition) {
+
+		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
+		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
+		m_gameCam->SetPos(m_nowEye);
+		m_gameCam->SetTarget(m_nowTarget);
+
+	}
+	else {
 
 		Vec3<float> playerVecX = -m_player->GetForwardVec();
 		const float CAMERA_DISTANCE = 80.0f;
@@ -154,20 +324,13 @@ void TutorialScene::OnUpdate()
 		m_gameCam->SetTarget(m_nowTarget);
 
 	}
-	else {
-		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
-		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
-		m_gameCam->SetPos(m_nowEye);
-		m_gameCam->SetTarget(m_nowTarget);
-
-	}
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
-	if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
-		GameMode::Instance()->m_id = GameMode::ID::GAME;
+	if (UsersInput::Instance()->KeyInput(DIK_RETURN)) {
+		m_isCameraHomePosition = true;
 	}
-	if (GameMode::Instance()->m_id == GameMode::ID::GAME && UsersInput::Instance()->KeyInput(DIK_SPACE)) {
-		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+		m_isCameraHomePosition = false;
 	}
 
 	m_environmentMgr->Update(m_player->GetPos());
@@ -187,6 +350,7 @@ void TutorialScene::OnDraw()
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//現在のカメラ取得
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 	//DrawFunc初期化
