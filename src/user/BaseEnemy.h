@@ -2,6 +2,7 @@
 #include "Vec.h"
 #include "EnemyWave.h"
 #include <memory>
+#include <array>
 
 class Model;
 class Camera;
@@ -28,12 +29,29 @@ public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
+	BaseEnemy() {};
+	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void Draw() = 0;
 
 	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
+
+	// w’è‚ÌŒ…‚Ì”š‚ğæ“¾B
+	int GetDigits(int Value, int M, int N) {
+		int mod_value;
+		int result;
+
+		/* nŒ…–ÚˆÈ‰º‚ÌŒ…‚ğæ“¾ */
+		mod_value = Value % (int)pow(10, N + 1);
+
+		/* mŒ…–ÚˆÈã‚ÌŒ…‚ğæ“¾ */
+		result = mod_value / pow(10, M);
+
+		return result;
+
+	}
 
 	ENEMY_INFO::ID GetId()
 	{

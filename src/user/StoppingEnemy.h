@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class StoppingEnemy : public BaseEnemy {
 
 private:
@@ -24,10 +26,12 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float STOPPING_SCALE = 6.0f;
+	const float SCALE = 6.0f;
 
 	// HP
-	const int STOPPING_HP = 10;
+	static const int HP = 10;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 
