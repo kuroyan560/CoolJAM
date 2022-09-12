@@ -205,6 +205,9 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     output.color = float4(0, 0, 0, 0);
     output.emissive = float4(0, 0, 0, 0);
     output.depth = 0.0f;
+    
+    float4 colorTexCol = colorTex.Sample(smp, input.uv);
+    float4 emissiveTexCol = emissiveMap.Sample(smp, input.uv);
 
     if (any(mainDrawRate))
     {
@@ -213,7 +216,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
             float3 normal = input.normal;
             float3 vnormal = normalize(mul(cam.view, normal));
         
-            s_baseColor = material.baseColor;
+            s_baseColor = material.baseColor + colorTexCol.rgb;
             s_metalness = material.metalness;
             s_roughness = material.roughness;
     
@@ -294,13 +297,15 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
                 ligEffect *= hemiLight;
             }
     
-            float4 result = float4(ligEffect, 1.0f - material.transparent);
+            float4 result = float4(ligEffect, (1.0f - material.transparent) * colorTexCol.w);
         
             output.color = result;
         }
         else
         {
-            output.color.xyz = material.baseColor.xyz;
+            output.color.xyz = material.baseColor.xyz + colorTexCol.xyz;
+            output.color.w *= colorTexCol.w;
+
         }
     }
     
