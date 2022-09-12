@@ -184,10 +184,10 @@ void PlayerStraightEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, con
 	Vec3<float> hitBulletPos;
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
 
-	Damage(1, BulletMgr);
-
 	// ’e‚É“–‚½‚Á‚½‚©ƒtƒ‰ƒO
 	if (0 < hitCount) {
+
+		Damage(1, BulletMgr);
 
 		m_hitEffectTimer = HIT_EFFECT_TIMER;
 

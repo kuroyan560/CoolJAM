@@ -82,7 +82,15 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
-	bool m_emissive = false;
+	bool m_emissive = true;
+
+	// チュートリアルのステータス。
+	enum class TUTORIAL_STATUS {
+
+		MOUSE,
+		DAMAGE_WALL,
+
+	};
 
 
 

@@ -83,7 +83,7 @@ private:
 
 	int m_bgm;
 
-	bool m_emissive = false;
+	bool m_emissive = true;
 
 
 

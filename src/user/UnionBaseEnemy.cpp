@@ -244,6 +244,8 @@ void UnionBaseEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 	// ’e‚É“–‚½‚Á‚½‚©ƒtƒ‰ƒO
 	if (0 < hitCount) {
 
+		Damage(1, BulletMgr);
+
 		m_hitEffectTimer = HIT_EFFECT_TIMER;
 
 	}
