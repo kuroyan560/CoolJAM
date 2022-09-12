@@ -64,6 +64,10 @@ TutorialScene::TutorialScene()
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
+
+	// チュートリアルのステータスを実装。
+	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
+
 }
 
 void TutorialScene::OnInitialize()
@@ -97,6 +101,9 @@ void TutorialScene::OnInitialize()
 		m_nowTarget = CAMERA_HOME_TARGET_POSITION;
 
 	}
+
+	// チュートリアルのステータスを実装。
+	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
 
 }
 
