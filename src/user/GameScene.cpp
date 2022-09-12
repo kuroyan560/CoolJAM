@@ -195,12 +195,12 @@ void GameScene::OnDraw()
 
 	/*--- ’Êí•`‰æ ---*/
 
-	// ƒ}ƒbƒv‚ð•`‰æ
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, false);
-
 	//ŠÂ‹«•`‰æ
 	m_environmentMgr->Draw(*nowCam);
+
+	// ƒ}ƒbƒv‚ð•`‰æ
+	m_mapModel->m_transform.SetScale(MAP_SIZE);
+	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, true, AlphaBlendMode_Trans);
 
 	//ƒvƒŒƒCƒ„[•`‰æ
 	m_player->Draw(*nowCam);

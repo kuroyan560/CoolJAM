@@ -22,10 +22,8 @@ StructuredBuffer<HemiSphereLight> hemiSphereLight : register(t3);
 cbuffer cbuff2 : register(b2)
 {
     matrix world;
-    float mainDrawRate;
-    float emissiveDrawRate;
-    float depthDrawRate;
-    bool isShading;
+    float3 drawRate;
+    int isShading;
 }
 
 cbuffer cbuff3 : register(b3)
@@ -209,7 +207,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     float4 colorTexCol = colorTex.Sample(smp, input.uv);
     float4 emissiveTexCol = emissiveMap.Sample(smp, input.uv);
 
-    if (any(mainDrawRate))
+    if (any(drawRate.x))
     {
         if(isShading)
         {
@@ -307,18 +305,18 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         }
     }
     
-    output.color.w = mainDrawRate * (1.0f - material.transparent) * colorTexCol.w;
+    output.color.w = drawRate.x * (1.0f - material.transparent) * colorTexCol.w;
     
-    if(any(emissiveDrawRate))
+    if(any(drawRate.y))
     {
         output.emissive = emissiveMap.Sample(smp, input.uv);
         output.emissive.xyz += material.emissive;
-        //output.emissive.w *= emissiveDrawRate * material.emissiveFactor;
-        output.emissive.xyz *= emissiveDrawRate * material.emissiveFactor;
-        output.emissive.w = 1.0f;
+        output.emissive.w = drawRate.y * material.emissiveFactor * output.color.w;
+        //output.emissive.xyz *= drawRate.y * material.emissiveFactor;
+        //output.emissive.w = 1.0f;
     }
         
-    if(any(depthDrawRate))
+    if(any(drawRate.z))
     {
         output.depth = input.depthInView;
     }
