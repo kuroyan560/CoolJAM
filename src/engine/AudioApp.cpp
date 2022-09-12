@@ -64,6 +64,17 @@ void AudioApp::Update()
 			else ++itr;
 		}
 	}
+
+	//íxâÑçƒê∂
+	for (auto& info : m_delayAudioHandle)
+	{
+		info.m_delayFrame--;
+		if (!info.m_delayFrame)PlayWave(info.m_handle);
+	}
+	m_delayAudioHandle.remove_if([](PlayAudioDelay& info)
+		{
+			return !info.m_delayFrame;
+		});
 }
 
 bool AudioApp::NowPlay(const int& Handle)

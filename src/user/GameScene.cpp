@@ -64,6 +64,9 @@ GameScene::GameScene()
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
+	
+	//BGM“Ç‚Ýž‚Ý
+	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
 }
 
 void GameScene::OnInitialize()
@@ -98,6 +101,7 @@ void GameScene::OnInitialize()
 
 	}
 
+	AudioApp::Instance()->PlayWave(m_bgm, true);
 }
 
 void GameScene::OnUpdate()

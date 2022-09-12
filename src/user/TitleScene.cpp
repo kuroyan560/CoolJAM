@@ -9,7 +9,9 @@
 #include "../engine/Importer.h"
 #include "KuroMath.h"
 #include "GameMode.h"
+#include"AudioApp.h"
 #include "TitleUI.h"
+
 
 TitleScene::TitleScene()
 {
@@ -67,7 +69,8 @@ TitleScene::TitleScene()
 	m_titleUI[1] = std::make_shared<TitleUI>("resource/user/UI/title_select_Gamel.png", TitleUI::STATUS::MIDDLE, TitleUI::UI_STATUS::GAME);
 	m_titleUI[2] = std::make_shared<TitleUI>("resource/user/UI/title_select_Exit.png", TitleUI::STATUS::DOWN, TitleUI::UI_STATUS::EXIT);
 
-
+	m_selectSE = AudioApp::Instance()->LoadAudio("resource/user/sound/select.wav");
+	m_enterSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enter.wav");
 }
 
 void TitleScene::OnInitialize()
@@ -77,7 +80,6 @@ void TitleScene::OnInitialize()
 	m_isTransition = false;
 	m_transitionEasingTimer = 0;
 	m_endEasingTransitionTimer = END_EASING_TIMER;
-
 
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
@@ -277,6 +279,8 @@ void TitleScene::UpdateSelect() {
 
 	if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
 
+		AudioApp::Instance()->PlayWaveDelay(m_enterSE);
+
 		// oŒ»’†‚¶‚á‚È‚©‚Á‚½‚çB
 		if (!m_isTitle && !m_isAppear && !m_isTransition) {
 
@@ -293,7 +297,7 @@ void TitleScene::UpdateSelect() {
 
 			if (m_nowSelect == SELECT::EXIT) {
 
-				exit(0);
+				KuroEngine::Instance()->GameEnd();
 
 			}
 
@@ -303,7 +307,6 @@ void TitleScene::UpdateSelect() {
 
 			m_isAppear = true;
 			m_isTitle = false;
-
 		}
 
 	}
@@ -315,6 +318,7 @@ void TitleScene::UpdateSelect() {
 		canTrans &= index->GetCanTrans();
 
 	}
+	auto oldSelect = m_nowSelect;
 
 	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
 	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition && !m_isTitle && canTrans) {
@@ -366,6 +370,8 @@ void TitleScene::UpdateSelect() {
 		}
 
 	}
+
+	if (oldSelect != m_nowSelect)AudioApp::Instance()->PlayWaveDelay(m_selectSE);
 
 }
 
