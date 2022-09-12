@@ -276,7 +276,9 @@ PSOutput PSmain(GSOutput input)
 {
     PSOutput output;
     output.color = input.col * input.mainDrawRate;
-    output.emissive = input.col * input.emissiveDrawRate;
+    output.emissive = input.col;
+    output.emissive.w *= input.emissiveDrawRate;
+    output.emissive = saturate(output.emissive);
     return output;
 }
 
