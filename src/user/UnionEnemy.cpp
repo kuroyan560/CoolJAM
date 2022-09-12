@@ -155,6 +155,8 @@ void UnionEnemy::Draw()
 
 }
 
+#include"AudioApp.h"
+#include"BaseEnemy.h"
 void UnionEnemy::Damage(const int& Amount)
 {
 
@@ -164,7 +166,11 @@ void UnionEnemy::Damage(const int& Amount)
 	if (m_hp <= 0) {
 
 		Init();
-
+		AudioApp::Instance()->PlayWaveDelay(BaseEnemy::DeadSE());
+	}
+	else
+	{
+		AudioApp::Instance()->PlayWaveDelay(BaseEnemy::DamageSE());
 	}
 
 }
