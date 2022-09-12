@@ -70,6 +70,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Pl
 		if (!index->m_isActive) continue;
 
 		index->Update(BulletMgr, PlayerPos, MapSize);
+		index->CommonUpdate();
 	}
 
 
@@ -90,7 +91,7 @@ void EnemyMgr::Draw(Camera& NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 		if (!index->m_isActive) continue;
 
 		index->Draw();
-
+		index->CommonDraw(NowCam);
 
 	}
 
@@ -182,6 +183,9 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 
 	// ¶¬‚·‚éB
 	Enemy->Generate(enemyID, PlayerPos, GeneratePos, ForwardVec);
+
+
+	Enemy->CommonInit();
 
 }
 
