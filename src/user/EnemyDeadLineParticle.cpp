@@ -2,7 +2,7 @@
 #include"../engine/Common/Angle.h"
 #include"DrawFunc_Append.h"
 
-EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(2.0f), m_initFlag(0)
+EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(4.0f), m_initFlag(0)
 {
 }
 
@@ -44,6 +44,6 @@ void EnemyDeadLineParticle::Draw(Camera &CAMERA)
 {
 	if (m_initFlag)
 	{
-		DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(), 0.3f, RenderTargetSwitch(m_alpha, 1.0f, 0.0f));
+		//DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(), 1.8f, RenderTargetSwitch(m_alpha, 0.3f, 0.0f));
 	}
 }

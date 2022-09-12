@@ -4,6 +4,7 @@
 #include<array>
 #include"../engine/Common/Vec.h"
 #include<memory>
+#include"ColorPalette.h"
 
 class Camera;
 class GraphicsPipeline;
@@ -51,9 +52,9 @@ private:
 	//頂点バッファ（四角パーティクルのバッファ）
 	std::shared_ptr<VertexBuffer>m_squarePtBuff;
 	std::array<EnemyDeadSquareParticle, PARTICLE_NUM>m_SquareParticle;
+	std::array<Color, 5>m_colorPatternArray;
 
 	//定数バッファ（エミッターのバッファ）
 	std::shared_ptr<ConstantBuffer>m_emiBuff;
-
 };
 

@@ -12,6 +12,7 @@
 #include "ElecMushiEnemy.h"
 #include "CoinEnemy.h"
 #include "../engine/Importer.h"
+#include"../engine/UsersInput.h"
 
 EnemyMgr::EnemyMgr()
 {
@@ -55,11 +56,15 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& Pl
 		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ð”ò‚Î‚·B
 		if (!index.operator bool()) continue;
 
+		if (UsersInput::Instance()->KeyOnTrigger(DIK_A))
+		{
+			m_deadEffectEmitterArray[0].Init(index->m_pos + Vec3<float>(0.0f, 0.3f, 0.0f));
+		}
 
 		auto i = &index - &m_enemy[0];
 		if (!index->m_isActive && m_initDeadEffectArray[i])
 		{
-			m_deadEffectEmitterArray[i].Init(index->m_pos);
+			m_deadEffectEmitterArray[i].Init(index->m_pos + Vec3<float>(0.0f, 0.3f, 0.0f));
 			m_initDeadEffectArray[i] = false;
 		}
 		m_deadEffectEmitterArray[i].Update();
