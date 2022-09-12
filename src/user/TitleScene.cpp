@@ -61,6 +61,7 @@ TitleScene::TitleScene()
 
 	m_isAppear = false;
 
+	m_nowSelect = SELECT::GAME;
 
 	m_titleUI[0] = std::make_shared<TitleUI>("resource/user/UI/title_select_tutorial.png", TitleUI::STATUS::UP, TitleUI::UI_STATUS::TUTORIAL);
 	m_titleUI[1] = std::make_shared<TitleUI>("resource/user/UI/title_select_Gamel.png", TitleUI::STATUS::MIDDLE, TitleUI::UI_STATUS::GAME);
@@ -82,6 +83,8 @@ void TitleScene::OnInitialize()
 
 	m_isTitle = true;
 	m_isAppear = false;
+
+	m_nowSelect = SELECT::GAME;
 
 	for (auto& index : m_titleUI) {
 
