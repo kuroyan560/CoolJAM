@@ -102,7 +102,7 @@ void TitleScene::OnUpdate()
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
 
-	m_environmentMgr->Update();
+	m_environmentMgr->Update(m_player->GetPos());
 
 	// 出現中だったら。
 	if (m_isAppear) {

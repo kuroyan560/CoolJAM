@@ -37,8 +37,11 @@ void DashLightingRoad::Update(const Vec3<float> &POS, int NOW_INDEX)
 
 void DashLightingRoad::Draw(Camera &Cam)
 {
+	const Vec3<float>OFFSET = { 0,0.4f,0.0f };
 	if (m_initFlag)
 	{
-		DrawFunc_Append::DrawLine(m_startPos, m_endPos, m_color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
+		DrawFunc_Append::DrawLine(m_startPos + OFFSET,
+			m_endPos + OFFSET,
+			m_color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
 	}
 }

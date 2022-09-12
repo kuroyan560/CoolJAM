@@ -53,4 +53,12 @@ public:
 
 	}
 
+	ENEMY_INFO::ID GetId()
+	{
+		return baseEnemy_id;
+	};
+
+protected:
+	ENEMY_INFO::ID baseEnemy_id;
+
 };

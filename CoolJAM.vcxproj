@@ -222,6 +222,7 @@
     <ClCompile Include="src\user\DrawFunc_Append.cpp" />
     <ClCompile Include="src\user\DashLightingParticle.cpp" />
     <ClCompile Include="src\user\DashLightingRoad.cpp" />
+    <ClCompile Include="src\user\CoinEnemy.cpp" />
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
@@ -334,6 +335,7 @@
     <ClInclude Include="src\user\DashLightingParticle.h" />
     <ClInclude Include="src\user\DashLightingRoad.h" />
     <ClInclude Include="src\user\DrawFunc_Append.h" />
+    <ClInclude Include="src\user\CoinEnemy.h" />
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />

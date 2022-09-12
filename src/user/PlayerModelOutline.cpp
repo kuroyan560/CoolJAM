@@ -2,10 +2,11 @@
 #include"../engine/DrawFuncBillBoard.h"
 #include"../engine/Common/KuroMath.h"
 #include"../user/KazDrawFunc.h"
+#include"ColorPalette.h"
 
 PlayerModelOutline::PlayerModelOutline()
 {
-	m_color = { 255,255,0,255 };
+	m_color = ColorPalette::S_GREEN_COLOR;
 	waveTex = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/PowerWave.png");
 }
 
@@ -54,7 +55,7 @@ void PlayerModelOutline::Update()
 		{
 			m_powerUpRateData.m_countReversNum = m_powerUpRateData.m_countReversMaxNum;
 		}
-		m_color.m_a = 255;
+		m_color.m_a = 1.0f;
 	}
 	else
 	{
@@ -91,7 +92,7 @@ void PlayerModelOutline::Update()
 			m_enoughPowerRateData.m_expandVertexRate = 0.0f;
 		}
 
-		m_color.m_a = 255;
+		m_color.m_a = 1.0f;
 		waveTextureSize.x += 0.1f;
 		waveTextureSize.y += 0.1f;
 	}
@@ -106,7 +107,6 @@ void PlayerModelOutline::Update()
 
 	m_enoughPowerFlag = false;
 	m_powerUpFlag = false;
-	m_color.m_a = m_color.m_a / 255;
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)

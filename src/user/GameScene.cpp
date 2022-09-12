@@ -166,7 +166,8 @@ void GameScene::OnUpdate()
 		GameMode::Instance()->m_isGame = false;
 	}
 
-	m_environmentMgr->Update();
+	m_environmentMgr->Update(m_player->GetPos());
+
 
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 

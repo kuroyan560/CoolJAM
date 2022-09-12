@@ -109,6 +109,7 @@ public:
 	const Angle& GetAngleOfView() { return angleOfView; }
 	const Matrix& GetViewMat() { CameraInfoUpdate(); return cameraInfo.matView; }
 	const Matrix& GetProjectionMat() { CameraInfoUpdate(); return cameraInfo.matProjection; }
+	const Matrix& GetBillBoardMat() { CameraInfoUpdate(); return cameraInfo.billboardMat; }
 	const Vec3<float>GetForward();
 	const Vec3<float>GetRight();
 	const float& GetNearZ() { return nearZ; }
