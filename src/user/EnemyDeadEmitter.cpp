@@ -14,6 +14,7 @@ void EnemyDeadEmitter::GeneratePipeline()
 
 	PipelineInitializeOption option(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	option.m_calling = D3D12_CULL_MODE_NONE;
+	option.m_depthTest = false;
 
 	std::vector<RenderTargetInfo>renderTarget =
 	{
@@ -87,6 +88,12 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 		nullptr,
 		"EnemyDeadSquareParticle");
 
+
+
+	m_emitterInfo.m_linePtThickness = 1.0f;
+	m_emitterInfo.m_squarePtSize = 5.0f;
+
+
 	//エミッターバッファ
 	m_emiBuff = D3D12App::Instance()->GenerateConstantBuffer(
 		sizeof(EmitterInfo),
@@ -95,21 +102,16 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 		"EnemyDeadEmitter");
 
 
-	m_emitterInfo.m_linePtThickness = 5.0f;
-	m_emitterInfo.m_squarePtSize = 10.0f;
 
-
-
-	m_colorPatternArray[0] = Color(255, 0, 0, 255);
-	m_colorPatternArray[1] = Color(255, 255, 255, 255);
-	m_colorPatternArray[2] = Color(255, 255, 0, 255);
-	m_colorPatternArray[3] = Color(0, 255, 0, 255);
-	m_colorPatternArray[4] = Color(36, 174, 242, 255);
+	m_colorPatternArray[0] = ColorPalette::S_LIGHT_PURPLE_COLOR;
+	m_colorPatternArray[1] = ColorPalette::S_GREEN_COLOR;
+	m_colorPatternArray[2] = ColorPalette::S_DARK_PURPLE_COLOR;
+	m_colorPatternArray[3] = ColorPalette::S_LIGHT_PURPLE_COLOR;
 }
 
 void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 {
-	int colorPatternNum = KuroFunc::GetRand(0, 4);
+	int colorPatternNum = KuroFunc::GetRand(0, 3);
 	Color color(m_colorPatternArray[colorPatternNum]);
 
 	//四分割して最低個数を出す
@@ -137,7 +139,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 		int min = 0 + nowPerCount * 90;
 		int max = min + 90;
 		int random = KuroFunc::GetRand(min, max);
-		m_SquareParticle[i].Init(POS, KuroFunc::GetRand(0.4f, 1.0f), random, color);
+		m_SquareParticle[i].Init(POS + Vec3<float>(0.0f, 0.7f, 0.0f), KuroFunc::GetRand(0.4f, 1.0f), random, color);
 	}
 }
 

@@ -12,7 +12,7 @@ void EnemyDeadLineParticle::Init(const Vec3<float> &POS, float SPEED, int ANGLE,
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
 	m_vel *= SPEED;
 	m_alpha = 255;
-	m_dispappearTime = 255 / 30;
+	m_dispappearTime = 255 / 60;
 	m_initFlag = 1;
 	m_rgb = {
 		static_cast<int>(COLOR.m_r * 255.0f),
