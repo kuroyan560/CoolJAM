@@ -81,10 +81,18 @@ VSOutput VSmain(Vertex input)
     return output;
 }
 
-
-float4 PSmain(VSOutput input) : SV_TARGET
+struct PSOutput
 {
-    return color;
+    float4 color : SV_Target0;
+    float4 emissive : SV_Target1;
+    float depth : SV_Target2;
+};
+
+PSOutput PSmain(VSOutput input) : SV_TARGET
+{
+    PSOutput output;
+    output.color = color;
+    return output;
 }
 
 float4 main( float4 pos : POSITION ) : SV_POSITION

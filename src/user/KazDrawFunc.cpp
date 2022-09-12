@@ -42,7 +42,12 @@ void KazDrawFunc::DrawNonShadingModelSignalColor(const std::weak_ptr<Model> Mode
 		};
 
 		//レンダーターゲット描画先情報;
-		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = { RenderTargetInfo(targetFormat, BlendMode) };
+		std::vector<RenderTargetInfo>RENDER_TARGET_INFO = 
+		{ 
+			RenderTargetInfo(targetFormat, BlendMode),
+			RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, AlphaBlendMode_Trans),
+			RenderTargetInfo(DXGI_FORMAT_R32_FLOAT, AlphaBlendMode_None)
+		};
 		//パイプライン生成
 		PIPELINE[targetFormat][BlendMode] = D3D12App::Instance()->GenerateGraphicsPipeline(PIPELINE_OPTION, SHADERS, ModelMesh::Vertex::GetInputLayout(), ROOT_PARAMETER, RENDER_TARGET_INFO, { WrappedSampler(false, false) });
 	}
