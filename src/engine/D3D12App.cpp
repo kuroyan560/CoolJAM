@@ -20,7 +20,7 @@ void D3D12App::Initialize(const HWND& Hwnd, const Vec2<int>& ScreenSize, const b
 	}
 	ComPtr<ID3D12Debug1> spDebugController1;
 	spDebugController0->QueryInterface(IID_PPV_ARGS(&spDebugController1));
-	spDebugController1->SetEnableGPUBasedValidation(false);
+	//spDebugController1->SetEnableGPUBasedValidation(false);
 
 #endif
 
@@ -642,7 +642,7 @@ std::shared_ptr<TextureBuffer> D3D12App::GenerateTextureBuffer(const Color& Colo
 
 	//専用のシェーダーリソースクラスにまとめる
 	std::shared_ptr<TextureBuffer>result;
-	result = std::make_shared<TextureBuffer>(buff, barrier, handles, texDesc);
+	result = std::make_shared<TextureBuffer>(buff, barrier, handles, texDesc, "ColorTex");
 	
 	//テクスチャ用のリソースバリアに変更
 	result->ChangeBarrier(m_commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -740,7 +740,7 @@ std::shared_ptr<TextureBuffer> D3D12App::GenerateTextureBuffer(const std::string
 
 	//専用のシェーダーリソースクラスにまとめる
 	std::shared_ptr<TextureBuffer>result;
-	result = std::make_shared<TextureBuffer>(buff, D3D12_RESOURCE_STATE_COPY_DEST, handles, texDesc);
+	result = std::make_shared<TextureBuffer>(buff, D3D12_RESOURCE_STATE_COPY_DEST, handles, texDesc,LoadImgFilePath);
 
 	//テクスチャ用のリソースバリアに変更
 	result->ChangeBarrier(command, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -806,7 +806,7 @@ std::shared_ptr<TextureBuffer> D3D12App::GenerateTextureBuffer(const Vec2<int>& 
 
 	//専用のシェーダーリソースクラスにまとめる
 	std::shared_ptr<TextureBuffer>result;
-	result = std::make_shared<TextureBuffer>(buff, barrier, srvHandles, texDesc);
+	result = std::make_shared<TextureBuffer>(buff, barrier, srvHandles, texDesc, Name);
 	result->SetUAVHandles(uavHandles);
 
 	return result;
@@ -896,7 +896,7 @@ std::shared_ptr<TextureBuffer> D3D12App::GenerateTextureBuffer(const std::vector
 
 	//専用のシェーダーリソースクラスにまとめる
 	std::shared_ptr<TextureBuffer>result;
-	result = std::make_shared<TextureBuffer>(buff, barrier, handles, texDesc);
+	result = std::make_shared<TextureBuffer>(buff, barrier, handles, texDesc, "Unknown");
 
 	//テクスチャ用のリソースバリアに変更
 	result->ChangeBarrier(m_commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
