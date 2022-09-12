@@ -297,25 +297,25 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
                 ligEffect *= hemiLight;
             }
     
-            float4 result = float4(ligEffect, (1.0f - material.transparent) * colorTexCol.w);
+            float4 result = float4(ligEffect, (1.0f - material.transparent));
         
             output.color = result;
         }
         else
         {
             output.color.xyz = material.baseColor.xyz + colorTexCol.xyz;
-            output.color.w *= colorTexCol.w;
-
         }
     }
     
-    output.color.w *= mainDrawRate;
+    output.color.w = mainDrawRate * (1.0f - material.transparent) * colorTexCol.w;
     
     if(any(emissiveDrawRate))
     {
         output.emissive = emissiveMap.Sample(smp, input.uv);
         output.emissive.xyz += material.emissive;
-        output.emissive.w *= emissiveDrawRate * material.emissiveFactor;
+        //output.emissive.w *= emissiveDrawRate * material.emissiveFactor;
+        output.emissive.xyz *= emissiveDrawRate * material.emissiveFactor;
+        output.emissive.w = 1.0f;
     }
         
     if(any(depthDrawRate))
