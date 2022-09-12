@@ -75,7 +75,7 @@ void DrawFunc_Append::RegisterRenderTargets(DXGI_FORMAT MainFormat, std::shared_
 			std::vector<RenderTargetInfo>RENDER_TARGET_INFO =
 			{
 				RenderTargetInfo(mainFormat, blendMode),
-				RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, blendMode),
+				RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, AlphaBlendMode_Add),
 				RenderTargetInfo(DXGI_FORMAT_R32_FLOAT, AlphaBlendMode_None)
 			};
 
@@ -204,7 +204,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	{
 		Matrix m_transformMat;
 		RenderTargetSwitch m_drawSwitch;
-		bool m_isShading;
+		int m_isShading;
 	};
 
 	SetRegisteredTargets();
@@ -219,7 +219,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	DrawData drawData;
 	drawData.m_transformMat = Transform.GetMat(IsBillBoard ? s_nowCam.lock()->GetBillBoardMat() : XMMatrixIdentity());
 	drawData.m_drawSwitch = Switch;
-	drawData.m_isShading = IsShading;
+	drawData.m_isShading = IsShading ? 1 : 0;
 	DRWA_DATA_BUFF[s_drawModelCount]->Mapping(&drawData);
 
 	auto model = Model.lock();
