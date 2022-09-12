@@ -123,8 +123,8 @@ inout TriangleStream<GSOutput> output)
     float offset = linePtThickness / 2.0f;
     float4 col;
     col.r = input[0].m_color.r / 255.0f;
-    col.g = input[0].m_color.r / 255.0f;
-    col.b = input[0].m_color.r / 255.0f;
+    col.g = input[0].m_color.g / 255.0f;
+    col.b = input[0].m_color.b / 255.0f;
     col.a = input[0].m_alpha / 255.0f;
     
     float4 from = float4(input[0].m_startPos, 1.0f);
