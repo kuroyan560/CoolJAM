@@ -49,6 +49,8 @@ private:
 	Light::Direction m_dirLigDef_2;
 	Light::HemiSphere m_hemiLig;
 
+	//プレイヤーにアタッチするポイントライト
+	Light::Point m_ptLig;
 
 	//柱の座標
 	std::array<Vec3<float>, PILLAR_NUM> m_pillarPosArray;
@@ -63,7 +65,7 @@ public:
 	~EnvironmentMgr() {}
 
 	void Init();
-	void Update();
+	void Update(const Vec3<float>&PlayerPos);
 	void Draw(Camera& Cam);
 
 	//環境ステータス変更

@@ -81,13 +81,15 @@ public:
 	/// <param name="BlendMode">ブレンドモード</param>
 	static void DrawModel(const std::weak_ptr<Model>Model, Transform& Transform, 
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(),
+		const bool& IsBillBoard = false,
 		std::shared_ptr<ModelAnimator> Animator = nullptr,
 		AlphaBlendMode BlendMode = AlphaBlendMode_None);
 	static void DrawModel(const std::weak_ptr<ModelObject>ModelObject,
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(), 
+		const bool& IsBillBoard = false,
 		AlphaBlendMode BlendMode = AlphaBlendMode_None)
 	{
 		auto obj = ModelObject.lock();
-		DrawModel(obj->m_model, obj->m_transform, Switch, obj->m_animator, BlendMode);
+		DrawModel(obj->m_model, obj->m_transform, Switch, IsBillBoard, obj->m_animator, BlendMode);
 	}
 };

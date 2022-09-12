@@ -11,7 +11,7 @@ void DashLightingParticle::Init(const Vec3<float> &POS)
 	m_pos = POS;
 	angle = KuroFunc::GetRand(0, 360);
 	angleVel = KuroFunc::GetRand(-1.0f, 1.0f);
-	alpha = 255;
+	alpha = 1;
 	initFlag = true;
 
 	const float R = 2.0f;
@@ -30,20 +30,19 @@ void DashLightingParticle::Update()
 {
 	if (initFlag)
 	{
-		alpha -= 255.0f / 30.0f;
-		if (alpha <= 0)
+		alpha -= 1.0f / 30.0f;
+		if (alpha <= 0.0f)
 		{
 			initFlag = false;
 		}
 	}
 }
 
+#include"ColorPalette.h"
 void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	if (initFlag)
 	{
-		//	DrawFunc_Append::DrawLine(m_startPos, m_endPos, Color(255, 255, 0, alpha), 0.5f,
-		//		RenderTargetSwitch(1.0f, 1.0f, 0.0f));
-		DrawFunc_Append::DrawModel(m_model, m_transform);
+		DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, alpha, 0));
 	}
 }

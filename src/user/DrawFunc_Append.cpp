@@ -193,6 +193,7 @@ void DrawFunc_Append::DrawLine(const Vec3<float>& From, const Vec3<float>& To, c
 
 void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Transform,
 	const RenderTargetSwitch& Switch,
+	const bool& IsBillBoard,
 	std::shared_ptr<ModelAnimator> Animator, 
 	AlphaBlendMode BlendMode)
 {
@@ -214,7 +215,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	}
 
 	DrawData drawData;
-	drawData.m_transformMat = Transform.GetMat();
+	drawData.m_transformMat = Transform.GetMat(IsBillBoard ? s_nowCam.lock()->GetBillBoardMat() : XMMatrixIdentity());
 	drawData.m_drawSwitch = Switch;
 	DRWA_DATA_BUFF[s_drawModelCount]->Mapping(&drawData);
 
