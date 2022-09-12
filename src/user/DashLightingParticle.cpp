@@ -43,6 +43,7 @@ void DashLightingParticle::Update()
 void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	//if (initFlag || !firstDrawFlag)
+	if (initFlag)
 	{
 		float a = alpha / 255.0f;
 		Color col = ColorPalette::S_GREEN_COLOR;
