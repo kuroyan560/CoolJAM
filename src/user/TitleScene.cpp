@@ -284,9 +284,12 @@ void TitleScene::UpdateSelect() {
 
 			m_revolverEasingTimer = 0;
 
-
-			GameMode::Instance()->m_isGame = m_nowSelect == SELECT::GAME;
-			GameMode::Instance()->m_isTutorial = m_nowSelect == SELECT::TUTORIAL;
+			if (m_nowSelect == SELECT::GAME) {
+				GameMode::Instance()->m_id = GameMode::ID::GAME;
+			}
+			if (m_nowSelect == SELECT::TUTORIAL) {
+				GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
+			}
 
 			if (m_nowSelect == SELECT::EXIT) {
 
@@ -333,7 +336,7 @@ void TitleScene::UpdateSelect() {
 
 		for (auto& index : m_titleUI) {
 
-			index->TransDown();
+			index->TransUp();
 
 		}
 
@@ -358,7 +361,7 @@ void TitleScene::UpdateSelect() {
 
 		for (auto& index : m_titleUI) {
 
-			index->TransUp();
+			index->TransDown();
 
 		}
 
@@ -383,16 +386,26 @@ void TitleScene::UpdateCamera() {
 			--m_endEasingTransitionTimer;
 			if (m_endEasingTransitionTimer <= 0) {
 
-				KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
+				// 遷移先のシーンを決める。
+				int transitionSceneNum = 0;
+				if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
+					transitionSceneNum = 2;
+				}
+				else if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL) {
+					transitionSceneNum = 1;
+				}
+
+				KuroEngine::Instance()->ChangeScene(transitionSceneNum, m_sceneTransition.get());
 
 			}
 
 		}
 
 		// 補間先注視点座標
-		Vec3<float> endTarget = (GameMode::Instance()->m_isGame ? END_GAME_TARGET_POS : END_TUTORIAL_TARGET_POS);
-		Vec3<float> endEye = (GameMode::Instance()->m_isGame ? END_GAME_EYE_POS : END_TUTORIAL_EYE_POS);
-		float endLength = (GameMode::Instance()->m_isGame ? END_GAME_LENGTH : END_TUTORIAL_LENGTH);
+		bool isGame = GameMode::Instance()->m_id == GameMode::ID::GAME;
+		Vec3<float> endTarget = (isGame ? END_GAME_TARGET_POS : END_TUTORIAL_TARGET_POS);
+		Vec3<float> endEye = (isGame ? END_GAME_EYE_POS : END_TUTORIAL_EYE_POS);
+		float endLength = (isGame ? END_GAME_LENGTH : END_TUTORIAL_LENGTH);
 
 		// イージング量を求める。
 		float easingAmount = KuroMath::Ease(InOut, Cubic, m_transitionEasingTimer, 0.0f, 1.0f);

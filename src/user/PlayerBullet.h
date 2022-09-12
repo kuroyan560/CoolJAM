@@ -36,7 +36,7 @@ public:
 	void Draw();
 
 	inline Vec3<float> GetPos() { return m_pos; }
-	inline float GetCheckHitScale() { return m_scale; }
+	inline float GetCheckHitScale() { return CHECK_HIT_SCALE; }
 
 	bool GetIsActive() {
 		return m_isActive;

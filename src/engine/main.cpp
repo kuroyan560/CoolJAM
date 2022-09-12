@@ -2,6 +2,7 @@
 #include"KuroEngine.h"
 #include"GameScene.h"
 #include"TitleScene.h"
+#include"TutorialScene.h"
 #include"Transform.h"
 #include"Transform2D.h"
 #include"Color.h"
@@ -49,6 +50,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	std::vector<BaseScene*>sceneList =
 	{
 		new TitleScene(),
+		new TutorialScene(),
 		new GameScene(),
 	};
 	int awakeScene = 0;	//開始時のステージ番号

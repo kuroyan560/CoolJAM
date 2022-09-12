@@ -1,4 +1,4 @@
-#include"GameScene.h"
+#include"TutorialScene.h"
 #include"GameManager.h"
 #include"DrawFunc3D.h"
 #include"Player.h"
@@ -17,7 +17,7 @@
 #include"FeverGauge.h"
 #include"GameMode.h"
 
-GameScene::GameScene()
+TutorialScene::TutorialScene()
 {
 	//バックバッファ情報取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
@@ -66,7 +66,7 @@ GameScene::GameScene()
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
 }
 
-void GameScene::OnInitialize()
+void TutorialScene::OnInitialize()
 {
 
 	/*===== 初期化処理 =====*/
@@ -100,7 +100,7 @@ void GameScene::OnInitialize()
 
 }
 
-void GameScene::OnUpdate()
+void TutorialScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
@@ -172,7 +172,7 @@ void GameScene::OnUpdate()
 }
 
 #include "DrawFunc2D.h"
-void GameScene::OnDraw()
+void TutorialScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
 
@@ -252,7 +252,7 @@ void GameScene::OnDraw()
 	//#endif
 }
 
-void GameScene::OnImguiDebug()
+void TutorialScene::OnImguiDebug()
 {
 	ImGui::Begin("Test");
 	ImGui::Checkbox("Emissive", &m_emissive);
@@ -273,6 +273,6 @@ void GameScene::OnImguiDebug()
 	ImGui::End();
 }
 
-void GameScene::OnFinalize()
+void TutorialScene::OnFinalize()
 {
 }
