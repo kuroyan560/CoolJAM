@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class PlayerStraightEnemy : public BaseEnemy {
 
 private:
@@ -17,14 +19,16 @@ private:
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
 
-	//モデル
+	// モデル
 	Transform m_transform;
 
 	// スケール
-	const float PLAYER_STRAIGHT_SCALE = 3.0f;
+	const float SCALE = 3.0f;
 
 	// HP
-	const int PLAYER_STRAIGHT_HP = 7;
+	static const int HP = 7;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 

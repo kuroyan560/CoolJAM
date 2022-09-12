@@ -2,6 +2,9 @@
 #include "Vec.h"
 #include "Transform.h"
 #include <memory>
+#include <array>
+
+class EnemyHP;
 
 class Camera;
 class Model;
@@ -20,10 +23,12 @@ private:
 	float m_scale;			// 大きさ
 	const float SCALE = 3.0f;
 	int m_hp;				// HP
-	const int HP = 3;
+	static const int HP = 3;
 	int m_hitEffectTimer;	// 弾に当たった際に赤色に描画するタイマー
 	const int HIT_EFFECT_TIMER = 10;
 	bool m_isActive;		// 生存フラグ
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:
@@ -41,5 +46,20 @@ public:
 	float GetScale() { return m_scale; }
 
 	void Damage(const int& Amount);
+
+	// 指定の桁の数字を取得。
+	int GetDigits(int Value, int M, int N) {
+		int mod_value;
+		int result;
+
+		/* n桁目以下の桁を取得 */
+		mod_value = Value % (int)pow(10, N + 1);
+
+		/* m桁目以上の桁を取得 */
+		result = mod_value / pow(10, M);
+
+		return result;
+
+	}
 
 };

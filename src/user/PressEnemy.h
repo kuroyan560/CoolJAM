@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class PressEnemy : public BaseEnemy {
 
 private:
@@ -33,10 +35,12 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float PRESS_SCALE = 32.0f;
+	const float SCALE = 32.0f;
 
 	// HP
-	const int PRESS_HP = 60;
+	static const int HP = 60;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:

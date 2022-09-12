@@ -29,6 +29,8 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::PRESS, 60);
 
+	m_waves.emplace_back(wave1);
+
 	//// マップの四方に敵を配置。
 	//wave1->AddEnemy(Vec3<float>(MapSize / 2.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
 	//wave1->AddEnemy(Vec3<float>(-MapSize / 2.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
@@ -45,7 +47,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	// WAVE1を追加。
 	//m_waves.emplace_back(wave1);
 
-	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(0, true);
+	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
 	wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
 	m_waves.emplace_back(wave2);
 

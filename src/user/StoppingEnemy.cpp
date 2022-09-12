@@ -1,4 +1,5 @@
 #include "StoppingEnemy.h"
+#include "EnemyHP.h"
 #include "BulletMgr.h"
 
 StoppingEnemy::StoppingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
@@ -9,6 +10,30 @@ StoppingEnemy::StoppingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Mo
 	m_model = DefModel;
 	m_modelHit = DamageModel;
 	m_isActive = false;
+
+	float angleInterval = DirectX::XM_PI / 10.0f;
+	for (auto& index : m_hpUI) {
+
+		int indexCount = static_cast<int>(&index - &m_hpUI[0]);
+
+		// 回転量
+		float drawAngle = 0;
+
+		// インデックスが10以上だったら。
+		if (10 < indexCount) {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * GetDigits(indexCount, 0, 0);
+
+		}
+		else {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * static_cast<float>(indexCount);
+
+		}
+
+		index = std::make_shared<EnemyHP>(-drawAngle);
+
+	}
 
 }
 
@@ -35,9 +60,16 @@ void StoppingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
-	m_scale = STOPPING_SCALE;
-	m_hp = STOPPING_HP;
+	m_scale = SCALE;
+	m_hp = HP;
 	m_transform.SetScale(m_scale);
+
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -72,6 +104,38 @@ void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 
 	}
 
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Invalidate();
+
+	}
+	if (10 < m_hp) {
+
+		for (int index = 0; index < GetDigits(m_hp, 0, 0); ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+	else {
+
+		for (int index = 0; index < m_hp; ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Update(m_pos, SCALE);
+
+	}
+
 }
 
 #include"DrawFunc_Append.h"
@@ -91,6 +155,13 @@ void StoppingEnemy::Draw()
 
 		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 		DrawFunc_Append::DrawModel(m_model, m_transform);
+
+	}
+
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
+
+		index->Draw();
 
 	}
 
