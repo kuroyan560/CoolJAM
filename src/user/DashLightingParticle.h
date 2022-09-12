@@ -5,12 +5,13 @@
 #include<DirectXMath.h>
 #include"../engine/Object.h"
 #include"../engine/Common/Transform.h"
+#include"../engine/D3D12Data.h"
 
 class Camera;
 class DashLightingParticle
 {
 public:
-	DashLightingParticle(std::shared_ptr<ModelObject> MODEL);
+	DashLightingParticle(std::shared_ptr<ModelObject> MODEL, std::array<std::shared_ptr<TextureBuffer>, 3>ELEC_TEXTURE_DATA);
 	void Init(const Vec3<float> &POS);
 	void Update();
 	void Draw(Camera &CAMEARA);
@@ -24,5 +25,7 @@ private:
 	bool initFlag;
 	std::shared_ptr<Model>m_model;
 	Transform m_transform;
+
+	std::array<std::shared_ptr<TextureBuffer>, 3> elecTextureBuffer;
 };
 

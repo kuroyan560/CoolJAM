@@ -6,12 +6,12 @@ PlayerDashLighting::PlayerDashLighting()
 {
 	m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
 
-	m_model->m_model->m_meshes[0].material->constData.pbr.baseColor = { 1.0f,0.0f,0.0f };
-	m_model->m_model->m_meshes[0].material->CreateBuff();
+
+	D3D12App::Instance()->GenerateTextureBuffer(elecAnimationTexture.data(), "resource/user/Particle/elecParticle.png", 3, { 3,1 });
 
 	for (int i = 0; i < m_particleArray.size(); ++i)
 	{
-		m_particleArray[i] = std::make_unique<DashLightingParticle>(m_model);
+		m_particleArray[i] = std::make_unique<DashLightingParticle>(m_model, elecAnimationTexture);
 	}
 
 	for (int i = 0; i < m_roadArray.size(); ++i)

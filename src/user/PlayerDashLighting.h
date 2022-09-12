@@ -27,4 +27,6 @@ private:
 	int m_roadIndex;
 	std::array<std::unique_ptr<DashLightingRoad>, 5> m_roadArray;			//‰Á‘¬Žž‚Ì“¹
 	std::shared_ptr<ModelObject>m_model;
+
+	std::array<std::shared_ptr<TextureBuffer>, 3>elecAnimationTexture;
 };
