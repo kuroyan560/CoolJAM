@@ -4,11 +4,13 @@
 #include"../user/KazDrawFunc.h"
 #include"ColorPalette.h"
 #include"../engine/Importer.h"
+#include"../engine/Common/KuroMath.h"
 
 PlayerModelOutline::PlayerModelOutline()
 {
-	m_color = ColorPalette::S_GREEN_COLOR;
-	waveTex = Importer::Instance()->LoadModel("resource/user/Particle/", "powerWave.glb");
+	m_modelColor = ColorPalette::S_GREEN_COLOR;
+	m_waveModel = Importer::Instance()->LoadModel("resource/user/Particle/", "powerWave.glb");
+	m_waveScaleMax = 3.0f;
 }
 
 void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL)
@@ -23,6 +25,7 @@ void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, flo
 	m_enoughPowerRateData.Init();
 	m_powerUpRateData.Init();
 	m_waveTextureSize = { 0.0f,0.0f };
+	m_waveAlpha = 1.0f;
 }
 
 void PlayerModelOutline::Update()
@@ -67,11 +70,11 @@ void PlayerModelOutline::Update()
 		float expandScele = 0.0f;
 		if (2 <= m_enoughPowerRateData.m_countReversNum)
 		{
-			expandScele = EXPAND_MAX_SCALE - 0.2f;
+			expandScele = EXPAND_MAX_SCALE + 0.3f;
 		}
 		else
 		{
-			expandScele = EXPAND_MAX_SCALE * 1.1f;
+			expandScele = EXPAND_MAX_SCALE * 2.0f;
 		}
 
 		if (m_enoughPowerRateData.m_reversRateFlag)
@@ -92,17 +95,31 @@ void PlayerModelOutline::Update()
 			m_enoughPowerRateData.m_expandVertexRate = 0.0f;
 		}
 
-		m_color.m_a -= 1.0f / 30.0f;
-		m_waveTextureSize.x += 0.1f;
-		m_waveTextureSize.y += 0.1f;
-		if (m_color.m_a <= 0.0f)
+		if (m_waveEaseRate < 1.0f)
 		{
-			m_color.m_a = 0.0f;
+			m_waveEaseRate += 1.0f / 30.0f;
+		}
+		if (1.0f <= m_waveEaseRate)
+		{
+			m_waveEaseRate = 1.0f;
+		}
+
+
+		m_waveAlpha -= 1.0f / 30.0f;
+		m_waveScaleMax = 20.0f;
+		float rate = KuroMath::Ease(Out, Cubic, m_waveEaseRate, 0.0f, 1.0f) * m_waveScaleMax;
+		m_waveTextureSize.x = rate;
+		m_waveTextureSize.y = rate;
+		if (m_waveAlpha <= 0.0f)
+		{
+			m_waveAlpha = 0.0f;
 		}
 	}
 	else
 	{
 		m_enoughPowerRateData.Init();
+		m_waveEaseRate = 0.0f;
+		m_waveAlpha = 1.0f;
 	}
 
 	m_transform.SetPos(*m_pos);
@@ -112,15 +129,15 @@ void PlayerModelOutline::Update()
 	m_enoughPowerFlag = false;
 	m_powerUpFlag = false;
 
-	m_waveTransform.SetPos(*m_pos);
+	m_waveTransform.SetPos(*m_pos + Vec3<float>(0.0f, 0.1f, 0.0f));
 	m_waveTransform.SetScale({ m_waveTextureSize.x,m_waveTextureSize.y,m_waveTextureSize.x });
 	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)
 {
-	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_color, CAMERA);
-	DrawFunc_Append::DrawModel(waveTex, m_waveTransform, RenderTargetSwitch(m_color.m_a, 0.0f, 1.0f));
+	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_modelColor, CAMERA);
+	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f));
 }
 
 void PlayerModelOutline::EnoughPowerEffect()
