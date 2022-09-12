@@ -19,8 +19,5 @@ public:
 	void Draw()override;
 
 private:
-	std::shared_ptr<Model> m_model;
-	std::shared_ptr<Model> m_modelHit;
-	Transform m_transform;
 };
 

@@ -180,13 +180,9 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 	default:
 		break;
 	}
-
 	// ¶¬‚·‚éB
 	Enemy->Generate(enemyID, PlayerPos, GeneratePos, ForwardVec);
-
-
 	Enemy->CommonInit();
-
 }
 
 Vec3<float> EnemyMgr::SearchNearestEnemy(const Vec3<float>& Pos) {
@@ -285,7 +281,7 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 
 		if (!(length < Size + index->m_scale)) continue;
 
-		if (index->GetId() != ENEMY_INFO::ID::COIN)
+		if (index->m_id != ENEMY_INFO::ID::COIN)
 		{
 			isHit = true;
 		}

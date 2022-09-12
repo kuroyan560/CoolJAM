@@ -34,7 +34,9 @@ public:
 
 	/*===== ÉÅÉìÉoä÷êî =====*/
 
-	BaseEnemy() {};
+	BaseEnemy()
+	{
+	};
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
@@ -57,10 +59,6 @@ public:
 		return result;
 	}
 
-	ENEMY_INFO::ID GetId()
-	{
-		return baseEnemy_id;
-	};
 
 
 
@@ -79,12 +77,12 @@ public:
 			m_outline->Draw(CAMERA);
 		}
 	};
+
 	void CommonInit()
 	{
-		m_outline = std::make_unique<Outline>(m_model, &m_pos, Vec3<float>(m_scale, m_scale, m_scale), ColorPalette::S_PINK_COLOR);
+		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
 	};
 
 protected:
-	ENEMY_INFO::ID baseEnemy_id;
 
 };

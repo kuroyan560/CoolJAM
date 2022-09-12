@@ -31,8 +31,6 @@ private:
 
 	const float RETURN_DEFPOS_SPEED = 0.2f;
 
-	//モデル
-	Transform m_transform;
 
 	// スケール
 	const float SCALE = 32.0f;
