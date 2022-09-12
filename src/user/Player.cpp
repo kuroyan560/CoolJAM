@@ -7,7 +7,8 @@
 #include "KuroFunc.h"
 #include "GameManager.h"
 #include "DriftParticle.h"
-#include"KazCollisionHelper.h"
+#include "KazCollisionHelper.h"
+#include "PlayerHP.h"
 
 Player::Player()
 {
@@ -42,9 +43,33 @@ Player::Player()
 
 	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
 
-	for (auto &index : m_driftParticle) {
+	for (auto& index : m_driftParticle) {
 
 		index = std::make_shared<DriftParticle>();
+
+	}
+
+	float angleInterval = DirectX::XM_PI / 10.0f;
+	for (auto& index : m_hpUI) {
+
+		int indexCount = static_cast<int>(&index - &m_hpUI[0]);
+
+		// 回転量
+		float drawAngle = 0;
+
+		// インデックスが10以上だったら。
+		if (10 < indexCount) {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * GetDigits(indexCount, 0, 0);
+
+		}
+		else {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * static_cast<float>(indexCount);
+
+		}
+
+		index = std::make_shared<PlayerHP>(-drawAngle);
 
 	}
 
@@ -82,7 +107,7 @@ void Player::Init()
 	m_isFever = false;
 	m_feverTime = 0;
 
-	for (auto &index : m_driftParticle) {
+	for (auto& index : m_driftParticle) {
 
 		index->Init();
 
@@ -96,7 +121,7 @@ void Player::Init()
 
 }
 
-void Player::Update(Camera &Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float> &WindowSize, const float &MapSize, const float &EdgeScope)
+void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 更新処理 =====*/
@@ -116,11 +141,42 @@ void Player::Update(Camera &Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	// エフェクト全般の更新処理
 	UpdateEffect();
 
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Invalidate();
+
+	}
+	if (10 < m_hp) {
+
+		for (int index = 0; index < GetDigits(m_hp, 0, 0); ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+	else {
+
+		for (int index = 0; index < m_hp; ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Update(m_pos, SCALE);
+
+	}
 
 
 }
 
-void Player::Input(Camera &Cam, const Vec2<float> &WindowSize)
+void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 {
 
 	/*====== 入力処理 =====*/
@@ -278,7 +334,7 @@ void Player::UpdateEffect()
 	/*===== エフェクト全般の更新処理 =====*/
 
 	// ドリフトパーティクルの更新処理
-	for (auto &index : m_driftParticle) {
+	for (auto& index : m_driftParticle) {
 
 		if (!index->GetIsActive()) continue;
 
@@ -474,7 +530,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	}
 
 	// ドリフトパーティクルの描画処理
-	for (auto &index : m_driftParticle) {
+	for (auto& index : m_driftParticle) {
 
 		if (!index->GetIsActive()) continue;
 
@@ -486,6 +542,13 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 
 		m_outlineModel.Draw(Cam);
 		m_dashLight->Draw(Cam);
+
+		// 敵のHPの板ポリを描画
+		for (auto& index : m_hpUI) {
+
+			index->Draw();
+
+		}
 
 	}
 
@@ -525,7 +588,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 }
 
 #include"DrawFunc3D.h"
-void Player::DrawDebugInfo(Camera &Cam) {
+void Player::DrawDebugInfo(Camera& Cam) {
 
 	/*===== デバッグ情報を描画 =====*/
 
@@ -544,7 +607,7 @@ void Player::DrawDebugInfo(Camera &Cam) {
 
 }
 
-void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float &MapSize, const float &EdgeScope)
+void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
@@ -603,7 +666,7 @@ void Player::Finalize()
 
 }
 
-float Player::Saturate(const float &Value)
+float Player::Saturate(const float& Value)
 {
 
 	/*===== 01に納める。 =====*/
@@ -615,7 +678,7 @@ float Player::Saturate(const float &Value)
 	return value;
 }
 
-void Player::GenerateDriftParticle(const float &NowAngle, const float &Cross) {
+void Player::GenerateDriftParticle(const float& NowAngle, const float& Cross) {
 
 	++m_driftParticleDelay;
 	if (DRIFT_PARTICLE_DELAY < m_driftParticleDelay) {
@@ -624,7 +687,7 @@ void Player::GenerateDriftParticle(const float &NowAngle, const float &Cross) {
 		Vec3<float> generatePos;
 		int generateCount = 0;
 		const float MAX_GENERATE_COUNT = 3.0f;
-		for (auto &index : m_driftParticle) {
+		for (auto& index : m_driftParticle) {
 
 			if (index->GetIsActive()) continue;
 
@@ -688,7 +751,7 @@ void Player::GenerateDriftParticle(const float &NowAngle, const float &Cross) {
 
 }
 
-Vec3<float> Player::RGBtoHSV(const Vec3<float> &RGB)
+Vec3<float> Player::RGBtoHSV(const Vec3<float>& RGB)
 {
 	double hue = 0;
 	double s = 0;
@@ -732,7 +795,7 @@ Vec3<float> Player::RGBtoHSV(const Vec3<float> &RGB)
 
 }
 
-Vec3<float> Player::HSVtoRGB(const Vec3<float> &HSV)
+Vec3<float> Player::HSVtoRGB(const Vec3<float>& HSV)
 {
 	/*HSV -> RGB*/
 
@@ -779,7 +842,7 @@ Vec3<float> Player::HSVtoRGB(const Vec3<float> &HSV)
 	return rgb;
 }
 
-void Player::SearchMaxMinColor(Vec3<float> &Color, double &max, double &min, int &rgb)
+void Player::SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int& rgb)
 {
 
 	float r = Color.x;
@@ -816,7 +879,7 @@ void Player::SearchMaxMinColor(Vec3<float> &Color, double &max, double &min, int
 
 }
 
-bool Player::ChangeBodyColorEasing(const float &AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float> &StartColor, const Vec3<float> &EndColor, const bool &IsEaseX)
+bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX)
 {
 
 	/*===== 色をイージングで変える =====*/

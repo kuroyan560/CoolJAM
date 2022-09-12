@@ -1,12 +1,13 @@
-#include <DrawFunc_Append.h>
-#include "EnemyHP.h"
+#include "PlayerHP.h"
 #include "../engine/Importer.h"
+#include <DrawFunc_Append.h>
 
-EnemyHP::EnemyHP(const float& Angle) {
+PlayerHP::PlayerHP(const float& Angle)
+{
 
 	/*===== コンストラクタ =====*/
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy_hp.glb");
+	m_model = Importer::Instance()->LoadModel("resource/user/", "player_hp.glb");
 	m_alpha = 0.0f;
 	m_isActive = false;
 	m_drawAngle = 0.0f;
@@ -14,7 +15,8 @@ EnemyHP::EnemyHP(const float& Angle) {
 
 }
 
-void EnemyHP::Init() {
+void PlayerHP::Init()
+{
 
 	/*===== 初期化処理 =====*/
 
@@ -23,7 +25,8 @@ void EnemyHP::Init() {
 
 }
 
-void EnemyHP::Update(const Vec3<float>& EnemyPos, const float& EnemySize) {
+void PlayerHP::Update(const Vec3<float>& EnemyPos, const float& EnemySize)
+{
 
 	/*===== 更新処理 =======*/
 
@@ -58,7 +61,8 @@ void EnemyHP::Update(const Vec3<float>& EnemyPos, const float& EnemySize) {
 
 }
 
-void EnemyHP::Draw() {
+void PlayerHP::Draw()
+{
 
 	/*===== 描画処理 =====*/
 
