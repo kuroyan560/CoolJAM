@@ -4,6 +4,8 @@
 #include <array>
 #include <memory>
 
+class EnemyHP;
+
 class UnionEnemy;
 
 class UnionBaseEnemy : public BaseEnemy {
@@ -32,10 +34,12 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float UNION_SCALE = 6.0f;
+	const float SCALE = 6.0f;
 
 	// HP
-	const int UNION_HP = 5;
+	static const int HP = 5;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:

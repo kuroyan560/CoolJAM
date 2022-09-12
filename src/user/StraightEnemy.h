@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class StraightEnemy : public BaseEnemy {
 
 private:
@@ -21,10 +23,12 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float STRAIGHT_SCALE = 3.0f;
+	const float SCALE = 3.0f;
 
 	// HP
-	const int STRAIGHT_HP = 7;
+	static const int HP = 7;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:

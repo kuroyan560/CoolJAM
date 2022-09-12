@@ -504,7 +504,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		m_shotTimer = 0;
 
 		// ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ğŒŸõ‚·‚éB
-		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.85f);
+		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.8f);
 
 		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
 		if (nearestEnemy != Vec3<float>(-1, -1, -1)) {

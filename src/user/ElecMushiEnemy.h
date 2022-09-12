@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class ElecMushiEnemy : public BaseEnemy {
 
 private:
@@ -28,10 +30,12 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float PLAYER_STRAIGHT_SCALE = 3.0f;
+	const float SCALE = 3.0f;
 
 	// HP
-	const int PLAYER_STRAIGHT_HP = 7;
+	static const int HP = 15;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:

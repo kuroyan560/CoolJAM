@@ -1,6 +1,7 @@
 #include "UnionEnemy.h"
 #include "Importer.h"
 #include "Model.h"
+#include "EnemyHP.h"
 
 UnionEnemy::UnionEnemy(std::shared_ptr<Model> NormalModel, std::shared_ptr<Model> HitModel)
 {
@@ -14,6 +15,30 @@ UnionEnemy::UnionEnemy(std::shared_ptr<Model> NormalModel, std::shared_ptr<Model
 	m_scale = SCALE;
 	m_hp = 0;
 
+	float angleInterval = DirectX::XM_PI / 10.0f;
+	for (auto& index : m_hpUI) {
+
+		int indexCount = static_cast<int>(&index - &m_hpUI[0]);
+
+		// 回転量
+		float drawAngle = 0;
+
+		// インデックスが10以上だったら。
+		if (10 < indexCount) {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * GetDigits(indexCount, 0, 0);
+
+		}
+		else {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * static_cast<float>(indexCount);
+
+		}
+
+		index = std::make_shared<EnemyHP>(-drawAngle);
+
+	}
+
 }
 
 void UnionEnemy::Init()
@@ -25,6 +50,13 @@ void UnionEnemy::Init()
 	m_scale = SCALE;
 	m_hitEffectTimer = 0;
 	m_hp = 0;
+
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -40,6 +72,13 @@ void UnionEnemy::Generate(const Vec3<float>& Pos)
 	m_hp = HP;
 	m_transform.SetScale(SCALE);
 
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
+
+		index->Init();
+
+	}
+
 }
 
 void UnionEnemy::Update()
@@ -50,6 +89,38 @@ void UnionEnemy::Update()
 	if (m_hp <= 0) {
 
 		Init();
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Invalidate();
+
+	}
+	if (10 < m_hp) {
+
+		for (int index = 0; index < GetDigits(m_hp, 0, 0); ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+	else {
+
+		for (int index = 0; index < m_hp; ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Update(m_pos, SCALE);
 
 	}
 
@@ -74,6 +145,13 @@ void UnionEnemy::Draw()
 		DrawFunc_Append::DrawModel(m_model, m_transform);
 
 	}
+
+	//// 敵のHPの板ポリを描画
+	//for (auto& index : m_hpUI) {
+
+	//	index->Draw();
+
+	//}
 
 }
 
