@@ -82,14 +82,17 @@ public:
 	static void DrawModel(const std::weak_ptr<Model>Model, Transform& Transform, 
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(),
 		const bool& IsBillBoard = false,
+		const bool& IsShading = true,
 		std::shared_ptr<ModelAnimator> Animator = nullptr,
-		AlphaBlendMode BlendMode = AlphaBlendMode_None);
+		AlphaBlendMode BlendMode = AlphaBlendMode_Trans);
+
 	static void DrawModel(const std::weak_ptr<ModelObject>ModelObject,
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(), 
 		const bool& IsBillBoard = false,
-		AlphaBlendMode BlendMode = AlphaBlendMode_None)
+		const bool& IsShading = true,
+		AlphaBlendMode BlendMode = AlphaBlendMode_Trans)
 	{
 		auto obj = ModelObject.lock();
-		DrawModel(obj->m_model, obj->m_transform, Switch, IsBillBoard, obj->m_animator, BlendMode);
+		DrawModel(obj->m_model, obj->m_transform, Switch, IsBillBoard, IsShading, obj->m_animator, BlendMode);
 	}
 };

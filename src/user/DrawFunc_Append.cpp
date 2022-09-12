@@ -113,7 +113,7 @@ void DrawFunc_Append::RegisterRenderTargets(DXGI_FORMAT MainFormat, std::shared_
 			std::vector<RenderTargetInfo>RENDER_TARGET_INFO =
 			{
 				RenderTargetInfo(mainFormat, blendMode),
-				RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, blendMode),
+				RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT, AlphaBlendMode_Trans),
 				RenderTargetInfo(DXGI_FORMAT_R32_FLOAT, AlphaBlendMode_None)
 			};
 			//パイプライン生成
@@ -194,6 +194,7 @@ void DrawFunc_Append::DrawLine(const Vec3<float>& From, const Vec3<float>& To, c
 void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Transform,
 	const RenderTargetSwitch& Switch,
 	const bool& IsBillBoard,
+	const bool& IsShading,
 	std::shared_ptr<ModelAnimator> Animator, 
 	AlphaBlendMode BlendMode)
 {
@@ -203,6 +204,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	{
 		Matrix m_transformMat;
 		RenderTargetSwitch m_drawSwitch;
+		bool m_isShading;
 	};
 
 	SetRegisteredTargets();
@@ -217,6 +219,7 @@ void DrawFunc_Append::DrawModel(const std::weak_ptr<Model>Model, Transform& Tran
 	DrawData drawData;
 	drawData.m_transformMat = Transform.GetMat(IsBillBoard ? s_nowCam.lock()->GetBillBoardMat() : XMMatrixIdentity());
 	drawData.m_drawSwitch = Switch;
+	drawData.m_isShading = IsShading;
 	DRWA_DATA_BUFF[s_drawModelCount]->Mapping(&drawData);
 
 	auto model = Model.lock();

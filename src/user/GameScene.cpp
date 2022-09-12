@@ -193,7 +193,12 @@ void GameScene::OnDraw()
 	);
 
 	/*--- 通常描画 ---*/
-		//環境描画
+
+	// マップを描画
+	m_mapModel->m_transform.SetScale(MAP_SIZE);
+	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, false);
+
+	//環境描画
 	m_environmentMgr->Draw(*nowCam);
 
 	//プレイヤー描画
@@ -204,10 +209,6 @@ void GameScene::OnDraw()
 
 	//弾を描画。
 	m_bulletMgr->Draw();
-
-	// マップを描画
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel);
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
@@ -229,7 +230,6 @@ void GameScene::OnDraw()
 	{
 		m_ligBloomDev.Draw(m_emissiveMap, backBuff);
 	}
-
 
 	//	/* --- デバッグ描画 ---*/
 	//#ifdef _DEBUG

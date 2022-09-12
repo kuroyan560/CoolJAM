@@ -71,6 +71,6 @@ void EnemyHP::Draw() {
 	m_transform.SetScale(SIZE);
 
 	RenderTargetSwitch renderTargetSwitch = RenderTargetSwitch(m_alpha, 1.0f, 1.0f);
-	DrawFunc_Append::DrawModel(m_model, m_transform, renderTargetSwitch, false, nullptr, AlphaBlendMode_Trans);
+	DrawFunc_Append::DrawModel(m_model, m_transform, renderTargetSwitch, false, true, nullptr, AlphaBlendMode_Trans);
 
 }
