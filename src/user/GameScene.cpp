@@ -15,6 +15,7 @@
 #include"KazCollisionHelper.h"
 #include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
+#include"GameMode.h"
 
 GameScene::GameScene()
 {
@@ -75,14 +76,27 @@ void GameScene::OnInitialize()
 	m_enemyWaveMgr->Init();
 	m_feverGauge->Init();
 
-	m_baseEye = Vec3<float>(m_player->GetPos() + Vec3<float>(30.0f, 30.0f, 0.0f));
-	m_nowEye = m_baseEye;
-	m_baseTarget = m_player->GetPos();
-	m_nowTarget = m_baseTarget;
-
 	m_environmentMgr->Init();
 	m_player->Init();
 	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
+
+	if (GameMode::Instance()->m_isGame) {
+
+		const float CAMERA_DISTANCE = 80.0f;
+		m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
+		m_nowEye = m_baseEye;
+		m_baseTarget = m_player->GetPos();
+		m_nowTarget = m_baseTarget;
+
+	}
+	else {
+
+		m_baseEye = CAMERA_HOME_EYE_POSITION;
+		m_nowEye = CAMERA_HOME_EYE_POSITION;
+		m_baseTarget = CAMERA_HOME_TARGET_POSITION;
+		m_nowTarget = CAMERA_HOME_TARGET_POSITION;
+
+	}
 
 }
 
@@ -90,7 +104,7 @@ void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
-	auto &nowCam = *GameManager::Instance()->GetNowCamera();
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -110,36 +124,50 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 
-	Vec3<float> playerVecX = -m_player->GetForwardVec();
-	const float CAMERA_DISTANCE = 80.0f;
 
-	// カメラを補間。
-	m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
-	m_nowEye = m_baseEye;
+	// ゲームの状態に応じてカメラの位置を変える。
+	if (GameMode::Instance()->m_isGame) {
 
-	m_baseTarget = m_player->GetPos();
-	m_baseTarget.x += 3.0f;
-	m_nowTarget = m_baseTarget;
+		Vec3<float> playerVecX = -m_player->GetForwardVec();
+		const float CAMERA_DISTANCE = 80.0f;
 
-	Vec3<float> eyeVec = Vec3<float>(m_baseEye - m_player->GetPos()).GetNormal();
-	float xzAngle = atan2f(eyeVec.x, eyeVec.z);
+		// カメラを補間。
+		m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0);
+		m_nowEye += (m_baseEye - m_nowEye) / 3.0f;
 
+		m_baseTarget = m_player->GetPos();
+		m_baseTarget.x += 3.0f;
+		m_nowTarget += (m_baseTarget - m_nowTarget) / 3.0f;
 
-	m_gameCam->SetPos(m_nowEye);
-	m_gameCam->SetTarget(m_nowTarget);
+		Vec3<float> eyeVec = Vec3<float>(m_baseEye - m_player->GetPos()).GetNormal();
+		float xzAngle = atan2f(eyeVec.x, eyeVec.z);
+
+		m_gameCam->SetPos(m_nowEye);
+		m_gameCam->SetTarget(m_nowTarget);
+
+	}
+	else {
+		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
+		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
+		m_gameCam->SetPos(m_nowEye);
+		m_gameCam->SetTarget(m_nowTarget);
+
+	}
+
+	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
+	if (GameMode::Instance()->m_isTutorial && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
+		GameMode::Instance()->m_isTutorial = false;
+		GameMode::Instance()->m_isGame = true;
+	}
+	if (GameMode::Instance()->m_isGame && UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+		GameMode::Instance()->m_isTutorial = true;
+		GameMode::Instance()->m_isGame = false;
+	}
 
 	m_environmentMgr->Update(m_player->GetPos());
 
+
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
-
-
-	//if (!m_gameTimer->IsStart() && m_enemyWaveMgr->IsNowWaveBounusStage())
-	//{
-	//	m_gameTimer->Init(10);
-	//	m_gameTimer->Start();
-	//}
-	//m_gameTimer->Update();
-
 
 
 }
@@ -201,28 +229,28 @@ void GameScene::OnDraw()
 	}
 
 
-//	/* --- デバッグ描画 ---*/
-//#ifdef _DEBUG
-//	//デプスステンシルクリア
-//	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-//	//レンダーターゲットセット（バックバッファとデプスステンシル）
-//	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
-//
-//	//デバッグ描画フラグ確認
-//	if (GameManager::Instance()->GetDebugDrawFlg())
-//	{
-//		//XYZ軸
-//		static const float LEN = 100.0f;
-//		static const float THICKNESS = 0.5f;
-//		static Vec3<float>ORIGIN = { 0,0,0 };
-//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
-//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
-//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
-//
-//		m_player->DrawDebugInfo(*nowCam);
-//
-//	}
-//#endif
+	//	/* --- デバッグ描画 ---*/
+	//#ifdef _DEBUG
+	//	//デプスステンシルクリア
+	//	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
+	//	//レンダーターゲットセット（バックバッファとデプスステンシル）
+	//	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
+	//
+	//	//デバッグ描画フラグ確認
+	//	if (GameManager::Instance()->GetDebugDrawFlg())
+	//	{
+	//		//XYZ軸
+	//		static const float LEN = 100.0f;
+	//		static const float THICKNESS = 0.5f;
+	//		static Vec3<float>ORIGIN = { 0,0,0 };
+	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
+	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
+	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
+	//
+	//		m_player->DrawDebugInfo(*nowCam);
+	//
+	//	}
+	//#endif
 }
 
 void GameScene::OnImguiDebug()
