@@ -105,13 +105,12 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 
 	m_colorPatternArray[0] = ColorPalette::S_LIGHT_PURPLE_COLOR;
 	m_colorPatternArray[1] = ColorPalette::S_GREEN_COLOR;
-	m_colorPatternArray[2] = ColorPalette::S_DARK_PURPLE_COLOR;
-	m_colorPatternArray[3] = ColorPalette::S_LIGHT_PURPLE_COLOR;
+	m_colorPatternArray[2] = ColorPalette::S_LIGHT_PURPLE_COLOR;
 }
 
 void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 {
-	int colorPatternNum = KuroFunc::GetRand(0, 3);
+	int colorPatternNum = KuroFunc::GetRand(0, 2);
 	Color color(m_colorPatternArray[colorPatternNum]);
 
 	//l•ªŠ„‚µ‚ÄÅ’áŒÂ”‚ğo‚·
