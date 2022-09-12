@@ -70,7 +70,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{
-		m_roadArray[i]->Update(m_endPos, m_roadIndex);
+		m_roadArray[i]->Update(m_endPos, m_roadIndex, ENABLE_FLAG);
 	}
 }
 
