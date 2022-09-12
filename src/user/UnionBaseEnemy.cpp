@@ -237,13 +237,7 @@ void UnionBaseEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 	hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, hitBulletPos);
 	if (activeCount <= 0) {
 
-		m_hp -= hitCount;
-		hitCount = 0;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
+		Damage(1, BulletMgr);
 
 	}
 
