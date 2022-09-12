@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class ShieldEnemy : public BaseEnemy {
 
 private:
@@ -30,14 +32,16 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float SHIELD_SCALE = 12.0f;
+	const float SCALE = 12.0f;
 
 	// HP
-	const int SHIELD_HP = 30;
+	static const int HP = 30;
 
 	const float SHIELD_ROT = 0.01f;
 
 	ENEMY_INFO::ID m_id;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:

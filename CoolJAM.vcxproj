@@ -225,6 +225,7 @@
     <ClCompile Include="src\user\DriftParticle.cpp" />
     <ClCompile Include="src\user\ElecMushiEnemy.cpp" />
     <ClCompile Include="src\user\EnemyBullet.cpp" />
+    <ClCompile Include="src\user\EnemyHP.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="src\user\DriftParticle.h" />
     <ClInclude Include="src\user\ElecMushiEnemy.h" />
     <ClInclude Include="src\user\EnemyBullet.h" />
+    <ClInclude Include="src\user\EnemyHP.h" />
     <ClInclude Include="src\user\EnemyWave.h" />
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />

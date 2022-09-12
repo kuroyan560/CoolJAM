@@ -1,6 +1,7 @@
 #include "UnionBaseEnemy.h"
 #include "BulletMgr.h"
 #include "UnionEnemy.h"
+#include "EnemyHP.h"
 
 UnionBaseEnemy::UnionBaseEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -18,6 +19,30 @@ UnionBaseEnemy::UnionBaseEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 	}
 
+	float angleInterval = DirectX::XM_PI / 10.0f;
+	for (auto& index : m_hpUI) {
+
+		int indexCount = static_cast<int>(&index - &m_hpUI[0]);
+
+		// 回転量
+		float drawAngle = 0;
+
+		// インデックスが10以上だったら。
+		if (10 < indexCount) {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * GetDigits(indexCount, 0, 0);
+
+		}
+		else {
+
+			drawAngle = DirectX::XM_PIDIV2 - angleInterval * static_cast<float>(indexCount);
+
+		}
+
+		index = std::make_shared<EnemyHP>(-drawAngle);
+
+	}
+
 }
 
 void UnionBaseEnemy::Init()
@@ -30,6 +55,38 @@ void UnionBaseEnemy::Init()
 	for (auto& index : m_unionEnemy) {
 
 		index->Init();
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Invalidate();
+
+	}
+	if (10 < m_hp) {
+
+		for (int index = 0; index < GetDigits(m_hp, 0, 0); ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+	else {
+
+		for (int index = 0; index < m_hp; ++index) {
+
+			m_hpUI[index]->Activate();
+
+		}
+
+	}
+
+	// HPUIの更新処理
+	for (auto& index : m_hpUI) {
+
+		index->Update(m_pos, SCALE);
 
 	}
 
@@ -49,8 +106,8 @@ void UnionBaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 	m_speed = 0;
 	m_isActive = true;
 	m_hitEffectTimer = 0;
-	m_scale = UNION_SCALE;
-	m_hp = UNION_HP;
+	m_scale = SCALE;
+	m_hp = HP;
 	m_transform.SetScale(m_scale);
 
 	// 周りの敵を生成。
@@ -62,6 +119,13 @@ void UnionBaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 		m_unionEnemy[index]->Generate(m_pos + Vec3<float>(cosf(nowRotate) * moveScale, 0, sinf(nowRotate) * moveScale));
 		nowRotate += UNION_ROTATE;
+
+	}
+
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
+
+		index->Init();
 
 	}
 
@@ -124,6 +188,13 @@ void UnionBaseEnemy::Draw()
 	for (auto& index : m_unionEnemy) {
 
 		if (!index->GetIsActive()) continue;
+
+		index->Draw();
+
+	}
+
+	// 敵のHPの板ポリを描画
+	for (auto& index : m_hpUI) {
 
 		index->Draw();
 

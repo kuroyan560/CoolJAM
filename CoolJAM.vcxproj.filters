@@ -95,6 +95,7 @@
     <ClCompile Include="src\user\UnionEnemy.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
     <ClCompile Include="src\user\PlayerModelOutline.cpp" />
+    <ClCompile Include="src\user\EnemyHP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -207,5 +208,6 @@
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\PlayerModelOutline.h" />
     <ClInclude Include="src\user\GameMode.h" />
+    <ClInclude Include="src\user\EnemyHP.h" />
   </ItemGroup>
 </Project>

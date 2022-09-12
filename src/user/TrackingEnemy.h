@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "Transform.h"
 
+class EnemyHP;
+
 class TrackingEnemy : public BaseEnemy {
 
 private:
@@ -25,12 +27,14 @@ private:
 	Transform m_transform;
 
 	// ÉXÉPÅ[Éã
-	const float TRACKING_SCALE = 3.0f;
+	const float SCALE = 3.0f;
 
 	const float TRACKING_ROT = 0.02f;
 
 	// HP
-	const int TRACKING_HP = 4;
+	static const int HP = 4;
+
+	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
 
 public:
