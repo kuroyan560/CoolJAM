@@ -40,7 +40,7 @@ void EnemyDeadEmitter::GeneratePipeline()
 			EnemyDeadLineParticle::GetInputLayout(),
 			rootParams,
 			renderTarget,
-			{ WrappedSampler(false,false) });
+			{ WrappedSampler(false,true) });
 		//四角パーティクル
 	}
 	{
