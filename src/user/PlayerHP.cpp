@@ -1,6 +1,6 @@
 #include "PlayerHP.h"
 #include "../engine/Importer.h"
-#include <DrawFunc_Append.h>
+#include "DrawFunc_Append.h"
 
 PlayerHP::PlayerHP(const float& Angle)
 {
@@ -74,6 +74,6 @@ void PlayerHP::Draw()
 	m_transform.SetScale(SIZE);
 
 	RenderTargetSwitch renderTargetSwitch = RenderTargetSwitch(m_alpha, 1.0f, 1.0f);
-	DrawFunc_Append::DrawModel(m_model, m_transform, renderTargetSwitch, false, nullptr, AlphaBlendMode_Trans);
+	DrawFunc_Append::DrawModel(m_model, m_transform, renderTargetSwitch, false, false, nullptr, AlphaBlendMode_Trans);
 
 }
