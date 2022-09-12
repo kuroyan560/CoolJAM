@@ -1,5 +1,6 @@
 #include "DashLightingParticle.h"
 #include"DrawFunc_Append.h"
+#include"../engine/DrawFunc3D.h"
 
 DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL) :initFlag(false)
 {
@@ -43,6 +44,6 @@ void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	if (initFlag)
 	{
-		DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, alpha, 0));
+		DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, alpha, 0), true);
 	}
 }

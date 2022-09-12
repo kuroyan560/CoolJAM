@@ -126,7 +126,6 @@ void GameScene::OnUpdate()
 	// 敵Waveクラスの更新処理。
 	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 
-
 	// ゲームの状態に応じてカメラの位置を変える。
 	if (GameMode::Instance()->m_isGame) {
 

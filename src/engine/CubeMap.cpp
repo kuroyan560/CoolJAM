@@ -154,7 +154,7 @@ StaticallyCubeMap::StaticallyCubeMap(const std::string& Name, const float& SideL
 		float clearVal[4] = { DEFAULT_COLOR.m_r,DEFAULT_COLOR.m_g,DEFAULT_COLOR.m_b,DEFAULT_COLOR.m_a };
 		D3D12App::Instance()->GetCmdList()->ClearRenderTargetView(rtvDescHandles, clearVal, 0, nullptr);
 
-		DEFAULT_CUBE_MAP_TEX = std::make_shared<TextureBuffer>(buff, texBarrier, srvDescHandles, texDesc);
+		DEFAULT_CUBE_MAP_TEX = std::make_shared<TextureBuffer>(buff, texBarrier, srvDescHandles, texDesc, Name);
 	}
 
 	//デフォルトキューブマップ割当
@@ -339,7 +339,7 @@ DynamicCubeMap::DynamicCubeMap(const int& CubeMapEdge)
 	cubeMapSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
 	auto srvDescHandles = D3D12App::Instance()->CreateSRV(buff, cubeMapSrvDesc);
 
-	m_cubeMap = std::make_shared<TextureBuffer>(buff, texBarrier, srvDescHandles, texDesc);
+	m_cubeMap = std::make_shared<TextureBuffer>(buff, texBarrier, srvDescHandles, texDesc, "DynamicCubeMap");
 
 	//キューブマップ用のレンダーターゲットビュー
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};

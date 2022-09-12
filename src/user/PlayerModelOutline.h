@@ -34,6 +34,7 @@ private:
 	float m_baseScale;
 	DirectX::XMMATRIX *m_rotation;
 	std::shared_ptr<Model> m_model;
+	Color m_modelColor;
 	Transform m_transform;
 	//ƒ‚ƒfƒ‹‚Ìó‘Ô----------
 
@@ -65,10 +66,12 @@ private:
 	OutlineRateData m_powerUpRateData;
 	//‹­‰»‰‰o‰‰o----------
 
-	Vec2<float>waveTextureSize;
-	std::shared_ptr<TextureBuffer>waveTex;
-
-	Color m_color;
+	Vec2<float>m_waveTextureSize;
+	std::shared_ptr<Model> m_waveModel;
+	float m_waveEaseRate;
+	float m_waveScaleMax;
+	Transform m_waveTransform;
+	float m_waveAlpha;
 
 	void Rate(float *T, float RATE, float MAX_RATE)
 	{
