@@ -10,6 +10,7 @@ PlayerModelOutline::PlayerModelOutline()
 {
 	m_modelColor = ColorPalette::S_GREEN_COLOR;
 	m_waveModel = Importer::Instance()->LoadModel("resource/user/Particle/", "powerWave.glb");
+	m_waveModel->m_meshes[0].material->texBuff[0] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/PowerWave.png");
 	m_waveScaleMax = 3.0f;
 }
 
@@ -120,6 +121,7 @@ void PlayerModelOutline::Update()
 		m_enoughPowerRateData.Init();
 		m_waveEaseRate = 0.0f;
 		m_waveAlpha = 1.0f;
+		m_waveTextureSize = { 0.0f,0.0f };
 	}
 
 	m_transform.SetPos(*m_pos);
@@ -131,13 +133,13 @@ void PlayerModelOutline::Update()
 
 	m_waveTransform.SetPos(*m_pos + Vec3<float>(0.0f, 0.1f, 0.0f));
 	m_waveTransform.SetScale({ m_waveTextureSize.x,m_waveTextureSize.y,m_waveTextureSize.x });
-	m_waveTransform.SetRotate(Vec3<Angle>(0, 180, 0));
+	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_modelColor, CAMERA);
-	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f));
+	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false);
 }
 
 void PlayerModelOutline::EnoughPowerEffect()
