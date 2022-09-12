@@ -35,4 +35,12 @@ public:
 
 	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
+	ENEMY_INFO::ID GetId()
+	{
+		return baseEnemy_id;
+	};
+
+protected:
+	ENEMY_INFO::ID baseEnemy_id;
+
 };

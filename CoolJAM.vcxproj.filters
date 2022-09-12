@@ -95,6 +95,7 @@
     <ClCompile Include="src\user\UnionEnemy.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
     <ClCompile Include="src\user\PlayerModelOutline.cpp" />
+    <ClCompile Include="src\user\CoinEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -186,6 +187,8 @@
     <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\LightBlock.h" />
     <ClInclude Include="src\user\LineLight.h" />
+    <ClInclude Include="src\user\GameTimer.h" />
+    <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
@@ -207,5 +210,6 @@
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\PlayerModelOutline.h" />
     <ClInclude Include="src\user\GameMode.h" />
+    <ClInclude Include="src\user\CoinEnemy.h" />
   </ItemGroup>
 </Project>
