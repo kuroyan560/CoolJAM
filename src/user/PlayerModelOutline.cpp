@@ -70,11 +70,11 @@ void PlayerModelOutline::Update()
 		float expandScele = 0.0f;
 		if (2 <= m_enoughPowerRateData.m_countReversNum)
 		{
-			expandScele = EXPAND_MAX_SCALE + 0.3f;
+			expandScele = EXPAND_MAX_SCALE - 0.2f;
 		}
 		else
 		{
-			expandScele = EXPAND_MAX_SCALE * 2.0f;
+			expandScele = EXPAND_MAX_SCALE * 1.5f;
 		}
 
 		if (m_enoughPowerRateData.m_reversRateFlag)
@@ -131,7 +131,7 @@ void PlayerModelOutline::Update()
 
 	m_waveTransform.SetPos(*m_pos + Vec3<float>(0.0f, 0.1f, 0.0f));
 	m_waveTransform.SetScale({ m_waveTextureSize.x,m_waveTextureSize.y,m_waveTextureSize.x });
-	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
+	m_waveTransform.SetRotate(Vec3<Angle>(0, 180, 0));
 }
 
 void PlayerModelOutline::Draw(Camera &CAMERA)
