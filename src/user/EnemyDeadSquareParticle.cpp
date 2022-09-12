@@ -11,7 +11,7 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
 	m_vel *= SPEED;
 	m_color.m_a = 1.0f;
-	m_dispappearTime = 60;
+	m_dispappearTime = 120;
 	m_initFlag = 1;
 	m_angle = { 0,0,0 };
 	m_color = COLOR;
@@ -32,13 +32,18 @@ void EnemyDeadSquareParticle::Update()
 	{
 		m_pos += m_vel;
 		m_angle += m_angleVel;
-
+		m_color.m_a -= 1.0f / static_cast<float>(m_dispappearTime);
 
 		const Vec2<float> LIMIT_LINE = { 200.0f,200.0f };
-		if (m_pos.x <= LIMIT_LINE.x &&
+		bool insideFlag = m_pos.x <= LIMIT_LINE.x &&
 			m_pos.z <= LIMIT_LINE.y &&
 			-LIMIT_LINE.x <= m_pos.x &&
-			-LIMIT_LINE.y <= m_pos.z)
+			-LIMIT_LINE.y <= m_pos.z;
+
+		insideFlag = 0.0f < m_color.m_a;
+
+
+		if (insideFlag)
 		{
 			m_initFlag = 1;
 		}

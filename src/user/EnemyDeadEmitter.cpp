@@ -103,7 +103,7 @@ EnemyDeadEmitter::EnemyDeadEmitter()
 
 
 
-	m_colorPatternArray[0] = ColorPalette::S_LIGHT_PURPLE_COLOR;
+	m_colorPatternArray[0] = ColorPalette::S_PINK_COLOR;
 	m_colorPatternArray[1] = ColorPalette::S_GREEN_COLOR;
 	m_colorPatternArray[2] = ColorPalette::S_LIGHT_PURPLE_COLOR;
 }
