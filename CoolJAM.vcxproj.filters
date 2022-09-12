@@ -98,6 +98,7 @@
     <ClCompile Include="src\user\EnemyHP.cpp" />
     <ClCompile Include="src\user\CoinEnemy.cpp" />
     <ClCompile Include="src\user\PlayerHP.cpp" />
+    <ClCompile Include="src\user\TitleUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -215,5 +216,6 @@
     <ClInclude Include="src\user\EnemyHP.h" />
     <ClInclude Include="src\user\CoinEnemy.h" />
     <ClInclude Include="src\user\PlayerHP.h" />
+    <ClInclude Include="src\user\TitleUI.h" />
   </ItemGroup>
 </Project>

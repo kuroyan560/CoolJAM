@@ -10,6 +10,7 @@
 #include "KuroMath.h"
 #include "GameMode.h"
 #include"AudioApp.h"
+#include "TitleUI.h"
 
 
 TitleScene::TitleScene()
@@ -58,17 +59,15 @@ TitleScene::TitleScene()
 	m_selectUI[1] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/title_select_Gamel.png");
 	m_selectUI[2] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/title_select_Exit.png");
 
-	m_rotateUI[0] = OFF_SCREEN_ROTATE[0];
-	m_rotateUI[1] = OFF_SCREEN_ROTATE[1];
-	m_rotateUI[2] = OFF_SCREEN_ROTATE[2];
-
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
 	m_isAppear = false;
 
-	m_nowSelect = SELECT::TUTORIAL;
+	m_nowSelect = SELECT::GAME;
 
-	m_addRotateUI = 0;
+	m_titleUI[0] = std::make_shared<TitleUI>("resource/user/UI/title_select_tutorial.png", TitleUI::STATUS::UP, TitleUI::UI_STATUS::TUTORIAL);
+	m_titleUI[1] = std::make_shared<TitleUI>("resource/user/UI/title_select_Gamel.png", TitleUI::STATUS::MIDDLE, TitleUI::UI_STATUS::GAME);
+	m_titleUI[2] = std::make_shared<TitleUI>("resource/user/UI/title_select_Exit.png", TitleUI::STATUS::DOWN, TitleUI::UI_STATUS::EXIT);
 
 	m_selectSE = AudioApp::Instance()->LoadAudio("resource/user/sound/select.wav");
 	m_enterSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enter.wav");
@@ -82,18 +81,18 @@ void TitleScene::OnInitialize()
 	m_transitionEasingTimer = 0;
 	m_endEasingTransitionTimer = END_EASING_TIMER;
 
-	m_rotateUI[0] = OFF_SCREEN_ROTATE[0];
-	m_rotateUI[1] = OFF_SCREEN_ROTATE[1];
-	m_rotateUI[2] = OFF_SCREEN_ROTATE[2];
-
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
 
 	m_isTitle = true;
 	m_isAppear = false;
 
-	m_nowSelect = SELECT::TUTORIAL;
+	m_nowSelect = SELECT::GAME;
 
-	m_addRotateUI = 0;
+	for (auto& index : m_titleUI) {
+
+		index->Init();
+
+	}
 
 }
 
@@ -117,11 +116,6 @@ void TitleScene::OnUpdate()
 		// 位置を求める。
 		m_revolverPos = OFF_SCREEN_REVOLVER_POS + (REVOLVER_POS - OFF_SCREEN_REVOLVER_POS) * easingAmount;
 
-		// 回転を求める。
-		m_rotateUI[0] = OFF_SCREEN_ROTATE[0] + (DEF_ROTATE[0] - OFF_SCREEN_ROTATE[0]) * easingAmount;
-		m_rotateUI[1] = OFF_SCREEN_ROTATE[1] + (DEF_ROTATE[1] - OFF_SCREEN_ROTATE[1]) * easingAmount;
-		m_rotateUI[2] = OFF_SCREEN_ROTATE[2] + (DEF_ROTATE[2] - OFF_SCREEN_ROTATE[2]) * easingAmount;
-
 		// タイトルを回転させる。
 		m_titleAngle = DirectX::XM_2PI - DirectX::XM_PI * easingAmount;
 
@@ -144,16 +138,28 @@ void TitleScene::OnUpdate()
 		// 位置を求める。
 		m_revolverPos = REVOLVER_POS + (OFF_SCREEN_REVOLVER_POS - REVOLVER_POS) * easingAmount;
 
-		// 回転を求める。
-		m_rotateUI[0] = m_exitRotateUI[0] + (OFF_SCREEN_ROTATE[0] - m_exitRotateUI[0]) * easingAmount;
-		m_rotateUI[1] = m_exitRotateUI[1] + (OFF_SCREEN_ROTATE[1] - m_exitRotateUI[1]) * easingAmount;
-		m_rotateUI[2] = m_exitRotateUI[2] + (OFF_SCREEN_ROTATE[2] - m_exitRotateUI[2]) * easingAmount;
-
 		// タイマーを更新。
 		m_revolverEasingTimer += ADD_REVOLVER_EASING_TIMER;
 		if (1.0f <= m_revolverEasingTimer) {
 
 			m_revolverEasingTimer = 1.0f;
+
+		}
+
+		// UIを回転させる。
+		bool canTrans = true;
+		for (auto& index : m_titleUI) {
+
+			canTrans &= index->GetCanTrans();
+
+		}
+		if (canTrans) {
+
+			for (auto& index : m_titleUI) {
+
+				index->TransDown();
+
+			}
 
 		}
 
@@ -165,6 +171,14 @@ void TitleScene::OnUpdate()
 
 	// カメラの更新処理
 	UpdateCamera();
+
+
+
+	for (auto& index : m_titleUI) {
+
+		index->Update();
+
+	}
 
 
 }
@@ -199,22 +213,17 @@ void TitleScene::OnDraw()
 	// プレイヤーを描画
 	m_player->Draw(*nowCam, true);
 
-	// UI用を描画
-	for (auto& index : m_selectUI) {
-
-		// ベクトルを求める。
-		Vec2<float> vec = Vec2<float>(cosf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]), sinf(m_rotateUI[static_cast<int>(&index - &m_selectUI[0])]));
-
-		Vec2<float> centerPos = m_revolverPos + vec * 400.0f;
-
-		DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_rotateUI[static_cast<int>(&index - &m_selectUI[0])], index);
-
-	}
-
 	// タイトルを描画。
 	Vec2<float> vec = Vec2<float>(cosf(m_titleAngle), sinf(m_titleAngle));
-	Vec2<float> centerPos = vec * 300.0f + Vec2<float>(0, 720.0f / 2.0f);
-	DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.0f, 1.0f), m_titleAngle, m_titleTexture);
+	Vec2<float> centerPos = vec * 380.0f + Vec2<float>(0, 720.0f / 2.0f);
+	DrawFunc2D::DrawRotaGraph2D(centerPos, Vec2<float>(1.2f, 1.2f), m_titleAngle, m_titleTexture);
+
+
+	for (auto& index : m_titleUI) {
+
+		index->Draw(m_revolverPos);
+
+	}
 
 
 	/*--- エミッシブマップ合成 ---*/
@@ -278,14 +287,7 @@ void TitleScene::UpdateSelect() {
 			m_isTransition = true;
 
 			m_revolverEasingTimer = 0;
-			//KuroEngine::Instance()->ChangeScene(1, m_sceneTransition.get());
 
-			// 回転量を保存。
-			for (int index = 0; index < 3; ++index) {
-
-				m_exitRotateUI[index] = m_rotateUI[index];
-
-			}
 
 			GameMode::Instance()->m_isGame = m_nowSelect == SELECT::GAME;
 			GameMode::Instance()->m_isTutorial = m_nowSelect == SELECT::TUTORIAL;
@@ -306,12 +308,17 @@ void TitleScene::UpdateSelect() {
 
 	}
 
+	// 遷移可能か
+	bool canTrans = true;
+	for (auto& index : m_titleUI) {
+
+		canTrans &= index->GetCanTrans();
+
+	}
 	auto oldSelect = m_nowSelect;
 
 	float mouseMove = UsersInput::Instance()->GetMouseMove().m_inputZ;
-	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition) {
-
-		m_addRotateUI -= DirectX::XM_PIDIV2;
+	if (mouseMove < -100.0f && !m_isAppear && !m_isTransition && !m_isTitle && canTrans) {
 
 		switch (m_nowSelect)
 		{
@@ -328,10 +335,15 @@ void TitleScene::UpdateSelect() {
 			break;
 		}
 
+		for (auto& index : m_titleUI) {
+
+			index->TransDown();
+
+		}
+
 	}
 
-	if (100.0f < mouseMove && !m_isAppear && !m_isTransition) {
-		m_addRotateUI += DirectX::XM_PIDIV2;
+	if (100.0f < mouseMove && !m_isAppear && !m_isTransition && !m_isTitle && canTrans) {
 
 		switch (m_nowSelect)
 		{
@@ -346,46 +358,17 @@ void TitleScene::UpdateSelect() {
 			break;
 		default:
 			break;
+		}
+
+		for (auto& index : m_titleUI) {
+
+			index->TransUp();
+
 		}
 
 	}
 
 	if (oldSelect != m_nowSelect)AudioApp::Instance()->PlayWaveDelay(m_selectSE);
-
-	float rotate = m_addRotateUI / 5.0f;
-	m_addRotateUI -= m_addRotateUI / 5.0f;
-	for (auto& index : m_rotateUI) {
-
-		index += rotate;
-
-		if (0 < rotate) {
-
-			// 角度がスキップ領域に入っていたら。
-			if (MIN_SKIP_ROTATE <= index && index < MAX_SKIP_ROTATE) {
-				index = MAX_SKIP_ROTATE + (index - MIN_SKIP_ROTATE);
-			}
-			// 最高値を超えていたら。
-			if (DirectX::XM_2PI <= index) {
-				index = index - DirectX::XM_2PI;
-			}
-
-		}
-		else if (rotate < 0) {
-
-			// 角度がスキップ領域に入っていたら。
-			if (index <= MAX_SKIP_ROTATE && MIN_SKIP_ROTATE < index) {
-				index = MIN_SKIP_ROTATE - (MAX_SKIP_ROTATE - index);
-			}
-			// 最低値を超えていたら。
-			if (index <= 0) {
-				index = DirectX::XM_2PI + index;
-			}
-
-		}
-
-	}
-
-
 
 }
 

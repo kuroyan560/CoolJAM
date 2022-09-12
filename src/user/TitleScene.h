@@ -11,6 +11,7 @@ class DepthStencil;
 class Model;
 class EnvironmentMgr;
 class RenderTarget;
+class TitleUI;
 
 class TitleScene : public BaseScene {
 
@@ -45,24 +46,20 @@ private:
 		EXIT,
 		MAX,
 	};
+	SELECT m_nowSelect;
 	std::array<std::shared_ptr<TextureBuffer>, 3> m_selectUI;
-	std::array<float, 3> m_rotateUI;
-	std::array<float, 3> m_exitRotateUI;
-	const std::array<float, 3> DEF_ROTATE = { DirectX::XM_PIDIV2 * 0.0f ,DirectX::XM_PIDIV2 * 1.0f ,DirectX::XM_PIDIV2 * 3.0f };
-	const std::array<float, 3> OFF_SCREEN_ROTATE = { DirectX::XM_PIDIV2 * 0.0f + 5.0f ,DirectX::XM_PIDIV2 * 1.0f + 5.0f ,DirectX::XM_PIDIV2 * 3.0f + 5.0f };
-
-	const float MIN_SKIP_ROTATE = DirectX::XM_PIDIV2 * 2.0f - 0.1f;
-	const float MAX_SKIP_ROTATE = DirectX::XM_PIDIV2 * 3.0f - 0.1f;
 
 	// UI用変数
-	const Vec2<float> UI_SIZE = Vec2<float>(128, 32);
-	float m_addRotateUI;
-	SELECT m_nowSelect;
 	Vec2<float> m_revolverPos;
-	const Vec2<float> REVOLVER_POS = Vec2<float>(0, 720.0f / 2.0f);
-	const Vec2<float> OFF_SCREEN_REVOLVER_POS = Vec2<float>(-700.0f, 720.0f / 2.0f);
+	const Vec2<float> REVOLVER_POS = Vec2<float>(-100, 720.0f / 2.0f);
+	const Vec2<float> OFF_SCREEN_REVOLVER_POS = Vec2<float>(-900.0f, 720.0f / 2.0f);
 	float m_revolverEasingTimer;
 	const float ADD_REVOLVER_EASING_TIMER = 0.03f;
+
+
+
+	std::array<std::shared_ptr<TitleUI>, 3> m_titleUI;
+
 
 	// 出現退出フラグ
 	bool m_isAppear;
