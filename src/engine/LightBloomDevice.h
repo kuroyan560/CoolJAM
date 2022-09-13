@@ -16,6 +16,8 @@ struct LightBloomConfig
 	Vec3<float>m_outputColorRate = { 1,1,1 };
 	//明るさのしきい値
 	float m_brightThreshold = 0.0f;
+	//合成後の画像サイズ
+	Vec2<int>m_imgSize;
 };
 
 class LightBloomDevice
