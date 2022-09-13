@@ -22,6 +22,16 @@ bool operator==(const Matrix& lhs, const Matrix& rhs)
 	return !(lhs != rhs);
 }
 
+bool KuroFunc::LoadData(FILE* Fp, void* Data, const size_t& Size, const int& ElementNum)
+{
+	return 1 <= fread(Data, Size, ElementNum, Fp);
+}
+
+bool KuroFunc::SaveData(FILE* Fp, const void* Data, const size_t& Size, const int& ElementNum)
+{
+	return 1 <= fwrite(Data, Size, ElementNum, Fp);
+}
+
 std::wstring KuroFunc::GetWideStrFromStr(const std::string& Str)
 {
 	auto num1 = MultiByteToWideChar(

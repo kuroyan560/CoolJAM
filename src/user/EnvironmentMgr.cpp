@@ -170,7 +170,8 @@ void EnvironmentMgr::Draw(Camera &Cam)
 
 }
 
-void EnvironmentMgr::OnImguiDebug()
+#include"imguiApp.h"
+void EnvironmentMgr::ImguiDebug()
 {
 	ImGui::Begin("EnvironmentMgr");
 

@@ -16,6 +16,8 @@
 #include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
 #include"GameMode.h"
+#include"EnemyWaveEditor.h"
+#include"StageFloor.h"
 
 GameScene::GameScene()
 {
@@ -31,12 +33,8 @@ GameScene::GameScene()
 	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
-	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
-	m_mapModel->m_transform.SetScale(100.0f);
-
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
-	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
 	//敵を生成。
 	m_enemyMgr = std::make_shared<EnemyMgr>();
@@ -77,7 +75,7 @@ void GameScene::OnInitialize()
 	m_player->Init();
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
-	m_enemyWaveMgr->Init();
+	m_enemyWaveMgr->Init(60);
 	m_feverGauge->Init();
 
 	m_environmentMgr->Init();
@@ -103,6 +101,7 @@ void GameScene::OnInitialize()
 	}
 
 	AudioApp::Instance()->PlayWave(m_bgm, true);
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 }
 
 void GameScene::OnUpdate()
@@ -129,7 +128,10 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	// 敵Waveクラスの更新処理。
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+	{
+		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	}
 
 	// ゲームの状態に応じてカメラの位置を変える。
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
@@ -209,8 +211,7 @@ void GameScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	// マップを描画
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, true, AlphaBlendMode_Trans);
+	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画
 	m_player->Draw(*nowCam);
@@ -285,6 +286,9 @@ void GameScene::OnImguiDebug()
 	ImGui::Text("POS_Y:%f", m_player->GetPos().y);
 	ImGui::Text("POS_Z:%f", m_player->GetPos().z);
 	ImGui::End();
+
+	//ウェーブ編集
+	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr);
 }
 
 void GameScene::OnFinalize()

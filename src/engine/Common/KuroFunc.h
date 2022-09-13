@@ -7,6 +7,9 @@
 
 namespace KuroFunc
 {
+	bool LoadData(FILE* Fp, void* Data, const size_t& Size, const int& ElementNum);
+	bool SaveData(FILE* Fp, const void* Data, const size_t& Size, const int& ElementNum);
+
 	std::wstring GetWideStrFromStr(const std::string& Str);
 	std::wstring GetWideStrFromStr(const char* Str);
 

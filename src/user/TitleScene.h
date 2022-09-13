@@ -43,8 +43,6 @@ private:
 
 	// マップモデル
 	float MAP_SIZE = 150.0f;
-	std::shared_ptr<ModelObject> m_mapModel;
-	Transform m_mapModelTransform;
 
 	// タイトル画像
 	std::shared_ptr<TextureBuffer> m_titleTexture;

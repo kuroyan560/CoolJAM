@@ -17,6 +17,7 @@
 #include"FeverGauge.h"
 #include"GameMode.h"
 #include"Tutorial.h"
+#include"StageFloor.h"
 
 TutorialScene::TutorialScene()
 {
@@ -31,9 +32,6 @@ TutorialScene::TutorialScene()
 	m_player = std::make_shared<Player>();
 	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
-
-	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
-	m_mapModel->m_transform.SetScale(100.0f);
 
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
@@ -77,10 +75,6 @@ TutorialScene::TutorialScene()
 	m_transitionDelayTimer = 0;
 
 	m_tutorial = std::make_shared<Tutorial>();
-
-	// 床モデルのテクスチャを変える。
-	m_mapModel->m_model->m_meshes[0].material->texBuff[0] = m_tutorial->GetFloorRenderTarget();
-
 }
 
 void TutorialScene::OnInitialize()
@@ -90,7 +84,7 @@ void TutorialScene::OnInitialize()
 	m_player->Init();
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
-	m_enemyWaveMgr->Init();
+	m_enemyWaveMgr->Init(60);
 	m_feverGauge->Init();
 
 	m_environmentMgr->Init();
@@ -291,8 +285,7 @@ void TutorialScene::OnDraw()
 	m_tutorial->Draw();
 
 	// マップを描画
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, false);
+	StageFloor::Instance()->Draw();
 
 	//環境描画
 	m_environmentMgr->Draw(*nowCam);

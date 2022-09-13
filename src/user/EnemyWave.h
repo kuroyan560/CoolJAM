@@ -2,6 +2,8 @@
 #include "Vec.h"
 #include <vector>
 #include <memory>
+#include<string>
+#include<array>
 
 class EnemyMgr;
 
@@ -24,6 +26,25 @@ namespace ENEMY_INFO {
 
 	};
 
+	static const std::string& GetIDName(ID Id)
+	{
+		static const std::array<std::string, static_cast<int>(ID::ID_COUNT)> NAME_LIST =
+		{
+			"STOPPING",
+			"STRAIGHT",
+			"PLAYER_STRAIGHT",
+			"TRACKING",
+			"SHIELD",
+			"UNION",
+			"TORUS_MOVE",
+			"PRESS",
+			"DASH",
+			"ELEC_MUSI",
+			"COIN"
+		};
+		return NAME_LIST[static_cast<int>(Id)];
+	}
+
 	struct SPAWN_INFO
 	{
 
@@ -33,7 +54,6 @@ namespace ENEMY_INFO {
 		int m_generateFrame;
 
 		SPAWN_INFO() :m_pos(Vec3<float>()), m_forwardVec(Vec3<float>(0, 0, 1)), m_id(ID::STOPPING), m_generateFrame(0) {};
-
 	};
 
 
@@ -42,6 +62,8 @@ namespace ENEMY_INFO {
 class EnemyWave {
 
 private:
+	friend class EnemyWaveEditor;
+	friend class EnemyWaveLoader;
 
 	/*===== メンバ変数 =====*/
 
@@ -50,7 +72,6 @@ private:
 	int m_nowWaveFrame;								// このWaveが始まってからの経過時間。
 	bool m_isBounusStageFlag;
 	bool m_startWaveFlag;
-	bool m_initFlag;
 public:
 
 	/*===== メンバ関数 =====*/
@@ -61,8 +82,9 @@ public:
 	void AddEnemy(const ENEMY_INFO::SPAWN_INFO& EnemyInfo);
 	void AddEnemy(const Vec3<float>& Pos, const Vec3<float>& ForwardVec, ENEMY_INFO::ID ID, const int& GenerateFrame);
 
-	bool IsStart();
+	void Start();
 	void Stop();
 	bool IsBounusStage();
 	int WaveStartTime();
 };
+

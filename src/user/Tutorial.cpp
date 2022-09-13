@@ -7,12 +7,12 @@
 #include "TutorialText.h"
 #include "TutorialHexagon.h"
 #include "TutorialNice.h"
+#include"StageFloor.h"
 
 Tutorial::Tutorial() {
 
 	/*===== コンストラクタ =====*/
 
-	m_floorRenderTarget = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R8G8B8A8_UNORM, Color(0, 0, 0, 0), Vec2<int>(512, 512), L"FloorScreen");
 	m_damageWallTimer = 0;
 	m_enemyTutorialAppearTimer = 0;
 	m_enemyTutorialExitTimer = 0;
@@ -470,8 +470,7 @@ void Tutorial::Draw() {
 	/*===== 描画処理 =====*/
 
 	// レンダーターゲットをセット。
-	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_floorRenderTarget);
-	KuroEngine::Instance()->Graphics().SetRenderTargets({ m_floorRenderTarget });
+	StageFloor::Instance()->ScreenTargetSet(true);
 
 	for (auto& index : m_tutorialTexture) {
 

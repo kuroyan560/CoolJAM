@@ -10,12 +10,15 @@ class EnemyMgr;
 class EnemyWaveMgr {
 
 private:
+	friend class EnemyWaveEditor;
+	friend class EnemyWaveLoader;
 
 	/*===== メンバ変数 =====*/
 
 	std::vector<std::shared_ptr<EnemyWave>> m_waves;	// ウェーブ
 	int m_frameTimer;									// フレームのタイマー
-	int nowWaveCount;
+	int m_nowWaveIdx = -1;
+	int m_finalWaveTimer = 0;
 
 	Vec2<float> m_waveCount;
 
@@ -27,11 +30,12 @@ public:
 	/*===== メンバ関数 =====*/
 
 	EnemyWaveMgr(const float& MapSize);
-	void Init();
+	void Init(const int& FinalWaveTime, const int& FrameTimer = 0);
 	void Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void AddWave(std::shared_ptr<EnemyWave> Wave);
 
 	void Draw();
 
 	bool IsNowWaveBounusStage();
+	bool EndAllWaves() { return m_finalWaveTimer <= 0; }
 };
