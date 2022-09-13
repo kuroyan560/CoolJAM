@@ -22,6 +22,6 @@ public:
 	void Score();
 private:
 	std::unique_ptr<GameTimer>timer;
-	std::unique_ptr<WaveUI> m_waveUI;
+	std::shared_ptr<WaveUI> m_waveUI;
 
 };
