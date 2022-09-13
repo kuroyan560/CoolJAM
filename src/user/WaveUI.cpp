@@ -1,4 +1,5 @@
 #include "WaveUI.h"
+#include "Font.h"
 
 WaveUI::WaveUI(std::string File)
 {
@@ -14,7 +15,7 @@ WaveUI::WaveUI(std::string File)
 
 }
 
-void WaveUI::Init()
+void WaveUI::Init(const int& MaxWave)
 {
 
 	/*===== 初期化処理 =====*/
@@ -25,9 +26,26 @@ void WaveUI::Init()
 	m_isAppear = false;
 	m_wavePos = Vec2<float>();
 
+	// 最大数が10未満だったら。
+	if (MaxWave < 10) {
+
+		m_maxWaveCountIndex[0] = -1;
+		m_maxWaveCountIndex[1] = MaxWave;
+
+	}
+	else {
+
+		m_maxWaveCountIndex[0] = KuroFunc::GetSpecifiedDigitNum(MaxWave, 1);
+		m_maxWaveCountIndex[1] = KuroFunc::GetSpecifiedDigitNum(MaxWave, 0);
+
+	}
+
+	m_nowWaveCountIndex[0] = 0;
+	m_nowWaveCountIndex[0] = 0;
+
 }
 
-void WaveUI::Update()
+void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos)
 {
 
 	/*===== 更新処理 =====*/
@@ -41,7 +59,7 @@ void WaveUI::Update()
 		float easingAmount = KuroMath::Ease(Out, Cubic, m_easingTimer, 0.0f, 1.0f);
 
 		// 座標を設定。
-		m_wavePos = APPEAR_POS + (MIDDLE_POS - APPEAR_POS) * easingAmount;
+		m_wavePos = APPEAR_POS + ((MIDDLE_POS + OffsetPos) - APPEAR_POS) * easingAmount;
 
 	}
 
@@ -52,7 +70,7 @@ void WaveUI::Update()
 		float easingAmount = KuroMath::Ease(In, Cubic, m_easingTimer, 0.0f, 1.0f);
 
 		// 座標を設定。
-		m_wavePos = MIDDLE_POS + (EXIT_POS - MIDDLE_POS) * easingAmount;
+		m_wavePos = (MIDDLE_POS + OffsetPos) + (EXIT_POS - (MIDDLE_POS + OffsetPos)) * easingAmount;
 
 	}
 
@@ -60,6 +78,20 @@ void WaveUI::Update()
 	if (1.0f <= m_easingTimer) {
 
 		m_easingTimer = 1.0f;
+
+	}
+
+	// 最大数が10未満だったら。
+	if (NowWave < 10) {
+
+		m_nowWaveCountIndex[0] = -1;
+		m_nowWaveCountIndex[1] = NowWave;
+
+	}
+	else {
+
+		m_nowWaveCountIndex[0] = KuroFunc::GetSpecifiedDigitNum(NowWave, 1);
+		m_nowWaveCountIndex[1] = KuroFunc::GetSpecifiedDigitNum(NowWave, 0);
 
 	}
 
@@ -74,6 +106,23 @@ void WaveUI::Draw()
 	if (!m_isActive) return;
 
 	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(-200.0f, 0.0f), Vec2<float>(1.0f, 1.0f), 0, m_waveTexture);
+
+
+	if (m_nowWaveCountIndex[0] != -1) {
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(100.0f, 0.0f), Vec2<float>(1.5f, 1.5f), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[0]]);
+	}
+	if (m_nowWaveCountIndex[1] != -1) {
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(200.0f, 0.0f), Vec2<float>(1.5f, 1.5f), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[1]]);
+	}
+
+	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(300.0f, 20.0f), Vec2<float>(1.0f, 1.0f), 0, Font::Instance()->m_stripeFont[11]);
+
+	if (m_maxWaveCountIndex[0] != -1) {
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(380.0f, 20.0f), Vec2<float>(1.0f, 1.0f), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[0]]);
+	}
+	if (m_maxWaveCountIndex[1] != -1) {
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(450.0f, 20.0f), Vec2<float>(1.0f, 1.0f), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[1]]);
+	}
 
 }
 

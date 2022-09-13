@@ -6,28 +6,25 @@ GameUI::GameUI()
 {
 	m_timer = std::make_unique<GameTimer>();
 	m_waveUI = std::make_shared<WaveUI>("resource/user/wave.png");
+	m_waveNum = 0;
 }
 
 void GameUI::Init()
 {
 	m_timer->Init(120);
 	m_timer->Start();
-	m_waveUI->Init();
+	m_waveUI->Init(10);
 }
 
 void GameUI::Update()
 {
 	m_timer->Update();
-	m_waveUI->Update();
-
-
-
+	m_waveUI->Update(m_waveNum, m_wavePos);
 
 	// デバッグ用
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_I)) {
 
 		m_waveUI->Appear();
-
 	}
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
 
@@ -35,6 +32,8 @@ void GameUI::Update()
 
 	}
 
+	m_timer->Update();
+	m_waveUI->Update(m_waveNum, m_wavePos);
 }
 
 void GameUI::Draw()
@@ -47,7 +46,7 @@ void GameUI::DrawImGui()
 {
 	ImGui::Begin("UI");
 	SetVec2("Timer", &m_timer->timerPos);
-	SetVec2("Wave", &m_waveUI->m_wavePos);
+	SetVec2("Wave", &m_wavePos);
 	ImGui::End();
 }
 

@@ -111,6 +111,7 @@
     <ClCompile Include="src\user\ColorPalette.cpp" />
     <ClCompile Include="src\user\GameUI.cpp" />
     <ClCompile Include="src\user\WaveUI.cpp" />
+    <ClCompile Include="src\user\Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -240,5 +241,6 @@
     <ClInclude Include="src\user\StageFloor.h" />
     <ClInclude Include="src\user\GameUI.h" />
     <ClInclude Include="src\user\WaveUI.h" />
+    <ClInclude Include="src\user\Font.h" />
   </ItemGroup>
 </Project>

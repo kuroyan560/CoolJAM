@@ -18,6 +18,7 @@
 #include"GameMode.h"
 #include"EnemyWaveEditor.h"
 #include"StageFloor.h"
+#include"Font.h"
 
 GameScene::GameScene()
 {
@@ -66,6 +67,7 @@ GameScene::GameScene()
 	//BGM“Ç‚Ýž‚Ý
 	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
 
+	Font::Instance()->LoadFont();
 
 	m_gameUI = std::make_unique<GameUI>();
 }
