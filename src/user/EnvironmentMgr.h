@@ -1,5 +1,4 @@
 #pragma once
-#include"ImguiDebugInterFace.h"
 #include<memory>
 #include<string>
 #include<array>
@@ -12,7 +11,7 @@ class ModelObject;
 class Camera;
 class LightManager;
 
-class EnvironmentMgr : public ImguiDebugInterface
+class EnvironmentMgr
 {
 public:
 	enum STATUS { DEFAULT, FEVER, NUM, NONE = -1 };
@@ -78,7 +77,7 @@ public:
 	//ƒQƒbƒ^
 	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
 
-	void OnImguiDebug()override;
+	void ImguiDebug();
 };
 
 static std::array<std::string, EnvironmentMgr::STATUS::NUM> s_skyDomeNameArray =

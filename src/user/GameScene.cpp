@@ -275,6 +275,9 @@ void GameScene::OnImguiDebug()
 	ImGui::Text("POS_Y:%f", m_player->GetPos().y);
 	ImGui::Text("POS_Z:%f", m_player->GetPos().z);
 	ImGui::End();
+
+	//�E�F�[�u�ҏW
+	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr);
 }
 
 void GameScene::OnFinalize()
