@@ -34,15 +34,12 @@ public:
 
 
 public:
-	static const int& DamageSE() { return s_damageSE; }
-	static const int& DeadSE() { return s_deadSE; }
+	static const int &DamageSE() { return s_damageSE; }
+	static const int &DeadSE() { return s_deadSE; }
 
 	/*===== ÉÅÉìÉoä÷êî =====*/
 
-	BaseEnemy()
-	{
-		m_hitFlag = false;
-	};
+	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
 	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
@@ -72,13 +69,18 @@ public:
 		if (m_hp != m_prevHp)
 		{
 			m_hitFlag = true;
+			m_hitTiemr = 0;
 		}
 		if (m_hitFlag)
 		{
+			float s = -0.3f;
+			m_damageScale = Vec3<float>(s, s, s);
 			++m_hitTiemr;
 		}
-		if (30 <= m_hitTiemr)
+		if (3 <= m_hitTiemr)
 		{
+			float s = 0.0f;
+			m_damageScale = Vec3<float>(s, s, s);
 			m_hitTiemr = 0;
 			m_hitFlag = false;
 		}
@@ -93,6 +95,7 @@ public:
 		m_prevHp = m_hp;
 		m_hitTiemr = 0;
 		m_hitFlag = false;
+		m_baseScale = m_transform.GetScale();
 	};
 	void CommonUpdate()
 	{
@@ -100,6 +103,7 @@ public:
 	};
 	void CommonDraw(Camera &CAMERA)
 	{
+		m_transform.SetScale(m_baseScale + m_damageScale);
 		m_outline->Draw(CAMERA, m_hitFlag);
 	};
 
@@ -107,4 +111,7 @@ private:
 	int m_prevHp;
 	bool m_hitFlag;
 	int m_hitTiemr;
+
+	Vec3<float>m_damageScale;
+	Vec3<float>m_baseScale;
 };
