@@ -10,13 +10,14 @@ void EnemyDeadSquareParticle::Init(const Vec3<float> &POS, float SPEED, int ANGL
 	m_pos = POS;
 	m_vel = { cosf(Angle::ConvertToRadian(ANGLE)),0.0f,sinf(Angle::ConvertToRadian(ANGLE)) };
 	m_vel *= SPEED;
-	m_alpha = 255;
-	m_dispappearTime = 255 / 30;
+	m_color.m_a = 1.0f;
+	m_dispappearTime = 120;
 	m_initFlag = 1;
 	m_angle = { 0,0,0 };
+	m_color = COLOR;
 
-	float minVel = -30.5f;
-	float maxVel = 30.5f;
+	float minVel = -5.0f;
+	float maxVel = 5.0f;
 	m_angleVel = {
 		KuroFunc::GetRand(minVel, maxVel),
 		KuroFunc::GetRand(minVel, maxVel),
@@ -31,12 +32,25 @@ void EnemyDeadSquareParticle::Update()
 	{
 		m_pos += m_vel;
 		m_angle += m_angleVel;
+		m_color.m_a -= 1.0f / static_cast<float>(m_dispappearTime);
 
-		m_alpha += -m_dispappearTime;
-		if (m_alpha <= 0)
+		const Vec2<float> LIMIT_LINE = { 200.0f,200.0f };
+		bool insideFlag = m_pos.x <= LIMIT_LINE.x &&
+			m_pos.z <= LIMIT_LINE.y &&
+			-LIMIT_LINE.x <= m_pos.x &&
+			-LIMIT_LINE.y <= m_pos.z;
+
+		insideFlag = 0.0f < m_color.m_a;
+
+
+		if (insideFlag)
 		{
-			m_alpha = 0;
+			m_initFlag = 1;
+		}
+		else
+		{
 			m_initFlag = 0;
+			m_color.m_a = 0;
 		}
 	}
 }

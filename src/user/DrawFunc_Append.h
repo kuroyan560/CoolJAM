@@ -18,7 +18,6 @@ struct RenderTargetSwitch
 	float m_main = 1.0f;
 	float m_emissive = 1.0f;
 	float m_depth = 1.0f;
-	float m_pad;
 
 	RenderTargetSwitch() {}
 	RenderTargetSwitch(const float& Main, const float& Emissive, const float& Depth)
@@ -84,13 +83,13 @@ public:
 		const bool& IsBillBoard = false,
 		const bool& IsShading = true,
 		std::shared_ptr<ModelAnimator> Animator = nullptr,
-		AlphaBlendMode BlendMode = AlphaBlendMode_Trans);
+		AlphaBlendMode BlendMode = AlphaBlendMode_None);
 
 	static void DrawModel(const std::weak_ptr<ModelObject>ModelObject,
 		const RenderTargetSwitch& Switch = RenderTargetSwitch(), 
 		const bool& IsBillBoard = false,
 		const bool& IsShading = true,
-		AlphaBlendMode BlendMode = AlphaBlendMode_Trans)
+		AlphaBlendMode BlendMode = AlphaBlendMode_None)
 	{
 		auto obj = ModelObject.lock();
 		DrawModel(obj->m_model, obj->m_transform, Switch, IsBillBoard, IsShading, obj->m_animator, BlendMode);

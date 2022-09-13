@@ -21,10 +21,10 @@ struct VSInput
     float3 m_angle : ANGLE;
     int m_initFlg : INIT_FLG;
     float3 m_angleVel : ANGLE_VEL;
-    int m_alpha : ALPHA;
     float3 m_pos : POS;
     int m_disappearTime : DISAPPEAR_TIME;
     float3 m_vel : VEL;
+    float4 m_color : COLOR;
 };
 
 VSInput VSmain(VSInput input)
@@ -36,7 +36,7 @@ struct GSOutput
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD;
-    float alpha : ALPHA;
+    float4 color : COLOR;
 };
 
 float4 GetPos(float3 Pos, float2 Offset, matrix RotateMat)
@@ -60,7 +60,7 @@ inout TriangleStream<GSOutput> output)
     float2 offset = squarePtSize / 2.0f;
     
     GSOutput element;
-    element.alpha = input[0].m_alpha / 255.0f;
+    element.color = input[0].m_color;
     
     float4x4 rotate = GetRoateMat(input[0].m_angle);
     
@@ -96,10 +96,7 @@ struct PSOutput
 PSOutput PSmain(GSOutput input)
 {
     PSOutput output;
-    output.color = colorTex.Sample(smp, input.uv);
+    output.color = colorTex.Sample(smp, input.uv) * input.color;
     output.emissive = output.color * emissiveStrongth;
-
-    output.color.a *= input.alpha;
-    output.emissive.a *= input.alpha;
     return output;
 }

@@ -12,6 +12,9 @@ class BulletMgr;
 
 class BaseEnemy {
 
+	static int s_deadSE;
+	static int s_damageSE;
+
 public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
@@ -31,6 +34,8 @@ public:
 
 
 public:
+	static const int& DamageSE() { return s_damageSE; }
+	static const int& DeadSE() { return s_deadSE; }
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 

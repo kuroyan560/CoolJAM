@@ -12,6 +12,7 @@
 #include<string>
 
 #include<vector>
+#include<forward_list>
 
 class AudioApp
 {
@@ -97,8 +98,18 @@ private:
 		int m_nowIdx = 0;
 		PlayAudioArray(const std::vector<int>& Handles) :m_handles(Handles) {}
 	};
+
+	struct PlayAudioDelay
+	{
+		int m_handle;
+		int m_delayFrame;
+		PlayAudioDelay(const int& Handle, const int& DelayFrame = 10)
+			:m_handle(Handle), m_delayFrame(DelayFrame) {}
+	};
+
 	std::list<AudioData>m_audios;
 	std::vector<PlayAudioArray>m_playHandleArray;
+	std::forward_list<PlayAudioDelay>m_delayAudioHandle;
 
 public:
 	AudioApp();
@@ -110,6 +121,10 @@ public:
 	float GetVolume(const int& Handle);
 	int LoadAudio(std::string FileName, const float& Volume = 1.0f);
 	int PlayWave(const int& Handle, bool LoopFlag = false);
+	void PlayWaveDelay(const int& Handle, const int& DelayFrame = 10)
+	{
+		m_delayAudioHandle.push_front(PlayAudioDelay(Handle, DelayFrame));
+	}
 	int PlayWaveArray(const std::vector<int>& Handles)	//•¡”‚Ì‰¹º‚ğ“¯ƒtƒŒ[ƒ€‚ÅÄ¶‚µ‚È‚¢‚æ‚¤A‡”Ô‚ÉÄ¶
 	{
 		if (Handles.empty())return 0;

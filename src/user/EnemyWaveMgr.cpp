@@ -1,7 +1,7 @@
 #include "EnemyWaveMgr.h"
 #include "EnemyWave.h"
 
-EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
+EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 {
 
 	nowWaveCount = -1;
@@ -60,7 +60,7 @@ void EnemyWaveMgr::Init()
 
 }
 
-void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 
 	/*===== XVˆ— =====*/

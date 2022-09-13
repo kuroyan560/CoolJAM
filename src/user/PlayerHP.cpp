@@ -1,6 +1,6 @@
 #include "PlayerHP.h"
 #include "../engine/Importer.h"
-#include <DrawFunc_Append.h>
+#include "DrawFunc_Append.h"
 
 PlayerHP::PlayerHP(const float& Angle)
 {
@@ -69,7 +69,7 @@ void PlayerHP::Draw()
 	// アルファ値が0.05f以下だったら処理を行わない。
 	if (m_alpha <= 0.05f) return;
 
-	m_transform.SetPos(m_transform.GetPos() + Vec3<float>(0.0f, 0.1f, 0.0f));
+	m_transform.SetPos(m_transform.GetPos() + Vec3<float>(0.0f, 1.0f, 0.0f));
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(-m_drawAngle));
 	m_transform.SetScale(SIZE);
 

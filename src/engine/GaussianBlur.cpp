@@ -21,7 +21,7 @@ void GaussianBlur::GeneratePipeline()
 
     std::array<std::string, PROCESS_NUM - 1>vsEntoryPoint = { "HorizontalMain","VerticalMain" };
 
-    std::vector<RenderTargetInfo>renderTarget = { RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT,AlphaBlendMode_Trans) };
+    std::vector<RenderTargetInfo>renderTarget = { RenderTargetInfo(DXGI_FORMAT_R32G32B32A32_FLOAT,AlphaBlendMode_None) };
 
     auto sampler = WrappedSampler(false, true);
 
@@ -122,7 +122,7 @@ void GaussianBlur::Register(const std::shared_ptr<TextureBuffer>& SourceTex)
     DrawFunc2D::DrawExtendGraph2D(
         { 0,0 },
         m_blurResult[FINAL]->GetGraphSize().Float(),
-        m_blurResult[FINAL - 1]);
+        m_blurResult[FINAL - 1],1.0f,AlphaBlendMode_None);
 }
 
 #include"KuroEngine.h"

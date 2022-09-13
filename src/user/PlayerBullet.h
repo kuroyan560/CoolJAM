@@ -17,9 +17,9 @@ private:
 	Vec3<float> m_pos;
 	Vec3<float> m_forwardVec;
 	float m_scale;
-	const float SCALE = 0.5f;
+	const float SCALE = 1.0f;
 	const float CHECK_HIT_SCALE = 3.0f;
-	const float SPEED = 5.0f;
+	const float SPEED = 8.0f;
 	bool m_isActive;
 
 	Transform m_transform;
@@ -36,7 +36,7 @@ public:
 	void Draw();
 
 	inline Vec3<float> GetPos() { return m_pos; }
-	inline float GetCheckHitScale() { return m_scale; }
+	inline float GetCheckHitScale() { return CHECK_HIT_SCALE; }
 
 	bool GetIsActive() {
 		return m_isActive;
