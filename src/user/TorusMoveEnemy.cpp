@@ -176,7 +176,6 @@ void TorusMoveEnemy::Draw()
 		index->Draw();
 
 	}
-
 }
 
 void TorusMoveEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)

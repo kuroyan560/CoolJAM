@@ -2,11 +2,12 @@
 #include"DrawFunc_Append.h"
 #include"../engine/DrawFunc3D.h"
 #include"../engine/Model.h"
+#include"KazDrawFunc.h"
 
 DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL, std::array<std::shared_ptr<TextureBuffer>, 3>ELEC_TEXTURE_DATA) :initFlag(false)
 {
 	m_model = MODEL->m_model;
-	elecTextureBuffer = ELEC_TEXTURE_DATA;
+	m_elecTextureBuffer = ELEC_TEXTURE_DATA;
 	//m_model->m_meshes[0].material->texBuff[0] = elecTextureBuffer[0];
 }
 
@@ -28,6 +29,8 @@ void DashLightingParticle::Init(const Vec3<float> &POS)
 	m_transform.SetPos(m_startPos);
 	m_transform.SetScale({ 10.0f,10.0f,10.0f });
 	//m_transform.SetRotate(Vec3<Angle>(KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360)));
+	m_timer = 0;
+	m_flame = 0;
 }
 
 void DashLightingParticle::Update()
@@ -39,6 +42,17 @@ void DashLightingParticle::Update()
 		{
 			initFlag = false;
 		}
+		if (1 <= m_timer)
+		{
+			++m_flame;
+			m_timer = 0;
+		}
+		++m_timer;
+		if (m_elecTextureBuffer.size() <= m_flame)
+		{
+			m_flame = m_elecTextureBuffer.size() - 1;
+			initFlag = false;
+		}
 	}
 }
 
@@ -47,8 +61,10 @@ void DashLightingParticle::Draw(Camera &CAMERA)
 {
 	if (initFlag)
 	{
-		DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, 0.0f, 0), true, false, nullptr, AlphaBlendMode_Trans);
+		//DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, 0.0f, 0), true, false, nullptr, AlphaBlendMode_Trans);
+		KazDrawFunc::DrawBillBoardGraph(CAMERA, m_pos, { 10.0f,10.0f }, m_elecTextureBuffer[m_flame]);
 	}
+
 	//Transform transform;
 	//transform.SetPos({ 0.0f,5.0f,0.0f });
 	//transform.SetScale({ 10.0f,10.0f,10.0f });

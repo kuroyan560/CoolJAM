@@ -1,6 +1,7 @@
 #include "PlayerDashLighting.h"
 #include"DrawFunc3D.h"
 #include"Model.h"
+#include"DrawFunc_Append.h"
 
 PlayerDashLighting::PlayerDashLighting()
 {
@@ -19,6 +20,9 @@ PlayerDashLighting::PlayerDashLighting()
 		m_roadArray[i] = std::make_unique<DashLightingRoad>(i);
 	}
 
+
+	m_lModel = m_model->m_model;
+	m_lModel->m_meshes[0].material->texBuff[0] = elecAnimationTexture[0];
 }
 
 void PlayerDashLighting::Init(Vec3<float> *POS)
@@ -33,10 +37,11 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 	++m_timer;
 	if (2 <= m_timer && ENABLE_FLAG)
 	{
+		float size = 5.0f;
 		Vec3<float>emittPos;
-		emittPos.x = m_pos->x + KuroFunc::GetRand(-3.0f, 3.0f);
-		emittPos.y = KuroFunc::GetRand(-3.0f, 3.0f);
-		emittPos.z = m_pos->z + KuroFunc::GetRand(-3.0f, 3.0f);
+		emittPos.x = m_pos->x + KuroFunc::GetRand(-size, size);
+		emittPos.y = KuroFunc::GetRand(-size, size);
+		emittPos.z = m_pos->z + KuroFunc::GetRand(-size, size);
 		m_particleArray[m_particleInitNum]->Init(emittPos);
 
 		++m_particleInitNum;
@@ -84,4 +89,9 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 	{
 		m_roadArray[i]->Draw(CAMERA);
 	}
+
+	Transform t;
+	t.SetPos({ 0.0f,10.0f,0.0f });
+	t.SetScale({ 50.0f,50.0f,50.0f });
+	DrawFunc_Append::DrawModel(m_lModel, t, RenderTargetSwitch(1.0f, 1.0f, 1.0f), true, false, nullptr,AlphaBlendMode_Trans);
 }

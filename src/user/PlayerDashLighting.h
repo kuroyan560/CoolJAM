@@ -29,4 +29,6 @@ private:
 	std::shared_ptr<ModelObject>m_model;
 
 	std::array<std::shared_ptr<TextureBuffer>, 3>elecAnimationTexture;
+
+	std::shared_ptr<Model>m_lModel;
 };

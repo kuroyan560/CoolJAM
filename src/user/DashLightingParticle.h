@@ -25,7 +25,8 @@ private:
 	bool initFlag;
 	std::shared_ptr<Model>m_model;
 	Transform m_transform;
+	int m_flame;
+	int m_timer;
 
-	std::array<std::shared_ptr<TextureBuffer>, 3> elecTextureBuffer;
+	std::array<std::shared_ptr<TextureBuffer>, 3> m_elecTextureBuffer;
 };
-

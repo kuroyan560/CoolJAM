@@ -171,8 +171,6 @@ void GameScene::OnUpdate()
 
 
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
-
-
 }
 
 #include "DrawFunc2D.h"
@@ -183,8 +181,11 @@ void GameScene::OnDraw()
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
+
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
 	auto &nowCam = GameManager::Instance()->GetNowCamera();
+
 
 	//DrawFunc初期化
 	DrawFunc_Append::FrameInit(
@@ -233,27 +234,27 @@ void GameScene::OnDraw()
 	}
 
 	//	/* --- デバッグ描画 ---*/
-	//#ifdef _DEBUG
-	//	//デプスステンシルクリア
-	//	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-	//	//レンダーターゲットセット（バックバッファとデプスステンシル）
-	//	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
-	//
-	//	//デバッグ描画フラグ確認
-	//	if (GameManager::Instance()->GetDebugDrawFlg())
-	//	{
-	//		//XYZ軸
-	//		static const float LEN = 100.0f;
-	//		static const float THICKNESS = 0.5f;
-	//		static Vec3<float>ORIGIN = { 0,0,0 };
-	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
-	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
-	//		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
-	//
-	//		m_player->DrawDebugInfo(*nowCam);
-	//
-	//	}
-	//#endif
+	#ifdef _DEBUG
+		//デプスステンシルクリア
+		KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
+		//レンダーターゲットセット（バックバッファとデプスステンシル）
+		KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
+	
+		//デバッグ描画フラグ確認
+		if (GameManager::Instance()->GetDebugDrawFlg())
+		{
+			//XYZ軸
+			static const float LEN = 100.0f;
+			static const float THICKNESS = 0.5f;
+			static Vec3<float>ORIGIN = { 0,0,0 };
+			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
+			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
+			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
+	
+			m_player->DrawDebugInfo(*nowCam);
+	
+		}
+	#endif
 }
 
 void GameScene::OnImguiDebug()
