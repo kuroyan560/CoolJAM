@@ -42,6 +42,6 @@ void DashLightingRoad::Draw(Camera &Cam)
 	{
 		DrawFunc_Append::DrawLine(m_startPos + OFFSET,
 			m_endPos + OFFSET,
-			m_color, 1.0f, RenderTargetSwitch(1.0f, 1.0f, 1.0f), AlphaBlendMode_Add);
+			m_color, 0.3f, RenderTargetSwitch(0.5f, 0.5f, 1.0f), AlphaBlendMode_Add);
 	}
 }
