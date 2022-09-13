@@ -112,7 +112,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope);
+	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer = false);
 	void Draw(Camera& Cam, const bool& IsTitle = false);
 	void DrawDebugInfo(Camera& Cam);
 
@@ -125,6 +125,7 @@ public:
 	bool GetIsFever() { return m_isFever; }
 	float GetPlayerFeverRate() { return static_cast<float>(m_feverTime) / static_cast<float>(FEVER_TIME); }
 	float GetMovedLength() { return m_movedLength; }
+	void ClearMovedLength() { m_movedLength = 0; }
 	int GetDashCount() { return m_dashCounter; }
 	void ResetDashCount() { m_dashCounter = 0; }
 
@@ -138,7 +139,7 @@ private:
 	void Input(Camera& Cam, const Vec2<float>& WindowSize);
 
 	// 移動処理
-	void Move(std::weak_ptr<BulletMgr> BulletMgr);
+	void Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer);
 
 	// エフェクト全般の更新処理
 	void UpdateEffect();

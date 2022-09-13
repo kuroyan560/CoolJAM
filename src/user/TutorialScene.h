@@ -23,13 +23,13 @@ class EnemyWaveMgr;
 class GameTimer;
 class TextureBuffer;
 class FeverGauge;
-class TutorialText;
+class Tutorial;
 
 class TutorialScene : public BaseScene
 {
 private:
 	//プレイヤー
-	std::unique_ptr<Player> m_player;
+	std::shared_ptr<Player> m_player;
 
 	//マップモデル
 	std::shared_ptr<ModelObject>m_mapModel;
@@ -62,8 +62,8 @@ private:
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
 
-	// チュートリアルのテキスト
-	std::shared_ptr<TutorialText> m_tutorialText;
+	// チュートリアル
+	std::shared_ptr<Tutorial> m_tutorial;
 
 
 	//カメラ関係。
@@ -88,25 +88,19 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
+	// 遷移関係
+	bool m_isTransitionStart;
+	bool m_isInitPlayer;
+	bool m_isCompleteUpper;
+
+	// 遷移するときに見るカメラのY軸座標
+	const float TRANSITION_CAMERA_Y = 300.0f;
+
+	// タイトルでの各カメラのパラメーター
+	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19660044f, 0.100951008f, -4.14727974f);
+	Vec3<float> TITLE_EYE_POS = Vec3<float>(9.01069641f, 2.39467144f, 6.33004093f);
+
 	bool m_emissive = true;
-
-
-	/*-- チュートリアルに使用する変数 --*/
-
-	int m_damageWallTimer;		// ダメージ壁のチュートリアルの表示時間。
-	const int DAMAGE_WALL_TUTORIAL_TIMER = 240;
-
-	int m_enemyTutorialAppearTimer;		// 敵のチュートリアルで敵の説明のテキストを表示する時間。
-	const int ENEMY_TUTORIAL_APPEAR_TIMER = 180;
-	int m_enemyTutorialExitTimer;		// 敵のチュートリアルで敵を倒してから次のチュートリアルに遷移するまでの時間。
-	const int ENEMY_TUTORIAL_EXIT_TIMER = 60;
-
-	int m_feverTutorialAppearTimer;		// フィーバーのチュートリアルでエレキ虫が出現するまでの時間。
-	const int FEVER_TUTORIAL_APPEAR_TIMER = 180;
-
-	int m_feverTutorialSpawnDelay;		// フィーバー中に敵を沸かせる遅延
-	const int FEVER_TUTORIAL_SPAWN_DELAY = 60;
-	bool m_isFever;						// フィーバーになったかどうか
 
 
 public:

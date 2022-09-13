@@ -125,7 +125,7 @@ void Player::Init()
 
 }
 
-void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
+void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer)
 {
 
 	/*===== 更新処理 =====*/
@@ -134,7 +134,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	Input(Cam, WindowSize);
 
 	// 移動処理
-	Move(BulletMgr);
+	Move(BulletMgr, IsStopFeverTimer);
 
 	// 弾発射処理
 	Shot(BulletMgr, EnemyMgr);
@@ -275,7 +275,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 }
 
-void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
+void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 {
 
 	/*===== 移動処理 =====*/
@@ -291,10 +291,15 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		--m_feverTime;
-		if (m_feverTime <= 0) {
+		// フィーバーの時間経過を止めるフラグが立っていたら減らさない。チュートリアルでフィーバーのタイマーを減らしたくない場合があったので作成しました。
+		if (!IsStopFeverTimer) {
 
-			m_isFever = false;
+			--m_feverTime;
+			if (m_feverTime <= 0) {
+
+				m_isFever = false;
+
+			}
 
 		}
 
