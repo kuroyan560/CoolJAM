@@ -9,6 +9,7 @@
 #include "DriftParticle.h"
 #include "KazCollisionHelper.h"
 #include "PlayerHP.h"
+#include"ModelAnimator.h"
 
 Player::Player()
 {
@@ -43,7 +44,7 @@ Player::Player()
 	m_isFever = false;
 	m_feverTime = 0;
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
 
 	for (auto& index : m_driftParticle) {
 
@@ -122,7 +123,7 @@ void Player::Init()
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
 
-
+	m_modelObj->m_animator->Play("ToFloater", false, false);
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer)
@@ -177,7 +178,8 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	}
 
-
+	//アニメーター更新
+	m_modelObj->m_animator->Update();
 }
 
 void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
@@ -212,7 +214,19 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	}
 
 	// ブレーキ入力を保存。
+	bool oldBrake = m_isBrake;
 	m_isBrake = UsersInput::Instance()->MouseInput(LEFT) && !isForward;
+
+	//タイヤアニメーション
+	if (!oldBrake && m_isBrake)	//フローター → タイヤ
+	{
+		m_modelObj->m_animator->Play("ToWheel", false, false);
+	}
+	else if (oldBrake && !m_isBrake)	//タイヤ → フローター
+	{
+		m_modelObj->m_animator->Play("ToFloater", false, false);
+	}
+
 	if (m_isBrake) {
 
 		++m_brakeTimer;
@@ -518,7 +532,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 {
 	/*===== 描画処理 =====*/
 
-	m_transform.SetPos(m_pos);
+	m_modelObj->m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
 	Vec3<float> movedVec = m_forwardVec;
@@ -535,11 +549,11 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	m_rotation = resultY * resultX;
 
 	inputATan2f = atan2f(m_inputVec.x, m_inputVec.z);
-	m_transform.SetRotate(m_rotation);
+	m_modelObj->m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
 		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-		DrawFunc_Append::DrawModel(m_model, m_transform);
+		DrawFunc_Append::DrawModel(m_modelObj);
 	}
 
 	// ドリフトパーティクルの描画処理
@@ -921,8 +935,8 @@ bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE Eas
 	if (nowHSV.x < 0) {
 		nowHSV.x += 360.0f;
 	}
-	m_model->m_meshes[1].material->constData.pbr.baseColor = HSVtoRGB(nowHSV);
-	m_model->m_meshes[1].material->Mapping();
+	m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor = HSVtoRGB(nowHSV);
+	m_modelObj->m_model->m_meshes[1].material->Mapping();
 
 	return 1.0f <= m_colorEasingTimer;
 

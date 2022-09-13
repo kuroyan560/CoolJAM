@@ -126,6 +126,13 @@ void PlayerModelOutline::Update()
 		m_waveTextureSize = { 0.0f,0.0f };
 	}
 
+
+	if (!m_enoughPowerFlag && !m_powerUpFlag)
+	{
+		m_scale = 0.8f;
+	}
+
+
 	m_transform.SetPos(*m_pos);
 	m_transform.SetScale({ m_scale,m_scale,m_scale });
 	m_transform.SetRotate(*m_rotation);

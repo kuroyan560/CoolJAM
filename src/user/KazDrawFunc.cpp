@@ -24,6 +24,7 @@ void KazDrawFunc::DrawNonShadingModelSignalColor(const std::weak_ptr<Model> Mode
 	{
 		//パイプライン設定
 		static PipelineInitializeOption PIPELINE_OPTION(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		PIPELINE_OPTION.m_calling = D3D12_CULL_MODE_FRONT;
 
 		//シェーダー情報
 		static Shaders SHADERS;

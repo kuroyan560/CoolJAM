@@ -7,7 +7,7 @@
 #include"PlayerDashLighting.h"
 #include"PlayerModelOutline.h"
 
-class Model;
+class ModelObject;
 class Camera;
 class BulletMgr;
 class EnemyMgr;
@@ -20,9 +20,6 @@ class Player
 private:
 
 	/*===== メンバ変数 =====*/
-
-	// トランスフォーム
-	Transform m_transform;
 
 	// 基本的な変数
 	Vec3<float> m_pos;			// 現在座標
@@ -91,7 +88,7 @@ private:
 	bool m_isBrake;				// ブレーキしているかどうか。
 
 	//モデル
-	std::shared_ptr<Model>m_model;
+	std::shared_ptr<ModelObject>m_modelObj;
 
 	//アウトライン用のモデル
 	float inputATan2f;
@@ -157,7 +154,7 @@ private:
 	float Saturate(const float& Value);
 
 	// トランスフォームゲッタ
-	const Transform& GetTransform()const { return m_transform; }
+	const Transform& GetTransform()const { return m_modelObj->m_transform; }
 
 	// ドリフトのパーティクルを生成。
 	void GenerateDriftParticle(const float& NowAngle, const float& Cross);
