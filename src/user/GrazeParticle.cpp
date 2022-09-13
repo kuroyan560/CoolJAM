@@ -67,7 +67,7 @@ void GrazeParticle::Draw(Camera& CAMERA)
 {
 	if (initFlag)
 	{
-	//	KazDrawFunc::DrawBillBoardGraph(CAMERA, m_pos, m_size, texBuff);
+		KazDrawFunc::DrawBillBoardGraph(CAMERA, m_pos, m_size, texBuff);
 	}
 }
 

@@ -45,7 +45,7 @@ void GrazeEmitter::Update(float MAP_SIZE)
 			count = i;
 		}
 	}
-	int countMax = 3;
+	int countMax = 10;
 	float rate = (1.0f - (static_cast<float>(count) / static_cast<float>(countMax)));
 	if (0 <= initTimer && count <= countMax)
 	{

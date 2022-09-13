@@ -164,9 +164,6 @@ private:
 	// ドリフトのパーティクルを生成。
 	void GenerateDriftParticle(const float& NowAngle, const float& Cross);
 
-	Vec3<float> RGBtoHSV(const Vec3<float>& RGB);
-	Vec3<float> HSVtoRGB(const Vec3<float>& HSV);
-	void SearchMaxMinColor(Vec3<float>& Color, double& max, double& min, int& rgb);
 
 	// 車体の色を変える。
 	bool ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE EasingType, EASE_CHANGE_TYPE EaseChangeType, const Vec3<float>& StartColor, const Vec3<float>& EndColor, const bool& IsEaseX);
