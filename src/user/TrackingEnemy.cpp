@@ -73,7 +73,7 @@ void TrackingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 
 }
 
-void TrackingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void TrackingEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/

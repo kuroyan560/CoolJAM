@@ -48,7 +48,7 @@ public:
 	PressEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel);
 	void Init()override;
 	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)override;
-	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
+	void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
 	void Draw()override;
 
 private:

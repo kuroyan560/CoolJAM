@@ -71,7 +71,7 @@ void ShieldEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, cons
 
 }
 
-void ShieldEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void ShieldEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/

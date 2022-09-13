@@ -72,7 +72,7 @@ void TorusMoveEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 }
 
-void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void TorusMoveEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/

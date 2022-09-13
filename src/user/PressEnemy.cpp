@@ -76,7 +76,7 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 
 }
 
-void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void PressEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/

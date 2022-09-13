@@ -14,6 +14,11 @@ BaseEnemy::BaseEnemy()
 	}
 }
 
+void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+{
+	OnUpdate(BulletMgr, PlayerPos, MapSize);
+}
+
 void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
 {
 
