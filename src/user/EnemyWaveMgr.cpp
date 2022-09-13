@@ -51,12 +51,15 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	//wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
 	//m_waves.emplace_back(wave2);
 
+	m_waves.emplace_back(std::make_shared<EnemyWave>(0, false));
+
 }
 
-void EnemyWaveMgr::Init(const int& FrameTimer)
+void EnemyWaveMgr::Init(const int& FrameTimer, const int& FinalWaveTime)
 {
 
 	/*===== 初期化処理 =====*/
+	assert(!m_waves.empty());
 
 	m_frameTimer = FrameTimer;
 	m_nowWaveIdx = 0;
@@ -67,13 +70,16 @@ void EnemyWaveMgr::Init(const int& FrameTimer)
 		{
 			return a->WaveStartTime() < b->WaveStartTime();
 		});
+
+	//一番
+	m_waves[0]->Start();
+
+	m_finalWaveTimer = FinalWaveTime;
 }
 
 void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 	/*===== 更新処理 =====*/
-
-	assert(!m_waves.empty());
 
 	// フレームのタイマーを更新。
 	++m_frameTimer;
@@ -92,6 +98,20 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &P
 			m_waves[m_nowWaveIdx]->Stop();
 			m_waves[nextWaveIdx]->Start();
 			m_nowWaveIdx = nextWaveIdx;
+		}
+	}
+	//ない場合最後のウェーブの時間計測
+	else
+	{
+		if (0 < m_finalWaveTimer)
+		{
+			m_finalWaveTimer--;
+
+			//全てのウェーブが終了
+			if (m_finalWaveTimer <= 0)
+			{
+
+			}
 		}
 	}
 
