@@ -19,7 +19,7 @@ public:
 
 	void Start();
 	void AddWaveNum();
-	void Score();
+	void Score(int SCORE);
 private:
 	std::unique_ptr<GameTimer>timer;
 	std::shared_ptr<WaveUI> m_waveUI;
