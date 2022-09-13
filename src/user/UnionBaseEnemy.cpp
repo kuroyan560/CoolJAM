@@ -163,6 +163,9 @@ void UnionBaseEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 		}
 
 	}
+
+	m_transform.SetPos(m_pos);
+
 }
 
 #include"DrawFunc_Append.h"
@@ -171,7 +174,6 @@ void UnionBaseEnemy::Draw()
 
 	/*===== •`‰æˆ— =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);

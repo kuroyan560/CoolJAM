@@ -16,7 +16,12 @@ class BaseEnemy {
 	static int s_deadSE;
 	static int s_damageSE;
 
+	static const int APPEAR_TIME = 90;
+	static const int APPEAR_HEIGHT_OFFSET = 60;
+
 	int m_appearTimer;
+	Vec3<float>m_generatePos;
+	Vec3<float>m_generateForwardVec;
 
 public:
 

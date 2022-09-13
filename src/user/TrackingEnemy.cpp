@@ -158,6 +158,7 @@ void TrackingEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<floa
 
 	}
 
+	m_transform.SetPos(m_pos);
 }
 
 #include"DrawFunc_Append.h"
@@ -166,7 +167,6 @@ void TrackingEnemy::Draw()
 
 	/*===== •`‰æˆ— =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
