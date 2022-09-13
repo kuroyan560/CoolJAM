@@ -13,6 +13,7 @@ class StageFloor : public Singleton<StageFloor>
 
 	StageFloor();
 public:
+	void ClearScreen();
 	void ScreenTargetSet(bool Clear);
 	void Draw();
 };

@@ -12,10 +12,14 @@ StageFloor::StageFloor()
 	m_modelObj->m_model->m_meshes[0].material->texBuff[COLOR_TEX] = m_floorScreen;
 }
 
+void StageFloor::ClearScreen()
+{
+	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_floorScreen);
+}
+
 void StageFloor::ScreenTargetSet(bool Clear)
 {
-	if(Clear)
-	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_floorScreen);
+	if (Clear)ClearScreen();
 
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ m_floorScreen });
 }
