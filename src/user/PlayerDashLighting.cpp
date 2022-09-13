@@ -4,7 +4,7 @@
 
 PlayerDashLighting::PlayerDashLighting()
 {
-	m_model = std::make_shared<ModelObject>("resource/user/Particle/", "plane.glb");
+	m_model = std::make_shared<ModelObject>("resource/user/Particle/", "yPlane.glb");
 
 
 	D3D12App::Instance()->GenerateTextureBuffer(elecAnimationTexture.data(), "resource/user/Particle/elecParticle.png", 3, { 3,1 });

@@ -7,7 +7,7 @@ DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL, s
 {
 	m_model = MODEL->m_model;
 	elecTextureBuffer = ELEC_TEXTURE_DATA;
-	m_model->m_meshes[0].material->texBuff[0] = elecTextureBuffer[0];
+	//m_model->m_meshes[0].material->texBuff[0] = elecTextureBuffer[0];
 }
 
 void DashLightingParticle::Init(const Vec3<float> &POS)
@@ -49,8 +49,8 @@ void DashLightingParticle::Draw(Camera &CAMERA)
 	{
 		DrawFunc_Append::DrawModel(m_model, m_transform, RenderTargetSwitch(alpha, 0.0f, 0), true, false, nullptr, AlphaBlendMode_Trans);
 	}
-	Transform transform;
-	transform.SetPos({ 0.0f,5.0f,0.0f });
-	transform.SetScale({ 10.0f,10.0f,10.0f });
-	DrawFunc_Append::DrawModel(m_model, transform, RenderTargetSwitch(1.0f, 0.0f, 0.0f), true, false, nullptr, AlphaBlendMode_Trans);
+	//Transform transform;
+	//transform.SetPos({ 0.0f,5.0f,0.0f });
+	//transform.SetScale({ 10.0f,10.0f,10.0f });
+	//DrawFunc_Append::DrawModel(m_model, transform, RenderTargetSwitch(1.0f, 0.0f, 0.0f), true, false, nullptr, AlphaBlendMode_Trans);
 }
