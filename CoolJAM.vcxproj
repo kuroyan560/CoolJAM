@@ -272,6 +272,7 @@
     <ClCompile Include="src\user\UnionEnemy.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
     <ClCompile Include="src\user\PlayerModelOutline.cpp" />
+    <ClCompile Include="src\user\WaveUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -399,6 +400,7 @@
     <ClInclude Include="src\user\UnionEnemy.h" />
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\PlayerModelOutline.h" />
+    <ClInclude Include="src\user\WaveUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">

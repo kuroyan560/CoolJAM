@@ -6,6 +6,7 @@
 
 class EnemyWave;
 class EnemyMgr;
+class WaveUI;
 
 class EnemyWaveMgr {
 
@@ -22,7 +23,7 @@ private:
 
 	Vec2<float> m_waveCount;
 
-	std::shared_ptr<TextureBuffer> m_waveTexBuffer;
+	std::shared_ptr<WaveUI> m_waveUI;
 
 
 public:
