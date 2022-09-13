@@ -25,7 +25,7 @@ GameTimer::GameTimer()
 	//TexHandleMgr::LoadDivGraph("resource/ChainCombat/UI/num.png", 12, { 12, 1 }, number.data());
 
 	//スコア無効、タイマーを中心に描画
-	timerPos.x = 600.0f;
+	timerPos.x = 0.0f;
 	timerPos.y = 400.0f;
 
 	//countDownSE[0] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_1.wav", 0.2f);

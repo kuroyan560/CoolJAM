@@ -104,6 +104,8 @@ void GameScene::OnInitialize()
 
 	AudioApp::Instance()->PlayWave(m_bgm, true);
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
+
+	m_gameUI->Init();
 }
 
 void GameScene::OnUpdate()
@@ -207,10 +209,9 @@ void GameScene::OnDraw()
 
 	// マップを描画
 	StageFloor::Instance()->ClearScreen();
-	StageFloor::Instance()->Draw();
 
 	m_gameUI->Draw();
-
+	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画
 	m_player->Draw(*nowCam);

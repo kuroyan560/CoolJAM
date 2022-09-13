@@ -8,6 +8,7 @@ GameUI::GameUI()
 void GameUI::Init()
 {
 	timer->Init(120);
+	timer->Start();
 }
 
 void GameUI::Update()
@@ -17,9 +18,5 @@ void GameUI::Update()
 
 void GameUI::Draw()
 {
-	// レンダーターゲットをセット。
-	StageFloor::Instance()->ScreenTargetSet(true);
-
 	timer->Draw();
-
 }
