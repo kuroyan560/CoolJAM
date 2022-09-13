@@ -54,6 +54,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	if (m_test)
 	{
 		ImGui::Text("Now Testing ...");
+
+		if (WaveMgr.EndAllWaves())
+		{
+			ImGui::Text("All waves end. Please stop this test.");
+		}
 		ImGui::End();
 		return;
 	}
@@ -62,6 +67,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	if (ImGui::Button("AddWave"))
 	{
 		WaveMgr.AddWave(std::make_shared<EnemyWave>(30, false));
+		m_waveIdx++;
 	}
 	//ウェーブ削除
 	ImGui::SameLine();
@@ -97,7 +103,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	//エネミー追加
 	if (ImGui::Button("AddEnemy"))
 	{
-		wave->AddEnemy({ 0,0,0 }, { 0,0,0 }, ENEMY_INFO::ID::STOPPING, 0);
+		wave->AddEnemy({ 0,0,0 }, { 0,0,0 }, ENEMY_INFO::ID::STOPPING, 1);
 	}
 
 	if (!enemys.empty())
@@ -116,7 +122,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			{
 				const auto& info = enemys[i];
 				std::string str = std::to_string(i) + " : " + std::to_string(info.m_generateFrame) + " - " + ENEMY_INFO::GetIDName(info.m_id);
-				ImGui::RadioButton(str.c_str(), &m_enemyIdx);
+				ImGui::RadioButton(str.c_str(), &m_enemyIdx, i);
 			}
 
 			ImGui::EndChild();
@@ -143,11 +149,12 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 					ImGui::SetItemDefaultFocus();
 				}
 			}
+			ImGui::EndCombo();
 		}
 		//生成フレーム
-		if (ImGui::DragInt("GenerateFrame", &enemy.m_generateFrame) && enemy.m_generateFrame < 0)
+		if (ImGui::DragInt("GenerateFrame", &enemy.m_generateFrame) && enemy.m_generateFrame < 1)
 		{
-			enemy.m_generateFrame = 0;	//マイナス防止
+			enemy.m_generateFrame = 1;	//マイナス防止
 		}
 
 		//生成位置
