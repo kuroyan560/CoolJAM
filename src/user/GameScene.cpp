@@ -203,6 +203,7 @@ void GameScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	// マップを描画
+	StageFloor::Instance()->ClearScreen();
 	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画

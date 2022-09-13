@@ -2,6 +2,7 @@ cbuffer cbuff0 : register(b0)
 {
     float3 outputColor;
     float brightThreshold;
+    int2 imgSize;
 }
 
 Texture2D<float4> img_0 : register(t0);
