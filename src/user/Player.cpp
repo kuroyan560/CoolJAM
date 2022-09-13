@@ -9,6 +9,7 @@
 #include "DriftParticle.h"
 #include "KazCollisionHelper.h"
 #include "PlayerHP.h"
+#include"ModelAnimator.h"
 
 Player::Player()
 {
@@ -118,7 +119,7 @@ void Player::Init()
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
 
-
+	m_modelObj->m_animator->Play("ToFloater", false, false);
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
@@ -173,7 +174,8 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 
 	}
 
-
+	//アニメーター更新
+	m_modelObj->m_animator->Update();
 }
 
 void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
@@ -208,7 +210,19 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	}
 
 	// ブレーキ入力を保存。
+	bool oldBrake = m_isBrake;
 	m_isBrake = UsersInput::Instance()->MouseInput(LEFT) && !isForward;
+
+	//タイヤアニメーション
+	if (!oldBrake && m_isBrake)	//フローター → タイヤ
+	{
+		m_modelObj->m_animator->Play("ToWheel", false, false);
+	}
+	else if (oldBrake && !m_isBrake)	//タイヤ → フローター
+	{
+		m_modelObj->m_animator->Play("ToFloater", false, false);
+	}
+
 	if (m_isBrake) {
 
 		++m_brakeTimer;
