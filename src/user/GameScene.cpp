@@ -16,6 +16,7 @@
 #include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
 #include"GameMode.h"
+#include"EnemyWaveEditor.h"
 
 GameScene::GameScene()
 {
@@ -128,7 +129,10 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	// “GWaveƒNƒ‰ƒX‚ÌXVˆ—B
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+	{
+		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	}
 
 	// ƒQ[ƒ€‚Ìó‘Ô‚É‰ž‚¶‚ÄƒJƒƒ‰‚ÌˆÊ’u‚ð•Ï‚¦‚éB
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
@@ -276,7 +280,7 @@ void GameScene::OnImguiDebug()
 	ImGui::Text("POS_Z:%f", m_player->GetPos().z);
 	ImGui::End();
 
-	//ï¿½Eï¿½Fï¿½[ï¿½uï¿½ÒW
+	//ƒEƒF[ƒu•ÒW
 	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr);
 }
 
