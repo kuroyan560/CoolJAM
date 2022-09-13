@@ -132,10 +132,10 @@ void GameScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	// 敵Waveクラスの更新処理。
-	if (EnemyWaveEditor::Instance()->CanWaveUpdate())
-	{
+	//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+	//{
 		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
-	}
+	//}
 
 	// ゲームの状態に応じてカメラの位置を変える。
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {

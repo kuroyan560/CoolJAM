@@ -7,6 +7,8 @@
 #include"StageFloor.h"
 #include"GameTimer.h"
 
+class WaveUI;
+
 class GameUI
 {
 public:
@@ -20,5 +22,6 @@ public:
 	void Score();
 private:
 	std::unique_ptr<GameTimer>timer;
+	std::shared_ptr<WaveUI> m_waveUI;
 
 };
