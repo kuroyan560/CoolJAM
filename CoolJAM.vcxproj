@@ -234,6 +234,7 @@
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\FeverGauge.cpp" />
+    <ClCompile Include="src\user\Font.cpp" />
     <ClCompile Include="src\user\GameTimer.cpp" />
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp" />
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp" />
@@ -253,6 +254,7 @@
     <ClCompile Include="src\user\PlayerHP.cpp" />
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp" />
     <ClCompile Include="src\user\PressEnemy.cpp" />
+    <ClCompile Include="src\user\ScoreMgr.cpp" />
     <ClCompile Include="src\user\ShieldEnemy.cpp" />
     <ClCompile Include="src\user\StageFloor.cpp" />
     <ClCompile Include="src\user\StoppingEnemy.cpp" />
@@ -270,6 +272,7 @@
     <ClCompile Include="src\user\UnionEnemy.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
     <ClCompile Include="src\user\PlayerModelOutline.cpp" />
+    <ClCompile Include="src\user\WaveUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -358,6 +361,7 @@
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\FeverGauge.h" />
+    <ClInclude Include="src\user\Font.h" />
     <ClInclude Include="src\user\GameMode.h" />
     <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
@@ -379,6 +383,7 @@
     <ClInclude Include="src\user\PlayerHP.h" />
     <ClInclude Include="src\user\PlayerStraightEnemy.h" />
     <ClInclude Include="src\user\PressEnemy.h" />
+    <ClInclude Include="src\user\ScoreMgr.h" />
     <ClInclude Include="src\user\ShieldEnemy.h" />
     <ClInclude Include="src\user\StageFloor.h" />
     <ClInclude Include="src\user\StoppingEnemy.h" />
@@ -396,6 +401,7 @@
     <ClInclude Include="src\user\UnionEnemy.h" />
     <ClInclude Include="src\user\PlayerDashLighting.h" />
     <ClInclude Include="src\user\PlayerModelOutline.h" />
+    <ClInclude Include="src\user\WaveUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
