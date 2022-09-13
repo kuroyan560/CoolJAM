@@ -33,7 +33,7 @@ void GameUI::Update()
 
 
 	timer->Update();
-	m_waveUI->Update(5, Vec2<float>());
+	m_waveUI->Update(10, Vec2<float>());
 
 
 
@@ -42,7 +42,7 @@ void GameUI::Update()
 
 void GameUI::Draw()
 {
-	timer->Draw();
+	//timer->Draw();
 	m_waveUI->Draw();
 
 }
