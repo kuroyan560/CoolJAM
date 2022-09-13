@@ -28,7 +28,7 @@ void DashLightingParticle::Init(const Vec3<float> &POS)
 
 	m_transform.SetPos(m_startPos);
 	m_transform.SetScale({ 10.0f,10.0f,10.0f });
-	//m_transform.SetRotate(Vec3<Angle>(KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360)));
+	m_transform.SetRotate(Vec3<Angle>(KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360), KuroFunc::GetRand(0, 360)));
 	m_timer = 0;
 	m_flame = 0;
 }
@@ -37,12 +37,8 @@ void DashLightingParticle::Update()
 {
 	if (initFlag)
 	{
-		alpha -= 1.0f / 30.0f;
-		if (alpha <= 0.0f)
-		{
-			initFlag = false;
-		}
-		if (1 <= m_timer)
+		alpha -= 1.0f / 20.0f;
+		if (2 <= m_timer)
 		{
 			++m_flame;
 			m_timer = 0;
@@ -50,7 +46,10 @@ void DashLightingParticle::Update()
 		++m_timer;
 		if (m_elecTextureBuffer.size() <= m_flame)
 		{
-			m_flame = m_elecTextureBuffer.size() - 1;
+			m_flame =0;
+		}
+		if (alpha <= 0.0f)
+		{
 			initFlag = false;
 		}
 	}
