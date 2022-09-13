@@ -55,7 +55,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 }
 
-void EnemyWaveMgr::Init(const int& FrameTimer, const int& FinalWaveTime)
+void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

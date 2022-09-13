@@ -16,6 +16,8 @@ private:
 	int m_waveIdx = 0;
 	int m_enemyIdx = 0;
 
+	int m_finalWaveTime = 150;
+
 public:
 	void EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr);
 	bool CanWaveUpdate()

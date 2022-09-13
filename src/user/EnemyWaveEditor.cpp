@@ -28,19 +28,19 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		{
 			if (ImGui::MenuItem("WaveTest", nullptr, nullptr, !m_test))
 			{
-				WaveMgr.Init(WaveMgr.m_waves[m_waveIdx]->m_waveStartFrame);
+				WaveMgr.Init(m_finalWaveTime, WaveMgr.m_waves[m_waveIdx]->m_waveStartFrame);
 				EnemyMgr.lock()->Init();
 				m_test = true;
 			}
 			if (ImGui::MenuItem("FullTest", nullptr, nullptr, !m_test))
 			{
-				WaveMgr.Init();
+				WaveMgr.Init(m_finalWaveTime);
 				EnemyMgr.lock()->Init();
 				m_test = true;
 			}
 			if (ImGui::MenuItem("Stop", nullptr, nullptr, m_test))
 			{
-				WaveMgr.Init();
+				WaveMgr.Init(m_finalWaveTime);
 				EnemyMgr.lock()->Init();
 				m_test = false;
 			}
@@ -59,9 +59,28 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		{
 			ImGui::Text("All waves end. Please stop this test.");
 		}
+		ImGui::Separator();
+
+		ImGui::Text("NowTimer : { %d }", WaveMgr.m_frameTimer);
+
+		if (WaveMgr.m_nowWaveIdx + 1 <= WaveMgr.m_waves.size() - 1)
+		{
+			ImGui::Text("NextWaveBegin : { %d }", WaveMgr.m_waves[WaveMgr.m_nowWaveIdx + 1]->m_waveStartFrame);
+		}
+		else
+		{
+			ImGui::Text("NextWaveBegin : { Final Wave }");
+			ImGui::Text("UntilFinish : { %d }", WaveMgr.m_finalWaveTimer);
+		}
+
 		ImGui::End();
 		return;
 	}
+
+	ImGui::Text("NowWaveCount : { %d }", WaveMgr.m_waves.size());
+	if (ImGui::DragInt("FinalWaveTime", &m_finalWaveTime) && m_finalWaveTime < 0)m_finalWaveTime = 0;
+
+	ImGui::Separator();
 
 	//ウェーブ追加
 	if (ImGui::Button("AddWave"))

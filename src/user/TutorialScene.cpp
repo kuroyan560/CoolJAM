@@ -77,7 +77,7 @@ void TutorialScene::OnInitialize()
 	m_player->Init();
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
-	m_enemyWaveMgr->Init();
+	m_enemyWaveMgr->Init(60);
 	m_feverGauge->Init();
 
 	m_environmentMgr->Init();
