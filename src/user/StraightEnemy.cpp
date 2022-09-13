@@ -46,7 +46,7 @@ void StraightEnemy::Init()
 
 }
 
-void StraightEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void StraightEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ê∂ê¨èàóù =====*/

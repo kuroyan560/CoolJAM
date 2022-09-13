@@ -13,7 +13,7 @@ void CoinEnemy::Init()
 	m_isActive = false;
 }
 
-void CoinEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec)
+void CoinEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec)
 {
 	m_id = ID;
 	m_pos = Pos;

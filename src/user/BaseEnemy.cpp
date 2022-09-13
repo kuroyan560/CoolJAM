@@ -19,6 +19,11 @@ void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pl
 	OnUpdate(BulletMgr, PlayerPos, MapSize);
 }
 
+void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+{
+	OnGenerate(ID, PlayerPos, Pos, ForwardVec);
+}
+
 void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
 {
 

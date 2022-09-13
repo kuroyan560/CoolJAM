@@ -16,6 +16,8 @@ class BaseEnemy {
 	static int s_deadSE;
 	static int s_damageSE;
 
+	int m_appearTimer;
+
 public:
 
 	/*===== ÉÅÉìÉoä÷êî =====*/
@@ -35,6 +37,7 @@ public:
 
 
 	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
+	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 public:
 	static const int &DamageSE() { return s_damageSE; }
 	static const int &DeadSE() { return s_deadSE; }
@@ -45,7 +48,7 @@ public:
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
 	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
+	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
 	virtual void Draw() = 0;
 
 	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
