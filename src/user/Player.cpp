@@ -43,8 +43,10 @@ Player::Player()
 	m_hp = MAX_HP;
 	m_isFever = false;
 	m_feverTime = 0;
+	m_mousePointerScale = false;
 
 	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
+	m_mousePointer = std::make_shared<ModelObject>("resource/user/", "mousePoint3D.glb");
 
 	for (auto& index : m_driftParticle) {
 
@@ -111,6 +113,7 @@ void Player::Init()
 	m_hp = MAX_HP;
 	m_isFever = false;
 	m_feverTime = 0;
+	m_mousePointerScale = 0;
 
 	for (auto& index : m_driftParticle) {
 
@@ -242,6 +245,17 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		// ブレーキブーストのタイマーを初期化する。
 		m_brakeBoostTimer = 0;
 
+		// マウスのわーるど座標を求める。
+		Vec2<int> winSize = Vec2<int>(WindowSize.x, WindowSize.y);
+		Vec3<float> mousePos = KuroFunc::ConvertScreenToWorld(UsersInput::Instance()->GetMousePos(), 0, Cam.GetViewMat(), Cam.GetProjectionMat(), winSize);
+		Vec3<float> mousePosFar = KuroFunc::ConvertScreenToWorld(UsersInput::Instance()->GetMousePos(), 1, Cam.GetViewMat(), Cam.GetProjectionMat(), winSize);
+		Vec3<float> mouseWorldPos;
+		bool isHit = CheckHitRayToStagePolygon(mousePos, Vec3<float>(mousePosFar - mousePos).GetNormal(), mouseWorldPos);
+
+		// マウス座標を更新。
+		mouseWorldPos.y = 0;
+		m_mousePointer->m_transform.SetPos(mouseWorldPos);
+
 		// ベクトルをすごくゆっくり補完する。
 		float cross = m_forwardVec.Cross(m_inputVec).y;
 		float dot = m_forwardVec.Dot(m_inputVec);
@@ -261,6 +275,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			m_forwardVec = Vec3<float>(sinf(rotAngle), 0.0f, cosf(rotAngle));
 
 		}
+
+		// マウスカーソルのサイズを補完する。
+		m_mousePointerScale += (MOUSE_POINTER_SCALE - m_mousePointerScale) / 2.0f;
 
 		GenerateDriftParticle(nowAngle, cross);
 
@@ -291,6 +308,12 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		if (MAX_SPEED < m_speed) m_speed = MAX_SPEED;
 
 		m_brakeTimer = 0;
+
+
+		// マウスカーソルのサイズを補完する。
+		if (0 < m_mousePointerScale) {
+			m_mousePointerScale -= m_mousePointerScale / 2.0f;
+		}
 
 	}
 
@@ -563,6 +586,10 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
 		DrawFunc_Append::DrawModel(m_modelObj);
 	}
+
+	// マウスのカーソルを描画
+	m_mousePointer->m_transform.SetScale(m_mousePointerScale);
+	DrawFunc_Append::DrawModel(m_mousePointer);
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {

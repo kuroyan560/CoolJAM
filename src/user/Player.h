@@ -36,6 +36,11 @@ private:
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
+	// マウス座標に設置するモデル。
+	std::shared_ptr<ModelObject>m_mousePointer;
+	float m_mousePointerScale;
+	const float MOUSE_POINTER_SCALE = 5.0f;
+
 	// 動いた総量
 	float m_movedLength;
 
@@ -180,6 +185,33 @@ private:
 		return result;
 
 	}
+
+	// マウスのわーるど座標を求める。
+	bool Player::CheckHitRayToStagePolygon(const Vec3<float>& RayStartPos, const Vec3<float>& RayDir, Vec3<float>& HitPos)
+	{
+
+		// 平面の頂点
+		Vec3<float> p1 = Vec3<float>(10000, 0, 10000);
+		Vec3<float> p2 = Vec3<float>(-10000, 0, -10000);
+		Vec3<float> p3 = Vec3<float>(10000, 0, -10000);
+
+		// レイの開始地点から平面におろした垂線の長さを求める
+		Vec3<float> planeNorm = Vec3<float>(0, 1, 0);
+		float rayToOriginLength = RayStartPos.Dot(planeNorm);
+		float planeToOriginLength = p1.Dot(planeNorm);
+		// 視点から平面におろした垂線の長さ
+		float perpendicularLine = rayToOriginLength - planeToOriginLength;
+
+		// 三角関数を利用して視点から衝突店までの距離を求める
+		float dist = planeNorm.Dot(RayDir);
+		float impDistance = perpendicularLine / -dist;
+
+		// 衝突地点
+		HitPos = RayStartPos + RayDir * impDistance;
+
+		return true;
+	}
+
 
 };
 
