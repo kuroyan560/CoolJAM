@@ -14,8 +14,6 @@ private:
 
 	std::shared_ptr<TextureBuffer> m_waveTexture;	// 「WAVE」のテクスチャ
 
-	Vec2<float> m_wavePos;
-
 	float m_easingTimer;	// イージングのタイマー
 	const float ADD_EASING_TIMER = 0.05f;
 
@@ -27,9 +25,10 @@ private:
 	const Vec2<float> MIDDLE_POS = WinApp::Instance()->GetExpandWinCenter() + Vec2<float>(0, 1.0f);
 	const Vec2<float> APPEAR_POS = Vec2<float>(WinApp::Instance()->GetExpandWinCenter().x, WinApp::Instance()->GetExpandWinSize().y + WinApp::Instance()->GetExpandWinCenter().y) + Vec2<float>(0, 1.0f);
 	const Vec2<float> EXIT_POS = Vec2<float>(WinApp::Instance()->GetExpandWinCenter().x, -WinApp::Instance()->GetExpandWinCenter().y) + Vec2<float>(0, 1.0f);
-
-
 public:
+
+	Vec2<float> m_wavePos;
+
 
 	/*===== メンバ関数 =====*/
 

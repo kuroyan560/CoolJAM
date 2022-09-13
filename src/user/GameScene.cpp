@@ -173,7 +173,14 @@ void GameScene::OnUpdate()
 		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
 	}
 
-	m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
+	if (m_player->GetIsFever())
+	{
+		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
+	}
+	else
+	{
+		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+	}
 
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
@@ -290,6 +297,8 @@ void GameScene::OnImguiDebug()
 
 	//ウェーブ編集
 	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr);
+
+	m_gameUI->DrawImGui();
 }
 
 void GameScene::OnFinalize()

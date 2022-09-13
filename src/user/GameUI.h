@@ -6,6 +6,7 @@
 #include <array>
 #include"StageFloor.h"
 #include"GameTimer.h"
+#include"../engine/ImguiApp.h"
 
 class WaveUI;
 
@@ -17,11 +18,16 @@ public:
 	void Update();
 	void Draw();
 
+	void DrawImGui();
+
 	void Start();
 	void AddWaveNum();
 	void Score(int SCORE);
 private:
-	std::unique_ptr<GameTimer>timer;
+	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
+
+	void SetVec2(std::string TAG, Vec2<float> *VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
 
 };

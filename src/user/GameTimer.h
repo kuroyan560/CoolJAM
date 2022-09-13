@@ -65,8 +65,8 @@ public:
 	bool IsStart();
 	void Debug();
 
-private:
 	Vec2<float> timerPos;
+private:
 
 	std::vector<int> number;
 
