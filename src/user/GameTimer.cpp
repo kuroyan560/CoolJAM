@@ -29,8 +29,8 @@ GameTimer::GameTimer()
 	}
 
 	//スコア無効、タイマーを中心に描画
-	timerPos.x = -150.0f;
-	timerPos.y = 100.0f;
+	timerPos.x = 500.0f;
+	timerPos.y = 800.0f;
 
 	//countDownSE[0] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_1.wav", 0.2f);
 	//countDownSE[1] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_2.wav", 0.2f);
@@ -231,17 +231,17 @@ void GameTimer::Update()
 void GameTimer::Draw()
 {
 	{
-		float easePosX = 0.0;
-		float winSizeX = WinApp::Instance()->GetExpandWinSize().x / 2.0f;
+		float easePosY = 0.0;
+		float winSizeY = WinApp::Instance()->GetExpandWinSize().y;
 		if (startFlag)
 		{
-			startEasePosX = KuroMath::Ease(Out, Cubic, startRate, 0.0f, 1.0f) * winSizeX;
-			easePosX = startEasePosX;
+			startEasePosX = KuroMath::Ease(Out, Cubic, startRate, 0.0f, 1.0f) * -winSizeY;
+			easePosY = startEasePosX;
 		}
 		if (timeUpFlag)
 		{
-			endEasePosX = startEasePosX + KuroMath::Ease(In, Cubic, endRate, 0.0f, 1.0f) * (winSizeX + 200.0f);
-			easePosX = endEasePosX;
+			endEasePosX = startEasePosX + KuroMath::Ease(In, Cubic, endRate, 0.0f, 1.0f) * -300.0f;
+			easePosY = endEasePosX;
 		}
 
 
@@ -254,19 +254,19 @@ void GameTimer::Draw()
 		for (int i = 0; i < minitueHandle.size(); i++)
 		{
 			offset = i;
-			centralPos = { easePosX + timerPos.x + i * texSize.x, timerPos.y + offsetY };
+			centralPos = { timerPos.x + i * texSize.x, timerPos.y + offsetY + easePosY };
 			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], alphaRate);
 		}
 
 		++offset;
-		centralPos = { easePosX + timerPos.x + offset * texSize.x,timerPos.y + offsetY };
+		centralPos = { timerPos.x + offset * texSize.x,timerPos.y + offsetY + easePosY };
 		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], alphaRate);
 		++offset;
 
 		//秒
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
-			centralPos = { easePosX + timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
+			centralPos = { timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY + easePosY };
 			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], alphaRate);
 		}
 

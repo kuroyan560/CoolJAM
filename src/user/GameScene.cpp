@@ -31,7 +31,6 @@ GameScene::GameScene()
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
 	m_player = std::make_unique<Player>();
-	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
@@ -84,7 +83,6 @@ void GameScene::OnInitialize()
 
 	m_environmentMgr->Init();
 	m_player->Init();
-	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -118,8 +116,6 @@ void GameScene::OnUpdate()
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
-
-	m_grazeEmitter->Update(MAP_SIZE);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
@@ -235,7 +231,6 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
-	m_grazeEmitter->Draw(*nowCam);
 
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
