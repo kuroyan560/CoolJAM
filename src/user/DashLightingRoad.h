@@ -11,14 +11,19 @@ class DashLightingRoad
 public:
 	DashLightingRoad(int ROAD_INDEX);
 	void Init(const Vec3<float> &POS);
-	void Update(const Vec3<float> &POS, int NOW_INDEX);
+	void Update(const Vec3<float> &POS, int NOW_INDEX, bool DISAPPEAR_FLAG);
 	void Draw(Camera &Cam);
 
 private:
-	Vec3<float> m_startPos, m_endPos;
+	Vec3<float> m_startPos, m_endPos, m_baseStartPos;
 
-	int m_indexNum;
 	Color m_color;
+	int m_indexNum;
+	float m_lenghtRate;
 	bool m_initFlag;
+	bool m_disappearFlag;
+	int m_timer;
+	int m_startTimer;
+	float m_distance;
 };
 

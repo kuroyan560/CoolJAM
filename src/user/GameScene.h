@@ -6,9 +6,8 @@
 #include"Vec.h"
 #include<memory>
 #include"GameTimer.h"
-#include"GrazeEmitter.h"
-
 #include"LightBloomDevice.h"
+
 class DepthStencil;
 class Player;
 class Model;
@@ -61,8 +60,6 @@ private:
 	Vec3<float> m_nowEye;
 	Vec3<float> m_baseTarget;
 	Vec3<float> m_nowTarget;
-
-	std::unique_ptr<GrazeEmitter> m_grazeEmitter;
 
 	//デプスステンシル
 	std::shared_ptr<DepthStencil>m_depthStencil;

@@ -32,10 +32,10 @@ void PlayerDashLighting::Init(Vec3<float> *POS)
 	m_roadIndex = -1;
 }
 
-void PlayerDashLighting::Update(bool ENABLE_FLAG)
+void PlayerDashLighting::Update(bool ENABLE_FLAG, bool FEVER_FLAG)
 {
 	++m_timer;
-	if (2 <= m_timer && ENABLE_FLAG)
+	if (2 <= m_timer && FEVER_FLAG)
 	{
 		float size = 5.0f;
 		Vec3<float>emittPos;
@@ -75,7 +75,7 @@ void PlayerDashLighting::Update(bool ENABLE_FLAG)
 
 	for (int i = 0; i < m_roadArray.size(); ++i)
 	{
-		m_roadArray[i]->Update(m_endPos, m_roadIndex);
+		m_roadArray[i]->Update(m_endPos, m_roadIndex, ENABLE_FLAG);
 	}
 }
 

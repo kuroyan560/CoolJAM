@@ -30,7 +30,6 @@ GameScene::GameScene()
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
 	m_player = std::make_unique<Player>();
-	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
@@ -80,7 +79,6 @@ void GameScene::OnInitialize()
 
 	m_environmentMgr->Init();
 	m_player->Init();
-	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -108,12 +106,10 @@ void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
-
-	m_grazeEmitter->Update(MAP_SIZE);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
@@ -130,7 +126,7 @@ void GameScene::OnUpdate()
 	// 敵Waveクラスの更新処理。
 	//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
 	//{
-		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 	//}
 
 	// ゲームの状態に応じてカメラの位置を変える。
@@ -160,6 +156,8 @@ void GameScene::OnUpdate()
 		m_gameCam->SetPos(m_nowEye);
 		m_gameCam->SetTarget(m_nowTarget);
 	}
+
+
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
 	if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
@@ -197,7 +195,7 @@ void GameScene::OnDraw()
 
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 
 	//DrawFunc初期化
@@ -212,7 +210,7 @@ void GameScene::OnDraw()
 	//環境描画
 	m_environmentMgr->Draw(*nowCam);
 
-	// マップを描画
+	//マップを描画
 	StageFloor::Instance()->ClearScreen();
 	StageFloor::Instance()->Draw();
 
@@ -228,7 +226,6 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
-	m_grazeEmitter->Draw(*nowCam);
 
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);

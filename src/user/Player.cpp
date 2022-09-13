@@ -554,7 +554,7 @@ void Player::UpdateEffect()
 	m_outlineModel.Update();
 
 	//ダッシュ時のエフェクト
-	m_dashLight->Update(dashFlag);
+	m_dashLight->Update(dashFlag, m_isFever);
 }
 
 
