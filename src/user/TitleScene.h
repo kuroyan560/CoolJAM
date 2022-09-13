@@ -12,6 +12,9 @@ class Model;
 class EnvironmentMgr;
 class RenderTarget;
 class TitleUI;
+class BulletMgr;
+class EnemyMgr;
+class EnemyWaveMgr;
 
 class TitleScene : public BaseScene {
 
@@ -29,8 +32,18 @@ private:
 	Vec3<float> m_baseTarget;
 	Vec3<float> m_nowTarget;
 
+	// クラス
+	std::shared_ptr<BulletMgr> m_bulletMgr;
+
+	// 敵ウェーブクラス
+	std::unique_ptr<EnemyWaveMgr> m_enemyWaveMgr;
+
+	//敵クラス。
+	std::shared_ptr<EnemyMgr> m_enemyMgr;
+
 	// マップモデル
-	std::shared_ptr<Model> m_mapModel;
+	float MAP_SIZE = 150.0f;
+	std::shared_ptr<ModelObject> m_mapModel;
 	Transform m_mapModelTransform;
 
 	// タイトル画像
@@ -95,8 +108,8 @@ private:
 	const float ADD_TRANSITION_EASING_TIMER = 0.01f;
 
 	// カメラの初期位置
-	Vec3<float> DEF_TARGET_POS = Vec3<float>(3.19660044f, 0.100951008f, -4.14727974f);
-	Vec3<float> DEF_EYE_POS = Vec3<float>(9.01069641f, 2.39467144f, 6.33004093f);
+	Vec3<float> DEF_TARGET_POS = Vec3<float>(3.1966f, 0.10095f, -4.1472f);
+	Vec3<float> DEF_EYE_POS = Vec3<float>(9.0106f, 2.3946f, 6.3300f);
 	const float DEF_ANGLE = 0.506614208f;
 	const float DEF_LENGTH = 10.9236498f;
 

@@ -11,7 +11,9 @@
 #include "GameMode.h"
 #include"AudioApp.h"
 #include "TitleUI.h"
-
+#include "EnemyMgr.h"
+#include "BulletMgr.h"
+#include "EnemyWaveMgr.h"
 
 TitleScene::TitleScene()
 {
@@ -26,8 +28,18 @@ TitleScene::TitleScene()
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
-	m_mapModel = Importer::Instance()->LoadModel("resource/user/map/", "mapModel.glb");
-	m_mapModelTransform.SetScale(150.0f);
+	//敵を生成。
+	m_enemyMgr = std::make_shared<EnemyMgr>();
+	m_enemyMgr->Init();
+
+	//弾クラスを生成。
+	m_bulletMgr = std::make_shared<BulletMgr>();
+
+	//敵ウェーブ管理クラス
+	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
+
+	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
+	m_mapModel->m_transform.SetScale(100.0f);
 
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
@@ -82,8 +94,10 @@ void TitleScene::OnInitialize()
 	m_endEasingTransitionTimer = END_EASING_TIMER;
 
 	m_revolverPos = OFF_SCREEN_REVOLVER_POS;
+	m_revolverEasingTimer = 0;
 
 	m_isTitle = true;
+	m_titleAngle = DirectX::XM_PI;
 	m_isAppear = false;
 
 	m_nowSelect = SELECT::GAME;
@@ -105,7 +119,19 @@ void TitleScene::OnUpdate()
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
 
+	//スクリーンサイズを取得。
+	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
+	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, 0, false);
+	m_player->Init();
+
 	m_environmentMgr->Update(m_player->GetPos());
+
+	// タイトルだったら。
+	if (m_isTitle) {
+
+		m_titleAngle -= m_titleAngle / 5.0f;
+
+	}
 
 	// 出現中だったら。
 	if (m_isAppear) {
@@ -208,10 +234,11 @@ void TitleScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	// マップを描画
-	DrawFunc_Append::DrawModel(m_mapModel, m_mapModelTransform);
+	m_mapModel->m_transform.SetScale(MAP_SIZE);
+	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, false);
 
 	// プレイヤーを描画
-	m_player->Draw(*nowCam, true);
+	m_player->Draw(*nowCam);
 
 	// タイトルを描画。
 	Vec2<float> vec = Vec2<float>(cosf(m_titleAngle), sinf(m_titleAngle));

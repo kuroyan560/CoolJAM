@@ -49,6 +49,9 @@ TutorialScene::TutorialScene()
 	// フィーバーゲージ
 	m_feverGauge = std::make_unique<FeverGauge>();
 
+	// シーン遷移
+	m_sceneTransition = std::make_unique<SceneTransition>();
+
 	//敵ウェーブ管理クラス
 	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
 
@@ -70,6 +73,8 @@ TutorialScene::TutorialScene()
 	m_isTransitionStart = false;
 	m_isInitPlayer = false;
 	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
 
 	m_tutorial = std::make_shared<Tutorial>();
 
@@ -96,6 +101,8 @@ void TutorialScene::OnInitialize()
 	m_isTransitionStart = false;
 	m_isInitPlayer = false;
 	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
 
 	m_tutorial->Init();
 
@@ -144,13 +151,7 @@ void TutorialScene::OnUpdate()
 
 		m_player->Init();
 
-	}
-
-
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
-
-		m_isTransitionStart = true;
-
+		m_tutorial->Init();
 	}
 
 
@@ -169,15 +170,25 @@ void TutorialScene::OnUpdate()
 		// 上を向ききっていたら。
 		if (m_isCompleteUpper) {
 
-			Vec3<float> nowCameraTarget = nowCam.GetTarget();
-			Vec3<float> nowCameraEye = nowCam.GetPos();
+			// カメラをタイトルのカメラの位置まで持っていくイージングのタイマーを更新。
+			m_returnTitlePosEasingTimer += 0.03f;
+			if (1.0f <= m_returnTitlePosEasingTimer) m_returnTitlePosEasingTimer = 1.0f;
+			float easingAmount = KuroMath::Ease(InOut, Exp, m_returnTitlePosEasingTimer, 0.0f, 1.0f);
 
-			// 座標をタイトルの座標に補完する。
-			nowCameraTarget += (TITLE_TARGET_POS - nowCameraTarget) / 5.0f;
-			nowCameraEye += (TITLE_EYE_POS - nowCameraEye) / 5.0f;
+			// カメラの位置をセット。
+			nowCam.SetTarget(m_baseEasingCameraTarget + (TITLE_TARGET_POS - m_baseEasingCameraTarget) * easingAmount);
+			nowCam.SetPos(m_baseEasingCameraEye + (TITLE_EYE_POS - m_baseEasingCameraEye) * easingAmount);
 
-			nowCam.SetTarget(nowCameraTarget);
-			nowCam.SetPos(nowCameraEye);
+
+			// 補間先との距離が一定以下になったら遷移させる。
+			if (1.0f <= m_returnTitlePosEasingTimer) {
+
+				++m_transitionDelayTimer;
+				if (30 < m_transitionDelayTimer) {
+					KuroEngine::Instance()->ChangeScene(0, m_sceneTransition.get());
+
+				}
+			}
 
 		}
 		else {
@@ -193,6 +204,9 @@ void TutorialScene::OnUpdate()
 
 				m_isInitPlayer = true;
 				m_isCompleteUpper = true;
+
+				m_baseEasingCameraEye = nowCam.GetPos();
+				m_baseEasingCameraTarget = nowCam.GetTarget();
 
 			}
 

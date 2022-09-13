@@ -413,22 +413,33 @@ void Tutorial::Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> E
 
 		}
 
-		// 戻るのアイコンのサイズを調整。
-		if (m_isNearReturnIcon) {
-			m_returnIconSize.x += (RETURN_ICON_EXP_SIZE.x - m_returnIconSize.x) / 2.0f;
-			m_returnIconSize.y += (RETURN_ICON_EXP_SIZE.y - m_returnIconSize.y) / 2.0f;
+		// 遷移中だったら。
+		if (IsTransition) {
 
-			// クリックされていたら遷移させる。
-			if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
-
-				IsTransition = true;
-
-			}
+			m_returnIconSize.x -= m_returnIconSize.x / 2.0f;
+			m_returnIconSize.y -= m_returnIconSize.y / 2.0f;
 
 		}
 		else {
-			m_returnIconSize.x += (RETURN_ICON_SIZE.x - m_returnIconSize.x) / 2.0f;
-			m_returnIconSize.y += (RETURN_ICON_SIZE.y - m_returnIconSize.y) / 2.0f;
+
+			// 戻るのアイコンのサイズを調整。
+			if (m_isNearReturnIcon) {
+				m_returnIconSize.x += (RETURN_ICON_EXP_SIZE.x - m_returnIconSize.x) / 2.0f;
+				m_returnIconSize.y += (RETURN_ICON_EXP_SIZE.y - m_returnIconSize.y) / 2.0f;
+
+				// クリックされていたら遷移させる。
+				if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
+
+					IsTransition = true;
+
+				}
+
+			}
+			else {
+				m_returnIconSize.x += (RETURN_ICON_SIZE.x - m_returnIconSize.x) / 2.0f;
+				m_returnIconSize.y += (RETURN_ICON_SIZE.y - m_returnIconSize.y) / 2.0f;
+			}
+
 		}
 
 	}

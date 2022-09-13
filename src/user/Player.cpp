@@ -118,6 +118,12 @@ void Player::Init()
 
 	}
 
+	for (auto& index : m_hpUI) {
+
+		index->Init();
+
+	}
+
 	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 
 	//ダッシュ時のエフェクト

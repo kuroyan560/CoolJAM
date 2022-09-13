@@ -88,17 +88,24 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
+	//シーン遷移
+	std::unique_ptr<SceneTransition> m_sceneTransition;
+
 	// 遷移関係
 	bool m_isTransitionStart;
 	bool m_isInitPlayer;
 	bool m_isCompleteUpper;
+	Vec3<float> m_baseEasingCameraEye;
+	Vec3<float> m_baseEasingCameraTarget;
+	float m_returnTitlePosEasingTimer;
+	int m_transitionDelayTimer;
 
 	// 遷移するときに見るカメラのY軸座標
 	const float TRANSITION_CAMERA_Y = 300.0f;
 
 	// タイトルでの各カメラのパラメーター
-	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19660044f, 0.100951008f, -4.14727974f);
-	Vec3<float> TITLE_EYE_POS = Vec3<float>(9.01069641f, 2.39467144f, 6.33004093f);
+	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19659996f, 0.100950003f, -4.14720011f);
+	Vec3<float> TITLE_EYE_POS = Vec3<float>(9.55155659f, 2.39459991f, 5.30036783f);
 
 	bool m_emissive = true;
 
