@@ -27,5 +27,5 @@ void StageFloor::ScreenTargetSet(bool Clear)
 #include"DrawFunc_Append.h"
 void StageFloor::Draw()
 {
-	DrawFunc_Append::DrawModel(m_modelObj, RenderTargetSwitch(), false, false);
+	DrawFunc_Append::DrawModel(m_modelObj, RenderTargetSwitch(), false, true);
 }
