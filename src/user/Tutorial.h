@@ -17,9 +17,6 @@ class Tutorial {
 private:
 
 	/*===== メンバ変数 =====*/
-
-	std::shared_ptr<RenderTarget> m_floorRenderTarget;
-
 	// 六角形
 	std::shared_ptr<TutorialHexagon> m_Hexagon;
 
@@ -68,8 +65,6 @@ public:
 	void Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> EnemyMgrIns, std::weak_ptr<BulletMgr> BulletMgrIns, bool& IsCameraHomePosition, const float& MapSize, bool& IsTransition);
 	void Draw();
 	void DrawReturnIcon();
-
-	std::shared_ptr<RenderTarget> GetFloorRenderTarget() { return m_floorRenderTarget; }
 
 	// プレイヤーとフィーバーゲージの更新を止めるかのゲッタ。
 	bool GetPlayerFeverGaugeStop(std::weak_ptr<EnemyMgr> EnemyMgrIns);

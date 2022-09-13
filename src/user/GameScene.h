@@ -29,9 +29,6 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> m_player;
 
-	//マップモデル
-	std::shared_ptr<ModelObject>m_mapModel;
-
 	//敵クラス。
 	std::shared_ptr<EnemyMgr> m_enemyMgr;
 

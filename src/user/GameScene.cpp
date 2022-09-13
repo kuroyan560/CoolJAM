@@ -17,6 +17,7 @@
 #include"FeverGauge.h"
 #include"GameMode.h"
 #include"EnemyWaveEditor.h"
+#include"StageFloor.h"
 
 GameScene::GameScene()
 {
@@ -32,12 +33,8 @@ GameScene::GameScene()
 	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
-	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
-	m_mapModel->m_transform.SetScale(100.0f);
-
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
 	GameManager::Instance()->RegisterCamera(m_gameCamKey, m_gameCam);
-	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
 	//敵を生成。
 	m_enemyMgr = std::make_shared<EnemyMgr>();
@@ -204,8 +201,7 @@ void GameScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	// マップを描画
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, true, AlphaBlendMode_Trans);
+	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画
 	m_player->Draw(*nowCam);

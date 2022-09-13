@@ -14,6 +14,7 @@
 #include "EnemyMgr.h"
 #include "BulletMgr.h"
 #include "EnemyWaveMgr.h"
+#include"StageFloor.h"
 
 TitleScene::TitleScene()
 {
@@ -37,9 +38,6 @@ TitleScene::TitleScene()
 
 	//敵ウェーブ管理クラス
 	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
-
-	m_mapModel = std::make_shared<ModelObject>("resource/user/map/", "mapModel.glb");
-	m_mapModel->m_transform.SetScale(100.0f);
 
 	//エミッシブマップ生成
 	m_emissiveMap = D3D12App::Instance()->GenerateRenderTarget(DXGI_FORMAT_R32G32B32A32_FLOAT, Color(0, 0, 0, 1), backBuff->GetGraphSize(), L"EmissiveMap");
@@ -234,8 +232,7 @@ void TitleScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	// マップを描画
-	m_mapModel->m_transform.SetScale(MAP_SIZE);
-	DrawFunc_Append::DrawModel(m_mapModel, RenderTargetSwitch(), false, false);
+	StageFloor::Instance()->Draw();
 
 	// プレイヤーを描画
 	m_player->Draw(*nowCam);
