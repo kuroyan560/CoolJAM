@@ -90,8 +90,8 @@ void PlayerDashLighting::Draw(Camera &CAMERA)
 		m_roadArray[i]->Draw(CAMERA);
 	}
 
-	Transform t;
-	t.SetPos({ 0.0f,10.0f,0.0f });
-	t.SetScale({ 50.0f,50.0f,50.0f });
-	DrawFunc_Append::DrawModel(m_lModel, t, RenderTargetSwitch(1.0f, 1.0f, 1.0f), true, false, nullptr,AlphaBlendMode_Trans);
+	//Transform t;
+	//t.SetPos({ 0.0f,10.0f,0.0f });
+	//t.SetScale({ 50.0f,50.0f,50.0f });
+	//DrawFunc_Append::DrawModel(m_lModel, t, RenderTargetSwitch(1.0f, 1.0f, 1.0f), true, false, nullptr,AlphaBlendMode_Trans);
 }
