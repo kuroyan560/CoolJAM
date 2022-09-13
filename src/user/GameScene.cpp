@@ -103,6 +103,7 @@ void GameScene::OnInitialize()
 	}
 
 	AudioApp::Instance()->PlayWave(m_bgm, true);
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 }
 
 void GameScene::OnUpdate()
