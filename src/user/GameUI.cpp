@@ -12,14 +12,13 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(120);
+	m_timer->Init(10);
 	m_timer->Start();
 	m_waveUI->Init(10);
 }
 
 void GameUI::Update()
 {
-	m_timer->Update();
 
 	// デバッグ用
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_I)) {
@@ -41,7 +40,7 @@ void GameUI::Update()
 
 	}
 
-	m_timer->Update();
+	m_timer->Update(60);
 	m_waveUI->Update(m_waveNum, m_wavePos, 1.0f / 30.0f);
 	ScoreMgr::Instance()->Update(m_scorePos, 1.0f / 30.0f);
 }
