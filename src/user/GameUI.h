@@ -28,9 +28,10 @@ private:
 	std::shared_ptr<WaveUI> m_waveUI;
 
 	Vec2<float>m_wavePos;
+	Vec2<float>m_scorePos;
 
-	void SetVec2(std::string TAG, Vec2<float> *VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
+	void SetVec2(std::string TAG, Vec2<float>* VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
 
 	int m_waveNum;
 

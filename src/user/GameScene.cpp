@@ -19,6 +19,7 @@
 #include"EnemyWaveEditor.h"
 #include"StageFloor.h"
 #include"Font.h"
+#include"ScoreMgr.h"
 
 GameScene::GameScene()
 {
@@ -63,13 +64,15 @@ GameScene::GameScene()
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
-	
+
 	//BGM読み込み
 	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
 
 	Font::Instance()->LoadFont();
 
 	m_gameUI = std::make_unique<GameUI>();
+
+	ScoreMgr::Instance()->Init();
 }
 
 void GameScene::OnInitialize()
@@ -81,6 +84,8 @@ void GameScene::OnInitialize()
 	m_bulletMgr->Init();
 	m_enemyWaveMgr->Init(60);
 	m_feverGauge->Init();
+
+	ScoreMgr::Instance()->Init();
 
 	m_environmentMgr->Init();
 	m_player->Init();
@@ -114,7 +119,7 @@ void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
-	auto &nowCam = *GameManager::Instance()->GetNowCamera();
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -136,7 +141,7 @@ void GameScene::OnUpdate()
 	// 敵Waveクラスの更新処理。
 	//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
 	//{
-		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
 	//}
 
 	// ゲームの状態に応じてカメラの位置を変える。
@@ -201,7 +206,7 @@ void GameScene::OnDraw()
 
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
-	auto &nowCam = GameManager::Instance()->GetNowCamera();
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 
 	//DrawFunc初期化
@@ -254,27 +259,27 @@ void GameScene::OnDraw()
 	}
 
 	//	/* --- デバッグ描画 ---*/
-	#ifdef _DEBUG
-		//デプスステンシルクリア
-		KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
-		//レンダーターゲットセット（バックバッファとデプスステンシル）
-		KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
-	
-		//デバッグ描画フラグ確認
-		if (GameManager::Instance()->GetDebugDrawFlg())
-		{
-			//XYZ軸
-			static const float LEN = 100.0f;
-			static const float THICKNESS = 0.5f;
-			static Vec3<float>ORIGIN = { 0,0,0 };
-			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
-			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
-			DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
-	
-			m_player->DrawDebugInfo(*nowCam);
-	
-		}
-	#endif
+#ifdef _DEBUG
+	//デプスステンシルクリア
+	KuroEngine::Instance()->Graphics().ClearDepthStencil(m_depthStencil);
+	//レンダーターゲットセット（バックバッファとデプスステンシル）
+	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
+
+	//デバッグ描画フラグ確認
+	if (GameManager::Instance()->GetDebugDrawFlg())
+	{
+		//XYZ軸
+		static const float LEN = 100.0f;
+		static const float THICKNESS = 0.5f;
+		static Vec3<float>ORIGIN = { 0,0,0 };
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
+		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
+
+		m_player->DrawDebugInfo(*nowCam);
+
+	}
+#endif
 }
 
 void GameScene::OnImguiDebug()

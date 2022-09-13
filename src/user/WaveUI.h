@@ -20,7 +20,6 @@ class WaveUI {
 	Vec2<float> m_offsetPos;
 
 	float m_easingTimer;	// イージングのタイマー
-	const float ADD_EASING_TIMER = 0.05f;
 
 	bool m_isAppear;		// 出現中か。
 	bool m_isExit;			// 消滅中か。
@@ -37,7 +36,7 @@ public:
 
 	WaveUI(std::string File);
 	void Init(const int& MaxWave);
-	void Update(const int& NowWave, const Vec2<float>& OffsetPos);
+	void Update(const int& NowWave, const Vec2<float>& OffsetPos, const float& AddEasingTimer);
 	void Draw();
 
 	// 出現している状態か

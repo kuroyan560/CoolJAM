@@ -255,6 +255,7 @@
     <ClCompile Include="src\user\PlayerHP.cpp" />
     <ClCompile Include="src\user\PlayerStraightEnemy.cpp" />
     <ClCompile Include="src\user\PressEnemy.cpp" />
+    <ClCompile Include="src\user\ScoreMgr.cpp" />
     <ClCompile Include="src\user\ShieldEnemy.cpp" />
     <ClCompile Include="src\user\StageFloor.cpp" />
     <ClCompile Include="src\user\StoppingEnemy.cpp" />
@@ -383,6 +384,7 @@
     <ClInclude Include="src\user\PlayerHP.h" />
     <ClInclude Include="src\user\PlayerStraightEnemy.h" />
     <ClInclude Include="src\user\PressEnemy.h" />
+    <ClInclude Include="src\user\ScoreMgr.h" />
     <ClInclude Include="src\user\ShieldEnemy.h" />
     <ClInclude Include="src\user\StageFloor.h" />
     <ClInclude Include="src\user\StoppingEnemy.h" />

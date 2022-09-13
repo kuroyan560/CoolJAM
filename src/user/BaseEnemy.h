@@ -33,21 +33,25 @@ public:
 
 	Transform m_transform;
 
+	const int LOW_SCORE_POINT = 300;
+	const int MIDDLE_SCORE_POINT = 600;
+	const int HIGHT_SCORE_POOINT = 900;
+
 
 public:
-	static const int &DamageSE() { return s_damageSE; }
-	static const int &DeadSE() { return s_deadSE; }
+	static const int& DamageSE() { return s_damageSE; }
+	static const int& DeadSE() { return s_deadSE; }
 
 	/*===== ÉÅÉìÉoä÷êî =====*/
 
 	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
-	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
-	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
+	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
+	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void Draw() = 0;
 
-	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
+	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// éwíËÇÃåÖÇÃêîéöÇéÊìæÅB
 	inline int GetDigits(int Value, int M, int N) {
@@ -106,7 +110,7 @@ public:
 	{
 		m_outline->Upadte();
 	};
-	void CommonDraw(Camera &CAMERA)
+	void CommonDraw(Camera& CAMERA)
 	{
 		m_outline->Draw(CAMERA, m_hitFlag);
 	};
