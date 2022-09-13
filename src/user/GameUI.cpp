@@ -12,16 +12,11 @@ void GameUI::Init()
 {
 	timer->Init(120);
 	timer->Start();
-	m_waveUI->Init();
+	m_waveUI->Init(10);
 }
 
 void GameUI::Update()
 {
-	timer->Update();
-	m_waveUI->Update();
-
-
-
 
 	// デバッグ用
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_I)) {
@@ -34,6 +29,14 @@ void GameUI::Update()
 		m_waveUI->Exit();
 
 	}
+
+
+
+	timer->Update();
+	m_waveUI->Update(5, Vec2<float>());
+
+
+
 
 }
 

@@ -5,6 +5,7 @@
 #include "WinApp.h"
 #include <string>
 #include <memory>
+#include <array>
 
 class WaveUI {
 
@@ -15,6 +16,11 @@ private:
 	std::shared_ptr<TextureBuffer> m_waveTexture;	// 「WAVE」のテクスチャ
 
 	Vec2<float> m_wavePos;
+
+	std::array<int, 2> m_maxWaveCountIndex;
+	std::array<int, 2> m_nowWaveCountIndex;
+
+	Vec2<float> m_offsetPos;
 
 	float m_easingTimer;	// イージングのタイマー
 	const float ADD_EASING_TIMER = 0.05f;
@@ -34,8 +40,8 @@ public:
 	/*===== メンバ関数 =====*/
 
 	WaveUI(std::string File);
-	void Init();
-	void Update();
+	void Init(const int& MaxWave);
+	void Update(const int& NowWave, const Vec2<float>& OffsetPos);
 	void Draw();
 
 	// 出現している状態か
