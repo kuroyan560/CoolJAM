@@ -148,6 +148,7 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 
 	}
 
+	m_transform.SetPos(m_pos);
 }
 
 #include"DrawFunc_Append.h"

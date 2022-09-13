@@ -11,9 +11,6 @@ private:
 	/*===== メンバ変数 =====*/
 
 	// モデル。
-	std::shared_ptr<Model> m_model;
-	std::shared_ptr<Model> m_modelHit;
-
 
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
 	float m_speed;				// 移動速度
@@ -24,8 +21,6 @@ private:
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
 
-	//モデル
-	Transform m_transform;
 
 	// スケール
 	const float SCALE = 3.0f;

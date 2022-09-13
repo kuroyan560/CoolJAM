@@ -11,7 +11,6 @@ private:
 	/*===== メンバ変数 =====*/
 
 	// モデル。
-	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
 
 
@@ -27,9 +26,6 @@ private:
 	int m_hp;
 	int m_shotTimer;
 	const int SHOT_TIMER = 300;
-
-	//モデル
-	Transform m_transform;
 
 	// スケール
 	const float SCALE = 12.0f;
