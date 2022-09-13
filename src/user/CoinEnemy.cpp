@@ -19,8 +19,6 @@ void CoinEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const 
 	m_pos = Pos;
 	m_isActive = true;
 	m_scale = 3.0f;
-
-	baseEnemy_id = ID;
 }
 
 void CoinEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize)

@@ -97,9 +97,14 @@
     <ClCompile Include="src\user\PlayerModelOutline.cpp" />
     <ClCompile Include="src\user\EnemyHP.cpp" />
     <ClCompile Include="src\user\CoinEnemy.cpp" />
+    <ClCompile Include="src\user\Outline.cpp" />
     <ClCompile Include="src\user\PlayerHP.cpp" />
     <ClCompile Include="src\user\TitleUI.cpp" />
     <ClCompile Include="src\user\TutorialScene.cpp" />
+    <ClCompile Include="src\user\Tutorial.cpp" />
+    <ClCompile Include="src\user\TutorialText.cpp" />
+    <ClCompile Include="src\user\TutorialHexagon.cpp" />
+    <ClCompile Include="src\user\TutorialNice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -216,8 +221,13 @@
     <ClInclude Include="src\user\GameMode.h" />
     <ClInclude Include="src\user\EnemyHP.h" />
     <ClInclude Include="src\user\CoinEnemy.h" />
+    <ClInclude Include="src\user\Outline.h" />
     <ClInclude Include="src\user\PlayerHP.h" />
     <ClInclude Include="src\user\TitleUI.h" />
     <ClInclude Include="src\user\TutorialScene.h" />
+    <ClInclude Include="src\user\Tutorial.h" />
+    <ClInclude Include="src\user\TutorialText.h" />
+    <ClInclude Include="src\user\TutorialHexagon.h" />
+    <ClInclude Include="src\user\TutorialNice.h" />
   </ItemGroup>
 </Project>

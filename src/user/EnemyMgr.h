@@ -51,6 +51,12 @@ public:
 	// “G‚ğ¶¬B
 	void Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize);
 
+	// ‚·‚×‚Ä‚Ì“G‚ª€‚ñ‚Å‚¢‚é‚©B
+	bool GetAllEnemyDead();
+
+	// ‚·‚×‚Ä‚Ì“G‚ğE‚·B
+	void AllKill(std::weak_ptr<BulletMgr> BulletMgr);
+
 
 private:
 

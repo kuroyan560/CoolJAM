@@ -30,9 +30,6 @@ private:
 	// UNIONの敵の周りの敵
 	std::array<std::shared_ptr<UnionEnemy>, 6> m_unionEnemy;
 
-	//モデル
-	Transform m_transform;
-
 	// スケール
 	const float SCALE = 6.0f;
 

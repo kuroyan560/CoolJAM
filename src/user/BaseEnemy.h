@@ -3,6 +3,9 @@
 #include "EnemyWave.h"
 #include <memory>
 #include <array>
+#include"Outline.h"
+#include"ColorPalette.h"
+#include"../engine/UsersInput.h"
 
 class Model;
 class Camera;
@@ -20,6 +23,7 @@ public:
 	// モデル。
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
+	std::unique_ptr<Outline>m_outline;
 
 	Vec3<float> m_pos;	// 座標
 	int m_hp;			// HP
@@ -27,21 +31,23 @@ public:
 	bool m_isActive;	// 生存フラグ
 	ENEMY_INFO::ID m_id;
 
+	Transform m_transform;
+
 
 public:
-	static const int& DamageSE() { return s_damageSE; }
-	static const int& DeadSE() { return s_deadSE; }
+	static const int &DamageSE() { return s_damageSE; }
+	static const int &DeadSE() { return s_deadSE; }
 
 	/*===== メンバ関数 =====*/
 
 	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
-	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
-	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
+	virtual void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
+	virtual void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
 	virtual void Draw() = 0;
 
-	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
+	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// 指定の桁の数字を取得。
 	inline int GetDigits(int Value, int M, int N) {
@@ -55,15 +61,63 @@ public:
 		result = mod_value / pow(10, M);
 
 		return result;
-
 	}
 
-	ENEMY_INFO::ID GetId()
+
+
+	bool AnnnounceHit()
 	{
-		return baseEnemy_id;
+		if (m_hp != m_prevHp || UsersInput::Instance()->KeyOnTrigger(DIK_M))
+		{
+			m_hitFlag = true;
+			m_hitTiemr = 0;
+			m_shrinkScale += 0.3f;
+		}
+		if (m_hitFlag)
+		{
+			m_lDamageScale = Vec3<float>(m_shrinkScale, m_shrinkScale, m_shrinkScale);
+			++m_hitTiemr;
+		}
+		if (5 <= m_hitTiemr)
+		{
+			float s = 0.0f;
+			m_lDamageScale = Vec3<float>(s, s, s);
+			m_hitTiemr = 0;
+			m_hitFlag = false;
+		}
+		m_damageScale = KuroMath::Lerp(m_damageScale, m_lDamageScale, 0.6f);
+
+		m_prevHp = m_hp;
+		m_transform.SetScale(m_baseScale - m_damageScale);
+		return m_hitFlag;
+	}
+
+	void CommonInit()
+	{
+		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
+		m_prevHp = m_hp;
+		m_hitTiemr = 0;
+		m_hitFlag = false;
+		m_baseScale = m_transform.GetScale();
+		m_damageScale = {};
+		m_shrinkScale = 0.0f;
+	};
+	void CommonUpdate()
+	{
+		m_outline->Upadte();
+	};
+	void CommonDraw(Camera &CAMERA)
+	{
+		m_outline->Draw(CAMERA, m_hitFlag);
 	};
 
-protected:
-	ENEMY_INFO::ID baseEnemy_id;
+private:
+	int m_prevHp;
+	bool m_hitFlag;
+	int m_hitTiemr;
 
+	Vec3<float>m_damageScale;
+	Vec3<float>m_lDamageScale;
+	float m_shrinkScale;
+	Vec3<float>m_baseScale;
 };

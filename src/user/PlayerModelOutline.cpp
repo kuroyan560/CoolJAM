@@ -12,9 +12,10 @@ PlayerModelOutline::PlayerModelOutline()
 	m_waveModel = Importer::Instance()->LoadModel("resource/user/Particle/", "powerWave.glb");
 	m_waveModel->m_meshes[0].material->texBuff[0] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/Particle/PowerWave.png");
 	m_waveScaleMax = 3.0f;
+	m_enoughPowerFlag = false;
 }
 
-void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL)
+void PlayerModelOutline::Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL)
 {
 	m_pos = POS;
 	m_rotation = ROTATION;
@@ -22,6 +23,7 @@ void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, flo
 	m_expandMaxScale = EXPAND_SCALE;
 	m_model = MODEL;
 	m_powerUpFlag = false;
+	m_enoughPowerFlag = false;
 
 	m_enoughPowerRateData.Init();
 	m_powerUpRateData.Init();
@@ -124,6 +126,13 @@ void PlayerModelOutline::Update()
 		m_waveTextureSize = { 0.0f,0.0f };
 	}
 
+
+	if (!m_enoughPowerFlag && !m_powerUpFlag)
+	{
+		m_scale = 0.8f;
+	}
+
+
 	m_transform.SetPos(*m_pos);
 	m_transform.SetScale({ m_scale,m_scale,m_scale });
 	m_transform.SetRotate(*m_rotation);
@@ -136,7 +145,7 @@ void PlayerModelOutline::Update()
 	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
 }
 
-void PlayerModelOutline::Draw(Camera &CAMERA)
+void PlayerModelOutline::Draw(Camera& CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_modelColor, CAMERA);
 	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);

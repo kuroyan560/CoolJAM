@@ -238,6 +238,7 @@
     <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\LightBlock.cpp" />
     <ClCompile Include="src\user\LineLight.cpp" />
+    <ClCompile Include="src\user\Outline.cpp" />
     <ClCompile Include="src\user\PlayerBullet.cpp" />
     <ClCompile Include="src\user\EnemyMgr.cpp" />
     <ClCompile Include="src\user\GameManager.cpp" />
@@ -256,7 +257,11 @@
     <ClCompile Include="src\user\TitleUI.cpp" />
     <ClCompile Include="src\user\TorusMoveEnemy.cpp" />
     <ClCompile Include="src\user\TrackingEnemy.cpp" />
+    <ClCompile Include="src\user\TutorialHexagon.cpp" />
+    <ClCompile Include="src\user\TutorialNice.cpp" />
     <ClCompile Include="src\user\TutorialScene.cpp" />
+    <ClCompile Include="src\user\Tutorial.cpp" />
+    <ClCompile Include="src\user\TutorialText.cpp" />
     <ClCompile Include="src\user\UnionBaseEnemy.cpp" />
     <ClCompile Include="src\user\UnionEnemy.cpp" />
     <ClCompile Include="src\user\PlayerDashLighting.cpp" />
@@ -355,6 +360,7 @@
     <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\LightBlock.h" />
     <ClInclude Include="src\user\LineLight.h" />
+    <ClInclude Include="src\user\Outline.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
     <ClInclude Include="src\user\EnemyMgr.h" />
     <ClInclude Include="src\user\GameManager.h" />
@@ -373,7 +379,11 @@
     <ClInclude Include="src\user\TitleUI.h" />
     <ClInclude Include="src\user\TorusMoveEnemy.h" />
     <ClInclude Include="src\user\TrackingEnemy.h" />
+    <ClInclude Include="src\user\TutorialHexagon.h" />
+    <ClInclude Include="src\user\TutorialNice.h" />
     <ClInclude Include="src\user\TutorialScene.h" />
+    <ClInclude Include="src\user\Tutorial.h" />
+    <ClInclude Include="src\user\TutorialText.h" />
     <ClInclude Include="src\user\UnionBaseEnemy.h" />
     <ClInclude Include="src\user\UnionEnemy.h" />
     <ClInclude Include="src\user\PlayerDashLighting.h" />

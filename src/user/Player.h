@@ -7,7 +7,7 @@
 #include"PlayerDashLighting.h"
 #include"PlayerModelOutline.h"
 
-class Model;
+class ModelObject;
 class Camera;
 class BulletMgr;
 class EnemyMgr;
@@ -20,9 +20,6 @@ class Player
 private:
 
 	/*===== メンバ変数 =====*/
-
-	// トランスフォーム
-	Transform m_transform;
 
 	// 基本的な変数
 	Vec3<float> m_pos;			// 現在座標
@@ -39,12 +36,14 @@ private:
 	int m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
+	// 動いた総量
+	float m_movedLength;
+
 	// フィーバー状態か
 	bool m_isFever;
 	int m_feverTime;
 	const int FEVER_TIME = 600;
 	const int FEVER_TIME_GAME_TIMER = 10;
-	const float FEVER_ATTACK_SCALE = 10.0f;
 
 	// HP関係
 	int m_hp;		// プレイヤーのHP
@@ -68,6 +67,9 @@ private:
 	bool m_isDamageEffect;		// ダメージエフェクト中か
 	bool m_isDamageEffectDrawPlayer;
 
+	// チュートリアル用。
+	int m_dashCounter;
+
 	// ドリフト
 	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
 	int m_driftParticleDelay;
@@ -86,7 +88,7 @@ private:
 	bool m_isBrake;				// ブレーキしているかどうか。
 
 	//モデル
-	std::shared_ptr<Model>m_model;
+	std::shared_ptr<ModelObject>m_modelObj;
 
 	//アウトライン用のモデル
 	float inputATan2f;
@@ -107,7 +109,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope);
+	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer = false);
 	void Draw(Camera& Cam, const bool& IsTitle = false);
 	void DrawDebugInfo(Camera& Cam);
 
@@ -119,6 +121,10 @@ public:
 	float GetMaxFeverTimeGameTimer() { return FEVER_TIME_GAME_TIMER; }
 	bool GetIsFever() { return m_isFever; }
 	float GetPlayerFeverRate() { return static_cast<float>(m_feverTime) / static_cast<float>(FEVER_TIME); }
+	float GetMovedLength() { return m_movedLength; }
+	void ClearMovedLength() { m_movedLength = 0; }
+	int GetDashCount() { return m_dashCounter; }
+	void ResetDashCount() { m_dashCounter = 0; }
 
 	Vec3<float>* GetPosPtr() { return &m_pos; };
 	const float* GetInputRadianPtr() { return &inputATan2f; };
@@ -130,7 +136,7 @@ private:
 	void Input(Camera& Cam, const Vec2<float>& WindowSize);
 
 	// 移動処理
-	void Move(std::weak_ptr<BulletMgr> BulletMgr);
+	void Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer);
 
 	// エフェクト全般の更新処理
 	void UpdateEffect();
@@ -148,7 +154,7 @@ private:
 	float Saturate(const float& Value);
 
 	// トランスフォームゲッタ
-	const Transform& GetTransform()const { return m_transform; }
+	const Transform& GetTransform()const { return m_modelObj->m_transform; }
 
 	// ドリフトのパーティクルを生成。
 	void GenerateDriftParticle(const float& NowAngle, const float& Cross);

@@ -23,12 +23,13 @@ class EnemyWaveMgr;
 class GameTimer;
 class TextureBuffer;
 class FeverGauge;
+class Tutorial;
 
 class TutorialScene : public BaseScene
 {
 private:
 	//プレイヤー
-	std::unique_ptr<Player> m_player;
+	std::shared_ptr<Player> m_player;
 
 	//マップモデル
 	std::shared_ptr<ModelObject>m_mapModel;
@@ -56,9 +57,14 @@ private:
 	// チュートリアル、リザルトでのカメラの位置。
 	Vec3<float> CAMERA_HOME_TARGET_POSITION = Vec3<float>(MAP_SIZE / 5.0f, 0.0f, 0.0f);
 	Vec3<float> CAMERA_HOME_EYE_POSITION = Vec3<float>(MAP_SIZE, MAP_SIZE * 2.0f, 0.0f);
+	bool m_isCameraHomePosition;
 
 	//ライトブルーム
 	LightBloomDevice m_ligBloomDev;
+
+	// チュートリアル
+	std::shared_ptr<Tutorial> m_tutorial;
+
 
 	//カメラ関係。
 	Vec3<float> m_baseEye;
@@ -82,19 +88,19 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
+	// 遷移関係
+	bool m_isTransitionStart;
+	bool m_isInitPlayer;
+	bool m_isCompleteUpper;
+
+	// 遷移するときに見るカメラのY軸座標
+	const float TRANSITION_CAMERA_Y = 300.0f;
+
+	// タイトルでの各カメラのパラメーター
+	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19660044f, 0.100951008f, -4.14727974f);
+	Vec3<float> TITLE_EYE_POS = Vec3<float>(9.01069641f, 2.39467144f, 6.33004093f);
+
 	bool m_emissive = true;
-
-	// チュートリアルのステータス。
-	enum class TUTORIAL_STATUS {
-
-		MOUSE,			// マウスの方向にいくチュートリアル
-		DAMAGE_WALL,	// ダメージ壁の説明
-		ENEMY,			// 真ん中に何もしてこない敵を配置
-		FEVER,			// フィーバー状態の説明
-
-	};
-
-	TUTORIAL_STATUS m_tutorialStatus;
 
 
 public:
