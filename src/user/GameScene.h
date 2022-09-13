@@ -7,6 +7,7 @@
 #include<memory>
 #include"GameTimer.h"
 #include"GrazeEmitter.h"
+#include"GameUI.h"
 
 #include"LightBloomDevice.h"
 class DepthStencil;
@@ -77,6 +78,8 @@ private:
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 
 	std::unique_ptr<GameTimer>m_gameTimer;
+
+	std::unique_ptr<GameUI>m_gameUI;
 
 	int m_bgm;
 

@@ -65,6 +65,9 @@ GameScene::GameScene()
 	
 	//BGM読み込み
 	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
+
+
+	m_gameUI = std::make_unique<GameUI>();
 }
 
 void GameScene::OnInitialize()
@@ -171,9 +174,9 @@ void GameScene::OnUpdate()
 	m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
 
 	m_environmentMgr->Update(m_player->GetPos());
-
-
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
+
+	m_gameUI->Update();
 }
 
 #include "DrawFunc2D.h"
@@ -205,6 +208,9 @@ void GameScene::OnDraw()
 	// マップを描画
 	StageFloor::Instance()->ClearScreen();
 	StageFloor::Instance()->Draw();
+
+	m_gameUI->Draw();
+
 
 	//プレイヤー描画
 	m_player->Draw(*nowCam);

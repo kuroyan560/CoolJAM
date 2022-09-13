@@ -109,6 +109,7 @@
     <ClCompile Include="src\user\EnemyWaveLoader.cpp" />
     <ClCompile Include="src\user\StageFloor.cpp" />
     <ClCompile Include="src\user\ColorPalette.cpp" />
+    <ClCompile Include="src\user\GameUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
