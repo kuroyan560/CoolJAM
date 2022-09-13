@@ -41,7 +41,7 @@ Player::Player()
 	m_isFever = false;
 	m_feverTime = 0;
 
-	m_model = Importer::Instance()->LoadModel("resource/user/", "player.glb");
+	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
 
 	for (auto& index : m_driftParticle) {
 
@@ -505,7 +505,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 {
 	/*===== 描画処理 =====*/
 
-	m_transform.SetPos(m_pos);
+	m_modelObj->m_transform.SetPos(m_pos);
 
 	// 入力の角度を求める。
 	Vec3<float> movedVec = m_forwardVec;
@@ -522,11 +522,11 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	m_rotation = resultY * resultX;
 
 	inputATan2f = atan2f(m_inputVec.x, m_inputVec.z);
-	m_transform.SetRotate(m_rotation);
+	m_modelObj->m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
 		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
-		DrawFunc_Append::DrawModel(m_model, m_transform);
+		DrawFunc_Append::DrawModel(m_modelObj);
 	}
 
 	// ドリフトパーティクルの描画処理
@@ -905,8 +905,8 @@ bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE Eas
 	if (nowHSV.x < 0) {
 		nowHSV.x += 360.0f;
 	}
-	m_model->m_meshes[1].material->constData.pbr.baseColor = HSVtoRGB(nowHSV);
-	m_model->m_meshes[1].material->Mapping();
+	m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor = HSVtoRGB(nowHSV);
+	m_modelObj->m_model->m_meshes[1].material->Mapping();
 
 	return 1.0f <= m_colorEasingTimer;
 
