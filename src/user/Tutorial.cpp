@@ -399,6 +399,9 @@ void Tutorial::Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> E
 		// ずっと更新しない。
 		UpdateText(false);
 
+		// カメラを近づける。
+		IsCameraHomePosition = false;
+
 		// マウスカーソルと戻るのアイコンの当たり判定を行う。
 		Vec2<float> mousePos = UsersInput::Instance()->GetMousePos();
 		float length = Vec2<float>(mousePos - RETURN_ICON_POS).Length();

@@ -109,7 +109,7 @@ public:
 	Player();
 	void Init();
 	void Finalize();
-	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer = false);
+	void Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer = false, bool IsNoInput = false);
 	void Draw(Camera& Cam, const bool& IsTitle = false);
 	void DrawDebugInfo(Camera& Cam);
 

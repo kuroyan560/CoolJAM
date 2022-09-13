@@ -132,13 +132,15 @@ void Player::Init()
 	m_modelObj->m_animator->Play("ToFloater", false, false);
 }
 
-void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer)
+void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer, bool IsNoInput)
 {
 
 	/*===== XVˆ— =====*/
 
 	// “ü—Íˆ—
-	Input(Cam, WindowSize);
+	if (!IsNoInput) {
+		Input(Cam, WindowSize);
+	}
 
 	// ˆÚ“®ˆ—
 	Move(BulletMgr, IsStopFeverTimer);

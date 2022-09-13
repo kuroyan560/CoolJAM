@@ -101,7 +101,7 @@ private:
 	int m_transitionDelayTimer;
 
 	// 遷移するときに見るカメラのY軸座標
-	const float TRANSITION_CAMERA_Y = 300.0f;
+	const float TRANSITION_CAMERA_Y = 150.0f;
 
 	// タイトルでの各カメラのパラメーター
 	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19659996f, 0.100950003f, -4.14720011f);
