@@ -245,28 +245,29 @@ void GameTimer::Draw()
 		}
 
 
-
 		Vec2<float>centralPos;
 		int offset = 0;
 		int offsetY = 15;
+
+		float alphaRate = static_cast<float>(timerAlpha) / 255;
 		//•ª
 		for (int i = 0; i < minitueHandle.size(); i++)
 		{
 			offset = i;
 			centralPos = { easePosX + timerPos.x + i * texSize.x, timerPos.y + offsetY };
-			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], alphaRate);
 		}
 
 		++offset;
 		centralPos = { easePosX + timerPos.x + offset * texSize.x,timerPos.y + offsetY };
-		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
+		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], alphaRate);
 		++offset;
 
 		//•b
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
 			centralPos = { easePosX + timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
-			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], alphaRate);
 		}
 
 	}
