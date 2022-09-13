@@ -44,6 +44,9 @@ GameScene::GameScene()
 	//弾クラスを生成。
 	m_bulletMgr = std::make_shared<BulletMgr>();
 
+	// シーン遷移
+	m_sceneTransition = std::make_unique<SceneTransition>();
+
 	// フィーバーゲージ
 	m_feverGauge = std::make_unique<FeverGauge>();
 
@@ -72,6 +75,17 @@ GameScene::GameScene()
 	m_gameUI = std::make_unique<GameUI>();
 
 	ScoreMgr::Instance()->Init();
+
+	// 戻るのアイコンを表示
+	m_returnTexture = D3D12App::Instance()->GenerateTextureBuffer("resource/user/tutorial/return.png");
+	m_returnIconSize = Vec2<float>();
+	m_isNearReturnIcon = false;
+
+	m_isStartTransition = false;
+	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
+
 }
 
 void GameScene::OnInitialize()
@@ -111,11 +125,20 @@ void GameScene::OnInitialize()
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 
 	m_gameUI->Init();
+	m_returnIconSize = Vec2<float>();
+	m_isNearReturnIcon = false;
+
+	m_isStartTransition = false;
+	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
+
 }
 
 void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
+
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
@@ -125,20 +148,46 @@ void GameScene::OnUpdate()
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
 
-	// プレイヤー更新処理
-	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
+	// シーン遷移のカメラが上を向ききっっていなかったら。　リザルト用で実装した処理で、ゲーム中は常に通ります。
+	if (!m_isCompleteUpper) {
 
-	// 敵更新処理
-	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
+		// プレイヤー更新処理
+		m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
 
-	// 弾を更新。
-	m_bulletMgr->Update(MAP_SIZE);
+		// 敵更新処理
+		m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
 
-	// 敵Waveクラスの更新処理。
-	//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
-	//{
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
-	//}
+		// 弾を更新。
+		m_bulletMgr->Update(MAP_SIZE);
+
+		// 敵Waveクラスの更新処理。
+		//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+		//{
+		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+		//}
+
+	}
+	else {
+
+		// 遷移が始まっていて、カメラが上を向ききっていたらプレイヤーを初期化し続ける。
+		if (m_isCompleteUpper) {
+
+			m_player->Init();
+
+		}
+
+	}
+
+
+
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)) {
+
+		GameMode::Instance()->m_id = GameMode::ID::RESULT;
+
+	}
+
+
+
 
 	// ゲームの状態に応じてカメラの位置を変える。
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
@@ -162,10 +211,9 @@ void GameScene::OnUpdate()
 
 	}
 	else {
-		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
-		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
-		m_gameCam->SetPos(m_nowEye);
-		m_gameCam->SetTarget(m_nowTarget);
+
+		UpdateResult();
+
 	}
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
@@ -236,6 +284,9 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
+	// 戻るのアイコンを描画。
+	DrawFunc2D::DrawExtendGraph2D(RETURN_ICON_POS - m_returnIconSize, RETURN_ICON_POS + m_returnIconSize, m_returnTexture);
+
 
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
@@ -305,4 +356,105 @@ void GameScene::OnImguiDebug()
 
 void GameScene::OnFinalize()
 {
+}
+
+void GameScene::UpdateResult()
+{
+
+
+	// マウスカーソルと戻るのアイコンの当たり判定を行う。
+	Vec2<float> mousePos = UsersInput::Instance()->GetMousePos();
+	float length = Vec2<float>(mousePos - RETURN_ICON_POS).Length();
+	if (length < RETURN_ICON_SIZE.x * 2.0f) {
+
+		m_isNearReturnIcon = true;
+
+	}
+	else {
+
+		m_isNearReturnIcon = false;
+
+	}
+
+	// 戻るのアイコンのサイズを調整。
+	if (m_isNearReturnIcon) {
+		m_returnIconSize.x += (RETURN_ICON_EXP_SIZE.x - m_returnIconSize.x) / 2.0f;
+		m_returnIconSize.y += (RETURN_ICON_EXP_SIZE.y - m_returnIconSize.y) / 2.0f;
+
+		// クリックされていたら遷移させる。
+		if (UsersInput::Instance()->MouseOnTrigger(LEFT)) {
+
+			m_isStartTransition = true;
+
+		}
+
+	}
+	else {
+		m_returnIconSize.x += (RETURN_ICON_SIZE.x - m_returnIconSize.x) / 2.0f;
+		m_returnIconSize.y += (RETURN_ICON_SIZE.y - m_returnIconSize.y) / 2.0f;
+	}
+
+	// 遷移が始まっていたら。
+
+	//現在のカメラ取得
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
+
+	if (m_isStartTransition) {
+
+		// 上を向ききっていたら。
+		if (m_isCompleteUpper) {
+
+			// カメラをタイトルのカメラの位置まで持っていくイージングのタイマーを更新。
+			m_returnTitlePosEasingTimer += 0.03f;
+			if (1.0f <= m_returnTitlePosEasingTimer) m_returnTitlePosEasingTimer = 1.0f;
+			float easingAmount = KuroMath::Ease(InOut, Exp, m_returnTitlePosEasingTimer, 0.0f, 1.0f);
+
+			// カメラの位置をセット。
+			nowCam->SetTarget(m_baseEasingCameraTarget + (TITLE_TARGET_POS - m_baseEasingCameraTarget) * easingAmount);
+			nowCam->SetPos(m_baseEasingCameraEye + (TITLE_EYE_POS - m_baseEasingCameraEye) * easingAmount);
+
+
+			// 補間先との距離が一定以下になったら遷移させる。
+			if (1.0f <= m_returnTitlePosEasingTimer) {
+
+				++m_transitionDelayTimer;
+				if (30 < m_transitionDelayTimer) {
+					KuroEngine::Instance()->ChangeScene(0, m_sceneTransition.get());
+
+				}
+			}
+
+		}
+		else {
+
+			Vec3<float> nowCameraTarget = nowCam->GetTarget();
+
+			nowCameraTarget.y += (TRANSITION_CAMERA_Y - nowCameraTarget.y) / 5.0f;
+
+			nowCam->SetTarget(nowCameraTarget);
+
+			// 補間先までの距離が一定以下になったら次へ
+			if (fabs(nowCameraTarget.y - TRANSITION_CAMERA_Y) <= 1.0f) {
+
+				m_isCompleteUpper = true;
+
+				m_baseEasingCameraEye = nowCam->GetPos();
+				m_baseEasingCameraTarget = nowCam->GetTarget();
+
+			}
+
+		}
+
+	}
+	else {
+
+
+		// カメラを引く。
+		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
+		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
+		m_gameCam->SetPos(m_nowEye);
+		m_gameCam->SetTarget(m_nowTarget);
+
+	}
+
 }

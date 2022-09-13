@@ -18,6 +18,7 @@ private:
 
 	bool m_isAppear;		// 出現中か。
 	bool m_isExit;			// 消滅中か。
+	bool m_isCenter;
 	bool m_isActive;
 
 	int m_prevScore;		// 1F前のスコア 演出用
@@ -32,6 +33,7 @@ private:
 	std::shared_ptr<TextureBuffer> m_ScoreTexture;
 
 	const Vec2<float> MIDDLE_POS = WinApp::Instance()->GetExpandWinCenter() + Vec2<float>(0, 300.0f);
+	const Vec2<float> CENTER_POS = WinApp::Instance()->GetExpandWinCenter();
 	const Vec2<float> APPEAR_POS = Vec2<float>(WinApp::Instance()->GetExpandWinCenter().x, WinApp::Instance()->GetExpandWinSize().y + WinApp::Instance()->GetExpandWinCenter().y);
 	const Vec2<float> EXIT_POS = Vec2<float>(WinApp::Instance()->GetExpandWinCenter().x, -WinApp::Instance()->GetExpandWinCenter().y);
 
@@ -49,6 +51,7 @@ public:
 
 	void Appear();
 	void Exit();
+	void Center();	// Appearで所定の位置に移動させた後に読んでください。
 
 	void AddScore(const int& Score);	// スコアを加算する。
 	void GameFinish();					// 保存してあるスコアを一気に代入する。

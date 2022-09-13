@@ -34,6 +34,11 @@ void GameUI::Update()
 		ScoreMgr::Instance()->Exit();
 
 	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_L)) {
+
+		ScoreMgr::Instance()->Center();
+
+	}
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_P)) {
 
 		ScoreMgr::Instance()->AddScore(100);

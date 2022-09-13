@@ -49,17 +49,35 @@ void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
 		m_pos = APPEAR_POS + ((MIDDLE_POS + Offset) - APPEAR_POS) * easingAmount;
 
 	}
-
 	// 退出中だったら。
-	if (m_isExit) {
+	else if (m_isExit) {
 
 		// イージング量を求める。
 		float easingAmount = KuroMath::Ease(In, Cubic, m_easingTimer, 0.0f, 1.0f);
 
+		// 補間元の座標。
+		Vec2<float> basePos = MIDDLE_POS;
+		if (m_isCenter) {
+
+			basePos = CENTER_POS;
+
+		}
+
 		// 座標を設定。
-		m_pos = (MIDDLE_POS + Offset) + (EXIT_POS - (MIDDLE_POS + Offset)) * easingAmount;
+		m_pos = (basePos + Offset) + (EXIT_POS - (basePos + Offset)) * easingAmount;
 
 	}
+	// 中央移行状態だったら。
+	else if (m_isCenter) {
+
+		// イージング量を求める。
+		float easingAmount = KuroMath::Ease(InOut, Cubic, m_easingTimer, 0.0f, 1.0f);
+
+		// 座標を設定。
+		m_pos = (MIDDLE_POS + Offset) + ((CENTER_POS + Offset) - (MIDDLE_POS + Offset)) * easingAmount;
+
+	}
+
 
 	m_easingTimer += AddEasingTimer;
 	if (1.0f <= m_easingTimer) {
@@ -118,6 +136,7 @@ void ScoreMgr::Appear()
 	m_isActive = true;
 	m_isAppear = true;
 	m_isExit = false;
+	m_isCenter = false;
 	m_easingTimer = 0;
 
 }
@@ -130,6 +149,19 @@ void ScoreMgr::Exit()
 	m_isActive = true;
 	m_isAppear = false;
 	m_isExit = true;
+	m_easingTimer = 0;
+
+}
+
+void ScoreMgr::Center()
+{
+
+	/*===== 中央移行処理 =====*/
+
+	m_isActive = true;
+	m_isAppear = false;
+	m_isExit = false;
+	m_isCenter = true;
 	m_easingTimer = 0;
 
 }
