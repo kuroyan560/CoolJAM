@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -229,6 +229,7 @@
     <ClCompile Include="src\user\EnemyHP.cpp" />
     <ClCompile Include="src\user\EnemyWave.cpp" />
     <ClCompile Include="src\user\EnemyWaveEditor.cpp" />
+    <ClCompile Include="src\user\EnemyWaveLoader.cpp" />
     <ClCompile Include="src\user\EnemyWaveMgr.cpp" />
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\FeverGauge.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="src\user\EnemyHP.h" />
     <ClInclude Include="src\user\EnemyWave.h" />
     <ClInclude Include="src\user\EnemyWaveEditor.h" />
+    <ClInclude Include="src\user\EnemyWaveLoader.h" />
     <ClInclude Include="src\user\EnemyWaveMgr.h" />
     <ClInclude Include="src\user\EnvironmentMgr.h" />
     <ClInclude Include="src\user\FeverGauge.h" />

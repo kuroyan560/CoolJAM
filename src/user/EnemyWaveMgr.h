@@ -10,6 +10,7 @@ class EnemyWaveMgr {
 
 private:
 	friend class EnemyWaveEditor;
+	friend class EnemyWaveLoader;
 
 	/*===== ƒƒ“ƒo•Ï” =====*/
 

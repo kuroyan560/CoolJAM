@@ -63,6 +63,7 @@ class EnemyWave {
 
 private:
 	friend class EnemyWaveEditor;
+	friend class EnemyWaveLoader;
 
 	/*===== ƒƒ“ƒo•Ï” =====*/
 
@@ -86,3 +87,4 @@ public:
 	bool IsBounusStage();
 	int WaveStartTime();
 };
+
