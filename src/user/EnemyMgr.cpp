@@ -90,9 +90,11 @@ void EnemyMgr::Draw(Camera& NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 
 		if (!index->m_isActive) continue;
 
-		index->Draw();
+		if (!index->AnnnounceHit())
+		{
+			index->Draw();
+		}
 		index->CommonDraw(NowCam);
-
 	}
 
 	for (auto& index : m_deadEffectEmitterArray)

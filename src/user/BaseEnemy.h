@@ -36,6 +36,7 @@ public:
 
 	BaseEnemy()
 	{
+		m_hitFlag = false;
 	};
 	virtual ~BaseEnemy() {};
 	virtual void Init() = 0;
@@ -61,28 +62,44 @@ public:
 
 
 
-
-
-	void CommonUpdate()
+	bool AnnnounceHit()
 	{
-		if (m_outline)
+		if (m_hp != m_prevHp)
 		{
-			m_outline->Upadte();
+			m_hitFlag = true;
 		}
-	};
-	void CommonDraw(Camera &CAMERA)
-	{
-		if (m_outline)
+		if (m_hitFlag)
 		{
-			m_outline->Draw(CAMERA);
+			++m_hitTiemr;
 		}
-	};
+		if (30 <= m_hitTiemr)
+		{
+			m_hitTiemr = 0;
+			m_hitFlag = false;
+		}
+
+		m_prevHp = m_hp;
+		return m_hitFlag;
+	}
 
 	void CommonInit()
 	{
 		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
+		m_prevHp = m_hp;
+		m_hitTiemr = 0;
+		m_hitFlag = false;
+	};
+	void CommonUpdate()
+	{
+		m_outline->Upadte();
+	};
+	void CommonDraw(Camera &CAMERA)
+	{
+		m_outline->Draw(CAMERA, m_hitFlag);
 	};
 
-protected:
-
+private:
+	int m_prevHp;
+	bool m_hitFlag;
+	int m_hitTiemr;
 };
