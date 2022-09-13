@@ -148,7 +148,7 @@ void PlayerModelOutline::Update()
 void PlayerModelOutline::Draw(Camera& CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_modelColor, CAMERA);
-	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false);
+	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);
 }
 
 void PlayerModelOutline::EnoughPowerEffect()
