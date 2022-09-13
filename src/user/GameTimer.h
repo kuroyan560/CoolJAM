@@ -23,7 +23,7 @@ public:
 	/// <param name="TIME">ƒtƒŒ[ƒ€”</param>
 	void Init(int TIME);
 	void Finalize();
-	void Update();
+	void Update(int FLAME);
 	void Draw();
 
 	/// <summary>

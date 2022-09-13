@@ -114,7 +114,7 @@ void GameTimer::Finalize()
 {
 }
 
-void GameTimer::Update()
+void GameTimer::Update(int TIME)
 {
 	if (interruput && false) {
 
@@ -138,7 +138,7 @@ void GameTimer::Update()
 	{
 		if (startRate <= 1.0f)
 		{
-			startRate += 1.0f / 30.0f;
+			startRate += 1.0f / static_cast<float>(TIME);
 		}
 		if (1.0f <= startRate)
 		{
@@ -149,7 +149,7 @@ void GameTimer::Update()
 	{
 		if (endRate <= 1.0f)
 		{
-			endRate += 1.0f / 30.0f;
+			endRate += 1.0f / static_cast<float>(TIME);
 		}
 		if (1.0f <= endRate)
 		{

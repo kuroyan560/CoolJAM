@@ -11,14 +11,14 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(60);
+	m_timer->Init(10);
 	m_timer->Start();
 	m_waveUI->Init(10);
 }
 
 void GameUI::Update()
 {
-	m_timer->Update();
+	m_timer->Update(60);
 	m_waveUI->Update(m_waveNum, m_wavePos);
 
 	// デバッグ用
@@ -31,9 +31,6 @@ void GameUI::Update()
 		m_waveUI->Exit();
 
 	}
-
-	m_timer->Update();
-	m_waveUI->Update(m_waveNum, m_wavePos);
 }
 
 void GameUI::Draw()
