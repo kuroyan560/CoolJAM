@@ -78,6 +78,9 @@ public:
 	//ƒQƒbƒ^
 	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
 
+	Vec3<float> pillarColor;
+	Vec3<float> larpPillarColor;
+
 	void OnImguiDebug()override;
 };
 

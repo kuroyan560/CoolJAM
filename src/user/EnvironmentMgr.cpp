@@ -41,6 +41,8 @@ EnvironmentMgr::EnvironmentMgr() :PILLAR_POS_ANGLE_OFFSET(Angle::ROUND() / PILLA
 		posArray.push_back(&m_pillarPosArray[pillarIdx]);
 	}
 	m_lineLight = std::make_unique<LineLight>(posArray);
+
+	pillarColor = { 1.0f,1.0f,1.0f };
 }
 
 void EnvironmentMgr::Init()
@@ -50,7 +52,7 @@ void EnvironmentMgr::Init()
 	m_statusChangeRate = 1.0f;
 }
 
-void EnvironmentMgr::Update(const Vec3<float>& PlayerPos)
+void EnvironmentMgr::Update(const Vec3<float> &PlayerPos)
 {
 	m_ptLig.SetPos(PlayerPos);
 
@@ -101,6 +103,12 @@ void EnvironmentMgr::Draw(Camera &Cam)
 		//スカイドーム
 		DrawFunc3D::DrawNonShadingModel(m_skyDomeModelArray[m_nowStatus], Transform(), Cam);
 
+
+		Vec3<float>mainColor = ColorPalette::RGBtoHSV(pillarColor);
+		Vec3<float>nextColor = ColorPalette::RGBtoHSV(larpPillarColor);
+		pillarColor = KuroMath::Lerp(mainColor, nextColor, 0.1f);
+		pillarColor = ColorPalette::HSVtoRGB(pillarColor);
+
 		//柱
 		for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)
 		{
@@ -108,6 +116,15 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			Angle posAngle = PILLAR_POS_ANGLE_OFFSET * pillarIdx;
 			m_pillarPosArray[pillarIdx] = { cos(posAngle) * m_pillarPosRadius,m_pillarPosY,sin(posAngle) * m_pillarPosRadius };
 			transform.SetPos(m_pillarPosArray[pillarIdx]);
+
+			m_pillarModelArray[m_nowStatus]->m_meshes[0].material->constData.lambert.emissive =
+			{
+				pillarColor.x,
+				pillarColor.y,
+				pillarColor.z
+			};
+			m_pillarModelArray[m_nowStatus]->m_meshes[0].material->Mapping();
+
 			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nowStatus], transform);
 			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nowStatus], transform, Cam);
 		}
@@ -131,6 +148,16 @@ void EnvironmentMgr::Draw(Camera &Cam)
 			float posRadius = KuroMath::Ease(Out, Back, m_statusChangeRate, 0.0f, m_pillarPosRadius);
 			m_pillarPosArray[pillarIdx] = { cos(posAngle) * posRadius,m_pillarPosY,sin(posAngle) * posRadius };
 			transform.SetPos(m_pillarPosArray[pillarIdx]);
+
+
+			m_pillarModelArray[m_nowStatus]->m_meshes[0].material->constData.pbr.baseColor =
+			{
+				pillarColor.x,
+				pillarColor.y,
+				pillarColor.z
+			};
+			m_pillarModelArray[m_nowStatus]->m_meshes[0].material->Mapping();
+
 			//DrawFunc3D::DrawNonShadingModel(m_pillarModelArray[m_nextStatus], transform, Cam);
 			DrawFunc_Append::DrawModel(m_pillarModelArray[m_nextStatus], transform);
 

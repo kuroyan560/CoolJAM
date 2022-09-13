@@ -30,6 +30,7 @@ public:
 		std::weak_ptr<RenderTarget>EMMISIVE_MAP,
 		std::weak_ptr<DepthStencil>DEPTH_STENCIL);
 
+	Color GetColor();
 private:
 	struct EmitterInfo
 	{
@@ -56,5 +57,7 @@ private:
 
 	//定数バッファ（エミッターのバッファ）
 	std::shared_ptr<ConstantBuffer>m_emiBuff;
+
+	Color m_color;
 };
 

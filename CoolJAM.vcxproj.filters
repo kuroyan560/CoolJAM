@@ -105,6 +105,7 @@
     <ClCompile Include="src\user\TutorialText.cpp" />
     <ClCompile Include="src\user\TutorialHexagon.cpp" />
     <ClCompile Include="src\user\TutorialNice.cpp" />
+    <ClCompile Include="src\user\ColorPalette.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />

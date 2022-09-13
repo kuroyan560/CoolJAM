@@ -30,6 +30,7 @@ EnemyMgr::EnemyMgr()
 
 	//}
 
+	m_particleColor = ColorPalette::S_GREEN_COLOR;
 }
 
 void EnemyMgr::Init()
@@ -66,6 +67,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 		if (!index->m_isActive && m_initDeadEffectArray[i])
 		{
 			m_deadEffectEmitterArray[i].Init(index->m_pos + Vec3<float>(0.0f, 0.3f, 0.0f));
+			m_particleColor = m_deadEffectEmitterArray[i].GetColor();
 			m_initDeadEffectArray[i] = false;
 		}
 		m_deadEffectEmitterArray[i].Update();
@@ -105,7 +107,7 @@ void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 
 	for (auto &index : m_deadEffectEmitterArray)
 	{
-			index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
+		index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
 	}
 
 }
@@ -334,7 +336,7 @@ bool EnemyMgr::GetAllEnemyDead() {
 
 	bool isAlive = false;
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ÇªÇ‡ÇªÇ‡ê∂ê¨Ç≥ÇÍÇƒÇ¢Ç»Ç©Ç¡ÇΩÇÁÅB
 		if (!index.operator bool()) continue;
@@ -355,7 +357,7 @@ void EnemyMgr::AllKill(std::weak_ptr<BulletMgr> BulletMgr) {
 
 	/*===== Ç∑Ç◊ÇƒÇÃìGÇéEÇ∑ =====*/
 
-	for (auto& index : m_enemy) {
+	for (auto &index : m_enemy) {
 
 		// ÇªÇ‡ÇªÇ‡ê∂ê¨Ç≥ÇÍÇƒÇ¢Ç»Ç©Ç¡ÇΩÇÁÅB
 		if (!index.operator bool()) continue;
@@ -368,4 +370,9 @@ void EnemyMgr::AllKill(std::weak_ptr<BulletMgr> BulletMgr) {
 
 	}
 
+}
+
+Color EnemyMgr::GetParticleColor()
+{
+	return m_particleColor;
 }
