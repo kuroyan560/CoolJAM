@@ -5,6 +5,7 @@
 #include"AudioApp.h"
 #include"../user/KazDrawFunc.h"
 #include"../engine/Common/KuroMath.h"
+#include"../engine/DrawFunc2D.h"
 
 
 GameTimer::GameTimer()
@@ -21,8 +22,11 @@ GameTimer::GameTimer()
 	number.resize(12);
 	texSize = { 64,44 };
 
-	D3D12App::Instance()->GenerateTextureBuffer(textureBufferArray.data(), "resource/user/num.png", 12, { 12, 1 });
 	//TexHandleMgr::LoadDivGraph("resource/ChainCombat/UI/num.png", 12, { 12, 1 }, number.data());
+	for (int i = 0; i < textureBufferArray.size(); ++i)
+	{
+		textureBufferArray[i] = Font::Instance()->m_stripeFont[i];
+	}
 
 	//スコア無効、タイマーを中心に描画
 	timerPos.x = -150.0f;
@@ -250,19 +254,19 @@ void GameTimer::Draw()
 		{
 			offset = i;
 			centralPos = { easePosX + timerPos.x + i * texSize.x, timerPos.y + offsetY };
-			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
 		}
 
 		++offset;
 		centralPos = { easePosX + timerPos.x + offset * texSize.x,timerPos.y + offsetY };
-		KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
+		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
 		++offset;
 
 		//秒
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
 			centralPos = { easePosX + timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
-			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
 		}
 
 	}

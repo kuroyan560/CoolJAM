@@ -4,6 +4,7 @@
 #include"../Common/Singleton.h"
 #include<array>
 #include"../engine/D3D12App.h"
+#include"Font.h"
 
 //InToTheAbyss‚©‚çˆ—‚ğˆø—p
 
