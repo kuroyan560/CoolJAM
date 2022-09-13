@@ -29,6 +29,7 @@ void LightBloomDevice::GeneratePipeline()
 		for (int i = 0; i < BLUR_COUNT; ++i)
 			rootParams.emplace_back(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, "ボケ画像");
 		rootParams.emplace_back(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, "加工後エミッシブマップ");
+		rootParams.emplace_back(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, "ライトブルーム設定"),
 
 		//パイプライン生成
 		s_combinePipeline = D3D12App::Instance()->GenerateComputePipeline(cs, rootParams, { WrappedSampler(false,true) });
@@ -47,6 +48,7 @@ LightBloomDevice::LightBloomDevice()
 	m_processedEmissiveMap = D3D12App::Instance()->GenerateTextureBuffer(winSize, DXGI_FORMAT_R32G32B32A32_FLOAT, "LightBloom - EmissiveMap - Processed");
 
 	//定数バッファ生成
+	m_config.m_imgSize = winSize;
 	m_constBuff = D3D12App::Instance()->GenerateConstantBuffer(sizeof(LightBloomConfig), 1, &m_config, "LgihtBloom - Config - ConstantBuffer");
 
 	//ガウシアンブラー
