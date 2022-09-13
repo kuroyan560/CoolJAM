@@ -179,9 +179,12 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		const int enemyCount = static_cast<int>(enemys.size());
 
 		//エネミーを生成順にソート
-		std::sort(enemys.begin(), enemys.end(), [](ENEMY_INFO::SPAWN_INFO& a, ENEMY_INFO::SPAWN_INFO b) {
-			return a.m_generateFrame < b.m_generateFrame;
-			});
+		if (ImGui::Button("Sort"))
+		{
+			std::sort(enemys.begin(), enemys.end(), [](ENEMY_INFO::SPAWN_INFO& a, ENEMY_INFO::SPAWN_INFO b) {
+				return a.m_generateFrame < b.m_generateFrame;
+				});
+		}
 
 		//エネミー一覧
 		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar))
