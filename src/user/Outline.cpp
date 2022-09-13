@@ -9,7 +9,7 @@ Outline::Outline(std::shared_ptr<Model> MODEL, const Transform *TRANSFORM, const
 	m_color = COLOR;
 	m_transform = TRANSFORM;
 	//m_hitColor = Color(245, 93, 31, 255);
-	m_hitColor = ColorPalette::S_GREEN_COLOR;
+	m_hitColor = ColorPalette::S_PINK_COLOR;
 }
 
 void Outline::Init()

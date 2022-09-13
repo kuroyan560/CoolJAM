@@ -7,7 +7,6 @@ int BaseEnemy::s_damageSE = -1;
 
 BaseEnemy::BaseEnemy()
 {
-	m_hitFlag = false;
 	if (s_deadSE == -1)
 	{
 		s_deadSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enemyDead.wav");

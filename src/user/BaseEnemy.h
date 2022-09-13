@@ -5,6 +5,7 @@
 #include <array>
 #include"Outline.h"
 #include"ColorPalette.h"
+#include"../engine/UsersInput.h"
 
 class Model;
 class Camera;
@@ -66,26 +67,28 @@ public:
 
 	bool AnnnounceHit()
 	{
-		if (m_hp != m_prevHp)
+		if (m_hp != m_prevHp || UsersInput::Instance()->KeyOnTrigger(DIK_M))
 		{
 			m_hitFlag = true;
 			m_hitTiemr = 0;
+			m_shrinkScale += 0.3f;
 		}
 		if (m_hitFlag)
 		{
-			float s = -0.3f;
-			m_damageScale = Vec3<float>(s, s, s);
+			m_lDamageScale = Vec3<float>(m_shrinkScale, m_shrinkScale, m_shrinkScale);
 			++m_hitTiemr;
 		}
-		if (3 <= m_hitTiemr)
+		if (5 <= m_hitTiemr)
 		{
 			float s = 0.0f;
-			m_damageScale = Vec3<float>(s, s, s);
+			m_lDamageScale = Vec3<float>(s, s, s);
 			m_hitTiemr = 0;
 			m_hitFlag = false;
 		}
+		m_damageScale = KuroMath::Lerp(m_damageScale, m_lDamageScale, 0.6f);
 
 		m_prevHp = m_hp;
+		m_transform.SetScale(m_baseScale - m_damageScale);
 		return m_hitFlag;
 	}
 
@@ -96,6 +99,8 @@ public:
 		m_hitTiemr = 0;
 		m_hitFlag = false;
 		m_baseScale = m_transform.GetScale();
+		m_damageScale = {};
+		m_shrinkScale = 0.0f;
 	};
 	void CommonUpdate()
 	{
@@ -103,7 +108,6 @@ public:
 	};
 	void CommonDraw(Camera &CAMERA)
 	{
-		m_transform.SetScale(m_baseScale + m_damageScale);
 		m_outline->Draw(CAMERA, m_hitFlag);
 	};
 
@@ -113,5 +117,7 @@ private:
 	int m_hitTiemr;
 
 	Vec3<float>m_damageScale;
+	Vec3<float>m_lDamageScale;
+	float m_shrinkScale;
 	Vec3<float>m_baseScale;
 };

@@ -104,7 +104,7 @@ void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 
 	for (auto &index : m_deadEffectEmitterArray)
 	{
-		//	index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
+			index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
 	}
 
 }
