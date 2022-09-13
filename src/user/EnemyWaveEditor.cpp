@@ -3,9 +3,58 @@
 #include"EnemyWaveMgr.h"
 #include"EnemyWave.h"
 #include"EnemyMgr.h"
+#include"KuroFunc.h"
+#include"EnemyWaveLoader.h"
 
 void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr)
 {
+	//セーブするか聞く
+	if (m_saveMode)
+	{
+		ImGui::SetNextWindowPos(ImVec2(640, 320));
+		ImGui::Begin("SaveEnemyWave");
+
+		static char s_saveFileNameBuff[256];
+		ImGui::InputText("SaveFileName", s_saveFileNameBuff, 256);
+
+		//同名のファイルがある場合警告文
+		if (KuroFunc::ExistFile(EnemyWaveLoader::s_dir + s_saveFileNameBuff + EnemyWaveLoader::s_extention))
+		{
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "This file name is already used. Are you sure overwriting?");
+		}
+
+		//実行
+		if (ImGui::Button("Done"))
+		{
+			EnemyWaveLoader::Save(s_saveFileNameBuff, WaveMgr.m_waves, m_finalWaveTime);
+			m_saveMode = false;
+		}
+
+		ImGui::End();
+	}
+	else if (m_loadMode)
+	{
+		ImGui::SetNextWindowPos(ImVec2(640, 320));
+		ImGui::Begin("LoadEnemyWave");
+
+		static char s_loadFileNameBuff[256];
+		ImGui::InputText("LoadWaveName", s_loadFileNameBuff, 256);
+
+		//ファイルがあるか確認
+		if (KuroFunc::ExistFile(EnemyWaveLoader::s_dir + s_loadFileNameBuff + EnemyWaveLoader::s_extention))
+		{
+			//実行
+			if (ImGui::Button("Done"))
+			{
+				WaveMgr.m_waves = EnemyWaveLoader::Load(s_loadFileNameBuff, m_finalWaveTime);
+				m_loadMode = false;
+			}
+		}
+
+		ImGui::End();
+	}
+
+	if (m_saveMode || m_loadMode)return;
 
 	ImGui::Begin("EnemyWaveEditor", nullptr, ImGuiWindowFlags_MenuBar);
 
@@ -15,11 +64,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		{
 			if (ImGui::MenuItem("Save"))
 			{
-
+				m_saveMode = true;
 			}
 			if (ImGui::MenuItem("Load"))
 			{
-
+				m_loadMode = true;
 			}
 			ImGui::EndMenu();
 		}

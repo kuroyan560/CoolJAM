@@ -9,6 +9,8 @@ class EnemyWaveEditor : public Singleton<EnemyWaveEditor>
 private:
 	friend class Singleton<EnemyWaveEditor>;
 
+	char* m_fileNameBuff;
+
 	bool m_isActive = true;
 	bool m_test = false;
 
@@ -17,6 +19,9 @@ private:
 	int m_enemyIdx = 0;
 
 	int m_finalWaveTime = 150;
+
+	bool m_loadMode = false;
+	bool m_saveMode = false;
 
 public:
 	void EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr);

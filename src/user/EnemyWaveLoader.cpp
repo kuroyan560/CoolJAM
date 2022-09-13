@@ -9,6 +9,7 @@ void EnemyWaveLoader::Save(const std::string& FileName, const std::vector<std::s
 {
     FILE* fp;
     fopen_s(&fp, (s_dir + FileName + s_extention).c_str(), "wb");
+    assert(fp != nullptr);
 
     //最後のウェーブの終了時間
     assert(KuroFunc::SaveData(fp, &FinalWaveTime, sizeof(FinalWaveTime), 1));
@@ -49,7 +50,8 @@ std::vector<std::shared_ptr<EnemyWave>> EnemyWaveLoader::Load(const std::string&
     std::vector<std::shared_ptr<EnemyWave>>result;
 
     FILE* fp;
-    fopen_s(&fp, (s_dir + FileName).c_str(), "rb");
+    fopen_s(&fp, (s_dir + FileName + s_extention).c_str(), "rb");
+    assert(fp != nullptr);
 
     //最後のウェーブの終了時間
     assert(KuroFunc::LoadData(fp, &FinalWaveTime, sizeof(FinalWaveTime), 1));
