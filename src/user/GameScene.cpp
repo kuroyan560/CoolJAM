@@ -64,9 +64,10 @@ GameScene::GameScene()
 	DrawFunc_Append::RegisterRenderTargets(backBuffFormat, m_emissiveMap, m_depthMap, m_depthStencil);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
-	
+
 	//BGM読み込み
 	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
+
 }
 
 void GameScene::OnInitialize()
@@ -108,7 +109,7 @@ void GameScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
 	//現在のカメラ取得
-	auto &nowCam = *GameManager::Instance()->GetNowCamera();
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -180,11 +181,12 @@ void GameScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
 
+
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//現在のカメラ取得
-	auto &nowCam = GameManager::Instance()->GetNowCamera();
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 	//DrawFunc初期化
 	DrawFunc_Append::FrameInit(

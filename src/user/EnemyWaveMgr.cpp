@@ -103,6 +103,16 @@ void EnemyWaveMgr::AddWave(std::shared_ptr<EnemyWave> Wave)
 
 }
 
+#include "DrawFunc2D.h"
+void EnemyWaveMgr::Draw()
+{
+
+	/*===== •`‰æˆ— =====*/
+
+	//DrawFunc2D::DrawExtendGraph2D
+
+}
+
 bool EnemyWaveMgr::IsNowWaveBounusStage()
 {
 	return m_waves[nowWaveCount]->IsBounusStage();
