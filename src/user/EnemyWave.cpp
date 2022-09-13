@@ -10,16 +10,12 @@ EnemyWave::EnemyWave(const int &WaveStartFrame, const bool &BounusStageFlag)
 	m_nowWaveFrame = 0;
 	m_isBounusStageFlag = BounusStageFlag;
 	m_startWaveFlag = false;
-	m_initFlag = false;
 }
 
 void EnemyWave::Init()
 {
 	/*===== èâä˙âªèàóù =====*/
-
-	m_nowWaveFrame = 0;
-	m_startWaveFlag = true;
-	m_initFlag = true;
+	Stop();
 }
 
 void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
@@ -86,12 +82,13 @@ int EnemyWave::WaveStartTime()
 	return m_waveStartFrame;
 }
 
+void EnemyWave::Start()
+{
+	m_startWaveFlag = true;
+	m_nowWaveFrame = 0;
+}
+
 void EnemyWave::Stop()
 {
 	m_startWaveFlag = false;
-}
-
-bool EnemyWave::IsStart()
-{
-	return m_initFlag;
 }

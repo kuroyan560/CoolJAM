@@ -3,9 +3,6 @@
 
 EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 {
-
-	nowWaveCount = -1;
-
 	/*===== コンストラクタ =====*/
 
 	m_frameTimer = 0;
@@ -32,7 +29,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::PRESS, 60);
 
-	m_waves.emplace_back(wave1);
+	//m_waves.emplace_back(wave1);
 
 	//// マップの四方に敵を配置。
 	//wave1->AddEnemy(Vec3<float>(MapSize / 2.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::STOPPING, 30);
@@ -56,44 +53,49 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 }
 
-void EnemyWaveMgr::Init()
+void EnemyWaveMgr::Init(const int& FrameTimer)
 {
 
 	/*===== 初期化処理 =====*/
 
-	m_frameTimer = 0;
+	m_frameTimer = FrameTimer;
+	m_nowWaveIdx = 0;
+	for (auto& w : m_waves)w->Stop();
 
+	//一応スタート順でソート
+	std::sort(m_waves.begin(), m_waves.end(), [](std::shared_ptr<EnemyWave>& a, std::shared_ptr<EnemyWave>& b)
+		{
+			return a->WaveStartTime() < b->WaveStartTime();
+		});
 }
 
 void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
-
 	/*===== 更新処理 =====*/
+
+	assert(!m_waves.empty());
 
 	// フレームのタイマーを更新。
 	++m_frameTimer;
 
 	// ウェーブの更新処理
-	for (int i = 0; i < m_waves.size(); ++i)
+	m_waves[m_nowWaveIdx]->Update(EnemyMgr, PlayerPos, MapSize);
+
+	//次のウェーブがある場合
+	int nextWaveIdx = m_nowWaveIdx + 1;
+	if (nextWaveIdx <= m_waves.size() - 1)
 	{
-		//Waveの開始の初期化
-		bool isStartFlag = !m_waves[i]->IsStart() && m_waves[i]->WaveStartTime() <= m_frameTimer;
-		if (isStartFlag)
+		//次のウェーブの開始時間を見る
+		bool nextStart = m_waves[nextWaveIdx]->WaveStartTime() <= m_frameTimer;
+		if (nextStart)
 		{
-			m_waves[i]->Init();
-			++nowWaveCount;
+			m_waves[m_nowWaveIdx]->Stop();
+			m_waves[nextWaveIdx]->Start();
+			m_nowWaveIdx = nextWaveIdx;
 		}
-		//次のWaveが開始されたら前Waveの生成処理を止める
-		if (isStartFlag && 0 <= (i - 1))
-		{
-			m_waves[i - 1]->Stop();
-		}
-
-
-		m_waves[i]->Update(EnemyMgr, PlayerPos, MapSize);
 	}
 
-	if (m_waves[nowWaveCount]->IsBounusStage())
+	if (m_waves[m_nowWaveIdx]->IsBounusStage())
 	{
 		bool debug = false;
 	}
@@ -110,5 +112,5 @@ void EnemyWaveMgr::AddWave(std::shared_ptr<EnemyWave> Wave)
 
 bool EnemyWaveMgr::IsNowWaveBounusStage()
 {
-	return m_waves[nowWaveCount]->IsBounusStage();
+	return m_waves[m_nowWaveIdx]->IsBounusStage();
 }
