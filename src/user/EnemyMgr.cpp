@@ -1,3 +1,4 @@
+
 #include "EnemyMgr.h"
 #include "KuroFunc.h"
 #include <limits>
@@ -296,7 +297,6 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float> &Pos, const float &Size)
 		{
 			isHit = false;
 		}
-		index->Init();
 
 	}
 
@@ -323,6 +323,48 @@ void EnemyMgr::AttackEnemy(const Vec3<float> &Pos, const float &Size, std::weak_
 		if (!(Vec3<float>(enemyPos - Pos).Length() <= Size + enemySize)) continue;
 
 		index->Damage(1, BulletMgr);
+
+	}
+
+}
+
+bool EnemyMgr::GetAllEnemyDead() {
+
+	/*===== すべての敵が死んでいるか =====*/
+
+	bool isAlive = false;
+
+	for (auto& index : m_enemy) {
+
+		// そもそも生成されていなかったら。
+		if (!index.operator bool()) continue;
+
+		// 生成されていなかったら。
+		if (!index->m_isActive) continue;
+
+		isAlive = true;
+
+	}
+
+	// isAliveがtrueだったら生成されているのでfalseを返す。
+	return !isAlive;
+
+}
+
+void EnemyMgr::AllKill(std::weak_ptr<BulletMgr> BulletMgr) {
+
+	/*===== すべての敵を殺す =====*/
+
+	for (auto& index : m_enemy) {
+
+		// そもそも生成されていなかったら。
+		if (!index.operator bool()) continue;
+
+		// 生成されていなかったら。
+		if (!index->m_isActive) continue;
+
+		index->Damage(1000, BulletMgr);
+
 
 	}
 

@@ -16,6 +16,7 @@
 #include"../engine/DrawFuncBillBoard.h"
 #include"FeverGauge.h"
 #include"GameMode.h"
+#include"Tutorial.h"
 
 TutorialScene::TutorialScene()
 {
@@ -27,7 +28,7 @@ TutorialScene::TutorialScene()
 	//デプスステンシル生成（バックバッファと同じサイズ）
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
-	m_player = std::make_unique<Player>();
+	m_player = std::make_shared<Player>();
 	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
@@ -48,6 +49,9 @@ TutorialScene::TutorialScene()
 	// フィーバーゲージ
 	m_feverGauge = std::make_unique<FeverGauge>();
 
+	// シーン遷移
+	m_sceneTransition = std::make_unique<SceneTransition>();
+
 	//敵ウェーブ管理クラス
 	m_enemyWaveMgr = std::make_unique<EnemyWaveMgr>(MAP_SIZE);
 
@@ -65,8 +69,17 @@ TutorialScene::TutorialScene()
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat);
 	DrawFunc3D::GenerateDrawLinePipeline(backBuffFormat, AlphaBlendMode_Add);
 
-	// チュートリアルのステータスを実装。
-	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
+	m_isCameraHomePosition = true;
+	m_isTransitionStart = false;
+	m_isInitPlayer = false;
+	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
+
+	m_tutorial = std::make_shared<Tutorial>();
+
+	// 床モデルのテクスチャを変える。
+	m_mapModel->m_model->m_meshes[0].material->texBuff[0] = m_tutorial->GetFloorRenderTarget();
 
 }
 
@@ -83,6 +96,15 @@ void TutorialScene::OnInitialize()
 	m_environmentMgr->Init();
 	m_player->Init();
 	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
+
+	m_isCameraHomePosition = true;
+	m_isTransitionStart = false;
+	m_isInitPlayer = false;
+	m_isCompleteUpper = false;
+	m_returnTitlePosEasingTimer = 0;
+	m_transitionDelayTimer = 0;
+
+	m_tutorial->Init();
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -102,16 +124,16 @@ void TutorialScene::OnInitialize()
 
 	}
 
-	// チュートリアルのステータスを実装。
-	m_tutorialStatus = TUTORIAL_STATUS::MOUSE;
-
 }
 
 void TutorialScene::OnUpdate()
 {
 	/*===== 更新処理 =====*/
+
 	//現在のカメラ取得
 	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+
+
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -122,7 +144,16 @@ void TutorialScene::OnUpdate()
 	GameManager::Instance()->Update();
 
 	// プレイヤー更新処理
-	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE);
+	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, EDGE_SCOPE, m_tutorial->GetPlayerFeverGaugeStop(m_enemyMgr));
+
+	// 遷移が始まったらプレイヤーを常に初期化し続ける。
+	if (m_isInitPlayer) {
+
+		m_player->Init();
+
+		m_tutorial->Init();
+	}
+
 
 	// 敵更新処理
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
@@ -130,11 +161,68 @@ void TutorialScene::OnUpdate()
 	// 弾を更新。
 	m_bulletMgr->Update(MAP_SIZE);
 
-	// 敵Waveクラスの更新処理。
-	m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+	// チュートリアルのアップデート
+	m_tutorial->Update(m_player, m_enemyMgr, m_bulletMgr, m_isCameraHomePosition, MAP_SIZE, m_isTransitionStart);
 
 	// ゲームの状態に応じてカメラの位置を変える。
-	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
+	if (m_isTransitionStart) {
+
+		// 上を向ききっていたら。
+		if (m_isCompleteUpper) {
+
+			// カメラをタイトルのカメラの位置まで持っていくイージングのタイマーを更新。
+			m_returnTitlePosEasingTimer += 0.03f;
+			if (1.0f <= m_returnTitlePosEasingTimer) m_returnTitlePosEasingTimer = 1.0f;
+			float easingAmount = KuroMath::Ease(InOut, Exp, m_returnTitlePosEasingTimer, 0.0f, 1.0f);
+
+			// カメラの位置をセット。
+			nowCam.SetTarget(m_baseEasingCameraTarget + (TITLE_TARGET_POS - m_baseEasingCameraTarget) * easingAmount);
+			nowCam.SetPos(m_baseEasingCameraEye + (TITLE_EYE_POS - m_baseEasingCameraEye) * easingAmount);
+
+
+			// 補間先との距離が一定以下になったら遷移させる。
+			if (1.0f <= m_returnTitlePosEasingTimer) {
+
+				++m_transitionDelayTimer;
+				if (30 < m_transitionDelayTimer) {
+					KuroEngine::Instance()->ChangeScene(0, m_sceneTransition.get());
+
+				}
+			}
+
+		}
+		else {
+
+			Vec3<float> nowCameraTarget = nowCam.GetTarget();
+
+			nowCameraTarget.y += (TRANSITION_CAMERA_Y - nowCameraTarget.y) / 5.0f;
+
+			nowCam.SetTarget(nowCameraTarget);
+
+			// 補間先までの距離が一定以下になったら次へ
+			if (fabs(nowCameraTarget.y - TRANSITION_CAMERA_Y) <= 1.0f) {
+
+				m_isInitPlayer = true;
+				m_isCompleteUpper = true;
+
+				m_baseEasingCameraEye = nowCam.GetPos();
+				m_baseEasingCameraTarget = nowCam.GetTarget();
+
+			}
+
+		}
+
+
+	}
+	else if (m_isCameraHomePosition) {
+
+		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
+		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
+		m_gameCam->SetPos(m_nowEye);
+		m_gameCam->SetTarget(m_nowTarget);
+
+	}
+	else {
 
 		Vec3<float> playerVecX = -m_player->GetForwardVec();
 		const float CAMERA_DISTANCE = 80.0f;
@@ -154,27 +242,18 @@ void TutorialScene::OnUpdate()
 		m_gameCam->SetTarget(m_nowTarget);
 
 	}
-	else {
-		m_nowEye += (CAMERA_HOME_EYE_POSITION - m_nowEye) / 5.0f;
-		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
-		m_gameCam->SetPos(m_nowEye);
-		m_gameCam->SetTarget(m_nowTarget);
-
-	}
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
-	if (GameMode::Instance()->m_id == GameMode::ID::TUTORIAL && UsersInput::Instance()->KeyInput(DIK_RETURN)) {
-		GameMode::Instance()->m_id = GameMode::ID::GAME;
+	if (UsersInput::Instance()->KeyInput(DIK_RETURN)) {
+		m_isCameraHomePosition = true;
 	}
-	if (GameMode::Instance()->m_id == GameMode::ID::GAME && UsersInput::Instance()->KeyInput(DIK_SPACE)) {
-		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
+	if (UsersInput::Instance()->KeyInput(DIK_SPACE)) {
+		m_isCameraHomePosition = false;
 	}
 
 	m_environmentMgr->Update(m_player->GetPos());
 
-
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
-
 
 }
 
@@ -187,6 +266,7 @@ void TutorialScene::OnDraw()
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
 
 	//現在のカメラ取得
+	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 	//DrawFunc初期化
@@ -196,7 +276,12 @@ void TutorialScene::OnDraw()
 		m_environmentMgr->GetLigMgr()
 	);
 
+	KuroEngine::Instance()->Graphics().ClearRenderTarget(m_emissiveMap);
+
 	/*--- 通常描画 ---*/
+
+	// チュートリアルの描画
+	m_tutorial->Draw();
 
 	// マップを描画
 	m_mapModel->m_transform.SetScale(MAP_SIZE);
@@ -213,6 +298,9 @@ void TutorialScene::OnDraw()
 
 	//弾を描画。
 	m_bulletMgr->Draw();
+
+	// チュートリアルの戻るのアイコンを描画
+	m_tutorial->DrawReturnIcon();
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();

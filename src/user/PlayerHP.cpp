@@ -76,4 +76,7 @@ void PlayerHP::Draw()
 	RenderTargetSwitch renderTargetSwitch = RenderTargetSwitch(m_alpha, 1.0f, 1.0f);
 	DrawFunc_Append::DrawModel(m_model, m_transform, renderTargetSwitch, false, false, nullptr, AlphaBlendMode_Trans);
 
+
+	m_transform.SetPos(m_transform.GetPos() - Vec3<float>(0.0f, 1.0f, 0.0f));
+
 }

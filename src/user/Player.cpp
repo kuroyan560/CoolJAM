@@ -28,6 +28,7 @@ Player::Player()
 	m_brakeBoostTimer = 0;
 	m_shotTimer = 0;
 	m_RedTime = 0;
+	m_movedLength = 0;
 	m_colorEasingTimer = 0;
 	m_isRed = true;
 	m_isEdge = false;
@@ -38,6 +39,7 @@ Player::Player()
 	m_isDamageEffect = false;
 	m_damageEffectTimer = 0;
 	m_damageEffectCount = 0;
+	m_dashCounter = 0;
 	m_hp = MAX_HP;
 	m_isFever = false;
 	m_feverTime = 0;
@@ -93,6 +95,8 @@ void Player::Init()
 	m_rotX = 0.01f;
 	m_shotTimer = 0;
 	m_RedTime = 0;
+	m_movedLength = 0;
+	m_dashCounter = 0;
 	m_colorEasingTimer = 0;
 	m_isRed = true;
 	m_brakeBoostTimer = 0;
@@ -114,6 +118,12 @@ void Player::Init()
 
 	}
 
+	for (auto& index : m_hpUI) {
+
+		index->Init();
+
+	}
+
 	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
 
 	//ダッシュ時のエフェクト
@@ -122,7 +132,7 @@ void Player::Init()
 	m_modelObj->m_animator->Play("ToFloater", false, false);
 }
 
-void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope)
+void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer)
 {
 
 	/*===== 更新処理 =====*/
@@ -131,7 +141,7 @@ void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_p
 	Input(Cam, WindowSize);
 
 	// 移動処理
-	Move(BulletMgr);
+	Move(BulletMgr, IsStopFeverTimer);
 
 	// 弾発射処理
 	Shot(BulletMgr, EnemyMgr);
@@ -269,6 +279,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 				m_brakeBoostTimer = brakeRate * MAX_BRAKE_TIMER;
 			}
 
+			// ダッシュした回数をカウントする。
+			++m_dashCounter;
+
 		}
 
 		// 最大値、最小値を超えないようにする。
@@ -282,7 +295,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 }
 
-void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
+void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 {
 
 	/*===== 移動処理 =====*/
@@ -298,10 +311,15 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		--m_feverTime;
-		if (m_feverTime <= 0) {
+		// フィーバーの時間経過を止めるフラグが立っていたら減らさない。チュートリアルでフィーバーのタイマーを減らしたくない場合があったので作成しました。
+		if (!IsStopFeverTimer) {
 
-			m_isFever = false;
+			--m_feverTime;
+			if (m_feverTime <= 0) {
+
+				m_isFever = false;
+
+			}
 
 		}
 
@@ -324,6 +342,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr)
 
 	// 移動させる。
 	m_pos += m_forwardVec * m_speed;
+	m_movedLength += Vec3<float>(m_forwardVec * m_speed).Length();
 
 	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
@@ -632,6 +651,9 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
 
+	// ダメージエフェクト中は当たり判定を無効化する。
+	if (m_isDamageEffect) return;
+
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 
@@ -651,7 +673,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, FEVER_ATTACK_SCALE, BulletMgr);
+		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
 
 	}
 
