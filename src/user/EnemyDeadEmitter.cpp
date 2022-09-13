@@ -112,6 +112,7 @@ void EnemyDeadEmitter::Init(const Vec3<float> &POS)
 {
 	int colorPatternNum = KuroFunc::GetRand(0, 2);
 	Color color(m_colorPatternArray[colorPatternNum]);
+	m_color = color;
 
 	//l•ªŠ„‚µ‚ÄÅ’áŒÂ”‚ğo‚·
 	const int PER_NUM = m_lineParticle.size() / 4;
@@ -188,4 +189,9 @@ void EnemyDeadEmitter::Draw(Camera &CAMERA,
 		},
 		pos.z,
 		true);
+}
+
+Color EnemyDeadEmitter::GetColor()
+{
+	return m_color;
 }

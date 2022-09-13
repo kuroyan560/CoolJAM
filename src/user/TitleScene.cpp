@@ -119,7 +119,7 @@ void TitleScene::OnUpdate()
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
-	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, 0, false);
+	m_player->Update(nowCam, m_bulletMgr, m_enemyMgr, windowSize, MAP_SIZE, 0, false, true);
 	m_player->Init();
 
 	m_environmentMgr->Update(m_player->GetPos());

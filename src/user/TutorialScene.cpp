@@ -149,6 +149,13 @@ void TutorialScene::OnUpdate()
 	}
 
 
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
+
+		m_isTransitionStart = true;
+
+	}
+
+
 	// “GXVˆ—
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);
 

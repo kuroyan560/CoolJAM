@@ -169,6 +169,13 @@ void GameScene::OnUpdate()
 		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
 	}
 
+	m_environmentMgr->larpPillarColor =
+	{
+		m_enemyMgr->GetParticleColor().m_r,
+		m_enemyMgr->GetParticleColor().m_g,
+		m_enemyMgr->GetParticleColor().m_b
+	};
+
 	m_environmentMgr->Update(m_player->GetPos());
 
 

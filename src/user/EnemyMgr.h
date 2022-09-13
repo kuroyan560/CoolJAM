@@ -23,7 +23,7 @@ private:
 	std::shared_ptr<Model> m_modelHit;
 	std::shared_ptr<Model> m_elecMushi;
 
-
+	Color m_particleColor;
 public:
 
 	/*===== メンバ関数 =====*/
@@ -57,7 +57,7 @@ public:
 	// すべての敵を殺す。
 	void AllKill(std::weak_ptr<BulletMgr> BulletMgr);
 
-
+	Color GetParticleColor();
 private:
 
 	// 敵生成関数 Generate内で使用する。
