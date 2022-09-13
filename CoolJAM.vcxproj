@@ -363,6 +363,7 @@
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />
     <ClInclude Include="src\user\EnemyDeadSquareParticle.h" />
+    <ClInclude Include="src\user\GameUI.h" />
     <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\LightBlock.h" />
     <ClInclude Include="src\user\LineLight.h" />

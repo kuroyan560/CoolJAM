@@ -158,7 +158,6 @@ void GameScene::OnUpdate()
 		m_nowTarget += (CAMERA_HOME_TARGET_POSITION - m_nowTarget) / 5.0f;
 		m_gameCam->SetPos(m_nowEye);
 		m_gameCam->SetTarget(m_nowTarget);
-
 	}
 
 	// チュートリアル状態の時、エンターキーを押すことでゲームモードのカメラに移行する。
@@ -169,12 +168,7 @@ void GameScene::OnUpdate()
 		GameMode::Instance()->m_id = GameMode::ID::TUTORIAL;
 	}
 
-	m_environmentMgr->larpPillarColor =
-	{
-		m_enemyMgr->GetParticleColor().m_r,
-		m_enemyMgr->GetParticleColor().m_g,
-		m_enemyMgr->GetParticleColor().m_b
-	};
+	m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
 
 	m_environmentMgr->Update(m_player->GetPos());
 

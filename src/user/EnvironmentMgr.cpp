@@ -109,6 +109,7 @@ void EnvironmentMgr::Draw(Camera &Cam)
 		pillarColor = KuroMath::Lerp(mainColor, nextColor, 0.1f);
 		pillarColor = ColorPalette::HSVtoRGB(pillarColor);
 
+
 		//’Œ
 		for (int pillarIdx = 0; pillarIdx < PILLAR_NUM; ++pillarIdx)
 		{
@@ -219,4 +220,14 @@ void EnvironmentMgr::ImguiDebug()
 	ImGui::DragFloat("Pillar_PosY", &m_pillarPosY, 0.5f);
 
 	ImGui::End();
+}
+
+void EnvironmentMgr::ChangeColor(const Color &COLOR)
+{
+	larpPillarColor =
+	{
+		COLOR.m_r,
+		COLOR.m_g,
+		COLOR.m_b
+	};
 }

@@ -236,5 +236,6 @@
     <ClInclude Include="src\user\TutorialNice.h" />
     <ClInclude Include="src\user\EnemyWaveLoader.h" />
     <ClInclude Include="src\user\StageFloor.h" />
+    <ClInclude Include="src\user\GameUI.h" />
   </ItemGroup>
 </Project>
