@@ -2,9 +2,13 @@
 #include "BulletMgr.h"
 #include"AudioApp.h"
 #include"KuroMath.h"
+#include"Importer.h"
+#include"KuroEngine.h"
 
 int BaseEnemy::s_deadSE = -1;
 int BaseEnemy::s_damageSE = -1;
+std::shared_ptr<Model>BaseEnemy::s_appearReticleModel;
+std::array<std::shared_ptr<TextureBuffer>, 5>BaseEnemy::s_appearReticleTex;
 
 BaseEnemy::BaseEnemy()
 {
@@ -12,6 +16,9 @@ BaseEnemy::BaseEnemy()
 	{
 		s_deadSE = AudioApp::Instance()->LoadAudio("resource/user/sound/enemyDead.wav");
 		s_damageSE = AudioApp::Instance()->LoadAudio("resource/user/sound/hit.wav", 0.1f);
+
+		s_appearReticleModel = Importer::Instance()->LoadModel("resource/user/", "enemy_appearReticle.glb");
+		D3D12App::Instance()->GenerateTextureBuffer(s_appearReticleTex.data(), "resource/user/appearReticle.png", 5, { 5,1 });
 	}
 }
 

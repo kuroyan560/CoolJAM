@@ -6,15 +6,20 @@
 #include"Outline.h"
 #include"ColorPalette.h"
 #include"../engine/UsersInput.h"
+#include<array>
 
 class Model;
 class Camera;
 class BulletMgr;
+class Model;
+class TextureBuffer;
 
 class BaseEnemy {
 
 	static int s_deadSE;
 	static int s_damageSE;
+	static std::shared_ptr<Model>s_appearReticleModel;
+	static std::array<std::shared_ptr<TextureBuffer>, 5>s_appearReticleTex;
 
 	static const int APPEAR_TIME = 90;
 	static const int APPEAR_HEIGHT_OFFSET = 60;
