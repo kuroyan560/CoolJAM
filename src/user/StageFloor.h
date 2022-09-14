@@ -1,6 +1,8 @@
 #pragma once
 #include"Singleton.h"
 #include<memory>
+#include"../engine/Common/Vec.h"
+#include"../engine/Common/Angle.h"
 class ModelObject;
 class RenderTarget;
 
@@ -10,7 +12,7 @@ class StageFloor : public Singleton<StageFloor>
 
 	std::shared_ptr<ModelObject>m_modelObj;
 	std::shared_ptr<RenderTarget>m_floorScreen;
-
+	Vec3<Angle>m_rotate;
 	StageFloor();
 public:
 	void ClearScreen();

@@ -59,6 +59,8 @@ private:
 
 	const Angle PILLAR_POS_ANGLE_OFFSET;
 
+	Vec3<float> pillarColor;
+	Vec3<float> larpPillarColor;
 public:
 	EnvironmentMgr();
 	~EnvironmentMgr() {}
@@ -74,11 +76,11 @@ public:
 		m_statusChangeRate = 0.0f;
 	}
 
+	void ChangeColor(const Color &COLOR);
+
 	//ƒQƒbƒ^
 	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
 
-	Vec3<float> pillarColor;
-	Vec3<float> larpPillarColor;
 
 	void ImguiDebug();
 };

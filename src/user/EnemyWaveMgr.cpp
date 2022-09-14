@@ -1,9 +1,7 @@
 #include "EnemyWaveMgr.h"
 #include "EnemyWave.h"
-#include "WaveUI.h"
-#include "UsersInput.h"
 
-EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
+EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 {
 	/*===== コンストラクタ =====*/
 
@@ -50,12 +48,6 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 	m_waves.emplace_back(std::make_shared<EnemyWave>(0, false));
 
-
-
-
-	// ウェーブのUIを読み込む。
-	m_waveUI = std::make_shared<WaveUI>("resource/user/wave.png");
-
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
@@ -80,7 +72,7 @@ void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 	m_finalWaveTimer = FinalWaveTime;
 }
 
-void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 	/*===== 更新処理 =====*/
 
@@ -122,23 +114,6 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& P
 	{
 		bool debug = false;
 	}
-
-
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_I)) {
-
-		m_waveUI->Appear();
-
-	}
-	else if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
-
-		m_waveUI->Exit();
-
-	}
-
-
-	// ウェーブの更新。
-	m_waveUI->Update();
-
 }
 
 void EnemyWaveMgr::AddWave(std::shared_ptr<EnemyWave> Wave)
@@ -147,18 +122,6 @@ void EnemyWaveMgr::AddWave(std::shared_ptr<EnemyWave> Wave)
 	/*===== ウェーブを追加 =====*/
 
 	m_waves.emplace_back(Wave);
-
-}
-
-#include "DrawFunc2D.h"
-void EnemyWaveMgr::Draw()
-{
-
-	/*===== 描画処理 =====*/
-
-	//DrawFunc2D::DrawExtendGraph2D
-
-	m_waveUI->Draw();
 
 }
 
