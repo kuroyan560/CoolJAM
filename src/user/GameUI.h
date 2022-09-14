@@ -24,6 +24,9 @@ public:
 	void Start();
 	void AddWaveNum();
 	void Score(int SCORE);
+
+	void Result();
+	void Finish();
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
@@ -38,5 +41,7 @@ private:
 
 	int m_waveNum;
 	int m_nowWaveMaxTimer;
+
+	bool m_isStartFlag;
 
 };

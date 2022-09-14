@@ -303,7 +303,7 @@ void GameScene::OnUpdate()
 		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
-	if (m_enemyWaveMgr->IsNowWaveBounusStage() || UsersInput::Instance()->KeyInput(DIK_G))
+	if (m_enemyWaveMgr->IsNowWaveBounusStage())
 	{
 		m_bonusEffect->Start();
 	}
@@ -315,6 +315,16 @@ void GameScene::OnUpdate()
 
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
+
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_H))
+	{
+		m_gameUI->Start();
+	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_J))
+	{
+		m_gameUI->Result();
+	}
+
 
 	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 

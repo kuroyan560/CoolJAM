@@ -15,47 +15,33 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(10);
-	m_timer->Start();
+	m_timer->Init(120);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
+	m_isStartFlag = false;
+
+	m_timer->timerPos = { 388.0f,893.0f };
+	m_wavePos = { 0.0f,-2.0f };
+	m_scorePos = { 45.0f,-25.0f };
 }
 
 void GameUI::Update(const int& NowWaveMaxTimer)
 {
-
-	// デバッグ用
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_I)) {
-
-		m_waveUI->Appear();
-
-		ScoreMgr::Instance()->Appear();
-	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_O)) {
-
-		m_waveUI->Exit();
-
-		ScoreMgr::Instance()->Exit();
-
-	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_L)) {
-
-		ScoreMgr::Instance()->Center();
-
-	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_P)) {
-
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_P))
+	{
 		ScoreMgr::Instance()->AddScore(100);
-
 	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_K)) {
 
-		m_gameStartTimerUI->Start();
-
+	if (m_gameStartTimerUI->IsStart() && !m_isStartFlag)
+	{
+		m_timer->Start();
+		m_waveUI->Appear();
+		ScoreMgr::Instance()->Appear();
+		m_isStartFlag = true;
 	}
 
 	m_nowWaveMaxTimer = NowWaveMaxTimer;
-	m_timer->Update(60);
+	m_timer->Update(30);
 	m_waveUI->Update(m_waveNum, m_wavePos, 1.0f / 30.0f);
 	ScoreMgr::Instance()->Update(m_scorePos, 1.0f / 30.0f);
 	m_gameStartTimerUI->Update(m_gameStartTimerOffsetPos, 1.0f / 30.0f);
@@ -74,11 +60,13 @@ void GameUI::DrawImGui()
 	ImGui::Begin("UI");
 	SetVec2("Timer", &m_timer->timerPos);
 	SetVec2("Wave", &m_wavePos);
+	SetVec2("Score", &m_scorePos);
 	ImGui::End();
 }
 
 void GameUI::Start()
 {
+	m_gameStartTimerUI->Start();
 }
 
 void GameUI::AddWaveNum()
@@ -87,6 +75,17 @@ void GameUI::AddWaveNum()
 
 void GameUI::Score(int SCORE)
 {
+}
+
+void GameUI::Result()
+{
+	ScoreMgr::Instance()->Center();
+	m_waveUI->Exit();
+}
+
+void GameUI::Finish()
+{
+	ScoreMgr::Instance()->Exit();
 }
 
 void GameUI::SetVec2(std::string TAG, Vec2<float>* VEC3)

@@ -36,9 +36,9 @@ public:
 
 	/*===== メンバ関数 =====*/
 
-	GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture);
+	GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool &IsGoTexture);
 	void Init();
-	void Update(const Vec2<float>& OffsetPos, const float& AddEasingTimer);
+	void Update(const Vec2<float> &OffsetPos, const float &AddEasingTimer);
 	void Draw();
 
 	// 出現している状態か
@@ -67,13 +67,14 @@ private:
 	bool m_isActive;
 	bool m_isStartGo;	// Goのテクスチャをスタートさせたか。
 
+	bool m_startFlag;
 public:
 
 	/*===== メンバ関数 =====*/
 
 	GameStartTimerUI();
 	void Init();
-	void Update(const Vec2<float>& OffsetPos, const float& AddEasingTimer);
+	void Update(const Vec2<float> &OffsetPos, const float &AddEasingTimer);
 	void Draw();
 
 	// 出現している状態か
@@ -81,4 +82,5 @@ public:
 
 	void Start();
 
+	bool IsStart() { return m_startFlag; }
 };

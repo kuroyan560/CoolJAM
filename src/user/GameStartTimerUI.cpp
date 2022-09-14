@@ -38,6 +38,7 @@ void GameStartTimerUI::Init()
 	m_countTimer = 0;
 	m_isActive = false;
 	m_isStartGo = false;
+	m_startFlag = false;
 
 }
 
@@ -77,7 +78,7 @@ void GameStartTimerUI::Update(const Vec2<float>& OffsetPos, const float& AddEasi
 	// GOを開始していて、GOのフラグが折れていたらこのクラスは終わり。
 	if (m_isStartGo && m_timer[3]->GetIsEnd()) {
 
-		Init();
+		m_startFlag = true;
 
 	}
 
