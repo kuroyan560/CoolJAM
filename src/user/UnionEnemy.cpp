@@ -2,6 +2,7 @@
 #include "Importer.h"
 #include "Model.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 UnionEnemy::UnionEnemy(std::shared_ptr<Model> NormalModel, std::shared_ptr<Model> HitModel)
 {

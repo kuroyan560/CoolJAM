@@ -2,6 +2,7 @@
 #include"KuroEngine.h"
 #include"GaussianBlur.h"
 #include"DrawFunc2D.h"
+#include "SlowMgr.h"
 
 std::shared_ptr<ComputePipeline>LightBloomDevice::s_filterPipeline;
 std::shared_ptr<ComputePipeline>LightBloomDevice::s_combinePipeline;

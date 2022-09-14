@@ -2,6 +2,7 @@
 #include "BulletMgr.h"
 #include "UnionEnemy.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 UnionBaseEnemy::UnionBaseEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -151,18 +152,7 @@ void UnionBaseEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 	Shot(BulletMgr, PlayerPos);
 
 	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	m_transform.SetPos(m_pos);
 
@@ -270,7 +260,7 @@ void UnionBaseEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>&
 	/*===== 弾射出処理 =====*/
 
 	++m_shotTimer;
-	if (SHOT_TIMER < m_shotTimer) {
+	if (m_maxShotTimer < m_shotTimer) {
 
 		// 集合体の周りから弾を出す。
 		for (auto& index : m_unionEnemy) {

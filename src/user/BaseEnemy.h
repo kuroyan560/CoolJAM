@@ -33,6 +33,8 @@ class BaseEnemy {
 	static const int DISAPPEAR_SPIN_DEGREE = 360 * 3;
 	static const int DISAPPEAR_HEIGHT_OFFSET = -3;
 
+	const float EDGE_SIZE = 20.0f;
+
 	//登場演出
 	int m_appearTimer;
 	int m_appearReticleTexIdx;
@@ -60,6 +62,8 @@ public:
 
 	Vec3<float> m_pos;	// 座標
 	int m_hp;			// HP
+	int m_shotTimer;
+	int m_maxShotTimer;
 	float m_scale;		// 大きさ
 	bool m_isActive;	// 生存フラグ
 	ENEMY_INFO::ID m_id;
@@ -71,8 +75,8 @@ public:
 	const int HIGHT_SCORE_POOINT = 900;
 
 	virtual void OnInit() = 0;
-	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
-	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
+	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
+	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
 public:
 	static const int &DamageSE() { return s_damageSE; }
@@ -83,12 +87,16 @@ public:
 	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	void Init();
-	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize);
-	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
+	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
+	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec, const int& ShotTimer);
 	void Draw();
 	void Disappear();
 
-	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
+	void ShotBullet(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos);
+
+	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
+
+	void CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// 指定の桁の数字を取得。
 	inline int GetDigits(int Value, int M, int N) {

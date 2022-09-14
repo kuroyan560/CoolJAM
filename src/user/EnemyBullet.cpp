@@ -2,6 +2,7 @@
 #include "EnemyBullet.h"
 #include "Importer.h"
 #include "Model.h"
+#include "SlowMgr.h"
 
 std::shared_ptr<Model> EnemyBullet::s_model;
 
@@ -17,6 +18,7 @@ EnemyBullet::EnemyBullet() {
 	if (!s_model)
 	{
 		s_model = Importer::Instance()->LoadModel("resource/user/", "enemyBullet.glb");
+		
 	}
 	m_transform.SetScale(SCALE);
 
@@ -40,6 +42,7 @@ void EnemyBullet::Generate(const Vec3<float>& Pos, const Vec3<float>& ForwardVec
 	m_pos = Pos;
 	m_forwardVec = ForwardVec;
 	m_scale = SCALE;
+	m_transform.SetScale(14);
 	m_isActive = true;
 
 }
@@ -48,7 +51,7 @@ void EnemyBullet::Update(const float& MapSize) {
 
 	/*===== 更新処理 ======*/
 
-	m_pos += m_forwardVec * SPEED;
+	m_pos += m_forwardVec * SPEED * SlowMgr::Instance()->m_slow;
 
 	// マップ外へ移動したら。
 	if (MapSize < m_pos.Length()) {

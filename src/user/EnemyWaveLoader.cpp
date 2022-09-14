@@ -1,6 +1,7 @@
 #include "EnemyWaveLoader.h"
 #include"EnemyWave.h"
 #include"KuroFunc.h"
+#include "SlowMgr.h"
 
 const std::string EnemyWaveLoader::s_dir = "resource/user/enemyWave/";
 const std::string EnemyWaveLoader::s_extention = ".enwav";

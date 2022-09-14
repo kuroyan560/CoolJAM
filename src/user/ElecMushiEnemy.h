@@ -23,9 +23,6 @@ private:
 	float m_sineWaveLength;
 	float m_defLength;
 
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
-
 
 	// ÉXÉPÅ[Éã
 	const float SCALE = 3.0f;

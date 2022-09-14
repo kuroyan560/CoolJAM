@@ -6,6 +6,7 @@
 #include"../user/KazDrawFunc.h"
 #include"../engine/Common/KuroMath.h"
 #include"../engine/DrawFunc2D.h"
+#include "SlowMgr.h"
 
 
 GameTimer::GameTimer()
@@ -116,6 +117,9 @@ void GameTimer::Finalize()
 
 void GameTimer::Update(int TIME)
 {
+
+	if (SlowMgr::Instance()->m_slow <= 0.9f) return;
+
 	if (interruput && false) {
 
 		// タイマーが計測していない間はサイズを0に近づける。

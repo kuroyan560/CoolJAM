@@ -113,6 +113,11 @@ private:
 	Vec2<float> RETURN_ICON_EXP_SIZE = Vec2<float>(94.0f, 94.0f);
 	Vec2<float> RETURN_ICON_POS = Vec2<float>(RETURN_ICON_SIZE.x * 2.0f, WinApp::Instance()->GetExpandWinSize().y - RETURN_ICON_SIZE.y * 2.0f);
 
+	// フィーバー敵を倒したときのエフェクト用変数
+	bool m_isFeverCameraEffect;		// フィーバー敵を倒したときのエフェクト中か。
+	int m_feverNearCameraTimer;		// フィーバー敵を倒したときのエフェクトの時間。
+	const int FEVER_NEAR_CAMERA_TIMER = 90;
+	const float FEVER_SHAKE = 10.0f;
 
 
 public:

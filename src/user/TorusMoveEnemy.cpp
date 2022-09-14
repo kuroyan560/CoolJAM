@@ -2,6 +2,7 @@
 #include "TorusMoveEnemy.h"
 #include "EnemyHP.h"
 #include "BulletMgr.h"
+#include "SlowMgr.h"
 
 TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -85,7 +86,7 @@ void TorusMoveEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 	// 移動させる。
 	m_speed = SPEED;
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// 押し戻す。
 	if (centerDistance <= m_pos.Length()) {
@@ -104,18 +105,7 @@ void TorusMoveEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 	Shot(BulletMgr, PlayerPos);
 
 	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	// HPUIの更新処理
 	for (auto& index : m_hpUI) {

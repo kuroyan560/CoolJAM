@@ -1,6 +1,7 @@
 #include "PlayerStraightEnemy.h"
 #include "EnemyHP.h"
 #include "BulletMgr.h"
+#include "SlowMgr.h"
 
 PlayerStraightEnemy::PlayerStraightEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -77,10 +78,10 @@ void PlayerStraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec
 	/*===== 更新処理 =====*/
 
 	// 移動速度を補間。
-	m_speed += (SPEED - m_speed) / 10.0f;
+	m_speed += (SPEED - m_speed) / 10.0f * SlowMgr::Instance()->m_slow;
 
 	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);
@@ -89,18 +90,7 @@ void PlayerStraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec
 	Shot(BulletMgr, PlayerPos);
 
 	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	// HPUIの更新処理
 	for (auto& index : m_hpUI) {

@@ -1,6 +1,7 @@
 #include "GrazeEmitter.h"
 #include"KazCollisionHelper.h"
 #include"../engine/UsersInput.h"
+#include "SlowMgr.h"
 
 GrazeEmitter::GrazeEmitter()
 {
@@ -28,7 +29,7 @@ void GrazeEmitter::Update(float MAP_SIZE)
 		bool debug = false;
 	}
 
-	++initTimer;
+	initTimer += 1.0f * SlowMgr::Instance()->m_slow;
 	Vec3<float>pos = *m_posPtr;
 	int count = 0;
 	for (int i = 0; i < 100; ++i)

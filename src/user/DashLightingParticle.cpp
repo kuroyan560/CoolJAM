@@ -3,6 +3,7 @@
 #include"../engine/DrawFunc3D.h"
 #include"../engine/Model.h"
 #include"KazDrawFunc.h"
+#include "SlowMgr.h"
 
 DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL, std::array<std::shared_ptr<TextureBuffer>, 3>ELEC_TEXTURE_DATA) :initFlag(false)
 {
@@ -11,7 +12,7 @@ DashLightingParticle::DashLightingParticle(std::shared_ptr<ModelObject> MODEL, s
 	//m_model->m_meshes[0].material->texBuff[0] = elecTextureBuffer[0];
 }
 
-void DashLightingParticle::Init(const Vec3<float> &POS)
+void DashLightingParticle::Init(const Vec3<float>& POS)
 {
 	m_pos = POS;
 	angle = KuroFunc::GetRand(0, 360);
@@ -37,16 +38,16 @@ void DashLightingParticle::Update()
 {
 	if (initFlag)
 	{
-		alpha -= 1.0f / 20.0f;
+		alpha -= 1.0f / 20.0f * SlowMgr::Instance()->m_slow;
 		if (2 <= m_timer)
 		{
 			++m_flame;
 			m_timer = 0;
 		}
-		++m_timer;
+		m_timer += 1.0f * SlowMgr::Instance()->m_slow;
 		if (m_elecTextureBuffer.size() <= m_flame)
 		{
-			m_flame =0;
+			m_flame = 0;
 		}
 		if (alpha <= 0.0f)
 		{
@@ -56,7 +57,7 @@ void DashLightingParticle::Update()
 }
 
 #include"ColorPalette.h"
-void DashLightingParticle::Draw(Camera &CAMERA)
+void DashLightingParticle::Draw(Camera& CAMERA)
 {
 	if (initFlag)
 	{

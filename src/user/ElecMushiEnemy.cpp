@@ -2,6 +2,7 @@
 #include "BulletMgr.h"
 #include "../engine/Importer.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -81,7 +82,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 	// 移動させる。
 	m_speed = SPEED;
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// 押し戻す。
 	if (m_defLength <= m_pos.Length()) {
@@ -95,7 +96,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 
 	// Sine波を更新。
-	m_sineWaveTimer += ADD_SINE_WAVE_TIMER;
+	m_sineWaveTimer += ADD_SINE_WAVE_TIMER * SlowMgr::Instance()->m_slow;
 	float sineWave = sinf(m_sineWaveTimer);
 	m_sineWaveLength = sineWave * SINE_WAVE_LENGTH;
 
@@ -167,22 +168,8 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 
 	/*===== 弾との当たり判定 =====*/
 
-	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-
-			// エレキ虫が死んだ。
-			BulletMgr.lock()->KillElecMushi();
-			Init();
-
-		}
-
-	}
+	// マップ外に出たら
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	int hitCount = 0;
 	// プレイヤー弾との当たり判定。

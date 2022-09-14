@@ -6,6 +6,7 @@
 #include"../engine/D3D12App.h"
 #include"KazDrawFunc.h"
 #include"../user/DrawFunc_Append.h"
+#include "SlowMgr.h"
 
 GrazeParticle::GrazeParticle() :SPEED(1000.0f), DISAPPEAR_TIME(60)
 {

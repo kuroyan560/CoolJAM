@@ -53,7 +53,7 @@ public:
 	void AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// “G‚ğ¶¬B
-	void Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize);
+	void Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const int& ShotTimer, const float& MapSize);
 
 	// ‚·‚×‚Ä‚Ì“G‚ª€‚ñ‚Å‚¢‚é‚©B
 	bool GetAllEnemyDead();
@@ -65,6 +65,6 @@ public:
 private:
 
 	// “G¶¬ŠÖ” Generate“à‚Åg—p‚·‚éB
-	void GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const float& MapSize);
+	void GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const int& ShotTimer, const float& MapSize);
 
 };

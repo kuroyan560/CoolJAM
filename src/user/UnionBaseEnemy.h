@@ -24,9 +24,6 @@ private:
 	int m_hitEffectTimer;		// ’e‚É“–‚½‚Á‚½ƒtƒ‰ƒO
 	const int HIT_EFFECT_TIMER = 10;
 
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
-
 	// UNION‚Ì“G‚ÌŽü‚è‚Ì“G
 	std::array<std::shared_ptr<UnionEnemy>, 6> m_unionEnemy;
 

@@ -2,6 +2,7 @@
 #include"DrawFunc3D.h"
 #include"Model.h"
 #include"DrawFunc_Append.h"
+#include "SlowMgr.h"
 
 PlayerDashLighting::PlayerDashLighting()
 {
@@ -34,7 +35,7 @@ void PlayerDashLighting::Init(Vec3<float> *POS)
 
 void PlayerDashLighting::Update(bool ENABLE_FLAG)
 {
-	++m_timer;
+	m_timer += 1.0f * SlowMgr::Instance()->m_slow;
 	if (2 <= m_timer && ENABLE_FLAG)
 	{
 		float size = 5.0f;
