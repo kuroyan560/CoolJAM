@@ -168,7 +168,7 @@ public:
 	};
 	void CommonDraw(Camera &CAMERA)
 	{
-		m_outline->Draw(CAMERA, m_hitFlag);
+		m_outline->Draw(CAMERA);
 	};
 
 	const bool &IsDisappear()const { return m_disappear; }
