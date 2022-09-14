@@ -9,6 +9,7 @@
 #include"../engine/ImguiApp.h"
 
 class WaveUI;
+class GameStartTimerUI;
 
 class GameUI
 {
@@ -26,9 +27,11 @@ public:
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
+	std::shared_ptr<GameStartTimerUI> m_gameStartTimerUI;
 
 	Vec2<float>m_wavePos;
 	Vec2<float>m_scorePos;
+	Vec2<float>m_gameStartTimerOffsetPos;
 
 	void SetVec2(std::string TAG, Vec2<float>* VEC3);
 	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);

@@ -2,11 +2,13 @@
 #include"WaveUI.h"
 #include"UsersInput.h"
 #include"ScoreMgr.h"
+#include"GameStartTimerUI.h"
 
 GameUI::GameUI()
 {
 	m_timer = std::make_unique<GameTimer>();
 	m_waveUI = std::make_shared<WaveUI>("resource/user/wave.png");
+	m_gameStartTimerUI = std::make_shared<GameStartTimerUI>();
 	m_waveNum = 0;
 }
 
@@ -15,6 +17,7 @@ void GameUI::Init()
 	m_timer->Init(10);
 	m_timer->Start();
 	m_waveUI->Init(10);
+	m_gameStartTimerUI->Init();
 }
 
 void GameUI::Update()
@@ -44,10 +47,16 @@ void GameUI::Update()
 		ScoreMgr::Instance()->AddScore(100);
 
 	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_K)) {
+
+		m_gameStartTimerUI->Start();
+
+	}
 
 	m_timer->Update(60);
 	m_waveUI->Update(m_waveNum, m_wavePos, 1.0f / 30.0f);
 	ScoreMgr::Instance()->Update(m_scorePos, 1.0f / 30.0f);
+	m_gameStartTimerUI->Update(m_gameStartTimerOffsetPos, 1.0f / 30.0f);
 }
 
 void GameUI::Draw()
@@ -55,6 +64,7 @@ void GameUI::Draw()
 	m_timer->Draw();
 	m_waveUI->Draw();
 	ScoreMgr::Instance()->Draw();
+	m_gameStartTimerUI->Draw();
 }
 
 void GameUI::DrawImGui()

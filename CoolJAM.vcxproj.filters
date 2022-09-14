@@ -113,6 +113,7 @@
     <ClCompile Include="src\user\WaveUI.cpp" />
     <ClCompile Include="src\user\Font.cpp" />
     <ClCompile Include="src\user\ScoreMgr.cpp" />
+    <ClCompile Include="src\user\GameStartTimerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\dxcompiler\inc\d3d12shader.h" />
@@ -244,5 +245,6 @@
     <ClInclude Include="src\user\WaveUI.h" />
     <ClInclude Include="src\user\Font.h" />
     <ClInclude Include="src\user\ScoreMgr.h" />
+    <ClInclude Include="src\user\GameStartTimerUI.h" />
   </ItemGroup>
 </Project>
