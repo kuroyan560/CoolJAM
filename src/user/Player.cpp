@@ -11,6 +11,7 @@
 #include "PlayerHP.h"
 #include"ModelAnimator.h"
 #include "SlowMgr.h"
+#include"AudioApp.h"
 
 Player::Player()
 {
@@ -47,6 +48,9 @@ Player::Player()
 	m_feverTime = 0;
 	m_mousePointerScale = false;
 
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0;
+
 	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
 	m_mousePointer = std::make_shared<ModelObject>("resource/user/", "mousePoint3D.glb");
 
@@ -82,6 +86,7 @@ Player::Player()
 
 	m_dashLight = std::make_unique<PlayerDashLighting>();
 
+	m_damageSE = AudioApp::Instance()->LoadAudio("resource/user/sound/damage.wav");
 }
 
 void Player::Init()
@@ -117,6 +122,9 @@ void Player::Init()
 	m_isPrevFever = false;
 	m_feverTime = 0;
 	m_mousePointerScale = 0;
+
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0;
 
 	for (auto& index : m_driftParticle) {
 
@@ -335,6 +343,17 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		m_isFever = true;
 		m_feverTime = FEVER_TIME;
 		BulletMgr.lock()->BrakeIsKillElecMushi();
+
+	}
+
+	// ノックバックの移動量を設定。
+	if (0 < m_knockBackSpeed) {
+
+		// 移動させる。
+		m_pos += m_knockBackVec * m_knockBackSpeed;
+
+		// 移動量を0に近づける。
+		m_knockBackSpeed -= m_knockBackSpeed / 18.0f;
 
 	}
 
@@ -637,7 +656,8 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.8f);
 
 		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
-		if (nearestEnemy != Vec3<float>(-1, -1, -1)) {
+		const float AUTO_AIM_SCALE = 15.0f;
+		if (nearestEnemy != Vec3<float>(-1, -1, -1) && Vec3<float>(nearestEnemy - m_pos).Length() <= AUTO_AIM_SCALE) {
 
 			shotEnemyPos = nearestEnemy;
 
@@ -674,12 +694,14 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 }
 
+#include"ShakeMgr.h"
 void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
 	/*===== 当たり判定 =====*/
 
 	// マップとの当たり判定。
+	bool isHitMap = false;
 	m_pos = KazCollisionHelper::KeepInMap(m_pos, MapSize);
 
 	// エッジの判定。
@@ -688,29 +710,29 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;
 
+	// 壁際との当たり判定を行う。
+	if (MapSize - MAP_EDGE <= m_pos.Length()) {
+
+		Damage();
+
+		// ノックバックの移動量を設定。
+		m_knockBackVec = -m_pos.GetNormal();
+		m_knockBackSpeed = KNOCK_BACK_SPEED;
+
+	}
+
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 	if (0 < hitCount) {
-
 		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-		float prevHP = m_hp;
-		--m_hp;
-		if (m_hp <= 0) m_hp = 0;
-		if (m_hp <= 2 && 2 < prevHP) {
-			m_isChangeRed = true;
-			m_colorEasingTimer = 0;
-		}
-
+		Damage();
 	}
 
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
 	m_brakeBoostTimer -= 1.0f * SlowMgr::Instance()->m_slow;
 	if (0 < m_brakeBoostTimer) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+		//EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
 
 	}
 	else {
@@ -722,27 +744,39 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+		int hitCount = EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+
+		if (0 < hitCount) {
+
+			// シェイクをかける。
+			ShakeMgr::Instance()->Shake(5);
+
+		}
 
 	}
 
 	// 敵との当たり判定。
 	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
-
-		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-		float prevHP = m_hp;
-		--m_hp;
-		if (m_hp <= 0) m_hp = 0;
-		if (m_hp <= 2 && 2 < prevHP) {
-			m_isChangeRed = true;
-			m_colorEasingTimer = 0;
-		}
-
+		Damage();
 	}
 
+}
+
+void Player::Damage()
+{
+	// 当たった判定。
+	m_damageEffectTimer = 0;
+	m_damageEffectCount = 0;
+	m_isDamageEffect = true;
+	float prevHP = m_hp;
+	--m_hp;
+	if (m_hp <= 0) m_hp = 0;
+	if (m_hp <= 2 && 2 < prevHP) {
+		m_isChangeRed = true;
+		m_colorEasingTimer = 0;
+	}
+
+	AudioApp::Instance()->PlayWaveDelay(m_damageSE);
 }
 
 void Player::Finalize()

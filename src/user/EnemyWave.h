@@ -75,6 +75,8 @@ private:
 	bool m_isBounusStageFlag;
 	bool m_startWaveFlag;
 
+	//敵の生成数
+	int m_generateCount;
 public:
 
 	/*===== メンバ関数 =====*/
@@ -90,8 +92,12 @@ public:
 	bool IsBounusStage();
 	int WaveStartTime();
 
+	bool IsAllEnemyAppear()const { return m_generateCount == static_cast<int>(m_enemys.size()); }
+
 	int GetWaveStartFrame() { return m_waveStartFrame; }
-	int GetWaveEndFrameLocal() { return m_enemys.back().m_generateFrame; }
+
+	// このウェーブで最後に敵が湧くローカルのフレーム数をもとめる。　ローカルのフレーム = EnemyWave内のフレーム
+	int GetWaveEndFrameLocal();
 
 };
 

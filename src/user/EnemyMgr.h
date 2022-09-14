@@ -50,7 +50,7 @@ public:
 	bool CheckHitEnemy(const Vec3<float>& Pos, const float& Size);
 
 	// w’è‚Ì”ÍˆÍ‚Ì“G‚ğ“|‚·B
-	void AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr);
+	int AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// “G‚ğ¶¬B
 	void Generate(const Vec3<float>& PlayerPos, const Vec3<float>& GeneratePos, const Vec3<float> ForwardVec, const int& EnemyID, const int& ShotTimer, const float& MapSize);

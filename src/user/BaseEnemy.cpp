@@ -1,3 +1,4 @@
+
 #include "BaseEnemy.h"
 #include "BulletMgr.h"
 #include"AudioApp.h"
@@ -21,6 +22,8 @@ BaseEnemy::BaseEnemy()
 		s_appearReticleModel = Importer::Instance()->LoadModel("resource/user/", "enemy_appearReticle.glb");
 		D3D12App::Instance()->GenerateTextureBuffer(s_appearReticleTex.data(), "resource/user/appearReticle.png", 5, { 5,1 });
 	}
+
+	m_outlineColor = ColorPalette::S_PINK_COLOR;
 }
 
 void BaseEnemy::Init()
@@ -207,11 +210,11 @@ void BaseEnemy::CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> B
 
 	/*===== マップ端との当たり判定 =====*/
 
-	if (MapSize <= m_pos.Length() - EDGE_SIZE) {
+	if (MapSize - EDGE_SIZE <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
-		Damage(1, BulletMgr);
+		Damage(1000, BulletMgr);
 
 	}
 

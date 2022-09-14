@@ -58,6 +58,7 @@ public:
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
 	std::unique_ptr<Outline>m_outline;
+	Color m_outlineColor;
 
 	Vec3<float> m_pos;	// 座標
 	int m_hp;			// HP
@@ -78,8 +79,8 @@ public:
 	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
 public:
-	static const int& DamageSE() { return s_damageSE; }
-	static const int& DeadSE() { return s_deadSE; }
+	static const int &DamageSE() { return s_damageSE; }
+	static const int &DeadSE() { return s_deadSE; }
 
 	/*===== メンバ関数 =====*/
 
@@ -138,13 +139,22 @@ public:
 		m_damageScale = KuroMath::Lerp(m_damageScale, m_lDamageScale, 0.6f);
 
 		m_prevHp = m_hp;
-		m_transform.SetScale(m_baseScale - m_damageScale);
+
+		//ダメージ受けすぎて小さくなりすぎない処理
+		Vec3<float>shrinkScale = m_baseScale - m_damageScale;
+		const float MIN_SCALE = 1.5f;
+		if(shrinkScale.x <= MIN_SCALE)
+		{
+			shrinkScale = { MIN_SCALE,MIN_SCALE,MIN_SCALE };
+		}
+
+		m_transform.SetScale(shrinkScale);
 		return m_hitFlag;
 	}
 
 	void CommonInit()
 	{
-		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
+		m_outline = std::make_unique<Outline>(m_model, &m_transform, m_outlineColor);
 		m_prevHp = m_hp;
 		m_hitTiemr = 0;
 		m_hitFlag = false;
@@ -156,12 +166,12 @@ public:
 	{
 		m_outline->Upadte();
 	};
-	void CommonDraw(Camera& CAMERA)
+	void CommonDraw(Camera &CAMERA)
 	{
-		m_outline->Draw(CAMERA, m_hitFlag);
+		m_outline->Draw(CAMERA);
 	};
 
-	const bool& IsDisappear()const { return m_disappear; }
+	const bool &IsDisappear()const { return m_disappear; }
 
 private:
 	int m_prevHp;

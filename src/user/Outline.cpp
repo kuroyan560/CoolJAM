@@ -8,7 +8,6 @@ Outline::Outline(std::shared_ptr<Model> MODEL, const Transform *TRANSFORM, const
 	m_model = MODEL;
 	m_color = COLOR;
 	m_transform = TRANSFORM;
-	m_hitColor = ColorPalette::S_PINK_COLOR;
 }
 
 void Outline::Init()
@@ -19,21 +18,14 @@ void Outline::Upadte()
 {
 }
 
-void Outline::Draw(Camera &CAMERA, bool HIT_FLAG)
+void Outline::Draw(Camera &CAMERA)
 {
 	if (m_transform == nullptr)
 	{
 		return;
 	}
 
-	Color nowColor = m_color;
-	if (HIT_FLAG)
-	{
-		nowColor = m_hitColor;
-	}
-
-
 	Transform transform = *m_transform;
 	transform.SetScale(transform.GetScale() + Vec3<float>(0.3f, 0.3f, 0.3f));
-	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, transform, nowColor, CAMERA);
+	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, transform, m_color, CAMERA);
 }

@@ -21,6 +21,7 @@
 #include"Font.h"
 #include"ScoreMgr.h"
 #include"SlowMgr.h"
+#include"ShakeMgr.h"
 
 GameScene::GameScene()
 {
@@ -95,6 +96,8 @@ GameScene::GameScene()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	ShakeMgr::Instance()->Init();
+
 }
 
 void GameScene::OnInitialize()
@@ -147,6 +150,7 @@ void GameScene::OnInitialize()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	ShakeMgr::Instance()->Init();
 
 	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
@@ -332,6 +336,12 @@ void GameScene::OnUpdate()
 	SlowMgr::Instance()->Update();
 
 	m_bonusEffect->Update();
+
+	ShakeMgr::Instance()->Update();
+
+	// ƒJƒƒ‰‚ð“®‚©‚·B
+	m_gameCam->SetPos(m_gameCam->GetPos() + ShakeMgr::Instance()->m_shake);
+
 }
 
 #include "DrawFunc2D.h"

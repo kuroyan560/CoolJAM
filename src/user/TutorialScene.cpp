@@ -19,6 +19,7 @@
 #include"Tutorial.h"
 #include"StageFloor.h"
 #include"SlowMgr.h"
+#include"ShakeMgr.h"
 
 TutorialScene::TutorialScene()
 {
@@ -80,6 +81,8 @@ TutorialScene::TutorialScene()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	ShakeMgr::Instance()->Init();
+
 
 	SlowMgr::Instance()->Init();
 }
@@ -106,6 +109,8 @@ void TutorialScene::OnInitialize()
 	m_transitionDelayTimer = 0;
 
 	m_tutorial->Init();
+
+	ShakeMgr::Instance()->Init();
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -161,6 +166,15 @@ void TutorialScene::OnUpdate()
 		m_tutorial->Init();
 	}
 
+	// 柱の色を変える。
+	if (m_player->GetIsFever())
+	{
+		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
+	}
+	else
+	{
+		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+	}
 
 	if (m_player->GetIsFever())
 	{
@@ -324,6 +338,11 @@ void TutorialScene::OnUpdate()
 
 
 	SlowMgr::Instance()->Update();
+
+	ShakeMgr::Instance()->Update();
+
+	// カメラを動かす。
+	m_gameCam->SetPos(m_gameCam->GetPos() + ShakeMgr::Instance()->m_shake);
 
 }
 

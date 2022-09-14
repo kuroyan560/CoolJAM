@@ -27,6 +27,9 @@ private:
 	Vec3<float> m_inputVec;		// 入力された方向ベクトル(移動方向ベクトルをこの方向に補完する。)
 	Vec3<float> m_prevForwardVec;// 前フレームの移動方向ベクトル。
 	Vec3<float> m_forwardVec;	// 移動方向ベクトル
+	Vec3<float> m_knockBackVec;
+	float m_knockBackSpeed;
+	const float KNOCK_BACK_SPEED = 6.0f;
 	DirectX::XMMATRIX m_rotation;	//クォータニオン
 	const Vec3<float> DEF_FORWARDVEC = Vec3<float>(1.0f, 0.0f, 0.0f);
 	float m_speed;				// 移動速度
@@ -43,6 +46,9 @@ private:
 
 	// 動いた総量
 	float m_movedLength;
+
+	// 壁際でダメージを受ける範囲。
+	const float MAP_EDGE = 1.0f;
 
 	// フィーバー状態か
 	bool m_isPrevFever;
@@ -69,7 +75,7 @@ private:
 	float m_damageEffectTimer;	// ダメージエフェクトの点滅に使用するタイマー
 	const int DAMAGE_EFFECT_DRAW_CHANGE_SPAN = 4;
 	int m_damageEffectCount;	// 点滅の回数
-	const int DAMAGE_EFFECT_COUNT = 3;
+	const int DAMAGE_EFFECT_COUNT = 6;
 	bool m_isDamageEffect;		// ダメージエフェクト中か
 	bool m_isDamageEffectDrawPlayer;
 
@@ -104,6 +110,8 @@ private:
 
 	PlayerModelOutline m_outlineModel;
 	std::unique_ptr<PlayerDashLighting> m_dashLight;
+
+	int m_damageSE;
 
 public:
 

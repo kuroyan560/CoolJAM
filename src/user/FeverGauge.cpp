@@ -7,7 +7,7 @@ FeverGauge::FeverGauge()
 
 	/*===== コンストラクタ =====*/
 
-	m_gaugeTexture = D3D12App::Instance()->GenerateTextureBuffer("resource/user/testFeverGauge.png");
+	m_gaugeTexture = D3D12App::Instance()->GenerateTextureBuffer("resource/user/UI/fever_gauge/frame.png");
 	m_baseRate = 0.0f;
 	m_nowRate = 0.0f;
 	m_isActive = false;

@@ -1,7 +1,7 @@
 #include "KazCollisionHelper.h"
 #include "Model.h"
 
-Vec3<float> KazCollisionHelper::KeepInMap(Vec3<float>& Pos, const float& MapSize)
+Vec3<float> KazCollisionHelper::KeepInMap(Vec3<float>& Pos, const float& MapSize, bool* IsHit)
 {
 
 	/*===== ƒ}ƒbƒv“à‚ÉŽû‚Ü‚é‚æ‚¤‚É‚·‚é =====*/
@@ -10,6 +10,7 @@ Vec3<float> KazCollisionHelper::KeepInMap(Vec3<float>& Pos, const float& MapSize
 	if (MapSize <= pos.Length()) {
 
 		pos = pos.GetNormal() * MapSize;
+		IsHit = false;
 
 	}
 
