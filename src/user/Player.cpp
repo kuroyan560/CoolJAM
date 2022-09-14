@@ -661,7 +661,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.8f);
 
 		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
-		const float AUTO_AIM_SCALE = 45.0f;
+		const float AUTO_AIM_SCALE = 60.0f;
 		if (nearestEnemy != Vec3<float>(-1, -1, -1) && Vec3<float>(nearestEnemy - m_pos).Length() <= AUTO_AIM_SCALE) {
 
 			shotEnemyPos = nearestEnemy;
