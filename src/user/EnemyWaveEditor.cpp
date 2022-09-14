@@ -179,6 +179,10 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				enemys[m_enemyIdx].m_shotTimer);
 			m_enemyIdx = static_cast<int>(enemys.size() - 1);
 		}
+		else
+		{
+			wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 60, 60);
+		}
 	}
 
 	if (!enemys.empty())
