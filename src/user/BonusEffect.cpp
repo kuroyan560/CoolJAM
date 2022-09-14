@@ -12,7 +12,7 @@ BonusEffect::BonusEffect() :LIMIT_MIN_LINE(-1000.0f), LIMIT_MAX_LINE(1580.0f), A
 	m_pos = { 500.0f,LIMIT_MIN_LINE };
 	m_vel.y = (LIMIT_MAX_LINE + abs(LIMIT_MIN_LINE)) / static_cast<float>(APPEAR_TIME);
 
-	appearDistance = -1250.0f;
+	appearDistance = -1200.0f;
 
 	appearRateData.Init({ 0.0f, LIMIT_MAX_LINE });
 	disappearRateData.Init({ 0.0f, LIMIT_MAX_LINE + appearDistance });
@@ -41,7 +41,7 @@ void BonusEffect::Update()
 		disappearRateData.Ease(-1000.0f, 30, In);
 		fontPos = disappearRateData.m_pos;
 	}
-	fontPos.x = 550.0f;
+	fontPos.x = 640.0f;
 
 
 	if (m_startFlag || m_stopFlag)
