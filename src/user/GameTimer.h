@@ -4,6 +4,7 @@
 #include"../Common/Singleton.h"
 #include<array>
 #include"../engine/D3D12App.h"
+#include"Font.h"
 
 //InToTheAbyss‚©‚çˆ—‚ğˆø—p
 
@@ -22,7 +23,7 @@ public:
 	/// <param name="TIME">ƒtƒŒ[ƒ€”</param>
 	void Init(int TIME);
 	void Finalize();
-	void Update();
+	void Update(int FLAME);
 	void Draw();
 
 	/// <summary>
@@ -65,8 +66,8 @@ public:
 	bool IsStart();
 	void Debug();
 
-private:
 	Vec2<float> timerPos;
+private:
 
 	std::vector<int> number;
 

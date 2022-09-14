@@ -19,7 +19,9 @@ private:
 	float m_scale;
 	const float SCALE = 3.0f;
 	const float CHECK_HIT_SCALE = 3.0f;
-	const float SPEED = 8.0f;
+	const float ADD_SPEED = 0.5f;
+	const float MAX_SPEED = 10.0f;
+	float m_speed;
 	bool m_isActive;
 
 	Transform m_transform;

@@ -12,7 +12,7 @@ class PlayerDashLighting
 public:
 	PlayerDashLighting();
 	void Init(Vec3<float> *POS);
-	void Update(bool ENABLE_FLAG, bool FEVER_FLAG);
+	void Update(bool ENABLE_FLAG);
 	void Draw(Camera &Cam);
 
 private:

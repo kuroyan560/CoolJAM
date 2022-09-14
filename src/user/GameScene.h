@@ -6,8 +6,9 @@
 #include"Vec.h"
 #include<memory>
 #include"GameTimer.h"
-#include"LightBloomDevice.h"
+#include"GameUI.h"
 
+#include"LightBloomDevice.h"
 class DepthStencil;
 class Player;
 class Model;
@@ -21,6 +22,7 @@ class EnemyWaveMgr;
 class GameTimer;
 class TextureBuffer;
 class FeverGauge;
+class SceneTransition;
 
 class GameScene : public BaseScene
 {
@@ -75,9 +77,36 @@ private:
 
 	std::unique_ptr<GameTimer>m_gameTimer;
 
+	std::unique_ptr<GameUI>m_gameUI;
+
 	int m_bgm;
 
 	bool m_emissive = true;
+
+	bool m_isStartTransition;
+	bool m_isCompleteUpper;
+	Vec3<float> m_baseEasingCameraEye;
+	Vec3<float> m_baseEasingCameraTarget;
+	float m_returnTitlePosEasingTimer;
+	int m_transitionDelayTimer;
+
+	// 遷移するときに見るカメラのY軸座標
+	const float TRANSITION_CAMERA_Y = 400.0f;
+
+	//シーン遷移
+	std::unique_ptr<SceneTransition> m_sceneTransition;
+
+	// タイトルでの各カメラのパラメーター
+	Vec3<float> TITLE_TARGET_POS = Vec3<float>(3.19659996f, 0.100950003f, -4.14720011f);
+	Vec3<float> TITLE_EYE_POS = Vec3<float>(9.55155659f, 2.39459991f, 5.30036783f);
+
+	// 戻るのアイコン。
+	std::shared_ptr<TextureBuffer> m_returnTexture;
+	bool m_isNearReturnIcon;
+	Vec2<float> m_returnIconSize;
+	Vec2<float> RETURN_ICON_SIZE = Vec2<float>(64.0f, 64.0f);
+	Vec2<float> RETURN_ICON_EXP_SIZE = Vec2<float>(94.0f, 94.0f);
+	Vec2<float> RETURN_ICON_POS = Vec2<float>(RETURN_ICON_SIZE.x * 2.0f, WinApp::Instance()->GetExpandWinSize().y - RETURN_ICON_SIZE.y * 2.0f);
 
 
 
@@ -88,4 +117,10 @@ public:
 	void OnDraw()override;
 	void OnImguiDebug()override;
 	void OnFinalize()override;
+
+
+private:
+
+	void UpdateResult();
+
 };

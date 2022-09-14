@@ -10,6 +10,7 @@ public:
 		NONE,
 		TUTORIAL,
 		GAME,
+		RESULT,
 
 	};
 

@@ -235,10 +235,12 @@
     <ClCompile Include="src\user\EnvironmentMgr.cpp" />
     <ClCompile Include="src\user\FeverGauge.cpp" />
     <ClCompile Include="src\user\Font.cpp" />
+    <ClCompile Include="src\user\GameStartTimerUI.cpp" />
     <ClCompile Include="src\user\GameTimer.cpp" />
     <ClCompile Include="src\user\EnemyDeadEmitter.cpp" />
     <ClCompile Include="src\user\EnemyDeadLineParticle.cpp" />
     <ClCompile Include="src\user\EnemyDeadSquareParticle.cpp" />
+    <ClCompile Include="src\user\GameUI.cpp" />
     <ClCompile Include="src\user\KazDrawFunc.cpp" />
     <ClCompile Include="src\user\LightBlock.cpp" />
     <ClCompile Include="src\user\LineLight.cpp" />
@@ -363,6 +365,7 @@
     <ClInclude Include="src\user\FeverGauge.h" />
     <ClInclude Include="src\user\Font.h" />
     <ClInclude Include="src\user\GameMode.h" />
+    <ClInclude Include="src\user\GameStartTimerUI.h" />
     <ClInclude Include="src\user\GameTimer.h" />
     <ClInclude Include="src\user\EnemyDeadEmitter.h" />
     <ClInclude Include="src\user\EnemyDeadLineParticle.h" />

@@ -5,6 +5,7 @@
 #include"AudioApp.h"
 #include"../user/KazDrawFunc.h"
 #include"../engine/Common/KuroMath.h"
+#include"../engine/DrawFunc2D.h"
 
 
 GameTimer::GameTimer()
@@ -21,12 +22,15 @@ GameTimer::GameTimer()
 	number.resize(12);
 	texSize = { 64,44 };
 
-	D3D12App::Instance()->GenerateTextureBuffer(textureBufferArray.data(), "resource/user/num.png", 12, { 12, 1 });
 	//TexHandleMgr::LoadDivGraph("resource/ChainCombat/UI/num.png", 12, { 12, 1 }, number.data());
+	for (int i = 0; i < textureBufferArray.size(); ++i)
+	{
+		textureBufferArray[i] = Font::Instance()->m_stripeFont[i];
+	}
 
 	//スコア無効、タイマーを中心に描画
-	timerPos.x = 0.0f - 150.0f;
-	timerPos.y = 46.0f;
+	timerPos.x = 500.0f;
+	timerPos.y = 800.0f;
 
 	//countDownSE[0] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_1.wav", 0.2f);
 	//countDownSE[1] = AudioApp::Instance()->LoadAudio("resource/ChainCombat/sound/voice/Voice_2.wav", 0.2f);
@@ -110,7 +114,7 @@ void GameTimer::Finalize()
 {
 }
 
-void GameTimer::Update()
+void GameTimer::Update(int TIME)
 {
 	if (interruput && false) {
 
@@ -134,7 +138,7 @@ void GameTimer::Update()
 	{
 		if (startRate <= 1.0f)
 		{
-			startRate += 1.0f / 30.0f;
+			startRate += 1.0f / static_cast<float>(TIME);
 		}
 		if (1.0f <= startRate)
 		{
@@ -145,7 +149,7 @@ void GameTimer::Update()
 	{
 		if (endRate <= 1.0f)
 		{
-			endRate += 1.0f / 30.0f;
+			endRate += 1.0f / static_cast<float>(TIME);
 		}
 		if (1.0f <= endRate)
 		{
@@ -227,42 +231,43 @@ void GameTimer::Update()
 void GameTimer::Draw()
 {
 	{
-		float easePosX = 0.0;
-		float winSizeX = WinApp::Instance()->GetExpandWinSize().x / 2.0f;
+		float easePosY = 0.0;
+		float winSizeY = WinApp::Instance()->GetExpandWinSize().y;
 		if (startFlag)
 		{
-			startEasePosX = KuroMath::Ease(Out, Cubic, startRate, 0.0f, 1.0f) * winSizeX;
-			easePosX = startEasePosX;
+			startEasePosX = KuroMath::Ease(Out, Cubic, startRate, 0.0f, 1.0f) * -winSizeY;
+			easePosY = startEasePosX;
 		}
 		if (timeUpFlag)
 		{
-			endEasePosX = startEasePosX + KuroMath::Ease(In, Cubic, endRate, 0.0f, 1.0f) * (winSizeX + 200.0f);
-			easePosX = endEasePosX;
+			endEasePosX = startEasePosX + KuroMath::Ease(In, Cubic, endRate, 0.0f, 1.0f) * -300.0f;
+			easePosY = endEasePosX;
 		}
-
 
 
 		Vec2<float>centralPos;
 		int offset = 0;
 		int offsetY = 15;
+
+		float alphaRate = static_cast<float>(timerAlpha) / 255;
 		//分
 		for (int i = 0; i < minitueHandle.size(); i++)
 		{
 			offset = i;
-			centralPos = { easePosX + timerPos.x + i * texSize.x, timerPos.y + offsetY };
-			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], timerAlpha);
+			centralPos = { timerPos.x + i * texSize.x, timerPos.y + offsetY + easePosY };
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[minitueHandle[i]], alphaRate);
 		}
 
 		++offset;
-		centralPos = { easePosX + timerPos.x + offset * texSize.x,timerPos.y + offsetY };
-		KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], timerAlpha);
+		centralPos = { timerPos.x + offset * texSize.x,timerPos.y + offsetY + easePosY };
+		DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[10], alphaRate);
 		++offset;
 
 		//秒
 		for (int i = 0; i < timeHandle.size(); i++)
 		{
-			centralPos = { easePosX + timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY };
-			KazDrawFunc::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], timerAlpha);
+			centralPos = { timerPos.x + (offset + i) * texSize.x, timerPos.y + offsetY + easePosY };
+			DrawFunc2D::DrawRotaGraph2D(centralPos, Vec2<float>(timerSize, timerSize), 0.0f, textureBufferArray[timeHandle[i]], alphaRate);
 		}
 
 	}

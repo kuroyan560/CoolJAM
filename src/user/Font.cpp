@@ -16,7 +16,7 @@ void Font::LoadFont()
 
 	for (auto& index : m_stripeFont) {
 
-		int indexCount = static_cast<int>(&index - &m_stripeFont[0]) + 9.0f;
+		int indexCount = static_cast<int>(&index - &m_stripeFont[0]) + 12.0f;
 		index = m_allFont[indexCount];
 
 	}
