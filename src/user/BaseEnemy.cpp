@@ -84,7 +84,7 @@ void BaseEnemy::Draw()
 
 		float alpha = KuroMath::Ease(In, Circ, timer, APPEAR_TIME, 1.0f, 0.0f);
 
-		DrawFunc_Append::DrawPlane(transform, s_appearReticleTex[m_appearReticleTexIdx], RenderTargetSwitch(alpha, 0.0f, 1.0f), AlphaBlendMode_Trans);
+		DrawFunc_Append::DrawPlane(transform, s_appearReticleTex[m_appearReticleTexIdx], RenderTargetSwitch(alpha, 1.0f, 1.0f), AlphaBlendMode_Trans);
 	}
 
 	OnDraw();

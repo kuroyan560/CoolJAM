@@ -106,6 +106,7 @@ void TitleScene::OnInitialize()
 
 	}
 
+	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
 void TitleScene::OnUpdate()

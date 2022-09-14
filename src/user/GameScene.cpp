@@ -102,6 +102,8 @@ void GameScene::OnInitialize()
 
 	AudioApp::Instance()->PlayWave(m_bgm, true);
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
+
+	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
 void GameScene::OnUpdate()
