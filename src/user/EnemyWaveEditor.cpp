@@ -192,7 +192,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			{
 				const auto& info = enemys[i];
 				std::string str = std::to_string(i) + " : " + std::to_string(info.m_generateFrame) + " - " + ENEMY_INFO::GetIDName(info.m_id);
-				ImGui::RadioButton(str.c_str(), &m_enemyIdx, i);
+				if (ImGui::RadioButton(str.c_str(), &m_enemyIdx, i))m_enemyIdx = i;
 			}
 
 			ImGui::EndChild();
@@ -228,14 +228,14 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		}
 
 		//生成位置
-		static float s_generatePos[3] = { enemy.m_pos.x,enemy.m_pos.y,enemy.m_pos.z };
+		float s_generatePos[3] = { enemy.m_pos.x,enemy.m_pos.y,enemy.m_pos.z };
 		if (ImGui::DragFloat3("GeneratePos", s_generatePos), 0.05f)
 		{
 			enemy.m_pos = { s_generatePos[0],s_generatePos[1],s_generatePos[2] };
 		}
 
 		//前ベクトル
-		static float s_forwardVec[3] = { enemy.m_forwardVec.x,enemy.m_forwardVec.y,enemy.m_forwardVec.z };
+		float s_forwardVec[3] = { enemy.m_forwardVec.x,enemy.m_forwardVec.y,enemy.m_forwardVec.z };
 		if (ImGui::DragFloat3("ForwardVec", s_forwardVec), 0.05f)
 		{
 			enemy.m_forwardVec = { s_forwardVec[0],s_forwardVec[1],s_forwardVec[2] };
