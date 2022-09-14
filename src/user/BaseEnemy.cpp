@@ -21,6 +21,8 @@ BaseEnemy::BaseEnemy()
 		s_appearReticleModel = Importer::Instance()->LoadModel("resource/user/", "enemy_appearReticle.glb");
 		D3D12App::Instance()->GenerateTextureBuffer(s_appearReticleTex.data(), "resource/user/appearReticle.png", 5, { 5,1 });
 	}
+
+	m_outlineColor = ColorPalette::S_PINK_COLOR;
 }
 
 void BaseEnemy::Init()

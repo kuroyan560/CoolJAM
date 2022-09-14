@@ -56,6 +56,7 @@ public:
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
 	std::unique_ptr<Outline>m_outline;
+	Color m_outlineColor;
 
 	Vec3<float> m_pos;	// 座標
 	int m_hp;			// HP
@@ -71,23 +72,23 @@ public:
 
 	virtual void OnInit() = 0;
 	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
-	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
+	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
 public:
-	static const int& DamageSE() { return s_damageSE; }
-	static const int& DeadSE() { return s_deadSE; }
+	static const int &DamageSE() { return s_damageSE; }
+	static const int &DeadSE() { return s_deadSE; }
 
 	/*===== メンバ関数 =====*/
 
 	BaseEnemy();
 	virtual ~BaseEnemy() {};
 	void Init();
-	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
+	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize);
 	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
 	void Draw();
 	void Disappear();
 
-	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
+	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// 指定の桁の数字を取得。
 	inline int GetDigits(int Value, int M, int N) {
@@ -130,13 +131,22 @@ public:
 		m_damageScale = KuroMath::Lerp(m_damageScale, m_lDamageScale, 0.6f);
 
 		m_prevHp = m_hp;
-		m_transform.SetScale(m_baseScale - m_damageScale);
+
+		//ダメージ受けすぎて小さくなりすぎない処理
+		Vec3<float>shrinkScale = m_baseScale - m_damageScale;
+		const float MIN_SCALE = 1.5f;
+		if(shrinkScale.x <= MIN_SCALE)
+		{
+			shrinkScale = { MIN_SCALE,MIN_SCALE,MIN_SCALE };
+		}
+
+		m_transform.SetScale(shrinkScale);
 		return m_hitFlag;
 	}
 
 	void CommonInit()
 	{
-		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
+		m_outline = std::make_unique<Outline>(m_model, &m_transform, m_outlineColor);
 		m_prevHp = m_hp;
 		m_hitTiemr = 0;
 		m_hitFlag = false;
@@ -148,12 +158,12 @@ public:
 	{
 		m_outline->Upadte();
 	};
-	void CommonDraw(Camera& CAMERA)
+	void CommonDraw(Camera &CAMERA)
 	{
 		m_outline->Draw(CAMERA, m_hitFlag);
 	};
 
-	const bool& IsDisappear()const { return m_disappear; }
+	const bool &IsDisappear()const { return m_disappear; }
 
 private:
 	int m_prevHp;

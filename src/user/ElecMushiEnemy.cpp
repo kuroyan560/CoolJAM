@@ -6,6 +6,8 @@
 ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
 
+	m_outlineColor = ColorPalette::S_GREEN_COLOR;
+
 	/*===== コンストラクタ =====*/
 
 	m_model = DefModel;
@@ -33,9 +35,7 @@ ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 		}
 
 		index = std::make_shared<EnemyHP>(-drawAngle);
-
 	}
-
 }
 
 void ElecMushiEnemy::OnInit()
