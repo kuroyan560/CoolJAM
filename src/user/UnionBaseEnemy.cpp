@@ -218,7 +218,7 @@ void UnionBaseEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 		// “–‚½‚è”»’è‚ğs‚¤B
 		Vec3<float> hitBulletPos;
 		int hitCount = BulletMgr.lock()->CheckHitPlayerBullet(index->GetPos(), index->GetScale(), hitBulletPos);
-		index->Damage(hitCount);
+		if(hitCount)index->Damage(hitCount);
 
 		++activeCount;
 
