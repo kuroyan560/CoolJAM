@@ -100,7 +100,8 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &P
 	if (nextWaveIdx <= m_waves.size() - 1)
 	{
 		//次のウェーブの開始時間を見る
-		bool nextStart = m_waves[nextWaveIdx]->WaveStartTime() <= m_frameTimer;
+		bool nextStart = (m_waves[nextWaveIdx]->WaveStartTime() <= m_frameTimer)	//時間経過
+			|| (m_waves[m_nowWaveIdx]->IsAllEnemyAppear() && EnemyMgr.lock()->GetAllEnemyDead());	//全ての敵を出し切った && 全員死亡している
 		if (nextStart)
 		{
 			m_waves[m_nowWaveIdx]->Stop();
