@@ -16,7 +16,7 @@ class GameUI
 public:
 	GameUI();
 	void Init();
-	void Update();
+	void Update(const int& NowWaveMaxTimer);
 	void Draw();
 
 	void DrawImGui();
@@ -37,5 +37,6 @@ private:
 	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
 
 	int m_waveNum;
+	int m_nowWaveMaxTimer;
 
 };

@@ -307,7 +307,7 @@ void GameScene::OnUpdate()
 	{
 		m_bonusEffect->Start();
 	}
-	else if(m_bonusEffect->IsStart())
+	else if (m_bonusEffect->IsStart())
 	{
 		m_bonusEffect->Stop();
 	}
@@ -316,7 +316,7 @@ void GameScene::OnUpdate()
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 
-	m_gameUI->Update();
+	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 
 
 	SlowMgr::Instance()->Update();

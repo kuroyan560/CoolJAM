@@ -162,6 +162,15 @@ void TutorialScene::OnUpdate()
 	}
 
 
+	if (m_player->GetIsFever())
+	{
+		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
+	}
+	else
+	{
+		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
 
 	// “GXVˆ—
 	m_enemyMgr->Update(m_bulletMgr, m_player->GetPos(), MAP_SIZE);

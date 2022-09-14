@@ -21,7 +21,7 @@ void GameUI::Init()
 	m_gameStartTimerUI->Init();
 }
 
-void GameUI::Update()
+void GameUI::Update(const int& NowWaveMaxTimer)
 {
 
 	// デバッグ用
@@ -54,6 +54,7 @@ void GameUI::Update()
 
 	}
 
+	m_nowWaveMaxTimer = NowWaveMaxTimer;
 	m_timer->Update(60);
 	m_waveUI->Update(m_waveNum, m_wavePos, 1.0f / 30.0f);
 	ScoreMgr::Instance()->Update(m_scorePos, 1.0f / 30.0f);
