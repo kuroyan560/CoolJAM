@@ -393,6 +393,8 @@ void GameScene::OnDraw()
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
 
+	m_gameUI->Draw2D();
+
 	// 戻るのアイコンを描画。
 	DrawFunc2D::DrawExtendGraph2D(RETURN_ICON_POS - m_returnIconSize, RETURN_ICON_POS + m_returnIconSize, m_returnTexture);
 

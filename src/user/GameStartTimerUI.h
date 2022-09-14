@@ -76,7 +76,7 @@ public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
-	GameStartTimerUI();
+	GameStartTimerUI(std::array<std::shared_ptr<TextureBuffer>, 4> TIME);
 	void Init();
 	void Update(const Vec2<float> &OffsetPos, const float &AddEasingTimer);
 	void Draw();

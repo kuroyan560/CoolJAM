@@ -7,9 +7,9 @@
 #include"StageFloor.h"
 #include"GameTimer.h"
 #include"../engine/ImguiApp.h"
+#include"GameStartTimerUI.h"
 
 class WaveUI;
-class GameStartTimerUI;
 
 class GameUI
 {
@@ -18,19 +18,18 @@ public:
 	void Init();
 	void Update(const int& NowWaveMaxTimer);
 	void Draw();
+	void Draw2D();
 
 	void DrawImGui();
 
 	void Start();
-	void AddWaveNum();
-	void Score(int SCORE);
-
 	void Result();
 	void Finish();
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
-	std::shared_ptr<GameStartTimerUI> m_gameStartTimerUI;
+	std::unique_ptr<GameStartTimerUI> m_gameStartTimerUI;
+	std::unique_ptr<GameStartTimerUI> m_gameEndTimerUI;
 
 	Vec2<float>m_wavePos;
 	Vec2<float>m_scorePos;
@@ -43,5 +42,5 @@ private:
 	int m_nowWaveMaxTimer;
 
 	bool m_isStartFlag;
-
+	bool m_endCountDownFlag;
 };

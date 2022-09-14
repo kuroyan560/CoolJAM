@@ -2,7 +2,7 @@
 #include "Font.h"
 #include"AudioApp.h"
 
-GameStartTimerUI::GameStartTimerUI()
+GameStartTimerUI::GameStartTimerUI(std::array<std::shared_ptr<TextureBuffer>, 4> TIME)
 {
 
 	/*===== コンストラクタ =====*/
