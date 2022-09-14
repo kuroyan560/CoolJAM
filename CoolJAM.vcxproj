@@ -218,6 +218,7 @@
     <ClCompile Include="src\engine\UsersInput.cpp" />
     <ClCompile Include="src\engine\WinApp.cpp" />
     <ClCompile Include="src\user\BaseEnemy.cpp" />
+    <ClCompile Include="src\user\BonusEffect.cpp" />
     <ClCompile Include="src\user\BulletMgr.cpp" />
     <ClCompile Include="src\user\ColorPalette.cpp" />
     <ClCompile Include="src\user\DrawFunc_Append.cpp" />
@@ -347,6 +348,7 @@
     <ClInclude Include="src\engine\UsersInput.h" />
     <ClInclude Include="src\engine\WinApp.h" />
     <ClInclude Include="src\user\BaseEnemy.h" />
+    <ClInclude Include="src\user\BonusEffect.h" />
     <ClInclude Include="src\user\BulletMgr.h" />
     <ClInclude Include="src\user\ColorPalette.h" />
     <ClInclude Include="src\user\DashLightingParticle.h" />
