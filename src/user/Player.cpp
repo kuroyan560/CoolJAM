@@ -695,6 +695,7 @@ void Player::DrawDebugInfo(Camera& Cam) {
 }
 
 #include"ShakeMgr.h"
+#include"EnemyWaveEditor.h"
 void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
@@ -706,6 +707,9 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
+
+	//レベルデザイン中
+	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
 
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;
@@ -762,11 +766,9 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 }
 
-#include"EnemyWaveEditor.h"
+
 void Player::Damage()
 {
-	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
-
 	// 当たった判定。
 	m_damageEffectTimer = 0;
 	m_damageEffectCount = 0;
