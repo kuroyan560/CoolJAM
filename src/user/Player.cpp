@@ -676,6 +676,7 @@ void Player::DrawDebugInfo(Camera& Cam) {
 
 }
 
+#include"ShakeMgr.h"
 void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
@@ -701,7 +702,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	m_brakeBoostTimer -= 1.0f * SlowMgr::Instance()->m_slow;
 	if (0 < m_brakeBoostTimer) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+		//EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
 
 	}
 	else {
@@ -713,7 +714,14 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// フィーバー状態だったら
 	if (m_isFever) {
 
-		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+		int hitCount = EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
+
+		if (0 < hitCount) {
+
+			// シェイクをかける。
+			ShakeMgr::Instance()->Shake(5);
+
+		}
 
 	}
 

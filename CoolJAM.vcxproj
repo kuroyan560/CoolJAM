@@ -389,6 +389,7 @@
     <ClInclude Include="src\user\PlayerStraightEnemy.h" />
     <ClInclude Include="src\user\PressEnemy.h" />
     <ClInclude Include="src\user\ScoreMgr.h" />
+    <ClInclude Include="src\user\ShakeMgr.h" />
     <ClInclude Include="src\user\ShieldEnemy.h" />
     <ClInclude Include="src\user\SlowMgr.h" />
     <ClInclude Include="src\user\StageFloor.h" />

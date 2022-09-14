@@ -50,6 +50,12 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 	m_waves.emplace_back(std::make_shared<EnemyWave>(0, false));
 
+
+
+
+	// 第1ウェーブの時間を計算。
+	m_nowWaveMaxTimer = m_waves.front()->GetWaveEndFrameLocal();
+
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
@@ -72,6 +78,9 @@ void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 	m_waves[0]->Start();
 
 	m_finalWaveTimer = FinalWaveTime;
+
+	// 第1ウェーブの時間を計算。
+	m_nowWaveMaxTimer = m_waves.front()->GetWaveEndFrameLocal();
 }
 
 void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
@@ -119,6 +128,10 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &P
 	{
 		bool debug = false;
 	}
+
+	// 現在のウェーブの時間を計算。
+	m_nowWaveMaxTimer = m_waves[m_nowWaveIdx]->GetWaveEndFrameLocal();
+
 }
 
 void EnemyWaveMgr::AddWave(std::shared_ptr<EnemyWave> Wave)

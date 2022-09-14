@@ -318,9 +318,11 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 
 }
 
-void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr) {
+int EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr) {
 
 	/*===== Žw’è‚Ì”ÍˆÍ‚Ì“G‚ð“|‚· =====*/
+
+	int hitCount = 0;
 
 	for (auto& index : m_enemy) {
 
@@ -338,7 +340,11 @@ void EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_
 
 		index->Damage(1, BulletMgr);
 
+		++hitCount;
+
 	}
+
+	return hitCount;
 
 }
 

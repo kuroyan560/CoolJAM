@@ -88,5 +88,11 @@ public:
 	void Stop();
 	bool IsBounusStage();
 	int WaveStartTime();
+
+	int GetWaveStartFrame() { return m_waveStartFrame; }
+
+	// このウェーブで最後に敵が湧くローカルのフレーム数をもとめる。　ローカルのフレーム = EnemyWave内のフレーム
+	int GetWaveEndFrameLocal();
+
 };
 
