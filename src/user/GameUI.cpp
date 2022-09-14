@@ -26,7 +26,7 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(60);
+	m_timer->Init(11000 / 60);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
 	m_gameEndTimerUI->Init();
@@ -44,7 +44,7 @@ void GameUI::Init()
 
 	scoreOffsetData.m_stringPos = { -35.0f,0.0f };
 	scoreOffsetData.m_stringSize = -0.1f;
-	scoreOffsetData.m_numPos = { 240.0f,0.0f };
+	scoreOffsetData.m_numPos = { 240.0f,-20.0f };
 	scoreOffsetData.m_numSize = 0.2f;
 
 	m_waveCenterOffsetPos = { 1.0f,-91.0f };
@@ -54,7 +54,7 @@ void GameUI::Init()
 	scoreFlagData.Init();
 }
 
-void GameUI::Update(const int &NowWaveMaxTimer)
+void GameUI::Update(const int& NowWaveMaxTimer)
 {
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_P))
 	{
@@ -176,7 +176,12 @@ bool GameUI::IsResult()
 	return m_gameEndTimerUI->IsStart();
 }
 
-void GameUI::SetVec2(std::string TAG, Vec2<float> *VEC3)
+bool GameUI::IsStart()
+{
+	return m_gameStartTimerUI->IsStart();
+}
+
+void GameUI::SetVec2(std::string TAG, Vec2<float>* VEC3)
 {
 	std::string name = TAG + "X";
 	ImGui::DragFloat(name.c_str(), &VEC3->x);
@@ -184,7 +189,7 @@ void GameUI::SetVec2(std::string TAG, Vec2<float> *VEC3)
 	ImGui::DragFloat(name.c_str(), &VEC3->y);
 }
 
-void GameUI::SetVec3(std::string TAG, Vec3<Angle> *VEC3)
+void GameUI::SetVec3(std::string TAG, Vec3<Angle>* VEC3)
 {
 	std::string name = TAG + "X";
 	ImGui::DragFloat(name.c_str(), &VEC3->x);

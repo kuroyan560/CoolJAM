@@ -551,6 +551,8 @@ void GameScene::UpdateResult()
 				}
 			}
 
+			m_enemyMgr->Init();
+
 		}
 		else {
 

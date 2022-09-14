@@ -319,6 +319,43 @@ bool EnemyMgr::CheckHitEnemy(const Vec3<float>& Pos, const float& Size)
 
 }
 
+
+bool EnemyMgr::CheckHitCoin(const Vec3<float>& Pos, const float& Size, std::weak_ptr< BulletMgr> BulletMgr) {
+
+	bool isHit = false;
+	for (auto& index : m_enemy) {
+
+		// 生成されていなかったら処理を飛ばす。
+		if (!index.operator bool()) continue;
+
+		if (!index->m_isActive) continue;
+
+		// コイン以外だったら処理を飛ばす。
+		if (index->m_id != ENEMY_INFO::ID::COIN) continue;
+
+		// 二点間の距離
+		float length = Vec3<float>(Pos - index->m_pos).Length();
+
+		if (!(length < Size + index->m_scale)) continue;
+
+		index->Damage(1000, BulletMgr);
+
+		if (index->m_id != ENEMY_INFO::ID::COIN)
+		{
+			isHit = true;
+		}
+		else
+		{
+			isHit = false;
+		}
+
+	}
+
+	return isHit;
+
+}
+
+
 int EnemyMgr::AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr) {
 
 	/*===== 指定の範囲の敵を倒す =====*/

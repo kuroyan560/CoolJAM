@@ -1,3 +1,4 @@
+
 #pragma once
 #include <array>
 #include <memory>
@@ -33,8 +34,8 @@ public:
 	EnemyMgr();
 	void Init();
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	void Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil);
-	
+	void Draw(Camera& NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil);
+
 	//‘ŞU
 	void AllDisappear();
 
@@ -49,6 +50,9 @@ public:
 
 	// “G‚Æ‚ÌÕ“Ë”»’èB
 	bool CheckHitEnemy(const Vec3<float>& Pos, const float& Size);
+
+	// ƒRƒCƒ“‚Æ‚ÌÕ“Ë”»’è
+	bool CheckHitCoin(const Vec3<float>& Pos, const float& Size, std::weak_ptr< BulletMgr> BulletMgr);
 
 	// w’è‚Ì”ÍˆÍ‚Ì“G‚ğ“|‚·B
 	int AttackEnemy(const Vec3<float>& Pos, const float& Size, std::weak_ptr<BulletMgr> BulletMgr);

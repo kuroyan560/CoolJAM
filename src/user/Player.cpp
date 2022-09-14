@@ -311,7 +311,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			// ダッシュした回数をカウントする。
 			m_dashCounter += 1.0f * SlowMgr::Instance()->m_slow;
 
-			AudioApp::Instance()->PlayWaveDelay(m_dashSE,4);
+			AudioApp::Instance()->PlayWaveDelay(m_dashSE, 4);
 		}
 
 		// 最大値、最小値を超えないようにする。
@@ -674,6 +674,9 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// マップとの当たり判定。
 	bool isHitMap = false;
 	m_pos = KazCollisionHelper::KeepInMap(m_pos, MapSize);
+
+	// コインとの値r判定。
+	EnemyMgr.lock()->CheckHitCoin(m_pos, BOOST_SCALE, BulletMgr);
 
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;

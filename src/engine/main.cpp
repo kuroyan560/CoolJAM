@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	//ÉGÉìÉWÉìê›íË=====================
 	EngineOption engineOption;
-	engineOption.m_windowName = "KuroEngine3.0";
+	engineOption.m_windowName = "BlitzAutomatica";
 	engineOption.m_windowSize = { 1280,720 };
 	engineOption.m_iconPath = nullptr;
 	engineOption.m_backBuffClearColor = Color(23, 14, 41, 255);

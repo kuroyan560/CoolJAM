@@ -17,15 +17,15 @@ class GameUI
 public:
 	GameUI();
 	void Init();
-	void Update(const int &NowWaveMaxTimer);
+	void Update(const int& NowWaveMaxTimer);
 	void Draw();
 	void Draw2D();
 
 	void DrawImGui();
 
 	void Start();
+	bool IsStart();
 	bool IsResult();
-
 
 	int m_waveNum;
 
@@ -42,8 +42,8 @@ private:
 	Vec2<float>m_waveCenterOffsetPos;
 	Vec2<float>m_scoreCenterOffsetPos;
 
-	void SetVec2(std::string TAG, Vec2<float> *VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
+	void SetVec2(std::string TAG, Vec2<float>* VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
 
 	int m_nowWaveMaxTimer;
 
