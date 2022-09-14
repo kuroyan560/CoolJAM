@@ -95,6 +95,8 @@ private:
 	float m_returnTitlePosEasingTimer;
 	int m_transitionDelayTimer;
 
+	bool isFlag;
+
 	// ‘JˆÚ‚·‚é‚Æ‚«‚ÉŒ©‚éƒJƒƒ‰‚ÌY²À•W
 	const float TRANSITION_CAMERA_Y = 400.0f;
 

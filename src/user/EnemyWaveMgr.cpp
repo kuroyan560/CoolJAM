@@ -119,7 +119,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE6を作成。
-	std::shared_ptr<EnemyWave> wave6 = std::make_shared<EnemyWave>(6000, true);
+	std::shared_ptr<EnemyWave> wave6 = std::make_shared<EnemyWave>(6000, false);
 
 
 	// 四方から追尾敵を出す。
@@ -153,7 +153,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE7を作成。
-	std::shared_ptr<EnemyWave> wave7 = std::make_shared<EnemyWave>(7000, true);
+	std::shared_ptr<EnemyWave> wave7 = std::make_shared<EnemyWave>(7000, false);
 
 
 	// エレキ虫を出す。
@@ -173,7 +173,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE8を作成。
-	std::shared_ptr<EnemyWave> wave8 = std::make_shared<EnemyWave>(8000, true);
+	std::shared_ptr<EnemyWave> wave8 = std::make_shared<EnemyWave>(8000, false);
 
 
 	// 超弾を撃つ敵を出す
@@ -191,7 +191,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE9を作成。
-	std::shared_ptr<EnemyWave> wave9 = std::make_shared<EnemyWave>(9000, true);
+	std::shared_ptr<EnemyWave> wave9 = std::make_shared<EnemyWave>(9000, false);
 
 
 	for (int index = 0; index < 10; ++index) {
@@ -208,7 +208,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE10を作成。
-	std::shared_ptr<EnemyWave> wave10 = std::make_shared<EnemyWave>(10000, true);
+	std::shared_ptr<EnemyWave> wave10 = std::make_shared<EnemyWave>(10000, false);
 
 
 	// 真ん中にエレキ虫を出す。

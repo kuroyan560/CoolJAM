@@ -26,7 +26,7 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(11000 / 60);
+	m_timer->Init(12500 / 60);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
 	m_gameEndTimerUI->Init();
@@ -44,7 +44,7 @@ void GameUI::Init()
 
 	scoreOffsetData.m_stringPos = { -35.0f,0.0f };
 	scoreOffsetData.m_stringSize = -0.1f;
-	scoreOffsetData.m_numPos = { 240.0f,-20.0f };
+	scoreOffsetData.m_numPos = { 180.0f,-20.0f };
 	scoreOffsetData.m_numSize = 0.2f;
 
 	m_waveCenterOffsetPos = { 1.0f,-91.0f };
@@ -56,10 +56,6 @@ void GameUI::Init()
 
 void GameUI::Update(const int& NowWaveMaxTimer)
 {
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_P))
-	{
-		ScoreMgr::Instance()->AddScore(100);
-	}
 
 	//ƒQ[ƒ€ŠJŽn
 	if (m_gameStartTimerUI->IsStart() && !m_isStartFlag)
@@ -118,7 +114,6 @@ void GameUI::Update(const int& NowWaveMaxTimer)
 		waveFlagData.Init();
 		scoreFlagData.Init();
 	}
-
 
 	m_timer->Update(30);
 	m_waveUI->Update(m_waveNum, m_wavePos, m_waveCenterOffsetPos, 1.0f / 30.0f);

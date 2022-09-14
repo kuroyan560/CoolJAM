@@ -161,6 +161,8 @@ public:
 	bool GetIsFeverTrigger() { return !m_isPrevFever && m_isFever; }
 	bool GetIsFeverEndTrigger() { return m_isPrevFever && !m_isFever; }
 
+	int GetHP() { return m_hp; }
+
 private:
 
 	// “ü—Íˆ—

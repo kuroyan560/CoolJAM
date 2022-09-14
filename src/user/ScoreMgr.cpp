@@ -18,7 +18,7 @@ void ScoreMgr::Init()
 	m_isActive = false;
 }
 
-void ScoreMgr::Update(const Vec2<float> &Offset, const Vec2<float> &CenterOffset, const float &AddEasingTimer)
+void ScoreMgr::Update(const Vec2<float>& Offset, const Vec2<float>& CenterOffset, const float& AddEasingTimer)
 {
 
 	/*===== 更新処理 =====*/
@@ -104,7 +104,7 @@ void ScoreMgr::Update(const Vec2<float> &Offset, const Vec2<float> &CenterOffset
 }
 
 #include "DrawFunc2D.h"
-void ScoreMgr::Draw(const AdjData &OFFSET_DATA)
+void ScoreMgr::Draw(const AdjData& OFFSET_DATA)
 {
 
 	/*===== 描画処理 =====*/
@@ -127,7 +127,7 @@ void ScoreMgr::Draw(const AdjData &OFFSET_DATA)
 	startPos.x -= FONT_OFFSET * (nowScoreLength / 2.0f);
 	for (int index = 0; index < nowScoreLength; ++index) {
 
-		DrawFunc2D::DrawRotaGraph2D(startPos + Vec2<float>((FONT_OFFSET) * index, 0.0f), Vec2<float>(scale, scale), 0.0f, Font::Instance()->m_stripeFont[KuroFunc::GetSpecifiedDigitNum(m_score, nowScoreLength - index - 1)]);
+		DrawFunc2D::DrawRotaGraph2D(startPos + Vec2<float>((FONT_OFFSET + 20.0f) * index, -20.0f), Vec2<float>(scale, scale), 0.0f, Font::Instance()->m_stripeFont[KuroFunc::GetSpecifiedDigitNum(m_score, nowScoreLength - index - 1)]);
 
 	}
 
@@ -171,7 +171,7 @@ void ScoreMgr::Center()
 
 }
 
-void ScoreMgr::AddScore(const int &Score)
+void ScoreMgr::AddScore(const int& Score)
 {
 
 	/*===== 一次保存スコアを加算する =====*/

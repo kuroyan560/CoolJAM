@@ -150,6 +150,8 @@ void GameScene::OnInitialize()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	isFlag = false;
+
 	ShakeMgr::Instance()->Init();
 
 	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
@@ -202,7 +204,7 @@ void GameScene::OnUpdate()
 
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE) || m_gameUI->IsResult())
+	if (m_player->GetHP() <= 0 || m_gameUI->IsResult())
 	{
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
@@ -339,6 +341,13 @@ void GameScene::OnUpdate()
 	if (m_isCompleteUpper)
 	{
 		m_gameUI->Init();
+	}
+
+	if (m_gameUI->IsStart() && !isFlag) {
+
+		isFlag = true;
+		m_enemyWaveMgr->Init(11000);
+
 	}
 
 	m_gameUI->m_waveNum = m_enemyWaveMgr->m_nowWaveIdx + 1;
