@@ -95,6 +95,7 @@ Player::Player()
 	m_damageEffect = std::make_shared<PlayerDamageEffectMgr>();
 
 	m_damageSE = AudioApp::Instance()->LoadAudio("resource/user/sound/damage.wav");
+	m_dashSE = AudioApp::Instance()->LoadAudio("resource/user/sound/dash.wav", 0.4f);
 }
 
 void Player::Init()
@@ -311,6 +312,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			// ダッシュした回数をカウントする。
 			m_dashCounter += 1.0f * SlowMgr::Instance()->m_slow;
 
+			AudioApp::Instance()->PlayWaveDelay(m_dashSE,4);
 		}
 
 		// 最大値、最小値を超えないようにする。

@@ -122,6 +122,7 @@ private:
 	std::unique_ptr<PlayerDashLighting> m_dashLight;
 
 	int m_damageSE;
+	int m_dashSE;
 
 	bool m_firstInput = false;
 
