@@ -16,7 +16,7 @@ PlayerModelOutline::PlayerModelOutline()
 	m_enoughPowerFlag = false;
 }
 
-void PlayerModelOutline::Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<ModelObject> MODEL)
+void PlayerModelOutline::Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<ModelObject> MODEL)
 {
 	m_pos = POS;
 	m_rotation = ROTATION;
@@ -155,10 +155,11 @@ void PlayerModelOutline::Update()
 
 }
 
-void PlayerModelOutline::Draw(Camera& CAMERA)
+void PlayerModelOutline::Draw(Camera &CAMERA)
 {
 	Transform transform = m_model->m_transform;
-	transform.SetScale(m_model->m_transform.GetScale() + m_transform.GetScale());
+	Vec3<float>scale = m_transform.GetScale() - m_model->m_transform.GetScale();
+	transform.SetScale(scale + m_transform.GetScale());
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model->m_model, transform, m_modelColor, CAMERA);
 	//DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);
 }

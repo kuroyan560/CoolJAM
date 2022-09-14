@@ -153,9 +153,7 @@ void Player::Init()
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
-
 	m_modelObj->m_animator->Play("ToFloater", false, false);
-
 	m_firstInput = false;
 }
 

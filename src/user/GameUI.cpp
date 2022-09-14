@@ -26,7 +26,7 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(10);
+	m_timer->Init(60);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
 	m_gameEndTimerUI->Init();
