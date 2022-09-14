@@ -87,7 +87,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 		for (int generate = 0; generate < 10; ++generate) {
 
-			wave4->AddEnemy(Vec3<float>(KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100)), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::PLAYER_STRAIGHT, 180 + 60 * index, 90000);
+			wave4->AddEnemy(Vec3<float>(KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100)), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::PLAYER_STRAIGHT, 180 + 120 * index, 90000);
 
 		}
 
@@ -116,6 +116,59 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 	// WAVE5を追加。
 	m_waves.emplace_back(wave5);
+
+
+
+	// WAVE6を作成。
+	std::shared_ptr<EnemyWave> wave6 = std::make_shared<EnemyWave>(6500, true);
+
+
+	// 四方から追尾敵を出す。
+	wave6->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::TRACKING, 60, 600);
+	wave6->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::TRACKING, 60, 600);
+	wave6->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 60, 600);
+	wave6->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 60, 600);
+
+	// 四方から追尾敵を出す。
+	wave6->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::TRACKING, 180, 600);
+	wave6->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::TRACKING, 180, 600);
+	wave6->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 180, 600);
+	wave6->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 180, 600);
+
+	// 四方から追尾敵を出す。
+	wave6->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::TRACKING, 300, 600);
+	wave6->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::TRACKING, 300, 600);
+	wave6->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 300, 600);
+	wave6->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 300, 600);
+
+	// 四方から追尾敵を出す。
+	wave6->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::TRACKING, 420, 600);
+	wave6->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::TRACKING, 420, 600);
+	wave6->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 420, 600);
+	wave6->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::TRACKING, 420, 600);
+
+	// WAVE6を追加。
+	m_waves.emplace_back(wave6);
+
+
+
+
+	// WAVE7を作成。
+	std::shared_ptr<EnemyWave> wave7 = std::make_shared<EnemyWave>(6500, true);
+
+
+	// エレキ虫を出す。
+	wave7->AddEnemy(Vec3<float>(0, 0, 50), Vec3<float>(), ENEMY_INFO::ID::ELEC_MUSHI, 0, 90000);
+
+	// 外周を囲むように動く敵をたくさん出す。
+	for (int index = 0; index < 200; ++index) {
+
+		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
+
+	}
+
+	// WAVE7を追加。
+	m_waves.emplace_back(wave7);
 
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
