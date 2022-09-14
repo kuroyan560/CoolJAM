@@ -20,7 +20,7 @@ private:
 	const Vec3<float>*m_posPtr;
 	const float *m_velPtr;
 	std::array<GrazeParticle, ARRAY_MAX> m_particleArray;
-	int initTimer;
+	float initTimer;
 
 };
 

@@ -246,5 +246,6 @@
     <ClInclude Include="src\user\Font.h" />
     <ClInclude Include="src\user\ScoreMgr.h" />
     <ClInclude Include="src\user\GameStartTimerUI.h" />
+    <ClInclude Include="src\user\SlowMgr.h" />
   </ItemGroup>
 </Project>

@@ -14,6 +14,7 @@
 #include "CoinEnemy.h"
 #include "../engine/Importer.h"
 #include"../engine/UsersInput.h"
+#include "SlowMgr.h"
 
 EnemyMgr::EnemyMgr()
 {

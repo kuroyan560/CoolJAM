@@ -2,6 +2,7 @@
 #include"../engine/DrawFunc3D.h"
 #include"../user/ColorPalette.h"
 #include"../user/DrawFunc_Append.h"
+#include "SlowMgr.h"
 
 DashLightingRoad::DashLightingRoad(int ROAD_INDEX) :m_color(ColorPalette::S_GREEN_COLOR), m_initFlag(false), m_indexNum(ROAD_INDEX)
 {

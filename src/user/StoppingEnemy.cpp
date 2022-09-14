@@ -1,6 +1,7 @@
 #include "StoppingEnemy.h"
 #include "EnemyHP.h"
 #include "BulletMgr.h"
+#include "SlowMgr.h"
 
 StoppingEnemy::StoppingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {

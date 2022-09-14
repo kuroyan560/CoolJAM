@@ -15,7 +15,7 @@ private:
 	/*===== メンバ変数 =====*/
 
 	std::vector<std::shared_ptr<EnemyWave>> m_waves;	// ウェーブ
-	int m_frameTimer;									// フレームのタイマー
+	float m_frameTimer;									// フレームのタイマー
 	int m_nowWaveIdx = -1;
 	int m_finalWaveTimer = 0;
 

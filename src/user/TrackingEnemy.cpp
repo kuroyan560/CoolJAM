@@ -1,6 +1,7 @@
 #include "TrackingEnemy.h"
 #include "BulletMgr.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 TrackingEnemy::TrackingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -87,7 +88,7 @@ void TrackingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 
 		// 移動方向ベクトルを角度に直して値を加算する。
 		float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
-		forwardVecAngle += handleRot;
+		forwardVecAngle += handleRot * SlowMgr::Instance()->m_slow;
 
 		// 加算した角度をベクトルに直す。
 		m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
@@ -95,16 +96,16 @@ void TrackingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 	}
 
 	// 移動速度を補間。
-	m_speed += (SPEED - m_speed) / 10.0f;
+	m_speed += (SPEED - m_speed) / 10.0f * SlowMgr::Instance()->m_slow;
 
 	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// ノックバックの移動。
-	m_pos += m_knockBackVec * m_knockBackSpeed;
+	m_pos += m_knockBackVec * m_knockBackSpeed * SlowMgr::Instance()->m_slow;
 
 	// ノックバックの移動を減らす。
-	m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
+	m_knockBackSpeed -= m_knockBackSpeed / 20.0f * SlowMgr::Instance()->m_slow;
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);

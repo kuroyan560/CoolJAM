@@ -5,6 +5,7 @@
 #include"ColorPalette.h"
 #include"../engine/Importer.h"
 #include"../engine/Common/KuroMath.h"
+#include"SlowMgr.h"
 
 PlayerModelOutline::PlayerModelOutline()
 {
@@ -43,12 +44,12 @@ void PlayerModelOutline::Update()
 
 		if (m_powerUpRateData.m_reversRateFlag)
 		{
-			Rate(&m_powerUpRateData.m_expandVertexRate, 0.3f, 1.0f);
+			Rate(&m_powerUpRateData.m_expandVertexRate, 0.3f * SlowMgr::Instance()->m_slow, 1.0f);
 			m_scale = (MAX_SCALE + EXPAND_MAX_SCALE * expandScale) + -KuroMath::Ease(Out, Cubic, m_powerUpRateData.m_expandVertexRate, 0.0f, 1.0f) * (EXPAND_MAX_SCALE * expandScale);
 		}
 		else
 		{
-			Rate(&m_powerUpRateData.m_expandVertexRate, 0.3f, 1.0f);
+			Rate(&m_powerUpRateData.m_expandVertexRate, 0.3f * SlowMgr::Instance()->m_slow, 1.0f);
 			m_scale = MAX_SCALE + KuroMath::Ease(Out, Cubic, m_powerUpRateData.m_expandVertexRate, 0.0f, 1.0f) * (EXPAND_MAX_SCALE * expandScale);
 		}
 
@@ -82,12 +83,12 @@ void PlayerModelOutline::Update()
 
 		if (m_enoughPowerRateData.m_reversRateFlag)
 		{
-			Rate(&m_enoughPowerRateData.m_expandVertexRate, 0.3f, 1.0f);
+			Rate(&m_enoughPowerRateData.m_expandVertexRate, 0.3f * SlowMgr::Instance()->m_slow, 1.0f);
 			m_scale = (MAX_SCALE + expandScele) + -KuroMath::Ease(Out, Cubic, m_enoughPowerRateData.m_expandVertexRate, 0.0f, 1.0f) * expandScele;
 		}
 		else
 		{
-			Rate(&m_enoughPowerRateData.m_expandVertexRate, 0.3f, 1.0f);
+			Rate(&m_enoughPowerRateData.m_expandVertexRate, 0.3f * SlowMgr::Instance()->m_slow, 1.0f);
 			m_scale = MAX_SCALE + KuroMath::Ease(Out, Cubic, m_enoughPowerRateData.m_expandVertexRate, 0.0f, 1.0f) * expandScele;
 		}
 

@@ -1,3 +1,4 @@
+
 #pragma once
 #include<memory>
 #include<string>
@@ -80,6 +81,7 @@ public:
 
 	//ƒQƒbƒ^
 	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
+	int GetNowStatus() { return m_nowStatus; }
 
 
 	void ImguiDebug();

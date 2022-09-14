@@ -1,5 +1,6 @@
 #include "EnemyWaveMgr.h"
 #include "EnemyWave.h"
+#include "SlowMgr.h"
 
 EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 {
@@ -75,6 +76,8 @@ void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 	/*===== 更新処理 =====*/
+
+	if (SlowMgr::Instance()->m_slow <= 0.9f) return;
 
 	// フレームのタイマーを更新。
 	++m_frameTimer;

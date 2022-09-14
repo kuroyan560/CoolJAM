@@ -1,4 +1,5 @@
 #include"LineLight.h"
+#include "SlowMgr.h"
 #include"../engine/DrawFunc3D.h"
 
 LineLight::LineLight(const std::vector<Vec3<float>*> &POS_ARRAY)

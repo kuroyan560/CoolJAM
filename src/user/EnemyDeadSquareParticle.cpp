@@ -1,5 +1,6 @@
 #include"EnemyDeadSquareParticle.h"
 #include"../engine/DrawFunc3D.h"
+#include "SlowMgr.h"
 
 EnemyDeadSquareParticle::EnemyDeadSquareParticle()
 {
@@ -30,9 +31,9 @@ void EnemyDeadSquareParticle::Update()
 {
 	if (m_initFlag)
 	{
-		m_pos += m_vel;
-		m_angle += m_angleVel;
-		m_color.m_a -= 1.0f / static_cast<float>(m_dispappearTime);
+		m_pos += m_vel * SlowMgr::Instance()->m_slow;
+		m_angle += m_angleVel * SlowMgr::Instance()->m_slow;
+		m_color.m_a -= 1.0f / static_cast<float>(m_dispappearTime) * SlowMgr::Instance()->m_slow;
 
 		const Vec2<float> LIMIT_LINE = { 200.0f,200.0f };
 		bool insideFlag = m_pos.x <= LIMIT_LINE.x &&

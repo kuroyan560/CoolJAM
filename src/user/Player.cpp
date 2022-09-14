@@ -10,6 +10,7 @@
 #include "KazCollisionHelper.h"
 #include "PlayerHP.h"
 #include"ModelAnimator.h"
+#include "SlowMgr.h"
 
 Player::Player()
 {
@@ -42,6 +43,7 @@ Player::Player()
 	m_dashCounter = 0;
 	m_hp = MAX_HP;
 	m_isFever = false;
+	m_isPrevFever = false;
 	m_feverTime = 0;
 	m_mousePointerScale = false;
 
@@ -112,6 +114,7 @@ void Player::Init()
 	m_damageEffectCount = 0;
 	m_hp = MAX_HP;
 	m_isFever = false;
+	m_isPrevFever = false;
 	m_feverTime = 0;
 	m_mousePointerScale = 0;
 
@@ -268,7 +271,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 		if (cross != 0) {
 
 			// 保管量
-			float rot = 0.04f * cross;
+			float rot = 0.04f * cross * SlowMgr::Instance()->m_slow;
 
 			float rotAngle = nowAngle + rot;
 
@@ -299,7 +302,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 			}
 
 			// ダッシュした回数をカウントする。
-			++m_dashCounter;
+			m_dashCounter += 1.0f * SlowMgr::Instance()->m_slow;
 
 		}
 
@@ -325,6 +328,8 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 
 	/*===== 移動処理 =====*/
 
+	m_isPrevFever = m_isFever;
+
 	if (BulletMgr.lock()->GetIsKillElecMushi()) {
 
 		m_isFever = true;
@@ -339,7 +344,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		// フィーバーの時間経過を止めるフラグが立っていたら減らさない。チュートリアルでフィーバーのタイマーを減らしたくない場合があったので作成しました。
 		if (!IsStopFeverTimer) {
 
-			--m_feverTime;
+			m_feverTime -= 1.0f * SlowMgr::Instance()->m_slow;
 			if (m_feverTime <= 0) {
 
 				m_isFever = false;
@@ -348,7 +353,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 
 		}
 
-		m_speed += (MAX_SPEED - m_speed) / 2.0f;
+		m_speed += (MAX_SPEED - m_speed) / 2.0f * SlowMgr::Instance()->m_slow;
 
 	}
 	else {
@@ -356,7 +361,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		// ブレーキ状態の有無に応じて移動速度を変える。
 		if (m_isBrake) {
 
-			m_speed += (BRAKE_SPEED - m_speed) / 10.0f;
+			m_speed += (BRAKE_SPEED - m_speed) / 10.0f * SlowMgr::Instance()->m_slow;
 
 		}
 
@@ -366,8 +371,8 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 	m_prevPos = m_pos;
 
 	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
-	m_movedLength += Vec3<float>(m_forwardVec * m_speed).Length();
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
+	m_movedLength += Vec3<float>(m_forwardVec * m_speed * SlowMgr::Instance()->m_slow).Length();
 
 	float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	float prevForwardVecAngle = atan2f(m_prevForwardVec.x, m_prevForwardVec.z);
@@ -404,7 +409,7 @@ void Player::UpdateEffect()
 	// ダメージエフェクトの更新処理
 	if (m_isDamageEffect) {
 
-		++m_damageEffectTimer;
+		m_damageEffectTimer += 1.0f * SlowMgr::Instance()->m_slow;
 		if (DAMAGE_EFFECT_DRAW_CHANGE_SPAN <= m_damageEffectTimer) {
 
 			// プレイヤーを表示しているかどうかで処理を変える。
@@ -623,7 +628,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 	// ドリフトしていなかったら処理とを飛ばす。
 	if (!m_isBrake) return;
 
-	++m_shotTimer;
+	m_shotTimer += 1.0f * SlowMgr::Instance()->m_slow;
 	if (SHOT_TIMER <= m_shotTimer) {
 
 		m_shotTimer = 0;
@@ -687,7 +692,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
-	--m_brakeBoostTimer;
+	m_brakeBoostTimer -= 1.0f * SlowMgr::Instance()->m_slow;
 	if (0 < m_brakeBoostTimer) {
 
 		EnemyMgr.lock()->AttackEnemy(m_pos, BOOST_SCALE, BulletMgr);
@@ -846,4 +851,5 @@ bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE Eas
 	m_modelObj->m_model->m_meshes[1].material->Mapping();
 
 	return 1.0f <= m_colorEasingTimer;
+
 }

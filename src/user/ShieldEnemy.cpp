@@ -1,6 +1,7 @@
 #include "ShieldEnemy.h"
 #include "BulletMgr.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 ShieldEnemy::ShieldEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -85,7 +86,7 @@ void ShieldEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& 
 
 		// 移動方向ベクトルを角度に直して値を加算する。
 		float forwardVecAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
-		forwardVecAngle += handleRot;
+		forwardVecAngle += handleRot * SlowMgr::Instance()->m_slow;
 
 		// 加算した角度をベクトルに直す。
 		m_forwardVec = Vec3<float>(sinf(forwardVecAngle), 0.0f, cosf(forwardVecAngle));
@@ -95,12 +96,6 @@ void ShieldEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& 
 	// 描画を回転させる。
 	float angle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	m_transform.SetRotate(DirectX::XMMatrixRotationY(angle));
-
-	// 移動速度を補間。
-	m_speed += (SPEED - m_speed) / 10.0f;
-
-	// 移動させる。
-	m_pos += m_forwardVec * m_speed;
 
 	// 当たり判定
 	CheckHitBullet(BulletMgr, MapSize, PlayerPos);

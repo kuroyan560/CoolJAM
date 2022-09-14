@@ -106,6 +106,12 @@ private:
 
 	bool m_emissive = true;
 
+	// フィーバー敵を倒したときのエフェクト用変数
+	bool m_isFeverCameraEffect;		// フィーバー敵を倒したときのエフェクト中か。
+	int m_feverNearCameraTimer;		// フィーバー敵を倒したときのエフェクトの時間。
+	const int FEVER_NEAR_CAMERA_TIMER = 90;
+	const float FEVER_SHAKE = 10.0f;
+
 
 public:
 	TutorialScene();

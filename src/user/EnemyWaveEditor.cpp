@@ -5,6 +5,7 @@
 #include"EnemyMgr.h"
 #include"KuroFunc.h"
 #include"EnemyWaveLoader.h"
+#include "SlowMgr.h"
 
 void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr)
 {

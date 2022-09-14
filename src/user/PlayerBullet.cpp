@@ -2,6 +2,7 @@
 #include "PlayerBullet.h"
 #include "Importer.h"
 #include "Model.h"
+#include "SlowMgr.h"
 
 std::shared_ptr<Model> PlayerBullet::s_model;
 
@@ -51,9 +52,9 @@ void PlayerBullet::Update(const float& MapSize) {
 
 	/*===== XVˆ— ======*/
 
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
-	m_speed += ADD_SPEED;
+	m_speed += ADD_SPEED * SlowMgr::Instance()->m_slow;
 	if (MAX_SPEED <= ADD_SPEED) {
 
 		m_speed = MAX_SPEED;

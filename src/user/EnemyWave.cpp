@@ -1,5 +1,6 @@
 #include "EnemyWave.h"
 #include "EnemyMgr.h"
+#include "SlowMgr.h"
 
 EnemyWave::EnemyWave(const int &WaveStartFrame, const bool &BounusStageFlag)
 {
@@ -24,6 +25,8 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &Play
 	if (!m_startWaveFlag) {
 		return;
 	}
+
+	if (SlowMgr::Instance()->m_slow <= 0.9f) return;
 
 	++m_nowWaveFrame;
 

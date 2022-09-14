@@ -1,5 +1,6 @@
 #include "FeverGauge.h"
 #include "D3D12App.h"
+#include "SlowMgr.h"
 
 FeverGauge::FeverGauge()
 {
@@ -38,7 +39,7 @@ void FeverGauge::Update(const bool& IsActive, const float& Rate)
 	m_baseRate = Rate;
 
 	// •âŠ®‚·‚éB
-	m_nowRate += (m_baseRate - m_nowRate) / 10.0f;
+	m_nowRate += (m_baseRate - m_nowRate) / 10.0f * SlowMgr::Instance()->m_slow;
 
 
 }

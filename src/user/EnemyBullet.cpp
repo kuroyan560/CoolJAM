@@ -2,6 +2,7 @@
 #include "EnemyBullet.h"
 #include "Importer.h"
 #include "Model.h"
+#include "SlowMgr.h"
 
 std::shared_ptr<Model> EnemyBullet::s_model;
 
@@ -48,7 +49,7 @@ void EnemyBullet::Update(const float& MapSize) {
 
 	/*===== 更新処理 ======*/
 
-	m_pos += m_forwardVec * SPEED;
+	m_pos += m_forwardVec * SPEED * SlowMgr::Instance()->m_slow;
 
 	// マップ外へ移動したら。
 	if (MapSize < m_pos.Length()) {

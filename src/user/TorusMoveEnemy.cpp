@@ -2,6 +2,7 @@
 #include "TorusMoveEnemy.h"
 #include "EnemyHP.h"
 #include "BulletMgr.h"
+#include "SlowMgr.h"
 
 TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -85,7 +86,7 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 
 	// à⁄ìÆÇ≥ÇπÇÈÅB
 	m_speed = SPEED;
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// âüÇµñﬂÇ∑ÅB
 	if (centerDistance <= m_pos.Length()) {

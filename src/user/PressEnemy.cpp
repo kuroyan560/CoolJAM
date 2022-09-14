@@ -1,6 +1,7 @@
 #include "PressEnemy.h"
 #include "BulletMgr.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 PressEnemy::PressEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
@@ -82,10 +83,10 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 	/*===== 更新処理 =====*/
 
 	// ノックバックの移動。
-	m_pos += m_knockBackVec * m_knockBackSpeed;
+	m_pos += m_knockBackVec * m_knockBackSpeed * SlowMgr::Instance()->m_slow;
 
 	// ノックバックの移動を減らす。
-	--m_returnDefTimer;
+	m_returnDefTimer -= 1.0f * SlowMgr::Instance()->m_slow;
 	if (0 < m_knockBackSpeed) {
 		m_knockBackSpeed -= m_knockBackSpeed / 20.0f;
 	}
@@ -96,10 +97,10 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 
 		// 初期位置までの座標。
 		Vec3<float> defPosDir = Vec3<float>(m_defPos - m_pos).GetNormal();
-		m_pos += defPosDir * m_returnDefPosSpeed;
+		m_pos += defPosDir * m_returnDefPosSpeed * SlowMgr::Instance()->m_slow;
 
 		// 移動速度を規定値に近づける。
-		m_returnDefPosSpeed += (RETURN_DEFPOS_SPEED - m_returnDefPosSpeed) / 20.0f;
+		m_returnDefPosSpeed += (RETURN_DEFPOS_SPEED - m_returnDefPosSpeed) / 20.0f * SlowMgr::Instance()->m_slow;
 
 	}
 	else {

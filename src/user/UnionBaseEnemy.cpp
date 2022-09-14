@@ -2,6 +2,7 @@
 #include "BulletMgr.h"
 #include "UnionEnemy.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 UnionBaseEnemy::UnionBaseEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {

@@ -33,7 +33,7 @@ private:
 	const float SCALE = 1.0f;
 	const float BOOST_SCALE = 20.0f;
 	bool m_isEdge;				// 縁にいるか
-	int m_brakeBoostTimer;
+	float m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
 
 	// マウス座標に設置するモデル。
@@ -45,8 +45,9 @@ private:
 	float m_movedLength;
 
 	// フィーバー状態か
+	bool m_isPrevFever;
 	bool m_isFever;
-	int m_feverTime;
+	float m_feverTime;
 	const int FEVER_TIME = 600;
 	const int FEVER_TIME_GAME_TIMER = 10;
 
@@ -65,7 +66,7 @@ private:
 
 
 	// ダメージ時
-	int m_damageEffectTimer;	// ダメージエフェクトの点滅に使用するタイマー
+	float m_damageEffectTimer;	// ダメージエフェクトの点滅に使用するタイマー
 	const int DAMAGE_EFFECT_DRAW_CHANGE_SPAN = 4;
 	int m_damageEffectCount;	// 点滅の回数
 	const int DAMAGE_EFFECT_COUNT = 3;
@@ -73,7 +74,7 @@ private:
 	bool m_isDamageEffectDrawPlayer;
 
 	// チュートリアル用。
-	int m_dashCounter;
+	float m_dashCounter;
 
 	// ドリフト
 	std::array<std::shared_ptr<DriftParticle>, 128> m_driftParticle;
@@ -84,7 +85,7 @@ private:
 	float m_rotX;
 
 	// 弾関係
-	int m_shotTimer;
+	float m_shotTimer;
 	const float SHOT_TIMER = 5;
 
 	// ブレーキ関係
@@ -103,6 +104,7 @@ private:
 
 	PlayerModelOutline m_outlineModel;
 	std::unique_ptr<PlayerDashLighting> m_dashLight;
+
 public:
 
 	float MIN_SPEED = 0.7f;	// 最小の移動速度
@@ -134,6 +136,8 @@ public:
 	Vec3<float>* GetPosPtr() { return &m_pos; };
 	const float* GetInputRadianPtr() { return &inputATan2f; };
 	float GetInputRadian() { return inputATan2f; };
+	bool GetIsFeverTrigger() { return !m_isPrevFever && m_isFever; }
+	bool GetIsFeverEndTrigger() { return m_isPrevFever && !m_isFever; }
 
 private:
 

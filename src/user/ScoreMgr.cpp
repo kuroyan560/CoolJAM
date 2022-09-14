@@ -2,6 +2,7 @@
 #include "Font.h"
 #include "KuroEngine.h"
 #include "KuroFunc.h"
+#include "SlowMgr.h"
 
 void ScoreMgr::Init()
 {
@@ -26,13 +27,13 @@ void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
 
 	// 一次保存したスコアが0より上だったら。
 	if (0 < m_addScoreRegister) {
-		addScorePoint = m_addScoreRegister / 2.0f;
+		addScorePoint = m_addScoreRegister / 2.0f * SlowMgr::Instance()->m_slow;
 	}
 
 	// スコアを加算する。
 	m_prevScore = m_score;
-	m_score += addScorePoint;
-	m_addScoreRegister -= addScorePoint;
+	m_score += addScorePoint * SlowMgr::Instance()->m_slow;
+	m_addScoreRegister -= addScorePoint * SlowMgr::Instance()->m_slow;
 
 
 	// ここより以下はUIの話。
@@ -79,7 +80,7 @@ void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
 	}
 
 
-	m_easingTimer += AddEasingTimer;
+	m_easingTimer += AddEasingTimer * SlowMgr::Instance()->m_slow;
 	if (1.0f <= m_easingTimer) {
 
 		m_easingTimer = 1.0f;

@@ -20,6 +20,7 @@
 #include"StageFloor.h"
 #include"Font.h"
 #include"ScoreMgr.h"
+#include"SlowMgr.h"
 
 GameScene::GameScene()
 {
@@ -86,6 +87,11 @@ GameScene::GameScene()
 	m_returnTitlePosEasingTimer = 0;
 	m_transitionDelayTimer = 0;
 
+	SlowMgr::Instance()->Init();
+
+	m_isFeverCameraEffect = false;
+	m_feverNearCameraTimer = 0;
+
 }
 
 void GameScene::OnInitialize()
@@ -132,6 +138,11 @@ void GameScene::OnInitialize()
 	m_isCompleteUpper = false;
 	m_returnTitlePosEasingTimer = 0;
 	m_transitionDelayTimer = 0;
+
+	SlowMgr::Instance()->Init();
+
+	m_isFeverCameraEffect = false;
+	m_feverNearCameraTimer = 0;
 
 }
 
@@ -184,13 +195,67 @@ void GameScene::OnUpdate()
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
 
+		// 現在フィーバー状態だったらデフォルトに戻す。
+		if (m_environmentMgr->GetNowStatus() == EnvironmentMgr::FEVER) {
+
+			m_environmentMgr->ChangeStatus(EnvironmentMgr::DEFAULT);
+
+		}
+
 	}
 
 
 
+	// フィーバーのトリガーを取得
+	if (!m_isFeverCameraEffect) {
+		m_isFeverCameraEffect = m_player->GetIsFeverTrigger();
+	}
+	if (m_player->GetIsFeverEndTrigger()) {
+		// 通常状態にする。
+		m_environmentMgr->ChangeStatus(EnvironmentMgr::DEFAULT);
+	}
 
+	// フィーバー中のカメラ演出中だったら。
+	if (m_isFeverCameraEffect) {
+
+		SlowMgr::Instance()->m_baseSlow = 0.0f;
+
+		// 現在のタイマーの割合を求める。
+		float nowRate = static_cast<float>(m_feverNearCameraTimer) / static_cast<float>(FEVER_NEAR_CAMERA_TIMER);
+
+		// 現在のシェイク量。
+		float nowShake = nowRate * FEVER_SHAKE;
+		Vec3<float> shake = Vec3<float>(KuroFunc::GetRand(-nowShake, nowShake), KuroFunc::GetRand(-nowShake, nowShake), KuroFunc::GetRand(-nowShake, nowShake));
+
+		// カメラをプレイヤーに近づける。	
+		const float CAMERA_DISTANCE = 30.0f;
+		m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0) + shake;
+		m_nowEye += (m_baseEye - m_nowEye) / 3.0f;
+		m_gameCam->SetPos(m_nowEye);
+
+		// カメラの注視点を補間。
+		m_baseTarget = m_player->GetPos();
+		m_baseTarget.x += 3.0f;
+		m_nowTarget += (m_baseTarget - m_nowTarget) / 3.0f;
+		m_gameCam->SetTarget(m_nowTarget);
+
+
+		// 一定時間経過したらフィーバーのカメラ演出を終える。
+		++m_feverNearCameraTimer;
+		if (FEVER_NEAR_CAMERA_TIMER < m_feverNearCameraTimer) {
+
+			m_feverNearCameraTimer = 0;
+			m_isFeverCameraEffect = false;
+			SlowMgr::Instance()->m_baseSlow = 1.0f;
+
+			// フィーバー状態にする。
+			m_environmentMgr->ChangeStatus(EnvironmentMgr::FEVER);
+
+		}
+
+	}
 	// ゲームの状態に応じてカメラの位置を変える。
-	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
+	else if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
 		Vec3<float> playerVecX = -m_player->GetForwardVec();
 		const float CAMERA_DISTANCE = 80.0f;
@@ -237,6 +302,10 @@ void GameScene::OnUpdate()
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 
 	m_gameUI->Update();
+
+
+	SlowMgr::Instance()->Update();
+
 }
 
 #include "DrawFunc2D.h"

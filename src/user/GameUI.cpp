@@ -2,6 +2,7 @@
 #include"WaveUI.h"
 #include"UsersInput.h"
 #include"ScoreMgr.h"
+#include "SlowMgr.h"
 #include"GameStartTimerUI.h"
 
 GameUI::GameUI()
