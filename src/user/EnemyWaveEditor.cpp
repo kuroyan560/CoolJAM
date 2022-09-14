@@ -171,7 +171,14 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	//エネミー追加
 	if (ImGui::Button("AddEnemy"))
 	{
-		wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 60, 1);
+		if (!enemys.empty())
+		{
+			wave->AddEnemy(
+				enemys[m_enemyIdx].m_pos, enemys[m_enemyIdx].m_forwardVec,
+				enemys[m_enemyIdx].m_id, enemys[m_enemyIdx].m_generateFrame,
+				enemys[m_enemyIdx].m_shotTimer);
+			m_enemyIdx = static_cast<int>(enemys.size() - 1);
+		}
 	}
 
 	if (!enemys.empty())
