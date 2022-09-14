@@ -6,8 +6,9 @@
 #include"KuroFunc.h"
 #include"EnemyWaveLoader.h"
 #include "SlowMgr.h"
+#include"Player.h"
 
-void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr)
+void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr, Player& Player)
 {
 	//セーブするか聞く
 	if (m_saveMode)
@@ -80,11 +81,13 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			{
 				WaveMgr.Init(m_finalWaveTime, WaveMgr.m_waves[m_waveIdx]->m_waveStartFrame);
 				EnemyMgr.lock()->Init();
+				Player.Init();
 				m_test = true;
 			}
 			if (ImGui::MenuItem("FullTest", nullptr, nullptr, !m_test))
 			{
 				WaveMgr.Init(m_finalWaveTime);
+				Player.Init();
 				EnemyMgr.lock()->Init();
 				m_test = true;
 			}
@@ -150,7 +153,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		WaveMgr.m_waves.emplace_back(std::make_shared<EnemyWave>(1, false));
 	}
 	//ウェーブ選択
-	ImGui::DragInt("NowEditWave", &m_waveIdx, 1, 0, WaveMgr.m_waves.size() - 1);
+	ImGui::InputInt("NowEditWave", &m_waveIdx, 1, 0, WaveMgr.m_waves.size() - 1);
 
 	ImGui::Separator();
 
@@ -171,13 +174,25 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	//エネミー追加
 	if (ImGui::Button("AddEnemy"))
 	{
-		wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 60, 1);
+		if (!enemys.empty())
+		{
+			wave->AddEnemy(
+				enemys[m_enemyIdx].m_pos, enemys[m_enemyIdx].m_forwardVec,
+				enemys[m_enemyIdx].m_id, enemys[m_enemyIdx].m_generateFrame,
+				enemys[m_enemyIdx].m_shotTimer);
+			m_enemyIdx = static_cast<int>(enemys.size() - 1);
+		}
+		else
+		{
+			wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 60, 60);
+		}
 	}
 
 	if (!enemys.empty())
 	{
 		const int enemyCount = static_cast<int>(enemys.size());
 
+		ImGui::SameLine();
 		//エネミーを生成順にソート
 		if (ImGui::Button("Sort"))
 		{
@@ -186,8 +201,17 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				});
 		}
 
+		ImGui::Separator();
+		//一括変更
+		static int s_bulkChangeShotTimer = 60;
+		ImGui::InputInt("BulkChange_ShotTime", &s_bulkChangeShotTimer);
+		if (ImGui::Button("BulkChange"))
+		{
+			for (auto& e : enemys)e.m_shotTimer = s_bulkChangeShotTimer;
+		}
+
 		//エネミー一覧
-		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar))
+		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(280, 360), ImGuiWindowFlags_NoTitleBar))
 		{
 			for (int i = 0; i < enemyCount; ++i)
 			{
@@ -240,6 +264,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		if (ImGui::DragFloat3("ForwardVec", s_forwardVec), 0.05f)
 		{
 			enemy.m_forwardVec = { s_forwardVec[0],s_forwardVec[1],s_forwardVec[2] };
+			enemy.m_forwardVec.x = std::clamp(enemy.m_forwardVec.x, 0.0f, 1.0f);
+			enemy.m_forwardVec.y = std::clamp(enemy.m_forwardVec.y, 0.0f, 1.0f);
+			enemy.m_forwardVec.z = std::clamp(enemy.m_forwardVec.z, 0.0f, 1.0f);
+			if (enemy.m_forwardVec.IsZero())enemy.m_forwardVec = { 1,0,0 };
+			enemy.m_forwardVec.Normalize();
 		}
 
 		//銃撃の時間スパン
@@ -257,4 +286,30 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 
 
 	ImGui::End();
+}
+
+#include"DrawFunc3D.h"
+#include"Importer.h"
+#include"Model.h"
+void EnemyWaveEditor::DebugDraw(Camera& Cam, EnemyWaveMgr& WaveMgr)
+{
+	if (!m_isActive)return;
+	if (m_test)return;
+
+	static std::shared_ptr<Model>model;
+	if (!model)
+	{
+		model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+	}
+
+	auto& wave = WaveMgr.m_waves[m_waveIdx];
+
+	for (auto& e : wave->m_enemys)
+	{
+		Transform transform;
+		transform.SetPos(e.m_pos);
+		transform.SetScale(3.0f);
+		DrawFunc3D::DrawNonShadingModel(model, transform, Cam);
+		DrawFunc3D::DrawLine(Cam, e.m_pos, e.m_pos + e.m_forwardVec * 5.0f, Color(), 0.3f);
+	}
 }

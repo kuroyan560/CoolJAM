@@ -4,6 +4,8 @@
 class EnemyWaveMgr;
 class EnemyWave;
 class EnemyMgr;
+class Player;
+class Camera;
 class EnemyWaveEditor : public Singleton<EnemyWaveEditor>
 {
 private:
@@ -24,9 +26,10 @@ private:
 	bool m_saveMode = false;
 
 public:
-	void EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr);
+	void EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr, Player& Player);
 	bool CanWaveUpdate()
 	{
 		return !m_isActive || m_test;
 	}
+	void DebugDraw(Camera& Cam, EnemyWaveMgr& WaveMgr);
 };

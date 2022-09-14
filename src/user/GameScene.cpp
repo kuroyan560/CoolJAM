@@ -181,10 +181,10 @@ void GameScene::OnUpdate()
 		m_bulletMgr->Update(MAP_SIZE);
 
 		// 敵Waveクラスの更新処理。
-		//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
-		//{
-		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
-		//}
+		if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+		{
+			m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+		}
 
 	}
 	else {
@@ -421,6 +421,8 @@ void GameScene::OnDraw()
 		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
 		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
 
+		EnemyWaveEditor::Instance()->DebugDraw(*nowCam, *m_enemyWaveMgr);
+
 		m_player->DrawDebugInfo(*nowCam);
 
 	}
@@ -448,7 +450,7 @@ void GameScene::OnImguiDebug()
 	ImGui::End();
 
 	//ウェーブ編集
-	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr);
+	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr, *m_player);
 
 	m_gameUI->DrawImGui();
 }

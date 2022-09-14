@@ -82,13 +82,6 @@ void EnvironmentMgr::Update(const Vec3<float> &PlayerPos)
 		}
 	}
 
-
-	//デバッグ
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_S) && m_nextStatus == STATUS::NONE)
-	{
-		ChangeStatus(STATUS(1 - m_nowStatus));
-	}
-
 	m_lineLight->Update();
 
 }

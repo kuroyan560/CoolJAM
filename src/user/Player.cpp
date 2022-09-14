@@ -144,6 +144,8 @@ void Player::Init()
 	m_dashLight->Init(&m_pos);
 
 	m_modelObj->m_animator->Play("ToFloater", false, false);
+
+	m_firstInput = false;
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer, bool IsNoInput)
@@ -222,22 +224,24 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	Vec2<float> screenForwardVec = Vec2<float>(cosf(screenForwardAngle), sinf(screenForwardAngle));
 
 	// ベクトルの角度の差を求める。
-	bool isForward = true;
+	//bool isForward = true;
 	// 現在ドリフト中かどうかで入力を受け付ける角度を決める。
-	if (m_isBrake && screenForwardVec.Dot(mouseDir) < 0.99f) {
+	//if (m_isBrake && screenForwardVec.Dot(mouseDir) < 0.99f) {
 
-		isForward = false;
+	//	isForward = false;
 
-	}
-	if (!m_isBrake && screenForwardVec.Dot(mouseDir) < 0.9f) {
+	//}
+	//if (!m_isBrake && screenForwardVec.Dot(mouseDir) < 0.9f) {
 
-		isForward = false;
+	//	isForward = false;
 
-	}
+	//}
 
-	// ブレーキ入力を保存。
+	//// ブレーキ入力を保存。
 	bool oldBrake = m_isBrake;
-	m_isBrake = UsersInput::Instance()->MouseInput(LEFT) && !isForward;
+	m_isBrake = UsersInput::Instance()->MouseInput(LEFT)/* && !isForward*/;
+
+	if (!m_firstInput && m_isBrake)m_firstInput = true;
 
 	//タイヤアニメーション
 	if (!oldBrake && m_isBrake)	//フローター → タイヤ
@@ -333,6 +337,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 
 void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 {
+	if (!m_firstInput)return;
 
 	/*===== 移動処理 =====*/
 
@@ -380,7 +385,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		// ブレーキ状態の有無に応じて移動速度を変える。
 		if (m_isBrake) {
 
-			m_speed += (BRAKE_SPEED - m_speed) / 10.0f * SlowMgr::Instance()->m_slow;
+			m_speed += (BRAKE_SPEED - m_speed) / 60.0f * SlowMgr::Instance()->m_slow;
 
 		}
 
@@ -656,7 +661,7 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.8f);
 
 		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
-		const float AUTO_AIM_SCALE = 15.0f;
+		const float AUTO_AIM_SCALE = 60.0f;
 		if (nearestEnemy != Vec3<float>(-1, -1, -1) && Vec3<float>(nearestEnemy - m_pos).Length() <= AUTO_AIM_SCALE) {
 
 			shotEnemyPos = nearestEnemy;
@@ -695,6 +700,7 @@ void Player::DrawDebugInfo(Camera& Cam) {
 }
 
 #include"ShakeMgr.h"
+#include"EnemyWaveEditor.h"
 void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const float& MapSize, const float& EdgeScope)
 {
 
@@ -707,6 +713,9 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// エッジの判定。
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
 
+	//レベルデザイン中
+	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
+
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;
 
@@ -718,6 +727,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 		// ノックバックの移動量を設定。
 		m_knockBackVec = -m_pos.GetNormal();
 		m_knockBackSpeed = KNOCK_BACK_SPEED;
+		m_speed = 0.0f;
 
 	}
 
@@ -761,6 +771,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	}
 
 }
+
 
 void Player::Damage()
 {
