@@ -11,6 +11,7 @@
 #include "PlayerHP.h"
 #include"ModelAnimator.h"
 #include "SlowMgr.h"
+#include"AudioApp.h"
 
 Player::Player()
 {
@@ -82,6 +83,7 @@ Player::Player()
 
 	m_dashLight = std::make_unique<PlayerDashLighting>();
 
+	m_damageSE = AudioApp::Instance()->LoadAudio("resource/user/sound/damage.wav");
 }
 
 void Player::Init()
@@ -691,19 +693,8 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
 	if (0 < hitCount) {
-
 		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-		float prevHP = m_hp;
-		--m_hp;
-		if (m_hp <= 0) m_hp = 0;
-		if (m_hp <= 2 && 2 < prevHP) {
-			m_isChangeRed = true;
-			m_colorEasingTimer = 0;
-		}
-
+		Damage();
 	}
 
 	// ブースト量が一定以上だったらある程度の範囲の敵を倒す。
@@ -728,21 +719,26 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	// 敵との当たり判定。
 	if (EnemyMgr.lock()->CheckHitEnemy(m_pos, SCALE)) {
-
-		// 当たった判定。
-		m_damageEffectTimer = 0;
-		m_damageEffectCount = 0;
-		m_isDamageEffect = true;
-		float prevHP = m_hp;
-		--m_hp;
-		if (m_hp <= 0) m_hp = 0;
-		if (m_hp <= 2 && 2 < prevHP) {
-			m_isChangeRed = true;
-			m_colorEasingTimer = 0;
-		}
-
+		Damage();
 	}
 
+}
+
+void Player::Damage()
+{
+	// 当たった判定。
+	m_damageEffectTimer = 0;
+	m_damageEffectCount = 0;
+	m_isDamageEffect = true;
+	float prevHP = m_hp;
+	--m_hp;
+	if (m_hp <= 0) m_hp = 0;
+	if (m_hp <= 2 && 2 < prevHP) {
+		m_isChangeRed = true;
+		m_colorEasingTimer = 0;
+	}
+
+	AudioApp::Instance()->PlayWaveDelay(m_damageSE);
 }
 
 void Player::Finalize()

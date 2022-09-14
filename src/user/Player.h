@@ -105,6 +105,8 @@ private:
 	PlayerModelOutline m_outlineModel;
 	std::unique_ptr<PlayerDashLighting> m_dashLight;
 
+	int m_damageSE;
+
 public:
 
 	float MIN_SPEED = 0.7f;	// Å¬‚ÌˆÚ“®‘¬“x
