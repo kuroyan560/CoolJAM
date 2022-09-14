@@ -11,6 +11,7 @@ class GameStartTimer {
 	/*===== メンバ変数 =====*/
 
 	std::shared_ptr<TextureBuffer> m_timerTexture;	// タイマーのテクスチャ
+	const int m_se;
 
 	Vec2<float> m_timerPos;
 
@@ -36,7 +37,7 @@ public:
 
 	/*===== メンバ関数 =====*/
 
-	GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture);
+	GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture,const int& SE);
 	void Init();
 	void Update(const Vec2<float>& OffsetPos, const float& AddEasingTimer);
 	void Draw();
@@ -66,6 +67,9 @@ private:
 
 	bool m_isActive;
 	bool m_isStartGo;	// Goのテクスチャをスタートさせたか。
+
+	int m_countUpSE;
+	int m_countFinishSE;
 
 public:
 

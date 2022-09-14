@@ -1,16 +1,20 @@
 #include "GameStartTimerUI.h"
 #include "Font.h"
+#include"AudioApp.h"
 
 GameStartTimerUI::GameStartTimerUI()
 {
 
 	/*===== コンストラクタ =====*/
+	m_countUpSE = AudioApp::Instance()->LoadAudio("resource/user/sound/countUp.wav");
+	m_countFinishSE = AudioApp::Instance()->LoadAudio("resource/user/sound/countFinish.wav");
 
 	// 各クラスを生成。
-	m_timer[0] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[3], false);
-	m_timer[1] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[2], false);
-	m_timer[2] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[1], false);
-	m_timer[3] = std::make_shared<GameStartTimer>(D3D12App::Instance()->GenerateTextureBuffer("resource/user/go.png"), true);
+	m_timer[0] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[3], false, m_countUpSE);
+	m_timer[1] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[2], false, m_countUpSE);
+	m_timer[2] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[1], false, m_countUpSE);
+	m_timer[3] = std::make_shared<GameStartTimer>(D3D12App::Instance()->GenerateTextureBuffer("resource/user/go.png"),
+		true,m_countFinishSE);
 
 	for (auto& index : m_timer) {
 
@@ -21,7 +25,6 @@ GameStartTimerUI::GameStartTimerUI()
 	m_countTimer = 0;
 	m_isActive = false;
 	m_isStartGo = false;
-
 }
 
 void GameStartTimerUI::Init()
@@ -115,7 +118,8 @@ void GameStartTimerUI::Start()
 
 }
 
-GameStartTimer::GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture)
+GameStartTimer::GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture, const int& SE)
+	:m_se(SE)
 {
 
 	/*===== コンストラクタ =====*/
@@ -232,5 +236,6 @@ void GameStartTimer::Start()
 	m_isExit = false;
 	m_isAppear = true;
 	m_easingTimer = 0;
+	AudioApp::Instance()->PlayWaveDelay(m_se);
 
 }
