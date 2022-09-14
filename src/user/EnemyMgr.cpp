@@ -25,6 +25,7 @@ EnemyMgr::EnemyMgr()
 	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 	m_elecMushi = Importer::Instance()->LoadModel("resource/user/", "enemy_elecMushi.glb");
 	m_elecMushiHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit_elecMushi.glb");
+	m_coinModel = Importer::Instance()->LoadModel("resource/user/", "coin.glb");
 
 	//for (auto& index : m_enemy) {
 
@@ -194,10 +195,10 @@ void EnemyMgr::GenerateEnemy(std::shared_ptr<BaseEnemy>& Enemy, const Vec3<float
 		//Enemy = std::make_shared<DATABITS_16>(m_model, m_modelHit);
 		break;
 	case ENEMY_INFO::ID::ELEC_MUSHI:
-		Enemy = std::make_shared<ElecMushiEnemy>(m_elecMushi, m_modelHit);
+		Enemy = std::make_shared<ElecMushiEnemy>(m_elecMushi, m_elecMushiHit);
 		break;
 	case ENEMY_INFO::ID::COIN:
-		Enemy = std::make_shared<CoinEnemy>(m_elecMushi, m_modelHit);
+		Enemy = std::make_shared<CoinEnemy>(m_coinModel, m_coinModel);
 		break;
 	default:
 		break;
