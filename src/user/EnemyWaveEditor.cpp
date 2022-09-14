@@ -8,6 +8,13 @@
 #include "SlowMgr.h"
 #include"Player.h"
 
+EnemyWaveEditor::EnemyWaveEditor()
+{
+#ifdef _DEBUG
+	m_isActive = true;
+#endif
+}
+
 void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr, Player& Player)
 {
 	//ÉZÅ[ÉuÇ∑ÇÈÇ©ï∑Ç≠

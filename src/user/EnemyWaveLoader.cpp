@@ -52,14 +52,14 @@ std::vector<std::shared_ptr<EnemyWave>> EnemyWaveLoader::Load(const std::string&
 
     FILE* fp;
     fopen_s(&fp, (s_dir + FileName + s_extention).c_str(), "rb");
-    assert(fp != nullptr);
+    if (fp != nullptr)assert(0);
 
     //最後のウェーブの終了時間
-    assert(KuroFunc::LoadData(fp, &FinalWaveTime, sizeof(FinalWaveTime), 1));
+    if (!KuroFunc::LoadData(fp, &FinalWaveTime, sizeof(FinalWaveTime), 1))assert(0);
 
     //ウェーブ数
     int waveCount = 0;
-    assert(KuroFunc::LoadData(fp, &waveCount, sizeof(waveCount), 1));
+    if (!KuroFunc::LoadData(fp, &waveCount, sizeof(waveCount), 1))assert(0);
 
     //ウェーブ生成
     result.resize(waveCount);
@@ -70,17 +70,17 @@ std::vector<std::shared_ptr<EnemyWave>> EnemyWaveLoader::Load(const std::string&
 
         //エネミーの数
         int enemyCount = 0;
-        assert(KuroFunc::LoadData(fp, &enemyCount, sizeof(enemyCount), 1));
+        if (!KuroFunc::LoadData(fp, &enemyCount, sizeof(enemyCount), 1))assert(0);
 
         //エネミー生成情報
         result[i]->m_enemys.resize(enemyCount);
-        assert(KuroFunc::LoadData(fp, result[i]->m_enemys.data(), sizeof(ENEMY_INFO::SPAWN_INFO), enemyCount));
+        if (!KuroFunc::LoadData(fp, result[i]->m_enemys.data(), sizeof(ENEMY_INFO::SPAWN_INFO), enemyCount))assert(0);
 
         //ウェーブの開始フレーム
-        assert(KuroFunc::LoadData(fp, &result[i]->m_waveStartFrame, sizeof(result[i]->m_waveStartFrame), 1));
+        if (!KuroFunc::LoadData(fp, &result[i]->m_waveStartFrame, sizeof(result[i]->m_waveStartFrame), 1))assert(0);
 
         //ウェーブがボーナスステージか
-        assert(KuroFunc::LoadData(fp, &result[i]->m_isBounusStageFlag, sizeof(result[i]->m_isBounusStageFlag), 1));
+        if (!KuroFunc::LoadData(fp, &result[i]->m_isBounusStageFlag, sizeof(result[i]->m_isBounusStageFlag), 1))assert(0);
     }
 
     fclose(fp);
