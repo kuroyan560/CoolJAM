@@ -203,7 +203,7 @@ void Tutorial::Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> E
 			// カメラを寄せて敵を生成する。
 			m_isGenerateEnemy = true;
 			IsCameraHomePosition = false;
-			EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::STOPPING), MapSize);
+			EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::STOPPING), 120, MapSize);
 
 			// 出現していなかったら出現させる。
 			if (!m_Hexagon->GetIsAlive()) {
@@ -261,7 +261,7 @@ void Tutorial::Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> E
 			// カメラを寄せて敵を生成する。
 			m_isGenerateEnemy = true;
 			IsCameraHomePosition = false;
-			EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::ELEC_MUSHI), MapSize);
+			EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::ELEC_MUSHI), 120, MapSize);
 
 			// 出現していなかったら出現させる。
 			if (!m_Hexagon->GetIsAlive()) {
@@ -347,13 +347,13 @@ void Tutorial::Update(std::weak_ptr<Player> PlayerIns, std::weak_ptr<EnemyMgr> E
 				m_feverTutorialSpawnDelay = 0;
 
 				// 敵を生成する。
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, -1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MapSize);
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(-100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, 1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MapSize);
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, 100.0f), Vec3<float>(1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MapSize);
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, -100.0f), Vec3<float>(-1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, -1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), 120, MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(-100.0f, 0.0f, 0.0f), Vec3<float>(0, 0, 1), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), 120, MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, 100.0f), Vec3<float>(1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), 120, MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, -100.0f), Vec3<float>(-1, 0, 0), static_cast<int>(ENEMY_INFO::ID::TORUS_MOVE), 120, MapSize);
 
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), MapSize);
-				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, -50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), 120, MapSize);
+				EnemyMgrIns.lock()->Generate(PlayerIns.lock()->GetPos(), Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(), static_cast<int>(ENEMY_INFO::ID::TRACKING), 120, MapSize);
 
 			}
 

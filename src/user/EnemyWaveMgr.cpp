@@ -18,7 +18,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 	for (int index = 0; index < 200; ++index) {
 
-		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, (60 * index));
+		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
 
 	}
 

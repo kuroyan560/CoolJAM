@@ -90,18 +90,7 @@ void PlayerStraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec
 	Shot(BulletMgr, PlayerPos);
 
 	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	// HPUIの更新処理
 	for (auto& index : m_hpUI) {

@@ -44,7 +44,7 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &Play
 		}
 
 		// ¶¬‚·‚éB
-		EnemyMgr.lock()->Generate(PlayerPos, index.m_pos, forwardVec, static_cast<int>(index.m_id), MapSize);
+		EnemyMgr.lock()->Generate(PlayerPos, index.m_pos, forwardVec, static_cast<int>(index.m_id), index.m_shotTimer, MapSize);
 
 	}
 
@@ -59,7 +59,7 @@ void EnemyWave::AddEnemy(const ENEMY_INFO::SPAWN_INFO &EnemyInfo)
 
 }
 
-void EnemyWave::AddEnemy(const Vec3<float> &Pos, const Vec3<float> &ForwardVec, ENEMY_INFO::ID ID, const int &GenerateFrame)
+void EnemyWave::AddEnemy(const Vec3<float> &Pos, const Vec3<float> &ForwardVec, ENEMY_INFO::ID ID, const int &GenerateFrame, const int& ShotTimer)
 {
 
 	/*===== “G‚ð’Ç‰Á =====*/
@@ -70,6 +70,7 @@ void EnemyWave::AddEnemy(const Vec3<float> &Pos, const Vec3<float> &ForwardVec, 
 	enemyInfo.m_forwardVec = ForwardVec;
 	enemyInfo.m_id = ID;
 	enemyInfo.m_generateFrame = GenerateFrame;
+	enemyInfo.m_shotTimer = ShotTimer;
 
 	m_enemys.emplace_back(enemyInfo);
 

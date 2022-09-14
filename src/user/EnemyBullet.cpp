@@ -18,6 +18,7 @@ EnemyBullet::EnemyBullet() {
 	if (!s_model)
 	{
 		s_model = Importer::Instance()->LoadModel("resource/user/", "enemyBullet.glb");
+		
 	}
 	m_transform.SetScale(SCALE);
 
@@ -41,6 +42,7 @@ void EnemyBullet::Generate(const Vec3<float>& Pos, const Vec3<float>& ForwardVec
 	m_pos = Pos;
 	m_forwardVec = ForwardVec;
 	m_scale = SCALE;
+	m_transform.SetScale(14);
 	m_isActive = true;
 
 }

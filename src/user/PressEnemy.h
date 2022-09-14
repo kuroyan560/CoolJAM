@@ -26,9 +26,6 @@ private:
 	float m_returnDefTimer;
 	const int RETURN_DEF_TIMER = 120;
 
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
-
 	const float RETURN_DEFPOS_SPEED = 0.2f;
 
 

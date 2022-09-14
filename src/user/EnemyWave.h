@@ -52,8 +52,10 @@ namespace ENEMY_INFO {
 		Vec3<float> m_forwardVec;
 		ID m_id;
 		int m_generateFrame;
+		int m_shotTimer;
 
-		SPAWN_INFO() :m_pos(Vec3<float>()), m_forwardVec(Vec3<float>(0, 0, 1)), m_id(ID::STOPPING), m_generateFrame(0) {};
+		SPAWN_INFO() :m_pos(Vec3<float>()), m_forwardVec(Vec3<float>(0, 0, 1)), m_id(ID::STOPPING), m_generateFrame(0), m_shotTimer(0) {};
+
 	};
 
 
@@ -76,11 +78,11 @@ public:
 
 	/*===== ÉÅÉìÉoä÷êî =====*/
 
-	EnemyWave(const int &WaveStartFrame, const bool &BounusStageFlag);
+	EnemyWave(const int& WaveStartFrame, const bool& BounusStageFlag);
 	void Init();
 	void Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void AddEnemy(const ENEMY_INFO::SPAWN_INFO& EnemyInfo);
-	void AddEnemy(const Vec3<float>& Pos, const Vec3<float>& ForwardVec, ENEMY_INFO::ID ID, const int& GenerateFrame);
+	void AddEnemy(const Vec3<float>& Pos, const Vec3<float>& ForwardVec, ENEMY_INFO::ID ID, const int& GenerateFrame, const int& ShotTimer);
 
 	void Start();
 	void Stop();

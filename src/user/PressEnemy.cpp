@@ -184,18 +184,7 @@ void PressEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float&
 	/*===== 弾との当たり判定 =====*/
 
 	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-			Init();
-
-		}
-
-	}
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	int hitCount = 0;
 	// プレイヤー弾との当たり判定。
@@ -242,6 +231,6 @@ void PressEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pla
 
 	/*===== 弾射出処理 =====*/
 
-	if (!(m_id == ENEMY_INFO::ID::UNION)) return;
+	ShotBullet(BulletMgr, PlayerPos);
 
 }
