@@ -51,6 +51,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 
 	m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
+	assert(!m_waves.empty());
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
