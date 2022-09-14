@@ -23,6 +23,7 @@ private:
 	std::shared_ptr<Model> m_modelHit;
 	std::shared_ptr<Model> m_elecMushi;
 	std::shared_ptr<Model> m_elecMushiHit;
+	std::shared_ptr<Model>m_coinModel;
 
 	Color m_particleColor;
 public:
