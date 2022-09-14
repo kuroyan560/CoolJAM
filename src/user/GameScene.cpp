@@ -153,6 +153,8 @@ void GameScene::OnInitialize()
 	ShakeMgr::Instance()->Init();
 
 	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
+
+	m_gameUI->Start();
 }
 
 void GameScene::OnUpdate()

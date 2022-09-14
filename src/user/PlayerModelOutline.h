@@ -3,12 +3,13 @@
 #include<memory>
 #include "Model.h"
 #include "Transform.h"
+#include"../engine/Object.h"
 
 class PlayerModelOutline
 {
 public:
 	PlayerModelOutline();
-	void Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL);
+	void Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<ModelObject> MODEL);
 	void Update();
 	void Draw(Camera& CAMERA);
 	void ChangeColor(Color CharaColor);
@@ -24,7 +25,6 @@ public:
 	/// <param name="SPEED">強化中の点滅のスピードを調整する 0~100</param>
 	void PowerUpEffect(int SPEED);
 
-
 private:
 	//プレイヤーの座標
 	Vec3<float>* m_pos;
@@ -34,7 +34,7 @@ private:
 	float m_scale;
 	float m_baseScale;
 	DirectX::XMMATRIX* m_rotation;
-	std::shared_ptr<Model> m_model;
+	std::shared_ptr<ModelObject> m_model;
 	Color m_modelColor;
 	Transform m_transform;
 
