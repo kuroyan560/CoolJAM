@@ -181,10 +181,10 @@ void GameScene::OnUpdate()
 		m_bulletMgr->Update(MAP_SIZE);
 
 		// 敵Waveクラスの更新処理。
-		//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
-		//{
-		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
-		//}
+		if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+		{
+			m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+		}
 
 	}
 	else {
