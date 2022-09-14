@@ -170,6 +170,24 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 	m_waves.emplace_back(wave7);
 
 
+
+
+	// WAVE8‚ğì¬B
+	std::shared_ptr<EnemyWave> wave8 = std::make_shared<EnemyWave>(6500, true);
+
+
+	// ’´’e‚ğŒ‚‚Â“G‚ğo‚·
+	wave7->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 0, 60);
+
+
+	// ‚¨‘f“G‚ğ“|‚·
+	wave7->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::PRESS, 360, 300);
+
+
+	// WAVE8‚ğ’Ç‰ÁB
+	m_waves.emplace_back(wave8);
+
+
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
 
 	//for (int index = 0; index < 200; ++index) {
