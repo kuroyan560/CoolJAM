@@ -150,7 +150,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		WaveMgr.m_waves.emplace_back(std::make_shared<EnemyWave>(1, false));
 	}
 	//ウェーブ選択
-	ImGui::DragInt("NowEditWave", &m_waveIdx, 1, 0, WaveMgr.m_waves.size() - 1);
+	ImGui::InputInt("NowEditWave", &m_waveIdx, 1, 0, WaveMgr.m_waves.size() - 1);
 
 	ImGui::Separator();
 
@@ -198,9 +198,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				});
 		}
 
+		ImGui::Separator();
 		//一括変更
 		static int s_bulkChangeShotTimer = 60;
-		if (ImGui::InputInt("BulkChange_ShotTime", &s_bulkChangeShotTimer))
+		ImGui::InputInt("BulkChange_ShotTime", &s_bulkChangeShotTimer);
+		if (ImGui::Button("BulkChange"))
 		{
 			for (auto& e : enemys)e.m_shotTimer = s_bulkChangeShotTimer;
 		}
