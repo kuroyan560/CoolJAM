@@ -1,3 +1,4 @@
+
 #include "BaseEnemy.h"
 #include "BulletMgr.h"
 #include"AudioApp.h"
@@ -209,11 +210,11 @@ void BaseEnemy::CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> B
 
 	/*===== マップ端との当たり判定 =====*/
 
-	if (MapSize <= m_pos.Length() - EDGE_SIZE) {
+	if (MapSize - EDGE_SIZE <= m_pos.Length()) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
-		Damage(1, BulletMgr);
+		Damage(1000, BulletMgr);
 
 	}
 

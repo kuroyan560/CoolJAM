@@ -1,3 +1,4 @@
+
 #pragma once
 #include "Vec.h"
 #include <vector>
@@ -18,6 +19,7 @@ private:
 	float m_frameTimer;									// フレームのタイマー
 	int m_nowWaveIdx = -1;
 	int m_finalWaveTimer = 0;
+	int m_nowWaveMaxTimer;
 
 public:
 
