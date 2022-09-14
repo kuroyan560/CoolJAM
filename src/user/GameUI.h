@@ -26,6 +26,9 @@ public:
 	void Start();
 	bool IsResult();
 
+
+	int m_waveNum;
+
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
@@ -42,7 +45,6 @@ private:
 	void SetVec2(std::string TAG, Vec2<float> *VEC3);
 	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
 
-	int m_waveNum;
 	int m_nowWaveMaxTimer;
 
 	bool m_isStartFlag;

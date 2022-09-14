@@ -91,8 +91,6 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 			wave4->AddEnemy(Vec3<float>(KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100)), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::PLAYER_STRAIGHT, 180 + 60 * index, 90000);
 
 		}
-
-
 	}
 
 	// WAVE4Çí«â¡ÅB
