@@ -680,7 +680,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
 
 	//レベルデザイン中
-	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
+	//if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
 
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;

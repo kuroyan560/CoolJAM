@@ -4,7 +4,7 @@
 #include "SlowMgr.h"
 #include"EnemyWaveLoader.h"
 
-EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
+EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 {
 	/*===== コンストラクタ =====*/
 
@@ -14,14 +14,46 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	std::shared_ptr<EnemyWave> wave1 = std::make_shared<EnemyWave>(0, false);
 
 
+	wave1->AddEnemy(Vec3<float>(-30, 0, 30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+	wave1->AddEnemy(Vec3<float>(-30, 0, 0), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 180);
+	wave1->AddEnemy(Vec3<float>(-30, 0, -30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+	wave1->AddEnemy(Vec3<float>(0, 0, -30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+	wave1->AddEnemy(Vec3<float>(0, 0, 30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+	wave1->AddEnemy(Vec3<float>(30, 0, -30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+	wave1->AddEnemy(Vec3<float>(30, 0, 30), Vec3<float>(), ENEMY_INFO::ID::STOPPING, 0, 300);
+
+
+	wave1->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 600, 300);
+
+
+	// WAVE1を追加。
+	m_waves.emplace_back(wave1);
+
+
+
+
+	// WAVE2を作成。
+	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(3000, false);
+
+
+	wave2->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 0, 600);
+
+	wave2->AddEnemy(Vec3<float>(0, 0, -60), Vec3<float>(), ENEMY_INFO::ID::UNION, 120, 180);
+	wave2->AddEnemy(Vec3<float>(0, 0, 60), Vec3<float>(), ENEMY_INFO::ID::UNION, 120, 300);
+	wave2->AddEnemy(Vec3<float>(60, 0, 0), Vec3<float>(), ENEMY_INFO::ID::UNION, 120, 180);
+	wave2->AddEnemy(Vec3<float>(-60, 0, 0), Vec3<float>(), ENEMY_INFO::ID::UNION, 120, 300);
+
+	// WAVE2を追加。
+	m_waves.emplace_back(wave2);
+
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
 
-	for (int index = 0; index < 200; ++index) {
+	//for (int index = 0; index < 200; ++index) {
 
-		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
+	//	wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
 
-	}
+	//}
 
 	//wave1->AddEnemy(Vec3<float>(100.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, -1.0f), ENEMY_INFO::ID::ELEC_MUSHI, 600);
 
@@ -45,9 +77,9 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	// WAVE1を追加。
 	//m_waves.emplace_back(wave1);
 
-	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
-	wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60, 60);
-	m_waves.emplace_back(wave2);
+	//std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
+	//wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60, 60);
+	//m_waves.emplace_back(wave2);
 
 
 	//m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
@@ -65,10 +97,10 @@ void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 	for (auto& w : m_waves)w->Stop();
 
 	//一応スタート順でソート
-	std::sort(m_waves.begin(), m_waves.end(), [](std::shared_ptr<EnemyWave>& a, std::shared_ptr<EnemyWave>& b)
-		{
-			return a->WaveStartTime() < b->WaveStartTime();
-		});
+	//std::sort(m_waves.begin(), m_waves.end(), [](std::shared_ptr<EnemyWave>& a, std::shared_ptr<EnemyWave>& b)
+	//	{
+	//		return a->WaveStartTime() < b->WaveStartTime();
+	//	});
 
 	//一番
 	m_waves[0]->Start();
@@ -79,7 +111,7 @@ void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 	m_nowWaveMaxTimer = m_waves.front()->GetWaveEndFrameLocal();
 }
 
-void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
+void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 	/*===== 更新処理 =====*/
 
