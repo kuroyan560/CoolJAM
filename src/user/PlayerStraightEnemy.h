@@ -24,7 +24,7 @@ private:
 
 	std::array<std::shared_ptr<EnemyHP>, HP> m_hpUI;
 
-
+	bool m_wallTurn;
 
 public:
 

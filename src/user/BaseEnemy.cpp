@@ -211,7 +211,7 @@ void BaseEnemy::CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> B
 
 	/*===== マップ端との当たり判定 =====*/
 
-	if (MapSize - EDGE_SIZE <= m_pos.Length()) {
+	if (CheckHitMapEdge(MapSize)) {
 
 		m_pos = m_pos.GetNormal() * MapSize;
 
