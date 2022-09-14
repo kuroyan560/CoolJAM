@@ -382,14 +382,16 @@ void GameScene::OnDraw()
 
 	/*--- ’Êí•`‰æ ---*/
 
-	//ŠÂ‹«•`‰æ
-	m_environmentMgr->Draw(*nowCam);
+
 
 	// ƒ}ƒbƒv‚ð•`‰æ
 	StageFloor::Instance()->ScreenTargetSet(true);
 	m_gameUI->Draw();
 	m_bonusEffect->Draw();
 	StageFloor::Instance()->Draw();
+
+	//ŠÂ‹«•`‰æ
+	m_environmentMgr->Draw(*nowCam);
 
 	//ƒvƒŒƒCƒ„[•`‰æ
 	m_player->Draw(*nowCam);
