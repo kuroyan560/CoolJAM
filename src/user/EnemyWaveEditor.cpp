@@ -264,6 +264,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		if (ImGui::DragFloat3("ForwardVec", s_forwardVec), 0.05f)
 		{
 			enemy.m_forwardVec = { s_forwardVec[0],s_forwardVec[1],s_forwardVec[2] };
+			enemy.m_forwardVec.Normalize();
 		}
 
 		//eŒ‚‚ÌŽžŠÔƒXƒpƒ“
