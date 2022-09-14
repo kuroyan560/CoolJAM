@@ -17,7 +17,7 @@ void ScoreMgr::Init()
 
 }
 
-void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
+void ScoreMgr::Update(const Vec2<float>& Offset, const Vec2<float>& CenterOffset, const float& AddEasingTimer)
 {
 
 	/*===== 更新処理 =====*/
@@ -60,7 +60,7 @@ void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
 		Vec2<float> basePos = MIDDLE_POS;
 		if (m_isCenter) {
 
-			basePos = CENTER_POS;
+			basePos = CENTER_POS + Offset + CenterOffset;
 
 		}
 
@@ -75,7 +75,7 @@ void ScoreMgr::Update(const Vec2<float>& Offset, const float& AddEasingTimer)
 		float easingAmount = KuroMath::Ease(InOut, Cubic, m_easingTimer, 0.0f, 1.0f);
 
 		// 座標を設定。
-		m_pos = (MIDDLE_POS + Offset) + ((CENTER_POS + Offset) - (MIDDLE_POS + Offset)) * easingAmount;
+		m_pos = (MIDDLE_POS + Offset) + ((CENTER_POS + Offset + CenterOffset) - (MIDDLE_POS + Offset)) * easingAmount;
 
 	}
 
