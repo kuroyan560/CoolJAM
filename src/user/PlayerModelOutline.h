@@ -36,6 +36,8 @@ private:
 	std::shared_ptr<Model> m_model;
 	Color m_modelColor;
 	Transform m_transform;
+	
+	bool m_firstFlameFlag;
 	//ƒ‚ƒfƒ‹‚Ìó‘Ô----------
 
 
