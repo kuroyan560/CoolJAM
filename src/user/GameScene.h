@@ -7,6 +7,7 @@
 #include<memory>
 #include"GameTimer.h"
 #include"LightBloomDevice.h"
+#include"BonusEffect.h"
 
 class DepthStencil;
 class Player;
@@ -74,6 +75,8 @@ private:
 	std::unique_ptr<EnvironmentMgr>m_environmentMgr;
 
 	std::unique_ptr<GameTimer>m_gameTimer;
+
+	std::unique_ptr<BonusEffect>m_bonusEffect;
 
 	int m_bgm;
 

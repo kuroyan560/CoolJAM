@@ -65,6 +65,9 @@ GameScene::GameScene()
 	//BGM読み込み
 	m_bgm = AudioApp::Instance()->LoadAudio("resource/user/sound/bgm.wav", 0.1f);
 
+
+	m_bonusEffect = std::make_unique<BonusEffect>();
+
 }
 
 void GameScene::OnInitialize()
@@ -173,6 +176,19 @@ void GameScene::OnUpdate()
 
 
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
+
+
+
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_G))
+	{
+		m_bonusEffect->Start();
+	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_H))
+	{
+		m_bonusEffect->Stop();
+	}
+
+	m_bonusEffect->Update();
 }
 
 #include "DrawFunc2D.h"
@@ -181,9 +197,6 @@ void GameScene::OnDraw()
 	/*===== 描画処理 =====*/
 
 	// ステージのレンダーターゲットをセット。
-	StageFloor::Instance()->ScreenTargetSet(true);
-
-
 	m_enemyWaveMgr->Draw();
 
 
@@ -211,7 +224,9 @@ void GameScene::OnDraw()
 	m_environmentMgr->Draw(*nowCam);
 
 	//マップを描画
-	StageFloor::Instance()->ClearScreen();
+	StageFloor::Instance()->ScreenTargetSet(true);
+
+	m_bonusEffect->Draw();
 	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画

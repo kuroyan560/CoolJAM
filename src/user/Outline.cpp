@@ -8,7 +8,6 @@ Outline::Outline(std::shared_ptr<Model> MODEL, const Transform *TRANSFORM, const
 	m_model = MODEL;
 	m_color = COLOR;
 	m_transform = TRANSFORM;
-	//m_hitColor = Color(245, 93, 31, 255);
 	m_hitColor = ColorPalette::S_PINK_COLOR;
 }
 
@@ -26,30 +25,6 @@ void Outline::Draw(Camera &CAMERA, bool HIT_FLAG)
 	{
 		return;
 	}
-
-	if (UsersInput::Instance()->KeyInput(DIK_Z))
-	{
-		m_hitColor = ColorPalette::S_GREEN_COLOR;
-	}
-	if (UsersInput::Instance()->KeyInput(DIK_X))
-	{
-		m_hitColor = ColorPalette::S_PINK_COLOR;
-	}
-	if (UsersInput::Instance()->KeyInput(DIK_C))
-	{
-		m_hitColor = ColorPalette::S_LIGHT_PURPLE_COLOR;
-	}
-	if (UsersInput::Instance()->KeyInput(DIK_V))
-	{
-		m_hitColor = ColorPalette::S_DARK_PURPLE_COLOR;
-	}
-	if (UsersInput::Instance()->KeyInput(DIK_B))
-	{
-		m_hitColor = Color(245, 93, 31, 255);
-	}
-
-
-
 
 	Color nowColor = m_color;
 	if (HIT_FLAG)
