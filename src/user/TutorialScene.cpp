@@ -19,6 +19,7 @@
 #include"Tutorial.h"
 #include"StageFloor.h"
 #include"SlowMgr.h"
+#include"ShakeMgr.h"
 
 TutorialScene::TutorialScene()
 {
@@ -80,6 +81,8 @@ TutorialScene::TutorialScene()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	ShakeMgr::Instance()->Init();
+
 
 	SlowMgr::Instance()->Init();
 }
@@ -106,6 +109,8 @@ void TutorialScene::OnInitialize()
 	m_transitionDelayTimer = 0;
 
 	m_tutorial->Init();
+
+	ShakeMgr::Instance()->Init();
 
 	if (GameMode::Instance()->m_id == GameMode::ID::GAME) {
 
@@ -315,6 +320,11 @@ void TutorialScene::OnUpdate()
 
 
 	SlowMgr::Instance()->Update();
+
+	ShakeMgr::Instance()->Update();
+
+	// ƒJƒƒ‰‚ğ“®‚©‚·B
+	m_gameCam->SetPos(m_gameCam->GetPos() + ShakeMgr::Instance()->m_shake);
 
 }
 

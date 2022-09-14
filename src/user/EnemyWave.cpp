@@ -2,7 +2,7 @@
 #include "EnemyMgr.h"
 #include "SlowMgr.h"
 
-EnemyWave::EnemyWave(const int &WaveStartFrame, const bool &BounusStageFlag)
+EnemyWave::EnemyWave(const int& WaveStartFrame, const bool& BounusStageFlag)
 {
 
 	/*===== コンストラクタ =====*/
@@ -19,7 +19,7 @@ void EnemyWave::Init()
 	Stop();
 }
 
-void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &PlayerPos, const float &MapSize)
+void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 	/*===== 更新処理 ====*/
 	if (!m_startWaveFlag) {
@@ -30,7 +30,7 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &Play
 
 	++m_nowWaveFrame;
 
-	for (auto &index : m_enemys) {
+	for (auto& index : m_enemys) {
 
 		// 生成フレームが合っていなかったら処理を飛ばす。
 		if (index.m_generateFrame != m_nowWaveFrame) continue;
@@ -50,7 +50,7 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &Play
 
 }
 
-void EnemyWave::AddEnemy(const ENEMY_INFO::SPAWN_INFO &EnemyInfo)
+void EnemyWave::AddEnemy(const ENEMY_INFO::SPAWN_INFO& EnemyInfo)
 {
 
 	/*===== 敵を追加 =====*/
@@ -59,7 +59,7 @@ void EnemyWave::AddEnemy(const ENEMY_INFO::SPAWN_INFO &EnemyInfo)
 
 }
 
-void EnemyWave::AddEnemy(const Vec3<float> &Pos, const Vec3<float> &ForwardVec, ENEMY_INFO::ID ID, const int &GenerateFrame, const int& ShotTimer)
+void EnemyWave::AddEnemy(const Vec3<float>& Pos, const Vec3<float>& ForwardVec, ENEMY_INFO::ID ID, const int& GenerateFrame, const int& ShotTimer)
 {
 
 	/*===== 敵を追加 =====*/
@@ -84,6 +84,18 @@ bool EnemyWave::IsBounusStage()
 int EnemyWave::WaveStartTime()
 {
 	return m_waveStartFrame;
+}
+
+int EnemyWave::GetWaveEndFrameLocal()
+{
+
+	if (0 < static_cast<int>(m_enemys.size())) {
+		return m_enemys.back().m_generateFrame;
+	}
+	else {
+		return 0;
+	}
+
 }
 
 void EnemyWave::Start()
