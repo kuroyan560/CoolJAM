@@ -65,7 +65,6 @@ void GameUI::Update(const int &NowWaveMaxTimer)
 		ScoreMgr::Instance()->Center();
 	}
 
-
 	m_nowWaveMaxTimer = NowWaveMaxTimer;
 
 
@@ -95,6 +94,20 @@ void GameUI::DrawImGui()
 	SetVec2("Timer", &m_timer->timerPos);
 	SetVec2("Wave", &m_wavePos);
 	SetVec2("Score", &m_scorePos);
+
+	SetVec2("Wave_StringPos", &waveOffsetData.m_stringPos);
+	SetVec2("Wave_StringSize", &waveOffsetData.m_stringSize);
+	SetVec2("Wave_NumPos", &waveOffsetData.m_numPos);
+	SetVec2("Wave_NumSize", &waveOffsetData.m_numSize);
+	SetVec2("Wave_ColorPos", &waveOffsetData.m_colonPos);
+	SetVec2("Wave_ColorSize", &waveOffsetData.m_colonSize);
+
+	SetVec2("Score_StringPos", &scoreOffsetData.m_stringPos);
+	SetVec2("Score_StringSize", &scoreOffsetData.m_stringSize);
+	SetVec2("Score_NumPos", &scoreOffsetData.m_numPos);
+	SetVec2("Score_NumSize", &scoreOffsetData.m_numSize);
+	SetVec2("Score_ColorPos", &scoreOffsetData.m_colonPos);
+	SetVec2("Score_ColorSize", &scoreOffsetData.m_colonSize);
 	ImGui::End();
 }
 

@@ -16,7 +16,7 @@ class GameUI
 public:
 	GameUI();
 	void Init();
-	void Update(const int& NowWaveMaxTimer);
+	void Update(const int &NowWaveMaxTimer);
 	void Draw();
 	void Draw2D();
 
@@ -35,12 +35,19 @@ private:
 	Vec2<float>m_scorePos;
 	Vec2<float>m_gameStartTimerOffsetPos;
 
-	void SetVec2(std::string TAG, Vec2<float>* VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
+	void SetVec2(std::string TAG, Vec2<float> *VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
 
 	int m_waveNum;
 	int m_nowWaveMaxTimer;
 
 	bool m_isStartFlag;
 	bool m_endCountDownFlag;
+
+	struct AdjData
+	{
+		Vec2<float> m_stringPos, m_stringSize, m_numPos, m_numSize, m_colonPos, m_colonSize;
+	};
+
+	AdjData waveOffsetData, scoreOffsetData;
 };
