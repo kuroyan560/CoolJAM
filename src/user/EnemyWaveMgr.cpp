@@ -33,7 +33,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE2を作成。
-	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(3000, false);
+	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(1500, false);
 
 
 	wave2->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 0, 600);
@@ -45,6 +45,77 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 	// WAVE2を追加。
 	m_waves.emplace_back(wave2);
+
+
+
+
+	// WAVE3を作成。
+	std::shared_ptr<EnemyWave> wave3 = std::make_shared<EnemyWave>(3000, false);
+
+	// 四方向から真ん中に向かって敵を沸かせる。
+	wave3->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 30, 600);
+	wave3->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 30, 600);
+	wave3->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 30, 600);
+	wave3->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 30, 600);
+
+	// 四方向から真ん中に向かって敵を沸かせる。
+	wave3->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180, 600);
+	wave3->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180, 600);
+	wave3->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180, 600);
+	wave3->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 180, 600);
+
+	// 四方向から真ん中に向かって敵を沸かせる。
+	wave3->AddEnemy(Vec3<float>(0, 0, -100), -Vec3<float>(0, 0, -100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 330, 600);
+	wave3->AddEnemy(Vec3<float>(0, 0, 100), -Vec3<float>(0, 0, 100).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 330, 600);
+	wave3->AddEnemy(Vec3<float>(100, 0, 0), -Vec3<float>(100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 330, 600);
+	wave3->AddEnemy(Vec3<float>(-100, 0, 0), -Vec3<float>(-100, 0, 0).GetNormal(), ENEMY_INFO::ID::STRAIGHT, 330, 600);
+
+	// WAVE3を追加。
+	m_waves.emplace_back(wave3);
+
+
+
+
+	// WAVE4を作成。
+	std::shared_ptr<EnemyWave> wave4 = std::make_shared<EnemyWave>(4500, false);
+
+	// エレキ虫を表示
+	wave4->AddEnemy(Vec3<float>(0, 0, 100), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::ELEC_MUSHI, 0, 90000);
+
+	// 敵をランダムに色々な方向にわかせる。
+	for (int index = 0; index < 5; ++index) {
+
+		for (int generate = 0; generate < 10; ++generate) {
+
+			wave4->AddEnemy(Vec3<float>(KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100)), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::PLAYER_STRAIGHT, 180 + 60 * index, 90000);
+
+		}
+
+
+	}
+
+	// WAVE4を追加。
+	m_waves.emplace_back(wave4);
+
+
+
+	// WAVE5を作成。
+	std::shared_ptr<EnemyWave> wave5 = std::make_shared<EnemyWave>(5700, true);
+
+
+	float rad = 0;
+	float length = MapSize;
+	for (int index = 0; index < 50; ++index) {
+
+		wave5->AddEnemy(Vec3<float>(cosf(rad) * length, 0.0f, sinf(rad) * length), Vec3<float>(), ENEMY_INFO::ID::COIN, 0, 900000);
+
+		length -= MapSize / 50.0f;
+		rad += 0.01f;
+
+	}
+
+	// WAVE5を追加。
+	m_waves.emplace_back(wave5);
 
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
