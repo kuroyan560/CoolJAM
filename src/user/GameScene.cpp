@@ -160,7 +160,7 @@ void GameScene::OnUpdate()
 	/*===== 更新処理 =====*/
 
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -200,7 +200,7 @@ void GameScene::OnUpdate()
 
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)||m_gameUI->IsResult())
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE) || m_gameUI->IsResult())
 	{
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
@@ -220,9 +220,13 @@ void GameScene::OnUpdate()
 	if (!m_isFeverCameraEffect) {
 		m_isFeverCameraEffect = m_player->GetIsFeverTrigger();
 	}
-	if (m_player->GetIsFeverEndTrigger()) {
+	if (m_player->GetIsFeverEndTrigger() || UsersInput::Instance()->KeyOnTrigger(DIK_0)) {
 		// 通常状態にする。
 		m_environmentMgr->ChangeStatus(EnvironmentMgr::DEFAULT);
+	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_1))
+	{
+		m_environmentMgr->ChangeStatus(EnvironmentMgr::FEVER);
 	}
 
 	// フィーバー中のカメラ演出中だったら。
@@ -305,11 +309,11 @@ void GameScene::OnUpdate()
 	}
 	else if (m_enemyWaveMgr->IsNowWaveBounusStage())
 	{
-		m_environmentMgr->ChangeColor(Color(1.0f, 1.0f, 0.0f, 1.0f));
+		m_environmentMgr->BonusStage();
 	}
 	else
 	{
-		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+		m_environmentMgr->ChangeColor(ColorPalette::S_GREEN_COLOR);
 	}
 
 	if (m_enemyWaveMgr->IsNowWaveBounusStage())
@@ -366,7 +370,7 @@ void GameScene::OnDraw()
 
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 
 	//DrawFunc初期化
@@ -516,7 +520,7 @@ void GameScene::UpdateResult()
 	// 遷移が始まっていたら。
 
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 	if (m_isStartTransition) {
 
