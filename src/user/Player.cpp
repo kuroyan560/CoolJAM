@@ -688,7 +688,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// 壁際との当たり判定を行う。
 	if (MapSize - MAP_EDGE <= m_pos.Length()) {
 
-		Damage();
+		//Damage();
 
 		// ノックバックの移動量を設定。
 		m_knockBackVec = -m_pos.GetNormal();
