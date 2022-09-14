@@ -85,7 +85,7 @@ void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const 
 	OnGenerate(ID, PlayerPos, Pos, ForwardVec);
 	m_appearReticleTexIdx = 0;
 	m_appearTimer = APPEAR_TIME;
-	m_appearReticleHeight = KuroFunc::GetRand(1.0f, 3.0f);
+	m_appearReticleHeight = KuroFunc::GetRand(1.0f, 4.0f);
 	m_generatePos = Pos;
 	m_generateForwardVec = ForwardVec;
 	m_transform.SetPos(m_generatePos + Vec3<float>(0.0f, APPEAR_HEIGHT_OFFSET, 0.0f));
@@ -115,6 +115,7 @@ void BaseEnemy::Draw()
 		transform.SetRotate(Vec3<float>(0, 1, 0), m_appearReticleAngle);
 
 		float alpha = KuroMath::Ease(In, Circ, timer, APPEAR_TIME, 1.0f, 0.0f);
+		alpha = 1.0f;
 
 		DrawFunc_Append::DrawPlane(transform, s_appearReticleTex[m_appearReticleTexIdx], RenderTargetSwitch(alpha, 1.0f, 1.0f), AlphaBlendMode_Trans);
 	}
