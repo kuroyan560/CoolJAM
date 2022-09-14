@@ -37,7 +37,7 @@ ShieldEnemy::ShieldEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model>
 
 }
 
-void ShieldEnemy::Init()
+void ShieldEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

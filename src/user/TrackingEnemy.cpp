@@ -37,7 +37,7 @@ TrackingEnemy::TrackingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Mo
 
 }
 
-void TrackingEnemy::Init()
+void TrackingEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

@@ -38,7 +38,7 @@ TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void TorusMoveEnemy::Init()
+void TorusMoveEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

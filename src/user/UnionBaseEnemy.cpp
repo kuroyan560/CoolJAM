@@ -45,7 +45,7 @@ UnionBaseEnemy::UnionBaseEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void UnionBaseEnemy::Init()
+void UnionBaseEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

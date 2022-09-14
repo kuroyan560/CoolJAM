@@ -37,7 +37,7 @@ PlayerStraightEnemy::PlayerStraightEnemy(std::shared_ptr<Model> DefModel, std::s
 
 }
 
-void PlayerStraightEnemy::Init()
+void PlayerStraightEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

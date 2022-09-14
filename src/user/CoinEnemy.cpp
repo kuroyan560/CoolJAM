@@ -8,7 +8,7 @@ CoinEnemy::CoinEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> Dam
 	m_isActive = false;
 }
 
-void CoinEnemy::Init()
+void CoinEnemy::OnInit()
 {
 	m_isActive = false;
 }

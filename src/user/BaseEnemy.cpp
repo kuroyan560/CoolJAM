@@ -23,6 +23,11 @@ BaseEnemy::BaseEnemy()
 	}
 }
 
+void BaseEnemy::Init()
+{
+	OnInit();
+}
+
 void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 	if (m_appearTimer)
@@ -47,6 +52,25 @@ void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pl
 			if (5 <= m_appearReticleTexIdx)m_appearReticleTexIdx = 0;
 		}
 	}
+	else if (m_disappearTimer)
+	{
+		int timer = DISAPPEAR_TIME - m_disappearTimer;
+
+		m_disappearTimer--;
+
+		auto scale = KuroMath::Ease(In, Back, timer, DISAPPEAR_TIME, m_disAppearStartScale, { 0,0,0 });
+		m_transform.SetScale(scale);
+
+		auto angle = KuroMath::Ease(In, Back, timer, DISAPPEAR_TIME, 0.0f, Angle(DISAPPEAR_SPIN_DEGREE));
+		m_transform.SetFront(KuroMath::TransformVec3(m_disappearStartFront, KuroMath::RotateMat(Vec3<float>(0, 1, 0), angle)));
+
+		auto pos = m_transform.GetPos();
+		pos.y += KuroMath::Ease(In, Circ, timer, DISAPPEAR_TIME, 0.0f, DISAPPEAR_HEIGHT_OFFSET);
+		m_transform.SetPos(pos);
+
+		if (m_disappearTimer <= 0)Init();
+	}
+
 	else
 	{
 		OnUpdate(BulletMgr, PlayerPos, MapSize);
@@ -62,6 +86,8 @@ void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const 
 	m_generatePos = Pos;
 	m_generateForwardVec = ForwardVec;
 	m_transform.SetPos(m_generatePos + Vec3<float>(0.0f, APPEAR_HEIGHT_OFFSET, 0.0f));
+
+	m_disappearTimer = 0;
 }
 
 #include"DrawFunc_Append.h"
@@ -91,6 +117,15 @@ void BaseEnemy::Draw()
 	OnDraw();
 }
 
+void BaseEnemy::Disappear()
+{
+	m_disappearTimer = DISAPPEAR_TIME;
+	m_disAppearStartScale = m_transform.GetScale();
+	m_disappearStartFront = m_transform.GetFront();
+	m_disappearStartHeight = m_transform.GetPos().y;
+	m_disappear = true;
+}
+
 void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
 {
 
@@ -98,6 +133,8 @@ void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
 
 	m_hp -= Amount;
 	if (m_hp <= 0) {
+
+		m_disappear = false;
 
 		if (m_id == ENEMY_INFO::ID::ELEC_MUSHI) {
 			// ƒGƒŒƒL’Ž‚ªŽ€‚ñ‚¾B

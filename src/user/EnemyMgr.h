@@ -33,6 +33,9 @@ public:
 	void Init();
 	void Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_ptr<RenderTarget>EmmisiveMap, std::weak_ptr<DepthStencil>DepthStencil);
+	
+	//‘ŞU
+	void AllDisappear();
 
 	// ˆê”Ô‹ß‚­‚É‚¢‚é“G‚ÌêŠ‚ğ‚©‚¦‚·B
 	Vec3<float> SearchNearestEnemy(const Vec3<float>& Pos);

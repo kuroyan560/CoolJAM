@@ -21,19 +21,32 @@ class BaseEnemy {
 	static std::shared_ptr<Model>s_appearReticleModel;
 	static std::array<std::shared_ptr<TextureBuffer>, 5>s_appearReticleTex;
 
+	//ìoèÍââèo
 	static const int APPEAR_TIME = 90;
 	static const int APPEAR_HEIGHT_OFFSET = 60;
 	static const int RETICLE_TEX_CHANGE_SPAN = 5;
 	static const int RETICLE_SCALE_MAX = 60.0f;
 	static const int RETICLE_SCALE_MIN = 20.0f;
 
+	//ëﬁéUââèo
+	static const int DISAPPEAR_TIME = 60;
+	static const int DISAPPEAR_SPIN_DEGREE = 360 * 3;
+	static const int DISAPPEAR_HEIGHT_OFFSET = -3;
 
+	//ìoèÍââèo
 	int m_appearTimer;
 	int m_appearReticleTexIdx;
 	Angle m_appearReticleAngle;
 	float m_appearReticleHeight;
 	Vec3<float>m_generatePos;
 	Vec3<float>m_generateForwardVec;
+
+	//ëﬁéUââèo
+	bool m_disappear;
+	int m_disappearTimer;
+	Vec3<float>m_disAppearStartScale;
+	Vec3<float> m_disappearStartFront;
+	float m_disappearStartHeight;
 
 public:
 
@@ -56,6 +69,7 @@ public:
 	const int MIDDLE_SCORE_POINT = 600;
 	const int HIGHT_SCORE_POOINT = 900;
 
+	virtual void OnInit() = 0;
 	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
 	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
@@ -67,10 +81,11 @@ public:
 
 	BaseEnemy();
 	virtual ~BaseEnemy() {};
-	virtual void Init() = 0;
+	void Init();
 	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
 	void Draw();
+	void Disappear();
 
 	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
 
@@ -92,6 +107,8 @@ public:
 
 	bool AnnnounceHit()
 	{
+		if (m_disappearTimer)return false;
+
 		if (m_hp != m_prevHp || UsersInput::Instance()->KeyOnTrigger(DIK_M))
 		{
 			m_hitFlag = true;
@@ -135,6 +152,8 @@ public:
 	{
 		m_outline->Draw(CAMERA, m_hitFlag);
 	};
+
+	const bool& IsDisappear()const { return m_disappear; }
 
 private:
 	int m_prevHp;

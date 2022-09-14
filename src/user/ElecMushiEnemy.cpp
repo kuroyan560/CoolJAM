@@ -38,7 +38,7 @@ ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void ElecMushiEnemy::Init()
+void ElecMushiEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

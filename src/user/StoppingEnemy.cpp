@@ -37,7 +37,7 @@ StoppingEnemy::StoppingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Mo
 
 }
 
-void StoppingEnemy::Init()
+void StoppingEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/

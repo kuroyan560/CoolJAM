@@ -89,7 +89,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			}
 			if (ImGui::MenuItem("Stop", nullptr, nullptr, m_test))
 			{
-				EnemyMgr.lock()->Init();
+				EnemyMgr.lock()->AllDisappear();
 				m_test = false;
 			}
 			ImGui::EndMenu();

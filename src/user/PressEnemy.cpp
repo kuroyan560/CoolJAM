@@ -37,7 +37,7 @@ PressEnemy::PressEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> D
 
 }
 
-void PressEnemy::Init()
+void PressEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/
