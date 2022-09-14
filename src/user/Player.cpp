@@ -741,8 +741,11 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 }
 
+#include"EnemyWaveEditor.h"
 void Player::Damage()
 {
+	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
+
 	// “–‚½‚Á‚½”»’èB
 	m_damageEffectTimer = 0;
 	m_damageEffectCount = 0;

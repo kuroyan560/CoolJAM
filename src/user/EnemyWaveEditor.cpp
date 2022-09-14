@@ -6,8 +6,9 @@
 #include"KuroFunc.h"
 #include"EnemyWaveLoader.h"
 #include "SlowMgr.h"
+#include"Player.h"
 
-void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr)
+void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr, Player& Player)
 {
 	//ÉZÅ[ÉuÇ∑ÇÈÇ©ï∑Ç≠
 	if (m_saveMode)
@@ -80,11 +81,13 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			{
 				WaveMgr.Init(m_finalWaveTime, WaveMgr.m_waves[m_waveIdx]->m_waveStartFrame);
 				EnemyMgr.lock()->Init();
+				Player.Init();
 				m_test = true;
 			}
 			if (ImGui::MenuItem("FullTest", nullptr, nullptr, !m_test))
 			{
 				WaveMgr.Init(m_finalWaveTime);
+				Player.Init();
 				EnemyMgr.lock()->Init();
 				m_test = true;
 			}
@@ -278,4 +281,30 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 
 
 	ImGui::End();
+}
+
+#include"DrawFunc3D.h"
+#include"Importer.h"
+#include"Model.h"
+void EnemyWaveEditor::DebugDraw(Camera& Cam, EnemyWaveMgr& WaveMgr)
+{
+	if (!m_isActive)return;
+	if (m_test)return;
+
+	static std::shared_ptr<Model>model;
+	if (!model)
+	{
+		model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
+	}
+
+	auto& wave = WaveMgr.m_waves[m_waveIdx];
+
+	for (auto& e : wave->m_enemys)
+	{
+		Transform transform;
+		transform.SetPos(e.m_pos);
+		transform.SetScale(3.0f);
+		DrawFunc3D::DrawNonShadingModel(model, transform, Cam);
+		DrawFunc3D::DrawLine(Cam, e.m_pos, e.m_pos + e.m_forwardVec * 5.0f, Color(), 0.3f);
+	}
 }
