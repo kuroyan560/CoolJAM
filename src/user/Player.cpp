@@ -536,7 +536,7 @@ void Player::UpdateEffect()
 	m_outlineModel.Update();
 
 	//ダッシュ時のエフェクト
-	m_dashLight->Update(dashFlag);
+	m_dashLight->Update(dashFlag, m_isFever);
 
 	// ダメージエフェクトを更新。
 	m_damageEffect->Update();

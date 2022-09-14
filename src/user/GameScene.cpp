@@ -303,6 +303,10 @@ void GameScene::OnUpdate()
 	{
 		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
 	}
+	else if (m_enemyWaveMgr->IsNowWaveBounusStage())
+	{
+		m_environmentMgr->ChangeColor(Color(1.0f, 1.0f, 0.0f, 1.0f));
+	}
 	else
 	{
 		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
