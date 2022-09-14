@@ -30,5 +30,5 @@ void StageFloor::ScreenTargetSet(bool Clear)
 void StageFloor::Draw()
 {
 	m_modelObj->m_transform.SetRotate(m_rotate);
-	DrawFunc_Append::DrawModel(m_modelObj, RenderTargetSwitch(), false, false);
+	DrawFunc_Append::DrawModel(m_modelObj, RenderTargetSwitch(), false, true);
 }
