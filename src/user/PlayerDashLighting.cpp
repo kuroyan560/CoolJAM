@@ -33,10 +33,10 @@ void PlayerDashLighting::Init(Vec3<float> *POS)
 	m_roadIndex = -1;
 }
 
-void PlayerDashLighting::Update(bool ENABLE_FLAG)
+void PlayerDashLighting::Update(bool ENABLE_FLAG, bool FEVER_FLAG)
 {
 	m_timer += 1.0f * SlowMgr::Instance()->m_slow;
-	if (2 <= m_timer && ENABLE_FLAG)
+	if (2 <= m_timer && FEVER_FLAG)
 	{
 		float size = 5.0f;
 		Vec3<float>emittPos;

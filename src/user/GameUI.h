@@ -7,35 +7,63 @@
 #include"StageFloor.h"
 #include"GameTimer.h"
 #include"../engine/ImguiApp.h"
+#include"GameStartTimerUI.h"
+#include"OffsetData.h"
 
 class WaveUI;
-class GameStartTimerUI;
 
 class GameUI
 {
 public:
 	GameUI();
 	void Init();
-	void Update();
+	void Update(const int &NowWaveMaxTimer);
 	void Draw();
+	void Draw2D();
 
 	void DrawImGui();
 
 	void Start();
-	void AddWaveNum();
-	void Score(int SCORE);
+	bool IsResult();
+
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;
-	std::shared_ptr<GameStartTimerUI> m_gameStartTimerUI;
+	std::unique_ptr<GameStartTimerUI> m_gameStartTimerUI;
+	std::unique_ptr<GameStartTimerUI> m_gameEndTimerUI;
 
 	Vec2<float>m_wavePos;
 	Vec2<float>m_scorePos;
 	Vec2<float>m_gameStartTimerOffsetPos;
 
-	void SetVec2(std::string TAG, Vec2<float>* VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
+	Vec2<float>m_waveCenterOffsetPos;
+	Vec2<float>m_scoreCenterOffsetPos;
+
+	void SetVec2(std::string TAG, Vec2<float> *VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
 
 	int m_waveNum;
+	int m_nowWaveMaxTimer;
 
+	bool m_isStartFlag;
+	bool m_endCountDownFlag;
+
+	bool m_resultFlag;
+
+	AdjData waveOffsetData, scoreOffsetData;
+
+	struct Flag
+	{
+		bool m_appearFlag;
+		bool m_centerFlag;
+		bool m_exitFlag;
+
+		void Init()
+		{
+			m_appearFlag = false;
+			m_centerFlag = false;
+			m_exitFlag = false;
+		};
+	};
+	Flag waveFlagData, scoreFlagData;
 };

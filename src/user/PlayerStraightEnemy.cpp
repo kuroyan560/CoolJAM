@@ -90,7 +90,7 @@ void PlayerStraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec
 	Shot(BulletMgr, PlayerPos);
 
 	// マップ外に出たら。
-	CheckHitMapEdge(MapSize, BulletMgr);
+	//CheckHitMapEdge(MapSize, BulletMgr);
 
 	// HPUIの更新処理
 	for (auto& index : m_hpUI) {
@@ -161,12 +161,18 @@ void PlayerStraightEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, con
 	/*===== 弾との当たり判定 =====*/
 
 	// マップ外判定。
-	if (MapSize + MapSize / 2.0f <= m_pos.Length()) {
+	if (CheckHitMapEdge(MapSize)) {
 
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		Init();
-
+		if (!m_wallTurn)
+		{
+			m_forwardVec = -m_forwardVec;
+			m_pos = m_pos.GetNormal() * MapSize;
+			m_wallTurn = true;
+		}
+	}
+	else
+	{
+		m_wallTurn = false;
 	}
 
 	int hitCount = 0;

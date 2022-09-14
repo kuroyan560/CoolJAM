@@ -39,7 +39,7 @@ public:
 
 	GameStartTimer(std::shared_ptr<TextureBuffer> TexBuffer, const bool& IsGoTexture,const int& SE);
 	void Init();
-	void Update(const Vec2<float>& OffsetPos, const float& AddEasingTimer);
+	void Update(const Vec2<float> &OffsetPos, const float &AddEasingTimer);
 	void Draw();
 
 	// oŒ»‚µ‚Ä‚¢‚éó‘Ô‚©
@@ -71,18 +71,20 @@ private:
 	int m_countUpSE;
 	int m_countFinishSE;
 
+	bool m_startFlag;
 public:
 
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
-	GameStartTimerUI();
+	GameStartTimerUI(std::array<std::shared_ptr<TextureBuffer>, 4> TIME);
 	void Init();
-	void Update(const Vec2<float>& OffsetPos, const float& AddEasingTimer);
+	void Update(const Vec2<float> &OffsetPos, const float &AddEasingTimer);
 	void Draw();
 
 	// oŒ»‚µ‚Ä‚¢‚éó‘Ô‚©
 	bool GetIsActive() { return m_isActive; }
 
 	void Start();
+	bool IsStart() { return m_startFlag; }
 
 };

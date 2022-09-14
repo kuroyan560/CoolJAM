@@ -11,6 +11,7 @@ class BulletMgr;
 
 class CoinEnemy :public BaseEnemy
 {
+	Angle m_angle;
 public:
 	CoinEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel);
 	void OnInit()override;

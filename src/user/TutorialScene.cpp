@@ -32,7 +32,6 @@ TutorialScene::TutorialScene()
 	m_depthStencil = D3D12App::Instance()->GenerateDepthStencil(backBuff->GetGraphSize());
 
 	m_player = std::make_shared<Player>();
-	m_grazeEmitter = std::make_unique<GrazeEmitter>();
 	m_player->Init();
 
 	m_gameCam = std::make_shared<Camera>(m_gameCamKey);
@@ -99,7 +98,6 @@ void TutorialScene::OnInitialize()
 
 	m_environmentMgr->Init();
 	m_player->Init();
-	m_grazeEmitter->Init(m_player->GetPosPtr(), m_player->GetInputRadianPtr());
 
 	m_isCameraHomePosition = true;
 	m_isTransitionStart = false;
@@ -150,7 +148,6 @@ void TutorialScene::OnUpdate()
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
 
-	m_grazeEmitter->Update(MAP_SIZE);
 
 	//ゲームマネージャ更新
 	GameManager::Instance()->Update();
@@ -167,6 +164,15 @@ void TutorialScene::OnUpdate()
 	}
 
 	// 柱の色を変える。
+	if (m_player->GetIsFever())
+	{
+		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
+	}
+	else
+	{
+		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
 	if (m_player->GetIsFever())
 	{
 		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
@@ -383,9 +389,6 @@ void TutorialScene::OnDraw()
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
-
-	m_grazeEmitter->Draw(*nowCam);
-
 	float radian = Angle::ConvertToRadian(90);
 	float cosRadian = cosf(m_player->GetInputRadian() + radian);
 	float sinRadian = sinf(m_player->GetInputRadian() + radian);

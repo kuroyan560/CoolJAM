@@ -21,7 +21,7 @@ GameTimer::GameTimer()
 	centerCoundDownAlpha = 0;
 
 	number.resize(12);
-	texSize = { 64,44 };
+	texSize = { 132,132 };
 
 	//TexHandleMgr::LoadDivGraph("resource/ChainCombat/UI/num.png", 12, { 12, 1 }, number.data());
 	for (int i = 0; i < textureBufferArray.size(); ++i)

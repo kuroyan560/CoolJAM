@@ -160,7 +160,7 @@ void GameScene::OnUpdate()
 	/*===== 更新処理 =====*/
 
 	//現在のカメラ取得
-	auto& nowCam = *GameManager::Instance()->GetNowCamera();
+	auto &nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -200,7 +200,8 @@ void GameScene::OnUpdate()
 
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)) {
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE) || m_gameUI->IsResult())
+	{
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
 
@@ -219,9 +220,13 @@ void GameScene::OnUpdate()
 	if (!m_isFeverCameraEffect) {
 		m_isFeverCameraEffect = m_player->GetIsFeverTrigger();
 	}
-	if (m_player->GetIsFeverEndTrigger()) {
+	if (m_player->GetIsFeverEndTrigger() || UsersInput::Instance()->KeyOnTrigger(DIK_0)) {
 		// 通常状態にする。
 		m_environmentMgr->ChangeStatus(EnvironmentMgr::DEFAULT);
+	}
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_1))
+	{
+		m_environmentMgr->ChangeStatus(EnvironmentMgr::FEVER);
 	}
 
 	// フィーバー中のカメラ演出中だったら。
@@ -302,16 +307,20 @@ void GameScene::OnUpdate()
 	{
 		m_environmentMgr->ChangeColor(m_enemyMgr->GetParticleColor());
 	}
+	else if (m_enemyWaveMgr->IsNowWaveBounusStage())
+	{
+		m_environmentMgr->BonusStage();
+	}
 	else
 	{
-		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+		m_environmentMgr->ChangeColor(ColorPalette::S_GREEN_COLOR);
 	}
 
-	if (m_enemyWaveMgr->IsNowWaveBounusStage() || UsersInput::Instance()->KeyInput(DIK_G))
+	if (m_enemyWaveMgr->IsNowWaveBounusStage())
 	{
 		m_bonusEffect->Start();
 	}
-	else if(m_bonusEffect->IsStart())
+	else if (m_bonusEffect->IsStart())
 	{
 		m_bonusEffect->Stop();
 	}
@@ -320,7 +329,18 @@ void GameScene::OnUpdate()
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 
-	m_gameUI->Update();
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_H))
+	{
+		m_gameUI->Start();
+	}
+
+	if (m_isCompleteUpper)
+	{
+		m_gameUI->Init();
+	}
+
+
+	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 
 
 	SlowMgr::Instance()->Update();
@@ -350,7 +370,7 @@ void GameScene::OnDraw()
 
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 
 	//DrawFunc初期化
@@ -382,6 +402,8 @@ void GameScene::OnDraw()
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
+
+	m_gameUI->Draw2D();
 
 	// 戻るのアイコンを描画。
 	DrawFunc2D::DrawExtendGraph2D(RETURN_ICON_POS - m_returnIconSize, RETURN_ICON_POS + m_returnIconSize, m_returnTexture);
@@ -498,7 +520,7 @@ void GameScene::UpdateResult()
 	// 遷移が始まっていたら。
 
 	//現在のカメラ取得
-	auto& nowCam = GameManager::Instance()->GetNowCamera();
+	auto &nowCam = GameManager::Instance()->GetNowCamera();
 
 	if (m_isStartTransition) {
 

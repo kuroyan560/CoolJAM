@@ -78,6 +78,10 @@ public:
 	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
+	bool CheckHitMapEdge(const float& MapSize)
+	{
+		return MapSize - EDGE_SIZE <= m_pos.Length();
+	}
 public:
 	static const int &DamageSE() { return s_damageSE; }
 	static const int &DeadSE() { return s_deadSE; }

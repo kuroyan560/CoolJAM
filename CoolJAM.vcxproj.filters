@@ -252,6 +252,7 @@
     <ClInclude Include="src\user\SlowMgr.h" />
     <ClInclude Include="src\user\BonusEffect.h" />
     <ClInclude Include="src\user\ShakeMgr.h" />
+    <ClInclude Include="src\user\OffsetData.h" />
     <ClInclude Include="src\user\PlayerDamageEffect.h" />
     <ClInclude Include="src\user\PlayerArrow.h" />
   </ItemGroup>

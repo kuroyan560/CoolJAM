@@ -378,6 +378,7 @@
     <ClInclude Include="src\user\KazDrawFunc.h" />
     <ClInclude Include="src\user\LightBlock.h" />
     <ClInclude Include="src\user\LineLight.h" />
+    <ClInclude Include="src\user\OffsetData.h" />
     <ClInclude Include="src\user\Outline.h" />
     <ClInclude Include="src\user\PlayerArrow.h" />
     <ClInclude Include="src\user\PlayerBullet.h" />
