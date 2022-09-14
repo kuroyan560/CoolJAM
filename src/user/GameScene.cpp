@@ -200,7 +200,8 @@ void GameScene::OnUpdate()
 
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)) {
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)||m_gameUI->IsResult())
+	{
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
 
@@ -307,11 +308,11 @@ void GameScene::OnUpdate()
 		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
-	if (m_enemyWaveMgr->IsNowWaveBounusStage() || UsersInput::Instance()->KeyInput(DIK_G))
+	if (m_enemyWaveMgr->IsNowWaveBounusStage())
 	{
 		m_bonusEffect->Start();
 	}
-	else if(m_bonusEffect->IsStart())
+	else if (m_bonusEffect->IsStart())
 	{
 		m_bonusEffect->Stop();
 	}
@@ -320,7 +321,18 @@ void GameScene::OnUpdate()
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 
-	m_gameUI->Update();
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_H))
+	{
+		m_gameUI->Start();
+	}
+
+	if (m_isCompleteUpper)
+	{
+		m_gameUI->Init();
+	}
+
+
+	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 
 
 	SlowMgr::Instance()->Update();
@@ -382,6 +394,8 @@ void GameScene::OnDraw()
 
 	// フィーバーゲージを描画。
 	m_feverGauge->Draw();
+
+	m_gameUI->Draw2D();
 
 	// 戻るのアイコンを描画。
 	DrawFunc2D::DrawExtendGraph2D(RETURN_ICON_POS - m_returnIconSize, RETURN_ICON_POS + m_returnIconSize, m_returnTexture);

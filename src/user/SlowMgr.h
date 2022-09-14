@@ -19,8 +19,8 @@ public:
 
 		/*===== ‰Šú‰»ˆ— =====*/
 
-		m_slow = true;
-		m_baseSlow = true;
+		m_slow = 1.0f;
+		m_baseSlow = 1.0f;
 
 	}
 

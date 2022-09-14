@@ -71,7 +71,7 @@ private:
 
 	std::vector<ENEMY_INFO::SPAWN_INFO> m_enemys;	// 敵データ
 	int m_waveStartFrame;							// ウェーブ開始フレーム
-	float m_nowWaveFrame;								// このWaveが始まってからの経過時間。
+	float m_nowWaveFrame;							// このWaveが始まってからの経過時間。
 	bool m_isBounusStageFlag;
 	bool m_startWaveFlag;
 

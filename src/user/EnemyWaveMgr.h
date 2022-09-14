@@ -17,9 +17,9 @@ private:
 
 	std::vector<std::shared_ptr<EnemyWave>> m_waves;	// ウェーブ
 	float m_frameTimer;									// フレームのタイマー
+	int m_nowWaveMaxTimer;
 	int m_nowWaveIdx = -1;
 	int m_finalWaveTimer = 0;
-	int m_nowWaveMaxTimer;
 
 public:
 
@@ -32,4 +32,5 @@ public:
 
 	bool IsNowWaveBounusStage();
 	bool EndAllWaves() { return m_finalWaveTimer <= 0; }
+	int GetNowWaveMaxTimer() { return m_nowWaveMaxTimer; }
 };

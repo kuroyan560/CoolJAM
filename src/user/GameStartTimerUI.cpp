@@ -2,7 +2,7 @@
 #include "Font.h"
 #include"AudioApp.h"
 
-GameStartTimerUI::GameStartTimerUI()
+GameStartTimerUI::GameStartTimerUI(std::array<std::shared_ptr<TextureBuffer>, 4> TIME)
 {
 
 	/*===== コンストラクタ =====*/
@@ -10,11 +10,10 @@ GameStartTimerUI::GameStartTimerUI()
 	m_countFinishSE = AudioApp::Instance()->LoadAudio("resource/user/sound/countFinish.wav");
 
 	// 各クラスを生成。
-	m_timer[0] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[3], false, m_countUpSE);
-	m_timer[1] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[2], false, m_countUpSE);
-	m_timer[2] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[1], false, m_countUpSE);
-	m_timer[3] = std::make_shared<GameStartTimer>(D3D12App::Instance()->GenerateTextureBuffer("resource/user/go.png"),
-		true,m_countFinishSE);
+	m_timer[0] = std::make_shared<GameStartTimer>(TIME[0], false, m_countUpSE);
+	m_timer[1] = std::make_shared<GameStartTimer>(TIME[1], false, m_countUpSE);
+	m_timer[2] = std::make_shared<GameStartTimer>(TIME[2], false, m_countUpSE);
+	m_timer[3] = std::make_shared<GameStartTimer>(TIME[3], true,m_countFinishSE);
 
 	for (auto& index : m_timer) {
 
@@ -41,6 +40,7 @@ void GameStartTimerUI::Init()
 	m_countTimer = 0;
 	m_isActive = false;
 	m_isStartGo = false;
+	m_startFlag = false;
 
 }
 
@@ -80,7 +80,7 @@ void GameStartTimerUI::Update(const Vec2<float>& OffsetPos, const float& AddEasi
 	// GOを開始していて、GOのフラグが折れていたらこのクラスは終わり。
 	if (m_isStartGo && m_timer[3]->GetIsEnd()) {
 
-		Init();
+		m_startFlag = true;
 
 	}
 
