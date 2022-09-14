@@ -74,6 +74,9 @@ private:
 	float m_nowWaveFrame;								// このWaveが始まってからの経過時間。
 	bool m_isBounusStageFlag;
 	bool m_startWaveFlag;
+
+	//敵の生成数
+	int m_generateCount;
 public:
 
 	/*===== メンバ関数 =====*/
@@ -88,6 +91,8 @@ public:
 	void Stop();
 	bool IsBounusStage();
 	int WaveStartTime();
+
+	bool IsAllEnemyAppear()const { return m_generateCount == static_cast<int>(m_enemys.size()); }
 
 	int GetWaveStartFrame() { return m_waveStartFrame; }
 
