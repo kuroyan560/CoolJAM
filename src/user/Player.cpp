@@ -54,6 +54,8 @@ Player::Player()
 	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
 	m_mousePointer = std::make_shared<ModelObject>("resource/user/", "mousePoint3D.glb");
 
+	materialColor = m_modelObj->m_model->m_meshes[0].material->constData.pbr.baseColor;
+
 	for (auto& index : m_driftParticle) {
 
 		index = std::make_shared<DriftParticle>();
@@ -221,23 +223,9 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	float screenForwardAngle = atan2f(m_forwardVec.x, m_forwardVec.z);
 	Vec2<float> screenForwardVec = Vec2<float>(cosf(screenForwardAngle), sinf(screenForwardAngle));
 
-	// ベクトルの角度の差を求める。
-	bool isForward = true;
-	// 現在ドリフト中かどうかで入力を受け付ける角度を決める。
-	if (m_isBrake && screenForwardVec.Dot(mouseDir) < 0.99f) {
-
-		isForward = false;
-
-	}
-	if (!m_isBrake && screenForwardVec.Dot(mouseDir) < 0.9f) {
-
-		isForward = false;
-
-	}
-
 	// ブレーキ入力を保存。
 	bool oldBrake = m_isBrake;
-	m_isBrake = UsersInput::Instance()->MouseInput(LEFT) && !isForward;
+	m_isBrake = UsersInput::Instance()->MouseInput(LEFT);
 
 	//タイヤアニメーション
 	if (!oldBrake && m_isBrake)	//フローター → タイヤ
@@ -454,6 +442,32 @@ void Player::UpdateEffect()
 			m_damageEffectTimer = 0;
 
 		}
+
+		// アウトラインの色を赤にする。
+		m_outlineModel.ChangeColor(ColorPalette::S_RED);
+
+		// 自機の色を赤にする。	
+		m_modelObj->m_model->m_meshes[0].material->constData.pbr.baseColor = Vec3<float>(ColorPalette::S_RED.m_r, ColorPalette::S_RED.m_g, ColorPalette::S_RED.m_b);
+		m_modelObj->m_model->m_meshes[0].material->Mapping();
+
+		// 自機の色を赤にする。	
+		m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor = Vec3<float>(ColorPalette::S_RED.m_r, ColorPalette::S_RED.m_g, ColorPalette::S_RED.m_b);
+		m_modelObj->m_model->m_meshes[1].material->Mapping();
+
+	}
+	else {
+
+		// アウトラインの色を緑にする。
+		m_outlineModel.ChangeColor(ColorPalette::S_GREEN_COLOR);
+
+		// 自機の色を元に戻す。	
+		m_modelObj->m_model->m_meshes[0].material->constData.pbr.baseColor = materialColor;
+		m_modelObj->m_model->m_meshes[0].material->Mapping();
+
+		// 自機の色を緑にする。	
+		m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor = Vec3<float>(ColorPalette::S_GREEN_COLOR.m_r, ColorPalette::S_GREEN_COLOR.m_g, ColorPalette::S_GREEN_COLOR.m_b);
+		m_modelObj->m_model->m_meshes[1].material->Mapping();
+
 	}
 
 
@@ -485,76 +499,6 @@ void Player::UpdateEffect()
 		if (MAX_HP <= m_hp) {
 
 			m_hp = MAX_HP;
-
-		}
-
-	}
-
-	// 赤色に変えるフラグが経っていたら。
-	if (m_isChangeRed) {
-
-		bool isEnd = ChangeBodyColorEasing(0.1f, Sine, In, GREEN_HSV, RED_HSV, true);
-
-		// イージングが終わったら。
-		if (isEnd) {
-
-			m_isRed = true;
-			m_isChangeRed = false;
-			m_colorEasingTimer = 0.0f;
-
-		}
-
-	}
-
-	// 緑色に変えるフラグが立っていたら。
-	else if (m_isChangeGreen) {
-
-		bool isEnd = ChangeBodyColorEasing(0.1f, Sine, In, RED_HSV, GREEN_HSV, true);
-
-		if (isEnd) {
-
-			m_isChangeGreen = false;
-			m_colorEasingTimer = 0.0f;
-
-		}
-
-	}
-
-	// HPが3以下だったら自機を点滅させる。
-	else if (m_hp <= 2) {
-
-		// 赤の時。
-		if (m_isRed) {
-
-			// 赤でいる時間のタイマーを更新する。
-			++m_RedTime;
-			if (RED_TIME[m_hp] <= m_RedTime) {
-
-				// 一定時間経過してたらイージングで緑にする。
-				bool isEnd = ChangeBodyColorEasing(ADD_COLOR_EASING_TIMER[m_hp], Exp, In, RED_HSV, DARK_RED_HSV, false);
-
-				if (isEnd) {
-
-					m_isRed = false;
-					m_colorEasingTimer = 0.0f;
-
-				}
-
-			}
-
-		}
-		else {
-
-			// 一定時間経過してたらイージングで暗い赤にする。
-			bool isEnd = ChangeBodyColorEasing(ADD_COLOR_EASING_TIMER[m_hp], Exp, In, DARK_RED_HSV, RED_HSV, false);
-
-			if (isEnd) {
-
-				m_isRed = true;
-				m_colorEasingTimer = 0.0f;
-				m_RedTime = 0;
-
-			}
 
 		}
 
@@ -607,8 +551,9 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 	m_modelObj->m_transform.SetRotate(m_rotation);
 
 	if (m_isDamageEffectDrawPlayer) {
-		//DrawFunc3D::DrawNonShadingModel(m_model, m_transform, Cam);
+
 		DrawFunc_Append::DrawModel(m_modelObj);
+
 	}
 
 	// マウスのカーソルを描画
@@ -626,7 +571,11 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 
 	if (!IsTitle) {
 
-		m_outlineModel.Draw(Cam);
+		// アウトラインを描画
+		if (!m_isDamageEffect) {
+			m_outlineModel.Draw(Cam);
+		}
+
 		m_dashLight->Draw(Cam);
 
 		// 敵のHPの板ポリを描画
@@ -898,6 +847,14 @@ bool Player::ChangeBodyColorEasing(const float& AddEasingAmount, EASING_TYPE Eas
 	}
 	m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor = ColorPalette::HSVtoRGB(nowHSV);
 	m_modelObj->m_model->m_meshes[1].material->Mapping();
+
+	// アウトラインの色を変える。
+	Color outlineColor;
+	outlineColor.m_r = m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor.x;
+	outlineColor.m_g = m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor.y;
+	outlineColor.m_b = m_modelObj->m_model->m_meshes[1].material->constData.pbr.baseColor.z;
+	outlineColor.m_a = 1.0f;
+	m_outlineModel.ChangeColor(outlineColor);
 
 	return 1.0f <= m_colorEasingTimer;
 

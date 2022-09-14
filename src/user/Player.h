@@ -44,6 +44,8 @@ private:
 	float m_mousePointerScale;
 	const float MOUSE_POINTER_SCALE = 5.0f;
 
+	Vec3<float> materialColor;
+
 	// ìÆÇ¢ÇΩëçó 
 	float m_movedLength;
 

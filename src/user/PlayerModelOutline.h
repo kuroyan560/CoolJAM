@@ -8,9 +8,10 @@ class PlayerModelOutline
 {
 public:
 	PlayerModelOutline();
-	void Init(Vec3<float> *POS, DirectX::XMMATRIX *ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL);
+	void Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, float PLAYER_SCALE, float EXPAND_SCALE, std::shared_ptr<Model> MODEL);
 	void Update();
-	void Draw(Camera &CAMERA);
+	void Draw(Camera& CAMERA);
+	void ChangeColor(Color CharaColor);
 
 	/// <summary>
 	/// 呼んでいる間は強化完了演出を行う
@@ -26,17 +27,17 @@ public:
 
 private:
 	//プレイヤーの座標
-	Vec3<float> *m_pos;
+	Vec3<float>* m_pos;
 
 
 	//モデルの状態----------
 	float m_scale;
 	float m_baseScale;
-	DirectX::XMMATRIX *m_rotation;
+	DirectX::XMMATRIX* m_rotation;
 	std::shared_ptr<Model> m_model;
 	Color m_modelColor;
 	Transform m_transform;
-	
+
 	bool m_firstFlameFlag;
 	//モデルの状態----------
 
@@ -75,7 +76,7 @@ private:
 	Transform m_waveTransform;
 	float m_waveAlpha;
 
-	void Rate(float *T, float RATE, float MAX_RATE)
+	void Rate(float* T, float RATE, float MAX_RATE)
 	{
 		if (*T < MAX_RATE)
 		{
