@@ -23,8 +23,15 @@ class BaseEnemy {
 
 	static const int APPEAR_TIME = 90;
 	static const int APPEAR_HEIGHT_OFFSET = 60;
+	static const int RETICLE_TEX_CHANGE_SPAN = 5;
+	static const int RETICLE_SCALE_MAX = 60.0f;
+	static const int RETICLE_SCALE_MIN = 20.0f;
+
 
 	int m_appearTimer;
+	int m_appearReticleTexIdx;
+	Angle m_appearReticleAngle;
+	float m_appearReticleHeight;
 	Vec3<float>m_generatePos;
 	Vec3<float>m_generateForwardVec;
 
@@ -48,6 +55,7 @@ public:
 
 	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
 	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
+	virtual void OnDraw() = 0;
 public:
 	static const int &DamageSE() { return s_damageSE; }
 	static const int &DeadSE() { return s_deadSE; }
@@ -59,7 +67,7 @@ public:
 	virtual void Init() = 0;
 	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
 	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
-	virtual void Draw() = 0;
+	void Draw();
 
 	void Damage(const int &Amount, std::weak_ptr<BulletMgr> BulletMgr);
 

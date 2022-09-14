@@ -27,7 +27,7 @@ void CoinEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &
 	m_transform.SetScale(m_scale);
 }
 
-void CoinEnemy::Draw()
+void CoinEnemy::OnDraw()
 {
 	DrawFunc_Append::DrawModel(m_model, m_transform);
 }

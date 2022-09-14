@@ -159,7 +159,7 @@ void ShieldEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 }
 
 #include"DrawFunc_Append.h"
-void ShieldEnemy::Draw()
+void ShieldEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

@@ -154,7 +154,7 @@ void TorusMoveEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 }
 
 #include"DrawFunc_Append.h"
-void TorusMoveEnemy::Draw()
+void TorusMoveEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

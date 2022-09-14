@@ -39,13 +39,13 @@ public:
 	void Init()override;
 	void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)override;
 	void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
-	void Draw()override;
+	void OnDraw()override;
 
 private:
 
 	// ’e‚Æ‚Ì“–‚½‚è”»’èB
 	void CheckHitBullet(std::weak_ptr< BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos);
-
+	
 	// ’e‚ğŒ‚‚Âˆ—B
 	void Shot(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float>& PlayerPos);
 

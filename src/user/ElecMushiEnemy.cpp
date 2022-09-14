@@ -144,7 +144,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 #include"DrawFunc3D.h"
 #include"DrawFunc_Append.h"
-void ElecMushiEnemy::Draw()
+void ElecMushiEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

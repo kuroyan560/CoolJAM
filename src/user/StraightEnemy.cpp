@@ -138,7 +138,7 @@ void StraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<floa
 }
 
 #include"DrawFunc_Append.h"
-void StraightEnemy::Draw()
+void StraightEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

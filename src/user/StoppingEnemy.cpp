@@ -141,7 +141,7 @@ void StoppingEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<floa
 }
 
 #include"DrawFunc_Append.h"
-void StoppingEnemy::Draw()
+void StoppingEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

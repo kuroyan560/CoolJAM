@@ -150,7 +150,7 @@ void PressEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>&
 }
 
 #include"DrawFunc_Append.h"
-void PressEnemy::Draw()
+void PressEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/

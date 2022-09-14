@@ -35,7 +35,16 @@ void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pl
 		Angle radian = KuroMath::Ease(Out, Circ, timer, APPEAR_TIME, Angle::ROUND() * 3.0f, 0.0f);
 		m_transform.SetFront(KuroMath::TransformVec3(m_generateForwardVec, KuroMath::RotateMat(Vec3<float>(0, 1, 0), radian)));
 
+		m_appearReticleAngle += Angle::PI() / 180.0f;
+
 		m_appearTimer--;
+
+		if (m_appearTimer % RETICLE_TEX_CHANGE_SPAN == 0)
+		{
+			m_appearReticleTexIdx++;
+
+			if (5 <= m_appearReticleTexIdx)m_appearReticleTexIdx = 0;
+		}
 	}
 	else
 	{
@@ -46,10 +55,39 @@ void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pl
 void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 	OnGenerate(ID, PlayerPos, Pos, ForwardVec);
+	m_appearReticleTexIdx = 0;
 	m_appearTimer = APPEAR_TIME;
+	m_appearReticleHeight = KuroFunc::GetRand(1.0f, 3.0f);
 	m_generatePos = Pos;
 	m_generateForwardVec = ForwardVec;
 	m_transform.SetPos(m_generatePos + Vec3<float>(0.0f, APPEAR_HEIGHT_OFFSET, 0.0f));
+}
+
+#include"DrawFunc_Append.h"
+void BaseEnemy::Draw()
+{
+	//登場位置にレティクル描画
+	if (m_appearTimer)
+	{
+		Transform transform;
+
+		auto reticlePos = m_transform.GetPos();
+		reticlePos.y = m_appearReticleHeight;
+		transform.SetPos(reticlePos);
+
+		int timer = APPEAR_TIME - m_appearTimer;
+		float scale = KuroMath::Ease(Out, Exp, timer, APPEAR_TIME,
+			RETICLE_SCALE_MAX, RETICLE_SCALE_MIN);
+		transform.SetScale({ scale,1.0f,scale });
+
+		transform.SetRotate(Vec3<float>(0, 1, 0), m_appearReticleAngle);
+
+		float alpha = KuroMath::Ease(In, Circ, timer, APPEAR_TIME, 1.0f, 0.0f);
+
+		DrawFunc_Append::DrawPlane(transform, s_appearReticleTex[m_appearReticleTexIdx], RenderTargetSwitch(alpha, 0.0f, 1.0f), AlphaBlendMode_Trans);
+	}
+
+	OnDraw();
 }
 
 void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
