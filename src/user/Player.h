@@ -117,8 +117,8 @@ private:
 
 public:
 
-	float MIN_SPEED = 1.7f;	// 最小の移動速度
-	float MAX_SPEED = 3.6f;	// 最大の移動速度
+	float MIN_SPEED = 1.2f;	// 最小の移動速度
+	float MAX_SPEED = 3.0f;	// 最大の移動速度
 	float BRAKE_SPEED = 0.2f;
 
 	/*===== メンバ関数 =====*/

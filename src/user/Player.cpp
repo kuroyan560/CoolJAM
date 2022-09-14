@@ -385,7 +385,7 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		// ブレーキ状態の有無に応じて移動速度を変える。
 		if (m_isBrake) {
 
-			m_speed += (BRAKE_SPEED - m_speed) / 70.0f * SlowMgr::Instance()->m_slow;
+			m_speed += (BRAKE_SPEED - m_speed) / 60.0f * SlowMgr::Instance()->m_slow;
 
 		}
 
@@ -727,6 +727,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 		// ノックバックの移動量を設定。
 		m_knockBackVec = -m_pos.GetNormal();
 		m_knockBackSpeed = KNOCK_BACK_SPEED;
+		m_speed = 0.0f;
 
 	}
 
