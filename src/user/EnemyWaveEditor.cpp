@@ -211,8 +211,8 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		}
 
 		//エネミー一覧
-		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(280, 360), ImGuiWindowFlags_NoTitleBar))
-		{
+		//if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(280, 360), ImGuiWindowFlags_NoTitleBar))
+		//{
 			for (int i = 0; i < enemyCount; ++i)
 			{
 				const auto& info = enemys[i];
@@ -220,8 +220,8 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				if (ImGui::RadioButton(str.c_str(), &m_enemyIdx, i))m_enemyIdx = i;
 			}
 
-			ImGui::EndChild();
-		}
+			//ImGui::EndChild();
+		//}
 
 		//インデックス範囲超え防止
 		m_enemyIdx = std::clamp(m_enemyIdx, 0, enemyCount - 1);
