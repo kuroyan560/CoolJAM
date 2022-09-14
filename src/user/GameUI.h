@@ -8,6 +8,7 @@
 #include"GameTimer.h"
 #include"../engine/ImguiApp.h"
 #include"GameStartTimerUI.h"
+#include"OffsetData.h"
 
 class WaveUI;
 
@@ -38,8 +39,8 @@ private:
 	Vec2<float>m_waveCenterOffsetPos;
 	Vec2<float>m_scoreCenterOffsetPos;
 
-	void SetVec2(std::string TAG, Vec2<float>* VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
+	void SetVec2(std::string TAG, Vec2<float> *VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
 
 	int m_waveNum;
 	int m_nowWaveMaxTimer;
@@ -47,10 +48,7 @@ private:
 	bool m_isStartFlag;
 	bool m_endCountDownFlag;
 
-	struct AdjData
-	{
-		Vec2<float> m_stringPos, m_stringSize, m_numPos, m_numSize, m_colonPos, m_colonSize;
-	};
+	bool m_resultFlag;
 
 	AdjData waveOffsetData, scoreOffsetData;
 };

@@ -5,6 +5,7 @@
 #include "D3D12App.h"
 #include <array>
 #include <memory>
+#include"OffsetData.h"
 
 class ScoreMgr : public Singleton<ScoreMgr> {
 
@@ -44,7 +45,7 @@ public:
 
 	void Init();
 	void Update(const Vec2<float>& Offset, const Vec2<float>& CenterOffset, const float& AddEasingTimer);
-	void Draw();
+	void Draw(const AdjData &OFFSET_DATA);
 
 	// èoåªÇµÇƒÇ¢ÇÈèÛë‘Ç©
 	bool GetIsActive() { return m_isActive; }

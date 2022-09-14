@@ -326,6 +326,12 @@ void GameScene::OnUpdate()
 		m_gameUI->Start();
 	}
 
+	if (m_isCompleteUpper)
+	{
+		m_gameUI->Init();
+	}
+
+
 	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 
 

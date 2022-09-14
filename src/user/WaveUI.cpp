@@ -116,30 +116,30 @@ void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos, const Vec2
 }
 
 #include "DrawFunc2D.h"
-void WaveUI::Draw()
+void WaveUI::Draw(const AdjData &OFFSET_DATA)
 {
 
 	/*===== ï`âÊèàóù =====*/
 
 	if (!m_isActive) return;
 
-	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(-250.0f, 0.0f), Vec2<float>(1.0f, 1.0f), 0, m_waveTexture);
+	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(-250.0f, 0.0f)+ OFFSET_DATA.m_stringPos, Vec2<float>(1.0f, 1.0f) + Vec2<float>(OFFSET_DATA.m_stringSize, OFFSET_DATA.m_stringSize), 0, m_waveTexture);
 
 
 	if (m_nowWaveCountIndex[0] != -1) {
-		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(20.0f, 80.0f), Vec2<float>(1.25f, 1.25f), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[0]]);
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(20.0f, 80.0f)+ OFFSET_DATA.m_numPos, Vec2<float>(1.25f, 1.25f) + Vec2<float>(OFFSET_DATA.m_numSize, OFFSET_DATA.m_numSize), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[0]]);
 	}
 	if (m_nowWaveCountIndex[1] != -1) {
-		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(170.0f, 80.0f), Vec2<float>(1.25f, 1.25f), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[1]]);
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(170.0f, 80.0f) + OFFSET_DATA.m_numPos, Vec2<float>(1.25f, 1.25f) + Vec2<float>(OFFSET_DATA.m_numSize, OFFSET_DATA.m_numSize), 0, Font::Instance()->m_stripeFont[m_nowWaveCountIndex[1]]);
 	}
 
-	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(300.0f, 120.0f), Vec2<float>(0.5f, 0.5f), 0, Font::Instance()->m_stripeFont[11]);
+	DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(300.0f, 120.0f) + OFFSET_DATA.m_numPos, Vec2<float>(0.5f, 0.5f) + Vec2<float>(OFFSET_DATA.m_numSize, OFFSET_DATA.m_numSize), 0, Font::Instance()->m_stripeFont[11]);
 
 	if (m_maxWaveCountIndex[0] != -1) {
-		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(380.0f, 120.0f), Vec2<float>(0.5f, 0.5f), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[0]]);
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(380.0f, 120.0f) + OFFSET_DATA.m_numPos, Vec2<float>(0.5f, 0.5f) + Vec2<float>(OFFSET_DATA.m_numSize, OFFSET_DATA.m_numSize), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[0]]);
 	}
 	if (m_maxWaveCountIndex[1] != -1) {
-		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(450.0f, 120.0f), Vec2<float>(0.5f, 0.5f), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[1]]);
+		DrawFunc2D::DrawRotaGraph2D(m_wavePos + Vec2<float>(450.0f, 120.0f) + OFFSET_DATA.m_numPos, Vec2<float>(0.5f, 0.5f) + Vec2<float>(OFFSET_DATA.m_numSize, OFFSET_DATA.m_numSize), 0, Font::Instance()->m_stripeFont[m_maxWaveCountIndex[1]]);
 	}
 
 }

@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <array>
+#include"OffsetData.h"
 
 class WaveUI {
 	/*===== ƒƒ“ƒo•Ï” =====*/
@@ -39,7 +40,7 @@ public:
 	WaveUI(std::string File);
 	void Init(const int& MaxWave);
 	void Update(const int& NowWave, const Vec2<float>& OffsetPos, const Vec2<float>& CenterOffset, const float& AddEasingTimer);
-	void Draw();
+	void Draw(const AdjData &OFFSET_DATA);
 
 	// oŒ»‚µ‚Ä‚¢‚éó‘Ô‚©
 	bool GetIsActive() { return m_isActive; }

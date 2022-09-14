@@ -26,16 +26,30 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(10);
+	m_timer->Init(5);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
 	m_gameEndTimerUI->Init();
 	m_isStartFlag = false;
 	m_endCountDownFlag = false;
+	m_resultFlag = false;
 
 	m_timer->timerPos = { 388.0f,893.0f };
 	m_wavePos = { 0.0f,-2.0f };
-	m_scorePos = { 45.0f,-25.0f };
+	m_scorePos = { 45.0f,-15.0f };
+
+	waveOffsetData.m_stringPos = { 0.0f,-5.0f };
+	waveOffsetData.m_stringSize = 0.1f;
+	waveOffsetData.m_numPos = { -38.0f,0.0f };
+
+	scoreOffsetData.m_stringPos = { -35.0f,0.0f };
+	scoreOffsetData.m_stringSize = -0.1f;
+	scoreOffsetData.m_numPos = { 240.0f,0.0f };
+	scoreOffsetData.m_numSize = 0.2f;
+
+	m_waveCenterOffsetPos = { 1.0f,-91.0f };
+	m_scoreCenterOffsetPos = { 23.0f,239.0f };
+
 }
 
 void GameUI::Update(const int& NowWaveMaxTimer)
@@ -60,19 +74,14 @@ void GameUI::Update(const int& NowWaveMaxTimer)
 		m_endCountDownFlag = true;
 	}
 	//ƒQ[ƒ€I—¹
-	if (m_gameEndTimerUI->IsStart())
-	{
-		ScoreMgr::Instance()->Center();
-	}
-
 	m_nowWaveMaxTimer = NowWaveMaxTimer;
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_M)) {
-
+	if (m_gameEndTimerUI->IsStart() && !m_resultFlag)
+	{
 		m_waveUI->Center();
 		ScoreMgr::Instance()->Center();
-
+		m_resultFlag = true;
 	}
 
 
@@ -86,8 +95,8 @@ void GameUI::Update(const int& NowWaveMaxTimer)
 void GameUI::Draw()
 {
 	m_timer->Draw();
-	m_waveUI->Draw();
-	ScoreMgr::Instance()->Draw();
+	m_waveUI->Draw(waveOffsetData);
+	ScoreMgr::Instance()->Draw(scoreOffsetData);
 	m_gameStartTimerUI->Draw();
 }
 
@@ -104,18 +113,21 @@ void GameUI::DrawImGui()
 	SetVec2("Score", &m_scorePos);
 
 	SetVec2("Wave_StringPos", &waveOffsetData.m_stringPos);
-	SetVec2("Wave_StringSize", &waveOffsetData.m_stringSize);
+	ImGui::DragFloat("Wave_StringSize", &waveOffsetData.m_stringSize);
 	SetVec2("Wave_NumPos", &waveOffsetData.m_numPos);
-	SetVec2("Wave_NumSize", &waveOffsetData.m_numSize);
+	ImGui::DragFloat("Wave_NumSize", &waveOffsetData.m_numSize);
 	SetVec2("Wave_ColorPos", &waveOffsetData.m_colonPos);
-	SetVec2("Wave_ColorSize", &waveOffsetData.m_colonSize);
+	ImGui::DragFloat("Wave_ColonSize", &waveOffsetData.m_colonSize);
 
 	SetVec2("Score_StringPos", &scoreOffsetData.m_stringPos);
-	SetVec2("Score_StringSize", &scoreOffsetData.m_stringSize);
+	ImGui::DragFloat("Score_StringSize", &scoreOffsetData.m_stringSize);
 	SetVec2("Score_NumPos", &scoreOffsetData.m_numPos);
-	SetVec2("Score_NumSize", &scoreOffsetData.m_numSize);
+	ImGui::DragFloat("Score_NumSize", &scoreOffsetData.m_numSize);
 	SetVec2("Score_ColorPos", &scoreOffsetData.m_colonPos);
-	SetVec2("Score_ColorSize", &scoreOffsetData.m_colonSize);
+	ImGui::DragFloat("Score_ColonSize", &scoreOffsetData.m_colonSize);
+
+	SetVec2("m_waveCenterOffsetPos", &m_waveCenterOffsetPos);
+	SetVec2("m_scoreCenterOffsetPos", &m_scoreCenterOffsetPos);
 	ImGui::End();
 }
 
