@@ -35,8 +35,11 @@ private:
 	Vec2<float>m_scorePos;
 	Vec2<float>m_gameStartTimerOffsetPos;
 
-	void SetVec2(std::string TAG, Vec2<float> *VEC3);
-	void SetVec3(std::string TAG, Vec3<Angle> *VEC3);
+	Vec2<float>m_waveCenterOffsetPos;
+	Vec2<float>m_scoreCenterOffsetPos;
+
+	void SetVec2(std::string TAG, Vec2<float>* VEC3);
+	void SetVec3(std::string TAG, Vec3<Angle>* VEC3);
 
 	int m_waveNum;
 	int m_nowWaveMaxTimer;

@@ -43,7 +43,7 @@ public:
 	/*===== ƒƒ“ƒoŠÖ” =====*/
 
 	void Init();
-	void Update(const Vec2<float>& Offset, const float& AddEasingTimer);
+	void Update(const Vec2<float>& Offset, const Vec2<float>& CenterOffset, const float& AddEasingTimer);
 	void Draw();
 
 	// oŒ»‚µ‚Ä‚¢‚éó‘Ô‚©

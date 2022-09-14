@@ -46,7 +46,7 @@ void WaveUI::Init(const int& MaxWave)
 
 }
 
-void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos, const float& AddEasingTimer)
+void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos, const Vec2<float>& CenterOffset, const float& AddEasingTimer)
 {
 
 	/*===== 更新処理 =====*/
@@ -63,15 +63,32 @@ void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos, const floa
 		m_wavePos = APPEAR_POS + ((MIDDLE_POS + OffsetPos) - APPEAR_POS) * easingAmount;
 
 	}
-
 	// 退出中だったら。
-	if (m_isExit) {
+	else if (m_isExit) {
 
 		// イージング量を求める。
 		float easingAmount = KuroMath::Ease(In, Cubic, m_easingTimer, 0.0f, 1.0f);
 
+		// 補間元の座標。
+		Vec2<float> basePos = MIDDLE_POS;
+		if (m_isCenter) {
+
+			basePos = CENTER_POS + OffsetPos + CenterOffset;
+
+		}
+
 		// 座標を設定。
-		m_wavePos = (MIDDLE_POS + OffsetPos) + (EXIT_POS - (MIDDLE_POS + OffsetPos)) * easingAmount;
+		m_wavePos = (basePos + OffsetPos) + (EXIT_POS - (basePos + OffsetPos)) * easingAmount;
+
+	}
+	// 中央移行状態だったら。
+	else if (m_isCenter) {
+
+		// イージング量を求める。
+		float easingAmount = KuroMath::Ease(InOut, Cubic, m_easingTimer, 0.0f, 1.0f);
+
+		// 座標を設定。
+		m_wavePos = (MIDDLE_POS + OffsetPos) + ((CENTER_POS + OffsetPos + CenterOffset) - (MIDDLE_POS + OffsetPos)) * easingAmount;
 
 	}
 
@@ -146,6 +163,19 @@ void WaveUI::Exit()
 
 	m_isExit = true;
 	m_isAppear = false;
+	m_easingTimer = 0;
+
+}
+
+void WaveUI::Center()
+{
+
+	/*===== 中央移行処理 =====*/
+
+	m_isActive = true;
+	m_isAppear = false;
+	m_isExit = false;
+	m_isCenter = true;
 	m_easingTimer = 0;
 
 }
