@@ -44,12 +44,14 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 	// WAVE1Çí«â¡ÅB
 	//m_waves.emplace_back(wave1);
-
+#ifdef _DEBUG
 	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
 	wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60, 60);
 	m_waves.emplace_back(wave2);
-
-
+#else 
+	m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
+#endif
+	
 	//m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
 	//assert(!m_waves.empty());
 }
