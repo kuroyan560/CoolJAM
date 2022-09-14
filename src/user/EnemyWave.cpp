@@ -88,14 +88,16 @@ int EnemyWave::WaveStartTime()
 
 int EnemyWave::GetWaveEndFrameLocal()
 {
+	if (m_enemys.empty())return 0;
 
-	if (0 < static_cast<int>(m_enemys.size())) {
-		return m_enemys.back().m_generateFrame;
-	}
-	else {
-		return 0;
+	int min = 100000000;
+
+	for (auto& e : m_enemys)
+	{
+		if (e.m_generateFrame < min)min = e.m_generateFrame;
 	}
 
+	return min;
 }
 
 void EnemyWave::Start()

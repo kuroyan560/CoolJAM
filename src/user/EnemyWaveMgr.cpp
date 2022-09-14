@@ -51,10 +51,6 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 
 
 	m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
-
-	// 第1ウェーブの時間を計算。
-	m_nowWaveMaxTimer = m_waves.front()->GetWaveEndFrameLocal();
-
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
