@@ -45,7 +45,7 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& Play
 
 		// ¶¬‚·‚éB
 		EnemyMgr.lock()->Generate(PlayerPos, index.m_pos, forwardVec, static_cast<int>(index.m_id), index.m_shotTimer, MapSize);
-
+		m_generateCount++;
 	}
 
 }
@@ -102,6 +102,7 @@ void EnemyWave::Start()
 {
 	m_startWaveFlag = true;
 	m_nowWaveFrame = 0;
+	m_generateCount = 0;
 }
 
 void EnemyWave::Stop()
