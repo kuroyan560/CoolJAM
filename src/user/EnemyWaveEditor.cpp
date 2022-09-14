@@ -242,6 +242,12 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			enemy.m_forwardVec = { s_forwardVec[0],s_forwardVec[1],s_forwardVec[2] };
 		}
 
+		//銃撃の時間スパン
+		if (ImGui::DragInt("ShotTime", &enemy.m_shotTimer) && enemy.m_shotTimer < 0)
+		{
+			enemy.m_shotTimer = 0;	//マイナス防止
+		}
+
 		//エネミー削除
 		if (ImGui::Button("RemoveEnemy"))
 		{
