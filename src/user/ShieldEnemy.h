@@ -19,11 +19,8 @@ private:
 	float m_scale;				// 大きさ
 	float m_speed;				// 移動速度
 	const float SPEED = 0.6f;	// 移動速度のデフォルト値。
-	bool m_isActive;			// 生存フラグ
 	int m_hitEffectTimer;		// 弾に当たったフラグ
 	const int HIT_EFFECT_TIMER = 10;
-
-	int m_hp;
 
 	// スケール
 	const float SCALE = 12.0f;

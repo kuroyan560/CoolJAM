@@ -20,7 +20,7 @@ void PlayerArrow::Draw(const Vec3<float>& PlayerPos, const Vec3<float>& MousePos
 	int drawCount = length / ARROW_SPAN;
 
 	// 3以下だったら描画しない。
-	if (drawCount <= 3) return;
+	if (drawCount < 3) return;
 
 	// マウス座標までのベクトル。
 	Vec3<float> mouseDir = Vec3<float>(MousePos - PlayerPos).GetNormal();
@@ -28,7 +28,7 @@ void PlayerArrow::Draw(const Vec3<float>& PlayerPos, const Vec3<float>& MousePos
 	for (int index = 0; index < drawCount; ++index) {
 
 		// 3以下だったら描画しない。
-		if (index <= 3) continue;
+		if (index < 3) continue;
 
 
 		// 描画位置を求める。
