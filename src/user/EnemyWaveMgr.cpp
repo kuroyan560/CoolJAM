@@ -153,7 +153,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE7を作成。
-	std::shared_ptr<EnemyWave> wave7 = std::make_shared<EnemyWave>(6500, true);
+	std::shared_ptr<EnemyWave> wave7 = std::make_shared<EnemyWave>(7700, true);
 
 
 	// エレキ虫を出す。
@@ -162,7 +162,7 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 	// 外周を囲むように動く敵をたくさん出す。
 	for (int index = 0; index < 200; ++index) {
 
-		wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
+		wave7->AddEnemy(Vec3<float>(0.0f, 0.0f, 50.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::TORUS_MOVE, 120, (60 * index));
 
 	}
 
@@ -173,19 +173,65 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 
 
 	// WAVE8を作成。
-	std::shared_ptr<EnemyWave> wave8 = std::make_shared<EnemyWave>(6500, true);
+	std::shared_ptr<EnemyWave> wave8 = std::make_shared<EnemyWave>(8900, true);
 
 
 	// 超弾を撃つ敵を出す
-	wave7->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 0, 60);
+	wave8->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::SHIELD, 0, 60);
 
 
 	// お素敵を倒す
-	wave7->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::PRESS, 360, 300);
+	wave8->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(), ENEMY_INFO::ID::PRESS, 360, 300);
 
 
 	// WAVE8を追加。
 	m_waves.emplace_back(wave8);
+
+
+
+
+	// WAVE9を作成。
+	std::shared_ptr<EnemyWave> wave9 = std::make_shared<EnemyWave>(10100, true);
+
+
+	for (int index = 0; index < 10; ++index) {
+
+		wave9->AddEnemy(Vec3<float>(0, 0, -100.0f + index * 10.0f), Vec3<float>(-1, 0, 0), ENEMY_INFO::ID::STRAIGHT, 0, 9000);
+
+	}
+
+
+	// WAVE9を追加。
+	m_waves.emplace_back(wave9);
+
+
+
+
+	// WAVE10を作成。
+	std::shared_ptr<EnemyWave> wave10 = std::make_shared<EnemyWave>(11300, true);
+
+
+	// 真ん中にエレキ虫を出す。
+	wave10->AddEnemy(Vec3<float>(0, 0, 0), Vec3<float>(0, 0, 0), ENEMY_INFO::ID::ELEC_MUSHI, 0, 9000);
+
+
+	// 周りから大量の敵を出す。
+	rad = 0;
+	float addRad = DirectX::XM_2PI / 10.0f;
+	for (int count = 0; count < 10; ++count) {
+		for (int index = 0; index < 10; ++index) {
+
+			Vec3<float> generatePos = Vec3<float>(cosf(rad), 0.0f, sinf(rad)) * 140.0f;
+			wave10->AddEnemy(generatePos, -generatePos.GetNormal(), ENEMY_INFO::ID::STRAIGHT, 120 * count, 90000);
+
+			rad += addRad;
+
+		}
+	}
+
+
+	// WAVE10を追加。
+	m_waves.emplace_back(wave10);
 
 
 	//wave1->AddEnemy(Vec3<float>(0.0f, 0.0f, 0.0f), Vec3<float>(0.0f, 0.0f, 0.0f), ENEMY_INFO::ID::UNION, 60);
@@ -270,9 +316,9 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& P
 	{
 		//次のウェーブの開始時間を見る
 		bool nextStart = (m_waves[nextWaveIdx]->WaveStartTime() <= m_frameTimer)	//時間経過
-			|| (m_waves[m_nowWaveIdx]->IsAllEnemyAppear() && EnemyMgr.lock()->GetAllEnemyDead()||
+			|| (m_waves[m_nowWaveIdx]->IsAllEnemyAppear() && EnemyMgr.lock()->GetAllEnemyDead() ||
 				UsersInput::Instance()->KeyOnTrigger(DIK_2));	//全ての敵を出し切った && 全員死亡している
-		
+
 		if (nextStart)
 		{
 			m_waves[m_nowWaveIdx]->Stop();
