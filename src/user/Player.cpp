@@ -12,6 +12,8 @@
 #include"ModelAnimator.h"
 #include "SlowMgr.h"
 #include"AudioApp.h"
+#include"PlayerDamageEffect.h"
+#include "PlayerArrow.h"
 
 Player::Player()
 {
@@ -56,6 +58,8 @@ Player::Player()
 
 	materialColor = m_modelObj->m_model->m_meshes[0].material->constData.pbr.baseColor;
 
+	m_playerArrow = std::make_shared<PlayerArrow>();
+
 	for (auto& index : m_driftParticle) {
 
 		index = std::make_shared<DriftParticle>();
@@ -87,6 +91,8 @@ Player::Player()
 	}
 
 	m_dashLight = std::make_unique<PlayerDashLighting>();
+
+	m_damageEffect = std::make_shared<PlayerDamageEffectMgr>();
 
 	m_damageSE = AudioApp::Instance()->LoadAudio("resource/user/sound/damage.wav");
 }
@@ -124,6 +130,8 @@ void Player::Init()
 	m_isPrevFever = false;
 	m_feverTime = 0;
 	m_mousePointerScale = 0;
+
+	m_damageEffect->Init();
 
 	m_knockBackVec = Vec3<float>();
 	m_knockBackSpeed = 0;
@@ -523,8 +531,11 @@ void Player::UpdateEffect()
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Update(dashFlag);
-}
 
+	// ダメージエフェクトを更新。
+	m_damageEffect->Update();
+
+}
 
 #include"DrawFunc_Append.h"
 void Player::Draw(Camera& Cam, const bool& IsTitle)
@@ -586,6 +597,11 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 		}
 
 	}
+
+	// ダメージ時のエフェクトを描画。
+	m_damageEffect->Draw();
+
+	m_playerArrow->Draw(m_pos, m_mousePointer->m_transform.GetPos());
 
 }
 
@@ -726,6 +742,9 @@ void Player::Damage()
 	}
 
 	AudioApp::Instance()->PlayWaveDelay(m_damageSE);
+
+	m_damageEffect->Start();
+
 }
 
 void Player::Finalize()
