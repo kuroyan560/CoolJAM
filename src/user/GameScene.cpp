@@ -153,6 +153,8 @@ void GameScene::OnInitialize()
 	ShakeMgr::Instance()->Init();
 
 	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
+
+	m_gameUI->Start();
 }
 
 void GameScene::OnUpdate()
@@ -382,14 +384,16 @@ void GameScene::OnDraw()
 
 	/*--- ’Êí•`‰æ ---*/
 
-	//ŠÂ‹«•`‰æ
-	m_environmentMgr->Draw(*nowCam);
+
 
 	// ƒ}ƒbƒv‚ð•`‰æ
 	StageFloor::Instance()->ScreenTargetSet(true);
 	m_gameUI->Draw();
 	m_bonusEffect->Draw();
 	StageFloor::Instance()->Draw();
+
+	//ŠÂ‹«•`‰æ
+	m_environmentMgr->Draw(*nowCam);
 
 	//ƒvƒŒƒCƒ„[•`‰æ
 	m_player->Draw(*nowCam);

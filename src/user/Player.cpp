@@ -149,13 +149,11 @@ void Player::Init()
 
 	}
 
-	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj);
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
-
 	m_modelObj->m_animator->Play("ToFloater", false, false);
-
 	m_firstInput = false;
 }
 
@@ -688,7 +686,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	// 壁際との当たり判定を行う。
 	if (MapSize - MAP_EDGE <= m_pos.Length()) {
 
-		Damage();
+		//Damage();
 
 		// ノックバックの移動量を設定。
 		m_knockBackVec = -m_pos.GetNormal();
