@@ -39,6 +39,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			m_saveMode = false;
 		}
 
+		if (ImGui::Button("Back"))
+		{
+			m_saveMode = false;
+		}
+
 		ImGui::End();
 	}
 	else if (m_loadMode)
@@ -58,6 +63,11 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				WaveMgr.m_waves = EnemyWaveLoader::Load(s_loadFileNameBuff, m_finalWaveTime);
 				m_loadMode = false;
 			}
+		}
+
+		if (ImGui::Button("Back"))
+		{
+			m_loadMode = false;
 		}
 
 		ImGui::End();
@@ -271,9 +281,9 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 		if (ImGui::DragFloat3("ForwardVec", s_forwardVec), 0.05f)
 		{
 			enemy.m_forwardVec = { s_forwardVec[0],s_forwardVec[1],s_forwardVec[2] };
-			enemy.m_forwardVec.x = std::clamp(enemy.m_forwardVec.x, 0.0f, 1.0f);
-			enemy.m_forwardVec.y = std::clamp(enemy.m_forwardVec.y, 0.0f, 1.0f);
-			enemy.m_forwardVec.z = std::clamp(enemy.m_forwardVec.z, 0.0f, 1.0f);
+			enemy.m_forwardVec.x = std::clamp(enemy.m_forwardVec.x, -1.0f, 1.0f);
+			enemy.m_forwardVec.y = std::clamp(enemy.m_forwardVec.y, 0.0f, 0.0f);
+			enemy.m_forwardVec.z = std::clamp(enemy.m_forwardVec.z, -1.0f, 1.0f);
 			if (enemy.m_forwardVec.IsZero())enemy.m_forwardVec = { 1,0,0 };
 			enemy.m_forwardVec.Normalize();
 		}

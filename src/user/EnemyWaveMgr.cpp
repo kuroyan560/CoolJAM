@@ -45,20 +45,20 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	// WAVE1‚ğ’Ç‰ÁB
 	//m_waves.emplace_back(wave1);
 
-	//std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
-	//wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
-	//m_waves.emplace_back(wave2);
+	std::shared_ptr<EnemyWave> wave2 = std::make_shared<EnemyWave>(120, true);
+	wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60, 60);
+	m_waves.emplace_back(wave2);
 
 
-	m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
-	assert(!m_waves.empty());
+	//m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
+	//assert(!m_waves.empty());
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/
-	assert(!m_waves.empty());
+	//assert(!m_waves.empty());
 
 	m_frameTimer = FrameTimer;
 	m_nowWaveIdx = 0;
