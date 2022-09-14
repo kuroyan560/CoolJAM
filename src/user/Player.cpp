@@ -236,6 +236,7 @@ void Player::Input(Camera& Cam, const Vec2<float>& WindowSize)
 	// ブレーキ入力を保存。
 	bool oldBrake = m_isBrake;
 	m_isBrake = UsersInput::Instance()->MouseInput(LEFT);
+	if (!m_firstInput)m_firstInput = true;
 
 	//タイヤアニメーション
 	if (!oldBrake && m_isBrake)	//フローター → タイヤ
