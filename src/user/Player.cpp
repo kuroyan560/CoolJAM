@@ -639,7 +639,8 @@ void Player::Shot(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> En
 		Vec3<float> nearestEnemy = EnemyMgr.lock()->SearchNearestEnemyToVector(m_pos, m_inputVec, 0.8f);
 
 		Vec3<float> shotEnemyPos = m_pos + m_inputVec * 20.0f;
-		if (nearestEnemy != Vec3<float>(-1, -1, -1)) {
+		const float AUTO_AIM_SCALE = 15.0f;
+		if (nearestEnemy != Vec3<float>(-1, -1, -1) && Vec3<float>(nearestEnemy - m_pos).Length() <= AUTO_AIM_SCALE) {
 
 			shotEnemyPos = nearestEnemy;
 
@@ -683,6 +684,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	/*===== 当たり判定 =====*/
 
 	// マップとの当たり判定。
+	bool isHitMap = false;
 	m_pos = KazCollisionHelper::KeepInMap(m_pos, MapSize);
 
 	// エッジの判定。
@@ -690,6 +692,13 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;
+
+	// 壁際との当たり判定を行う。
+	if (MapSize - MAP_EDGE <= m_pos.Length()) {
+
+		Damage();
+
+	}
 
 	// 敵弾との当たり判定。
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);

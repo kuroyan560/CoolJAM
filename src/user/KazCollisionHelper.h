@@ -10,7 +10,7 @@ class Camera;
 namespace KazCollisionHelper
 {
 	// マップ内に収まるようにする。
-	Vec3<float> KeepInMap(Vec3<float> &Pos, const float &MapSize);
+	Vec3<float> KeepInMap(Vec3<float> &Pos, const float &MapSize, bool* IsHit = nullptr);
 
 	/// <summary>
 	/// レイとモデルの線分での当たり判定

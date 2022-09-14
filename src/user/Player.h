@@ -44,6 +44,9 @@ private:
 	// 動いた総量
 	float m_movedLength;
 
+	// 壁際でダメージを受ける範囲。
+	const float MAP_EDGE = 20.0f;
+
 	// フィーバー状態か
 	bool m_isPrevFever;
 	bool m_isFever;
