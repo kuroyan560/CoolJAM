@@ -37,7 +37,7 @@ void PlayerDamageEffectMgr::Init()
 
 	}
 
-	m_generateCount = 0;
+	m_generateCount = 50;
 	m_generateSpan = 0;
 
 }
