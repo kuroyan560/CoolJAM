@@ -37,7 +37,7 @@ ShieldEnemy::ShieldEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model>
 
 }
 
-void ShieldEnemy::Init()
+void ShieldEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/
@@ -46,7 +46,7 @@ void ShieldEnemy::Init()
 
 }
 
-void ShieldEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void ShieldEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ¶¬ˆ— =====*/
@@ -71,7 +71,7 @@ void ShieldEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, cons
 
 }
 
-void ShieldEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void ShieldEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/
@@ -154,15 +154,16 @@ void ShieldEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& 
 
 	}
 
+	m_transform.SetPos(m_pos);
+
 }
 
 #include"DrawFunc_Append.h"
-void ShieldEnemy::Draw()
+void ShieldEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);

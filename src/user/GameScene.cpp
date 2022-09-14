@@ -136,6 +136,8 @@ void GameScene::OnInitialize()
 	m_returnTitlePosEasingTimer = 0;
 	m_transitionDelayTimer = 0;
 
+
+	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
 void GameScene::OnUpdate()

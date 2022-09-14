@@ -89,8 +89,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 			}
 			if (ImGui::MenuItem("Stop", nullptr, nullptr, m_test))
 			{
-				WaveMgr.Init(m_finalWaveTime);
-				EnemyMgr.lock()->Init();
+				EnemyMgr.lock()->AllDisappear();
 				m_test = false;
 			}
 			ImGui::EndMenu();
@@ -171,7 +170,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	//エネミー追加
 	if (ImGui::Button("AddEnemy"))
 	{
-		wave->AddEnemy({ 0,0,0 }, { 0,0,0 }, ENEMY_INFO::ID::STOPPING, 1);
+		wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 1);
 	}
 
 	if (!enemys.empty())

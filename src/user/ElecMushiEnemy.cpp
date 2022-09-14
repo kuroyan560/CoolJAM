@@ -38,7 +38,7 @@ ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void ElecMushiEnemy::Init()
+void ElecMushiEnemy::OnInit()
 {
 
 	/*===== èâä˙âªèàóù =====*/
@@ -47,7 +47,7 @@ void ElecMushiEnemy::Init()
 
 }
 
-void ElecMushiEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void ElecMushiEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ê∂ê¨èàóù =====*/
@@ -68,7 +68,7 @@ void ElecMushiEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 }
 
-void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== çXêVèàóù =====*/
@@ -139,16 +139,16 @@ void ElecMushiEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 
 	}
 
+	m_transform.SetPos(m_pos);
 }
 
 #include"DrawFunc3D.h"
 #include"DrawFunc_Append.h"
-void ElecMushiEnemy::Draw()
+void ElecMushiEnemy::OnDraw()
 {
 
 	/*===== ï`âÊèàóù =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);

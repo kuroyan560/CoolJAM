@@ -38,7 +38,7 @@ TorusMoveEnemy::TorusMoveEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 
 }
 
-void TorusMoveEnemy::Init()
+void TorusMoveEnemy::OnInit()
 {
 
 	/*===== èâä˙âªèàóù =====*/
@@ -47,7 +47,7 @@ void TorusMoveEnemy::Init()
 
 }
 
-void TorusMoveEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void TorusMoveEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ê∂ê¨èàóù =====*/
@@ -72,7 +72,7 @@ void TorusMoveEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, c
 
 }
 
-void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void TorusMoveEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== çXêVèàóù =====*/
@@ -154,12 +154,11 @@ void TorusMoveEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float
 }
 
 #include"DrawFunc_Append.h"
-void TorusMoveEnemy::Draw()
+void TorusMoveEnemy::OnDraw()
 {
 
 	/*===== ï`âÊèàóù =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);

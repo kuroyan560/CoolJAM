@@ -37,7 +37,7 @@ StoppingEnemy::StoppingEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Mo
 
 }
 
-void StoppingEnemy::Init()
+void StoppingEnemy::OnInit()
 {
 
 	/*===== èâä˙âªèàóù =====*/
@@ -46,7 +46,7 @@ void StoppingEnemy::Init()
 
 }
 
-void StoppingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void StoppingEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ê∂ê¨èàóù =====*/
@@ -73,7 +73,7 @@ void StoppingEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 
 }
 
-void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void StoppingEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== çXêVèàóù =====*/
@@ -136,15 +136,16 @@ void StoppingEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 
 	}
 
+	m_transform.SetPos(m_pos);
+
 }
 
 #include"DrawFunc_Append.h"
-void StoppingEnemy::Draw()
+void StoppingEnemy::OnDraw()
 {
 
 	/*===== ï`âÊèàóù =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
