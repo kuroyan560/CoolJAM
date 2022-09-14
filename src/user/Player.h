@@ -102,7 +102,7 @@ private:
 
 	// 弾関係
 	float m_shotTimer;
-	const float SHOT_TIMER = 5;
+	const float SHOT_TIMER = 4;
 
 	// ブレーキ関係
 	int m_brakeTimer;			// ブレーキしている時間。

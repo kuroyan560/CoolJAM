@@ -107,7 +107,7 @@ void GameScene::OnInitialize()
 	m_player->Init();
 	m_enemyMgr->Init();
 	m_bulletMgr->Init();
-	m_enemyWaveMgr->Init(60);
+	m_enemyWaveMgr->Init(6000);
 	m_feverGauge->Init();
 
 	ScoreMgr::Instance()->Init();
@@ -162,7 +162,7 @@ void GameScene::OnUpdate()
 	/*===== 更新処理 =====*/
 
 	//現在のカメラ取得
-	auto &nowCam = *GameManager::Instance()->GetNowCamera();
+	auto& nowCam = *GameManager::Instance()->GetNowCamera();
 
 	//スクリーンサイズを取得。
 	Vec2<float> windowSize = Vec2<float>(WinApp::Instance()->GetWinSize().x, WinApp::Instance()->GetWinSize().y);
@@ -183,10 +183,10 @@ void GameScene::OnUpdate()
 		m_bulletMgr->Update(MAP_SIZE);
 
 		// 敵Waveクラスの更新処理。
-		if (EnemyWaveEditor::Instance()->CanWaveUpdate())
-		{
-			m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
-		}
+		//if (EnemyWaveEditor::Instance()->CanWaveUpdate())
+		//{
+		m_enemyWaveMgr->Update(m_enemyMgr, m_player->GetPos(), MAP_SIZE);
+		//}
 
 	}
 	else {
@@ -372,7 +372,7 @@ void GameScene::OnDraw()
 
 	GameManager::Instance()->ChangeCamera(m_gameCamKey);
 	//現在のカメラ取得
-	auto &nowCam = GameManager::Instance()->GetNowCamera();
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 
 	//DrawFunc初期化
@@ -437,21 +437,21 @@ void GameScene::OnDraw()
 	KuroEngine::Instance()->Graphics().SetRenderTargets({ backBuff }, m_depthStencil);
 
 	//デバッグ描画フラグ確認
-	if (GameManager::Instance()->GetDebugDrawFlg())
-	{
-		//XYZ軸
-		static const float LEN = 100.0f;
-		static const float THICKNESS = 0.5f;
-		static Vec3<float>ORIGIN = { 0,0,0 };
-		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
-		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
-		DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
+	//if (GameManager::Instance()->GetDebugDrawFlg())
+	//{
+	//	//XYZ軸
+	//	static const float LEN = 100.0f;
+	//	static const float THICKNESS = 0.5f;
+	//	static Vec3<float>ORIGIN = { 0,0,0 };
+	//	DrawFunc3D::DrawLine(*nowCam, ORIGIN, { LEN,0,0 }, Color(1.0f, 0.0f, 0.0f, 1.0f), THICKNESS);
+	//	DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,LEN,0 }, Color(0.0f, 1.0f, 0.0f, 1.0f), THICKNESS);
+	//	DrawFunc3D::DrawLine(*nowCam, ORIGIN, { 0,0,LEN }, Color(0.0f, 0.0f, 1.0f, 1.0f), THICKNESS);
 
-		EnemyWaveEditor::Instance()->DebugDraw(*nowCam, *m_enemyWaveMgr);
+	//	EnemyWaveEditor::Instance()->DebugDraw(*nowCam, *m_enemyWaveMgr);
 
-		m_player->DrawDebugInfo(*nowCam);
+	//	m_player->DrawDebugInfo(*nowCam);
 
-	}
+	//}
 #endif
 }
 
@@ -476,7 +476,7 @@ void GameScene::OnImguiDebug()
 	ImGui::End();
 
 	//ウェーブ編集
-	EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr, *m_player);
+	//EnemyWaveEditor::Instance()->EditWithImgui(*m_enemyWaveMgr, m_enemyMgr, *m_player);
 
 	m_gameUI->DrawImGui();
 }
@@ -524,7 +524,7 @@ void GameScene::UpdateResult()
 	// 遷移が始まっていたら。
 
 	//現在のカメラ取得
-	auto &nowCam = GameManager::Instance()->GetNowCamera();
+	auto& nowCam = GameManager::Instance()->GetNowCamera();
 
 	if (m_isStartTransition) {
 
