@@ -1,7 +1,7 @@
 #include "BonusEffect.h"
 #include"../engine/DrawFunc2D.h"
 
-BonusEffect::BonusEffect() :LIMIT_MIN_LINE(-1000.0f), LIMIT_MAX_LINE(1580.0f), APPEAR_TIME(60)
+BonusEffect::BonusEffect() :LIMIT_MIN_LINE(-1000.0f), LIMIT_MAX_LINE(1580.0f), APPEAR_TIME(120)
 {
 	m_feverEffectTexBuffer = D3D12App::Instance()->GenerateTextureBuffer("resource/user/BonusStage/bonus_stage_gradation.png");
 	m_bonusStageTexBuffer = D3D12App::Instance()->GenerateTextureBuffer("resource/user/BonusStage/bonus_stage.png");
