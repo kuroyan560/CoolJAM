@@ -690,6 +690,21 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 
 	// “G’e‚Æ‚Ì“–‚½‚è”»’èB
 	int hitCount = BulletMgr.lock()->CheckHitEnemyBullet(m_pos, SCALE);
+	if (0 < hitCount) {
+
+		// “–‚½‚Á‚½”»’èB
+		m_damageEffectTimer = 0;
+		m_damageEffectCount = 0;
+		m_isDamageEffect = true;
+		float prevHP = m_hp;
+		--m_hp;
+		if (m_hp <= 0) m_hp = 0;
+		if (m_hp <= 2 && 2 < prevHP) {
+			m_isChangeRed = true;
+			m_colorEasingTimer = 0;
+		}
+
+	}
 
 	// ƒu[ƒXƒg—Ê‚ªˆê’èˆÈã‚¾‚Á‚½‚ç‚ ‚é’ö“x‚Ì”ÍˆÍ‚Ì“G‚ð“|‚·B
 	m_brakeBoostTimer -= 1.0f * SlowMgr::Instance()->m_slow;
