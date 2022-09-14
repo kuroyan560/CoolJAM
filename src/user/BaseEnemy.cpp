@@ -115,6 +115,7 @@ void BaseEnemy::Draw()
 		transform.SetRotate(Vec3<float>(0, 1, 0), m_appearReticleAngle);
 
 		float alpha = KuroMath::Ease(In, Circ, timer, APPEAR_TIME, 1.0f, 0.0f);
+		alpha = 1.0f;
 
 		DrawFunc_Append::DrawPlane(transform, s_appearReticleTex[m_appearReticleTexIdx], RenderTargetSwitch(alpha, 1.0f, 1.0f), AlphaBlendMode_Trans);
 	}

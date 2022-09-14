@@ -2,6 +2,7 @@
 #include "EnemyWave.h"
 #include"EnemyMgr.h"
 #include "SlowMgr.h"
+#include"EnemyWaveLoader.h"
 
 EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 {
@@ -48,14 +49,9 @@ EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
 	//wave2->AddEnemy(Vec3<float>(50.0f, 0.0f, 0.0f), Vec3<float>(1.0f, 0.0f, 0.0f), ENEMY_INFO::ID::COIN, 60);
 	//m_waves.emplace_back(wave2);
 
-	m_waves.emplace_back(std::make_shared<EnemyWave>(0, false));
 
-
-
-
-	// 第1ウェーブの時間を計算。
-	m_nowWaveMaxTimer = m_waves.front()->GetWaveEndFrameLocal();
-
+	m_waves = EnemyWaveLoader::Load("test", m_finalWaveTimer);
+	assert(!m_waves.empty());
 }
 
 void EnemyWaveMgr::Init(const int& FinalWaveTime, const int& FrameTimer)
@@ -120,7 +116,7 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &P
 			//全てのウェーブが終了
 			if (m_finalWaveTimer <= 0)
 			{
-
+				EnemyMgr.lock()->AllDisappear();
 			}
 		}
 	}
