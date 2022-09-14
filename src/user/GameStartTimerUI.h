@@ -85,6 +85,6 @@ public:
 	bool GetIsActive() { return m_isActive; }
 
 	void Start();
-
 	bool IsStart() { return m_startFlag; }
+
 };

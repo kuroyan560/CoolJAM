@@ -15,6 +15,7 @@ void ScoreMgr::Init()
 	m_scoreScale = DEF_SCALE;
 	m_ScoreTexture = D3D12App::Instance()->GenerateTextureBuffer("resource/user/score.png");
 	m_easingTimer = 0.0f;
+	m_isActive = false;
 }
 
 void ScoreMgr::Update(const Vec2<float> &Offset, const Vec2<float> &CenterOffset, const float &AddEasingTimer)
@@ -60,13 +61,13 @@ void ScoreMgr::Update(const Vec2<float> &Offset, const Vec2<float> &CenterOffset
 		Vec2<float> basePos = MIDDLE_POS;
 		if (m_isCenter) {
 
-			basePos = CENTER_POS + Offset + CenterOffset;
+			basePos = CENTER_POS + Offset + CenterOffset - Vec2<float>(46.0f, 15.0f);
 
 		}
 
 		// 座標を設定。
 		m_pos = (basePos + Offset) + (EXIT_POS - (basePos + Offset)) * easingAmount;
-
+		m_pos.y += 30.0f;
 	}
 	// 中央移行状態だったら。
 	else if (m_isCenter) {
