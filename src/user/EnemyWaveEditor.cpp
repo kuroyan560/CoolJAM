@@ -189,6 +189,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	{
 		const int enemyCount = static_cast<int>(enemys.size());
 
+		ImGui::SameLine();
 		//エネミーを生成順にソート
 		if (ImGui::Button("Sort"))
 		{
@@ -197,8 +198,15 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 				});
 		}
 
+		//一括変更
+		static int s_bulkChangeShotTimer = 60;
+		if (ImGui::InputInt("BulkChange_ShotTime", &s_bulkChangeShotTimer))
+		{
+			for (auto& e : enemys)e.m_shotTimer = s_bulkChangeShotTimer;
+		}
+
 		//エネミー一覧
-		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar))
+		if (ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(280, 360), ImGuiWindowFlags_NoTitleBar))
 		{
 			for (int i = 0; i < enemyCount; ++i)
 			{
