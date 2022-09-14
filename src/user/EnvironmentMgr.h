@@ -60,8 +60,9 @@ private:
 
 	const Angle PILLAR_POS_ANGLE_OFFSET;
 
-	Vec3<float> pillarColor;
-	Vec3<float> larpPillarColor;
+	std::array<Vec3<float>, 2> m_pillarColor;
+	Vec3<float> m_larpPillarColor;
+	bool m_bonusStageFlag;
 public:
 	EnvironmentMgr();
 	~EnvironmentMgr() {}
@@ -78,6 +79,7 @@ public:
 	}
 
 	void ChangeColor(const Color &COLOR);
+	void BonusStage();
 
 	//ƒQƒbƒ^
 	std::shared_ptr<LightManager>& GetLigMgr() { return m_ligMgr; }
