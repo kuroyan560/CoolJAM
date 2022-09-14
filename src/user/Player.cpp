@@ -48,6 +48,9 @@ Player::Player()
 	m_feverTime = 0;
 	m_mousePointerScale = false;
 
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0;
+
 	m_modelObj = std::make_shared<ModelObject>("resource/user/", "player.glb");
 	m_mousePointer = std::make_shared<ModelObject>("resource/user/", "mousePoint3D.glb");
 
@@ -119,6 +122,9 @@ void Player::Init()
 	m_isPrevFever = false;
 	m_feverTime = 0;
 	m_mousePointerScale = 0;
+
+	m_knockBackVec = Vec3<float>();
+	m_knockBackSpeed = 0;
 
 	for (auto& index : m_driftParticle) {
 
@@ -337,6 +343,17 @@ void Player::Move(std::weak_ptr<BulletMgr> BulletMgr, bool IsStopFeverTimer)
 		m_isFever = true;
 		m_feverTime = FEVER_TIME;
 		BulletMgr.lock()->BrakeIsKillElecMushi();
+
+	}
+
+	// ノックバックの移動量を設定。
+	if (0 < m_knockBackSpeed) {
+
+		// 移動させる。
+		m_pos += m_knockBackVec * m_knockBackSpeed;
+
+		// 移動量を0に近づける。
+		m_knockBackSpeed -= m_knockBackSpeed / 18.0f;
 
 	}
 
@@ -697,6 +714,10 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	if (MapSize - MAP_EDGE <= m_pos.Length()) {
 
 		Damage();
+
+		// ノックバックの移動量を設定。
+		m_knockBackVec = -m_pos.GetNormal();
+		m_knockBackSpeed = KNOCK_BACK_SPEED;
 
 	}
 
