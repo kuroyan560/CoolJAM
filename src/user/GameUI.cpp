@@ -26,7 +26,7 @@ GameUI::GameUI()
 
 void GameUI::Init()
 {
-	m_timer->Init(5);
+	m_timer->Init(10);
 	m_waveUI->Init(10);
 	m_gameStartTimerUI->Init();
 	m_gameEndTimerUI->Init();
@@ -50,9 +50,11 @@ void GameUI::Init()
 	m_waveCenterOffsetPos = { 1.0f,-91.0f };
 	m_scoreCenterOffsetPos = { 23.0f,239.0f };
 
+	waveFlagData.Init();
+	scoreFlagData.Init();
 }
 
-void GameUI::Update(const int& NowWaveMaxTimer)
+void GameUI::Update(const int &NowWaveMaxTimer)
 {
 	if (UsersInput::Instance()->KeyOnTrigger(DIK_P))
 	{
@@ -73,16 +75,51 @@ void GameUI::Update(const int& NowWaveMaxTimer)
 		m_gameEndTimerUI->Start();
 		m_endCountDownFlag = true;
 	}
+
+	if (m_endCountDownFlag && !m_resultFlag)
+	{
+		if (m_waveUI->AppearMax() && !waveFlagData.m_centerFlag)
+		{
+			m_waveUI->Center();
+			ScoreMgr::Instance()->Center();
+			waveFlagData.m_centerFlag = true;
+		}
+		if (m_waveUI->CenterMax() && !waveFlagData.m_exitFlag)
+		{
+			m_waveUI->Exit();
+			ScoreMgr::Instance()->Exit();
+			waveFlagData.m_exitFlag = true;
+		}
+	}
+	else if (m_resultFlag)
+	{
+		if (m_waveUI->AppearMax() && !waveFlagData.m_centerFlag)
+		{
+			m_waveUI->Center();
+			ScoreMgr::Instance()->Center();
+			waveFlagData.m_centerFlag = true;
+		}
+	}
+
+
 	//ƒQ[ƒ€I—¹
 	m_nowWaveMaxTimer = NowWaveMaxTimer;
 
 
 	if (m_gameEndTimerUI->IsStart() && !m_resultFlag)
 	{
-		m_waveUI->Center();
-		ScoreMgr::Instance()->Center();
+		m_waveUI->Init(10);
+		ScoreMgr::Instance()->Init();
+
+		ScoreMgr::Instance()->Appear();
+		m_waveUI->Appear();
 		m_resultFlag = true;
+
+		waveFlagData.Init();
+		scoreFlagData.Init();
 	}
+
+
 
 
 	m_timer->Update(30);
@@ -141,7 +178,7 @@ bool GameUI::IsResult()
 	return m_gameEndTimerUI->IsStart();
 }
 
-void GameUI::SetVec2(std::string TAG, Vec2<float>* VEC3)
+void GameUI::SetVec2(std::string TAG, Vec2<float> *VEC3)
 {
 	std::string name = TAG + "X";
 	ImGui::DragFloat(name.c_str(), &VEC3->x);
@@ -149,7 +186,7 @@ void GameUI::SetVec2(std::string TAG, Vec2<float>* VEC3)
 	ImGui::DragFloat(name.c_str(), &VEC3->y);
 }
 
-void GameUI::SetVec3(std::string TAG, Vec3<Angle>* VEC3)
+void GameUI::SetVec3(std::string TAG, Vec3<Angle> *VEC3)
 {
 	std::string name = TAG + "X";
 	ImGui::DragFloat(name.c_str(), &VEC3->x);

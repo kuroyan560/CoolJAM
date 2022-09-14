@@ -38,8 +38,8 @@ public:
 	/*===== メンバ関数 =====*/
 
 	WaveUI(std::string File);
-	void Init(const int& MaxWave);
-	void Update(const int& NowWave, const Vec2<float>& OffsetPos, const Vec2<float>& CenterOffset, const float& AddEasingTimer);
+	void Init(const int &MaxWave);
+	void Update(const int &NowWave, const Vec2<float> &OffsetPos, const Vec2<float> &CenterOffset, const float &AddEasingTimer);
 	void Draw(const AdjData &OFFSET_DATA);
 
 	// 出現している状態か
@@ -49,4 +49,7 @@ public:
 	void Exit();
 	void Center();	// Appearで所定の位置に移動させた後に読んでください。
 
+	bool AppearMax() { return m_isAppear && 1.0f <= m_easingTimer; }
+	bool CenterMax() { return m_isCenter && 1.0f <= m_easingTimer; }
+	bool ExitMax() { return m_isExit && 1.0f <= m_easingTimer; }
 };

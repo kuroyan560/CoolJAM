@@ -51,4 +51,19 @@ private:
 	bool m_resultFlag;
 
 	AdjData waveOffsetData, scoreOffsetData;
+
+	struct Flag
+	{
+		bool m_appearFlag;
+		bool m_centerFlag;
+		bool m_exitFlag;
+
+		void Init()
+		{
+			m_appearFlag = false;
+			m_centerFlag = false;
+			m_exitFlag = false;
+		};
+	};
+	Flag waveFlagData, scoreFlagData;
 };
