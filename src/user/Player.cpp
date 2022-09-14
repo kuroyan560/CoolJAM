@@ -149,7 +149,7 @@ void Player::Init()
 
 	}
 
-	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj);
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj->m_model);
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
