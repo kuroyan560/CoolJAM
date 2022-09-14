@@ -68,6 +68,6 @@ void EnemyBullet::Draw() {
 	/*===== •`‰æˆ— =====*/
 
 	m_transform.SetPos(m_pos);
-	DrawFunc_Append::DrawModel(s_model, m_transform);
+	DrawFunc_Append::DrawModel(s_model, m_transform, RenderTargetSwitch(1.0f, 0.3f, 1.0f));
 
 }

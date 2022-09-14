@@ -13,7 +13,7 @@ private:
 
 	char* m_fileNameBuff;
 
-	bool m_isActive = true;
+	bool m_isActive = false;
 	bool m_test = false;
 
 	//ï“èWëŒè€
@@ -25,6 +25,7 @@ private:
 	bool m_loadMode = false;
 	bool m_saveMode = false;
 
+	EnemyWaveEditor();
 public:
 	void EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr, Player& Player);
 	bool CanWaveUpdate()
