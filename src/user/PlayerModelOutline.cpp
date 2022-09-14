@@ -30,6 +30,8 @@ void PlayerModelOutline::Init(Vec3<float>* POS, DirectX::XMMATRIX* ROTATION, flo
 	m_powerUpRateData.Init();
 	m_waveTextureSize = { 0.0f,0.0f };
 	m_waveAlpha = 1.0f;
+
+	m_firstFlameFlag = false;
 }
 
 void PlayerModelOutline::Update()
@@ -144,12 +146,19 @@ void PlayerModelOutline::Update()
 	m_waveTransform.SetPos(*m_pos + Vec3<float>(0.0f, 0.1f, 0.0f));
 	m_waveTransform.SetScale({ m_waveTextureSize.x,m_waveTextureSize.y,m_waveTextureSize.x });
 	m_waveTransform.SetRotate(Vec3<Angle>(0, 0, 0));
+
+	if (!m_firstFlameFlag)
+	{
+		m_transform.SetScale({ 0.0f,0.0f,0.0f });
+		m_firstFlameFlag = true;
+	}
+
 }
 
 void PlayerModelOutline::Draw(Camera& CAMERA)
 {
 	KazDrawFunc::DrawNonShadingModelSignalColor(m_model, m_transform, m_modelColor, CAMERA);
-	DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);
+	//DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);
 }
 
 void PlayerModelOutline::EnoughPowerEffect()

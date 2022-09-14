@@ -34,10 +34,10 @@ public:
 	/*===== ÉÅÉìÉoä÷êî =====*/
 
 	PlayerStraightEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel);
-	void Init()override;
-	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)override;
-	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
-	void Draw()override;
+	void OnInit()override;
+	void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)override;
+	void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)override;
+	void OnDraw()override;
 
 private:
 

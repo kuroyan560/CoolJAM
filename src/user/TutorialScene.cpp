@@ -130,6 +130,7 @@ void TutorialScene::OnInitialize()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
 void TutorialScene::OnUpdate()

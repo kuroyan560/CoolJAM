@@ -24,6 +24,7 @@ EnemyMgr::EnemyMgr()
 	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
 	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 	m_elecMushi = Importer::Instance()->LoadModel("resource/user/", "enemy_elecMushi.glb");
+	m_elecMushiHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit_elecMushi.glb");
 
 	//for (auto& index : m_enemy) {
 
@@ -65,7 +66,7 @@ void EnemyMgr::Update(std::weak_ptr< BulletMgr> BulletMgr, const Vec3<float> &Pl
 		}
 
 		auto i = &index - &m_enemy[0];
-		if (!index->m_isActive && m_initDeadEffectArray[i])
+		if (!index->m_isActive && m_initDeadEffectArray[i] && !index->IsDisappear())
 		{
 			m_deadEffectEmitterArray[i].Init(index->m_pos + Vec3<float>(0.0f, 0.3f, 0.0f));
 			m_particleColor = m_deadEffectEmitterArray[i].GetColor();
@@ -111,6 +112,18 @@ void EnemyMgr::Draw(Camera &NowCam, std::weak_ptr<RenderTarget>Main, std::weak_p
 		index.Draw(NowCam, Main, EmmisiveMap, DepthStencil);
 	}
 
+}
+
+void EnemyMgr::AllDisappear()
+{
+	for (auto& index : m_enemy) {
+
+		// ¶¬‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ð”ò‚Î‚·B
+		if (!index.operator bool()) continue;
+
+		index->Disappear();
+
+	}
 }
 
 void EnemyMgr::Generate(const Vec3<float> &PlayerPos, const Vec3<float> &GeneratePos, const Vec3<float> ForwardVec, const int &EnemyID, const float &MapSize)

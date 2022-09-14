@@ -7,8 +7,11 @@
 #include<memory>
 #include"GameTimer.h"
 #include"GameUI.h"
-
 #include"LightBloomDevice.h"
+#include"BonusEffect.h"
+#include"EnemyWaveMgr.h"
+#include"LightBloomDevice.h"
+
 class DepthStencil;
 class Player;
 class Model;
@@ -78,6 +81,8 @@ private:
 	std::unique_ptr<GameTimer>m_gameTimer;
 
 	std::unique_ptr<GameUI>m_gameUI;
+
+	std::unique_ptr<BonusEffect>m_bonusEffect;
 
 	int m_bgm;
 

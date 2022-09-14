@@ -1,5 +1,6 @@
 #include "EnemyWaveMgr.h"
 #include "EnemyWave.h"
+#include"EnemyMgr.h"
 #include "SlowMgr.h"
 
 EnemyWaveMgr::EnemyWaveMgr(const float &MapSize)
@@ -94,6 +95,7 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float> &P
 		if (nextStart)
 		{
 			m_waves[m_nowWaveIdx]->Stop();
+			EnemyMgr.lock()->AllDisappear();
 			m_waves[nextWaveIdx]->Start();
 			m_nowWaveIdx = nextWaveIdx;
 		}

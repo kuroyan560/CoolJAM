@@ -71,7 +71,14 @@ Vec3<float> ColorPalette::RGBtoHSV(const Vec3<float> &RGB)
 	}
 
 	//Ê“x‚ğ‹‚ß‚é
-	s = (max - min) / max * 255.0f;
+	if (max == 0.0f)
+	{
+		s = 0.0f;
+	}
+	else
+	{
+		s = (max - min) / max * 255.0f;
+	}
 
 	//–¾“x‚ğ‹‚ß‚é
 	value = max;

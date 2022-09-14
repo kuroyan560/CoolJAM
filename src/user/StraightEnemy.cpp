@@ -38,7 +38,7 @@ StraightEnemy::StraightEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Mo
 
 }
 
-void StraightEnemy::Init()
+void StraightEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/
@@ -47,7 +47,7 @@ void StraightEnemy::Init()
 
 }
 
-void StraightEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void StraightEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ¶¬ˆ— =====*/
@@ -72,7 +72,7 @@ void StraightEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 
 }
 
-void StraightEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void StraightEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/
@@ -135,15 +135,15 @@ void StraightEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>
 
 	}
 
+	m_transform.SetPos(m_pos);
 }
 
 #include"DrawFunc_Append.h"
-void StraightEnemy::Draw()
+void StraightEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);

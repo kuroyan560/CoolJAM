@@ -87,6 +87,9 @@ GameScene::GameScene()
 	m_returnTitlePosEasingTimer = 0;
 	m_transitionDelayTimer = 0;
 
+
+	m_bonusEffect = std::make_unique<BonusEffect>();
+
 	SlowMgr::Instance()->Init();
 
 	m_isFeverCameraEffect = false;
@@ -144,6 +147,8 @@ void GameScene::OnInitialize()
 	m_isFeverCameraEffect = false;
 	m_feverNearCameraTimer = 0;
 
+
+	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
 void GameScene::OnUpdate()
@@ -298,6 +303,16 @@ void GameScene::OnUpdate()
 		m_environmentMgr->ChangeColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
+	if (m_enemyWaveMgr->IsNowWaveBounusStage() || UsersInput::Instance()->KeyInput(DIK_G))
+	{
+		m_bonusEffect->Start();
+	}
+	else if(m_bonusEffect->IsStart())
+	{
+		m_bonusEffect->Stop();
+	}
+
+
 	m_environmentMgr->Update(m_player->GetPos());
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
 
@@ -306,12 +321,18 @@ void GameScene::OnUpdate()
 
 	SlowMgr::Instance()->Update();
 
+	m_bonusEffect->Update();
 }
 
 #include "DrawFunc2D.h"
 void GameScene::OnDraw()
 {
 	/*===== 描画処理 =====*/
+
+	// ステージのレンダーターゲットをセット。
+
+
+
 
 	//バックバッファ取得
 	auto backBuff = D3D12App::Instance()->GetBackBuffRenderTarget();
@@ -336,9 +357,8 @@ void GameScene::OnDraw()
 
 	// マップを描画
 	StageFloor::Instance()->ScreenTargetSet(true);
-
 	m_gameUI->Draw();
-
+	m_bonusEffect->Draw();
 	StageFloor::Instance()->Draw();
 
 	//プレイヤー描画

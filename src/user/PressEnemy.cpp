@@ -38,7 +38,7 @@ PressEnemy::PressEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> D
 
 }
 
-void PressEnemy::Init()
+void PressEnemy::OnInit()
 {
 
 	/*===== ‰Šú‰»ˆ— =====*/
@@ -47,7 +47,7 @@ void PressEnemy::Init()
 
 }
 
-void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void PressEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== ¶¬ˆ— =====*/
@@ -77,7 +77,7 @@ void PressEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const
 
 }
 
-void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void PressEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
 {
 
 	/*===== XVˆ— =====*/
@@ -146,15 +146,16 @@ void PressEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& P
 		index->Update(m_pos, SCALE);
 
 	}
+
+	m_transform.SetPos(m_pos);
 }
 
 #include"DrawFunc_Append.h"
-void PressEnemy::Draw()
+void PressEnemy::OnDraw()
 {
 
 	/*===== •`‰æˆ— =====*/
 
-	m_transform.SetPos(m_pos);
 	if (0 < m_hitEffectTimer) {
 
 		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
