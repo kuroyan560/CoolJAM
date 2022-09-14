@@ -18,6 +18,7 @@
 #include"GameMode.h"
 #include"Tutorial.h"
 #include"StageFloor.h"
+#include"SlowMgr.h"
 
 TutorialScene::TutorialScene()
 {
@@ -75,6 +76,12 @@ TutorialScene::TutorialScene()
 	m_transitionDelayTimer = 0;
 
 	m_tutorial = std::make_shared<Tutorial>();
+
+	m_isFeverCameraEffect = false;
+	m_feverNearCameraTimer = 0;
+
+
+	SlowMgr::Instance()->Init();
 }
 
 void TutorialScene::OnInitialize()
@@ -118,6 +125,11 @@ void TutorialScene::OnInitialize()
 
 	}
 
+	SlowMgr::Instance()->Init();
+
+	m_isFeverCameraEffect = false;
+	m_feverNearCameraTimer = 0;
+
 	DrawFunc_Append::RegisterRenderTargets(D3D12App::Instance()->GetBackBuffFormat(), m_emissiveMap, m_depthMap, m_depthStencil);
 }
 
@@ -158,10 +170,60 @@ void TutorialScene::OnUpdate()
 	m_bulletMgr->Update(MAP_SIZE);
 
 	// チュートリアルのアップデート
-	m_tutorial->Update(m_player, m_enemyMgr, m_bulletMgr, m_isCameraHomePosition, MAP_SIZE, m_isTransitionStart);
+	if (0.9f <= SlowMgr::Instance()->m_slow) {
+		m_tutorial->Update(m_player, m_enemyMgr, m_bulletMgr, m_isCameraHomePosition, MAP_SIZE, m_isTransitionStart);
+	}
 
+	// フィーバーのトリガーを取得
+	if (!m_isFeverCameraEffect) {
+		m_isFeverCameraEffect = m_player->GetIsFeverTrigger();
+	}
+	if (m_player->GetIsFeverEndTrigger()) {
+		// 通常状態にする。
+		m_environmentMgr->ChangeStatus(EnvironmentMgr::DEFAULT);
+	}
+
+	// フィーバー中のカメラ演出中だったら。
+	if (m_isFeverCameraEffect) {
+
+		SlowMgr::Instance()->m_baseSlow = 0.0f;
+
+		// 現在のタイマーの割合を求める。
+		float nowRate = static_cast<float>(m_feverNearCameraTimer) / static_cast<float>(FEVER_NEAR_CAMERA_TIMER);
+
+		// 現在のシェイク量。
+		float nowShake = nowRate * FEVER_SHAKE;
+		Vec3<float> shake = Vec3<float>(KuroFunc::GetRand(-nowShake, nowShake), KuroFunc::GetRand(-nowShake, nowShake), KuroFunc::GetRand(-nowShake, nowShake));
+
+		// カメラをプレイヤーに近づける。	
+		const float CAMERA_DISTANCE = 30.0f;
+		m_baseEye = m_player->GetPos() + Vec3<float>(CAMERA_DISTANCE, CAMERA_DISTANCE, 0) + shake;
+		m_nowEye += (m_baseEye - m_nowEye) / 3.0f;
+		nowCam.SetPos(m_nowEye);
+
+		// カメラの注視点を補間。
+		m_baseTarget = m_player->GetPos();
+		m_baseTarget.x += 3.0f;
+		m_nowTarget += (m_baseTarget - m_nowTarget) / 3.0f;
+		nowCam.SetTarget(m_nowTarget);
+
+
+		// 一定時間経過したらフィーバーのカメラ演出を終える。
+		++m_feverNearCameraTimer;
+		if (FEVER_NEAR_CAMERA_TIMER < m_feverNearCameraTimer) {
+
+			m_feverNearCameraTimer = 0;
+			m_isFeverCameraEffect = false;
+			SlowMgr::Instance()->m_baseSlow = 1.0f;
+
+			// フィーバー状態にする。
+			m_environmentMgr->ChangeStatus(EnvironmentMgr::FEVER);
+
+		}
+
+	}
 	// ゲームの状態に応じてカメラの位置を変える。
-	if (m_isTransitionStart) {
+	else if (m_isTransitionStart) {
 
 		// 上を向ききっていたら。
 		if (m_isCompleteUpper) {
@@ -250,6 +312,9 @@ void TutorialScene::OnUpdate()
 	m_environmentMgr->Update(m_player->GetPos());
 
 	m_feverGauge->Update(m_player->GetIsFever(), m_player->GetPlayerFeverRate());
+
+
+	SlowMgr::Instance()->Update();
 
 }
 

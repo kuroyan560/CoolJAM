@@ -5,6 +5,7 @@
 #include"EnemyMgr.h"
 #include"KuroFunc.h"
 #include"EnemyWaveLoader.h"
+#include "SlowMgr.h"
 
 void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMgr> EnemyMgr)
 {
@@ -170,7 +171,7 @@ void EnemyWaveEditor::EditWithImgui(EnemyWaveMgr& WaveMgr, std::weak_ptr<EnemyMg
 	//エネミー追加
 	if (ImGui::Button("AddEnemy"))
 	{
-		wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 1);
+		wave->AddEnemy({ 0,0,0 }, { 1,0,0 }, ENEMY_INFO::ID::STOPPING, 60, 1);
 	}
 
 	if (!enemys.empty())

@@ -24,8 +24,6 @@ private:
 	const int HIT_EFFECT_TIMER = 10;
 
 	int m_hp;
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
 
 	// ÉXÉPÅ[Éã
 	const float SCALE = 12.0f;

@@ -18,9 +18,6 @@ private:
 	int m_hitEffectTimer;		// 弾に当たったフラグ
 	const int HIT_EFFECT_TIMER = 10;
 
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
-
 
 	// スケール
 	const float SCALE = 3.0f;

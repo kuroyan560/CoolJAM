@@ -1,6 +1,7 @@
 #include "EnemyDeadLineParticle.h"
 #include"../engine/Common/Angle.h"
 #include"DrawFunc_Append.h"
+#include "SlowMgr.h"
 
 EnemyDeadLineParticle::EnemyDeadLineParticle() :m_length(4.0f), m_initFlag(0)
 {
@@ -25,13 +26,13 @@ void EnemyDeadLineParticle::Update()
 {
 	if (m_initFlag)
 	{
-		m_pos += m_vel;
+		m_pos += m_vel * SlowMgr::Instance()->m_slow;
 
 		//ü‚Ì’·‚³
 		m_startPos = m_pos;
 		m_endPos = m_pos + m_vel * m_length;
 
-		m_alpha += -m_dispappearTime;
+		m_alpha += -m_dispappearTime * SlowMgr::Instance()->m_slow;
 		if (m_alpha <= 0)
 		{
 			m_alpha = 0;

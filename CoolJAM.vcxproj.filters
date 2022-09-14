@@ -247,6 +247,7 @@
     <ClInclude Include="src\user\Font.h" />
     <ClInclude Include="src\user\ScoreMgr.h" />
     <ClInclude Include="src\user\GameStartTimerUI.h" />
+    <ClInclude Include="src\user\SlowMgr.h" />
     <ClInclude Include="src\user\BonusEffect.h" />
   </ItemGroup>
 </Project>

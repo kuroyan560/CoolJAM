@@ -2,9 +2,12 @@
 #include "BulletMgr.h"
 #include "../engine/Importer.h"
 #include "EnemyHP.h"
+#include "SlowMgr.h"
 
 ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<Model> DamageModel)
 {
+
+	m_outlineColor = ColorPalette::S_GREEN_COLOR;
 
 	/*===== コンストラクタ =====*/
 
@@ -13,7 +16,7 @@ ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 	m_isActive = false;
 
 	float angleInterval = DirectX::XM_PI / 10.0f;
-	for (auto& index : m_hpUI) {
+	for (auto &index : m_hpUI) {
 
 		int indexCount = static_cast<int>(&index - &m_hpUI[0]);
 
@@ -33,9 +36,7 @@ ElecMushiEnemy::ElecMushiEnemy(std::shared_ptr<Model> DefModel, std::shared_ptr<
 		}
 
 		index = std::make_shared<EnemyHP>(-drawAngle);
-
 	}
-
 }
 
 void ElecMushiEnemy::OnInit()
@@ -47,7 +48,7 @@ void ElecMushiEnemy::OnInit()
 
 }
 
-void ElecMushiEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void ElecMushiEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec)
 {
 
 	/*===== 生成処理 =====*/
@@ -68,7 +69,7 @@ void ElecMushiEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos,
 
 }
 
-void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize)
+void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize)
 {
 
 	/*===== 更新処理 =====*/
@@ -81,7 +82,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 	// 移動させる。
 	m_speed = SPEED;
-	m_pos += m_forwardVec * m_speed;
+	m_pos += m_forwardVec * m_speed * SlowMgr::Instance()->m_slow;
 
 	// 押し戻す。
 	if (m_defLength <= m_pos.Length()) {
@@ -95,7 +96,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 
 
 	// Sine波を更新。
-	m_sineWaveTimer += ADD_SINE_WAVE_TIMER;
+	m_sineWaveTimer += ADD_SINE_WAVE_TIMER * SlowMgr::Instance()->m_slow;
 	float sineWave = sinf(m_sineWaveTimer);
 	m_sineWaveLength = sineWave * SINE_WAVE_LENGTH;
 
@@ -109,7 +110,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 	Shot(BulletMgr, PlayerPos);
 
 	// HPUIの更新処理
-	for (auto& index : m_hpUI) {
+	for (auto &index : m_hpUI) {
 
 		index->Invalidate();
 
@@ -133,7 +134,7 @@ void ElecMushiEnemy::OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<flo
 	}
 
 	// HPUIの更新処理
-	for (auto& index : m_hpUI) {
+	for (auto &index : m_hpUI) {
 
 		index->Update(m_pos, SCALE);
 
@@ -149,21 +150,12 @@ void ElecMushiEnemy::OnDraw()
 
 	/*===== 描画処理 =====*/
 
-	if (0 < m_hitEffectTimer) {
+	//DrawFunc3D::DrawNonShadingModel(m_model, m_transfsorm, Cam);
+	DrawFunc_Append::DrawModel(m_model, m_transform);
 
-		//DrawFunc3D::DrawNonShadingModel(m_modelHit, m_transform, Cam);
-		DrawFunc_Append::DrawModel(m_modelHit, m_transform);
-
-	}
-	else {
-
-		//DrawFunc3D::DrawNonShadingModel(m_model, m_transfsorm, Cam);
-		DrawFunc_Append::DrawModel(m_model, m_transform);
-
-	}
 
 	// 敵のHPの板ポリを描画
-	for (auto& index : m_hpUI) {
+	for (auto &index : m_hpUI) {
 
 		index->Draw();
 
@@ -171,27 +163,13 @@ void ElecMushiEnemy::OnDraw()
 
 }
 
-void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float& MapSize, const Vec3<float>& PlayerPos)
+void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float &MapSize, const Vec3<float> &PlayerPos)
 {
 
 	/*===== 弾との当たり判定 =====*/
 
-	// マップ外に出たら。
-	if (MapSize <= m_pos.Length()) {
-
-		m_pos = m_pos.GetNormal() * MapSize;
-
-		--m_hp;
-		if (m_hp <= 0) {
-
-
-			// エレキ虫が死んだ。
-			BulletMgr.lock()->KillElecMushi();
-			Init();
-
-		}
-
-	}
+	// マップ外に出たら
+	CheckHitMapEdge(MapSize, BulletMgr);
 
 	int hitCount = 0;
 	// プレイヤー弾との当たり判定。
@@ -219,7 +197,7 @@ void ElecMushiEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const fl
 
 }
 
-void ElecMushiEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos)
+void ElecMushiEnemy::Shot(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos)
 {
 
 	/*===== 弾を撃つ処理 =====*/

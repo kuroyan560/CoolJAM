@@ -1,5 +1,6 @@
 #include"LightBlock.h"
 #include"DrawFunc_Append.h"
+#include "SlowMgr.h"
 
 LightBlock::LightBlock(std::shared_ptr<Model> MODEL) :M_MAX_HIGHT(1000.0f)
 {
@@ -24,7 +25,7 @@ void LightBlock::Update()
 {
 	if (!m_finishFlag)
 	{
-		m_pos += m_vel;
+		m_pos += m_vel * SlowMgr::Instance()->m_slow;
 	}
 
 	if (m_pos.y <= -M_MAX_HIGHT)

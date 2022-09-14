@@ -1,5 +1,6 @@
 #include "WaveUI.h"
 #include "Font.h"
+#include "SlowMgr.h"
 
 WaveUI::WaveUI(std::string File)
 {
@@ -74,7 +75,7 @@ void WaveUI::Update(const int& NowWave, const Vec2<float>& OffsetPos, const floa
 
 	}
 
-	m_easingTimer += AddEasingTimer;
+	m_easingTimer += AddEasingTimer * SlowMgr::Instance()->m_slow;
 	if (1.0f <= m_easingTimer) {
 
 		m_easingTimer = 1.0f;

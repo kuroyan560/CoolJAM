@@ -21,6 +21,8 @@ BaseEnemy::BaseEnemy()
 		s_appearReticleModel = Importer::Instance()->LoadModel("resource/user/", "enemy_appearReticle.glb");
 		D3D12App::Instance()->GenerateTextureBuffer(s_appearReticleTex.data(), "resource/user/appearReticle.png", 5, { 5,1 });
 	}
+
+	m_outlineColor = ColorPalette::S_PINK_COLOR;
 }
 
 void BaseEnemy::Init()
@@ -77,7 +79,7 @@ void BaseEnemy::Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& Pl
 	}
 }
 
-void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec)
+void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec, const int& ShotTimer)
 {
 	OnGenerate(ID, PlayerPos, Pos, ForwardVec);
 	m_appearReticleTexIdx = 0;
@@ -86,6 +88,8 @@ void BaseEnemy::Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const 
 	m_generatePos = Pos;
 	m_generateForwardVec = ForwardVec;
 	m_transform.SetPos(m_generatePos + Vec3<float>(0.0f, APPEAR_HEIGHT_OFFSET, 0.0f));
+	m_shotTimer = 0;
+	m_maxShotTimer = ShotTimer;
 
 	m_disappearTimer = 0;
 }
@@ -124,6 +128,22 @@ void BaseEnemy::Disappear()
 	m_disappearStartFront = m_transform.GetFront();
 	m_disappearStartHeight = m_transform.GetPos().y;
 	m_disappear = true;
+}
+
+void BaseEnemy::ShotBullet(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos)
+{
+
+	/*===== 弾を撃つ処理 =====*/
+
+	++m_shotTimer;
+	if (m_maxShotTimer < m_shotTimer) {
+
+		BulletMgr.lock()->GenerateEnemyBullet(m_pos, Vec3(PlayerPos - m_pos).GetNormal());
+
+		m_shotTimer = 0;
+
+	}
+
 }
 
 void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
@@ -180,6 +200,21 @@ void BaseEnemy::Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr)
 	else
 	{
 		AudioApp::Instance()->PlayWaveDelay(s_damageSE);
+	}
+
+}
+
+void BaseEnemy::CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> BulletMgr)
+{
+
+	/*===== マップ端との当たり判定 =====*/
+
+	if (MapSize <= m_pos.Length() - EDGE_SIZE) {
+
+		m_pos = m_pos.GetNormal() * MapSize;
+
+		Damage(1, BulletMgr);
+
 	}
 
 }

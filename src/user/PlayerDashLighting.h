@@ -21,7 +21,7 @@ private:
 
 	std::array<std::unique_ptr<DashLightingParticle>, 40> m_particleArray;//電撃パーティクル
 	int m_particleInitNum;
-	int m_timer;
+	float m_timer;
 
 	bool m_prevFlag;
 	int m_roadIndex;

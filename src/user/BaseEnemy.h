@@ -33,6 +33,8 @@ class BaseEnemy {
 	static const int DISAPPEAR_SPIN_DEGREE = 360 * 3;
 	static const int DISAPPEAR_HEIGHT_OFFSET = -3;
 
+	const float EDGE_SIZE = 20.0f;
+
 	//登場演出
 	int m_appearTimer;
 	int m_appearReticleTexIdx;
@@ -56,9 +58,12 @@ public:
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Model> m_modelHit;
 	std::unique_ptr<Outline>m_outline;
+	Color m_outlineColor;
 
 	Vec3<float> m_pos;	// 座標
 	int m_hp;			// HP
+	int m_shotTimer;
+	int m_maxShotTimer;
 	float m_scale;		// 大きさ
 	bool m_isActive;	// 生存フラグ
 	ENEMY_INFO::ID m_id;
@@ -70,12 +75,12 @@ public:
 	const int HIGHT_SCORE_POOINT = 900;
 
 	virtual void OnInit() = 0;
-	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float> &PlayerPos, const float &MapSize) = 0;
+	virtual void OnUpdate(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize) = 0;
 	virtual void OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec) = 0;
 	virtual void OnDraw() = 0;
 public:
-	static const int& DamageSE() { return s_damageSE; }
-	static const int& DeadSE() { return s_deadSE; }
+	static const int &DamageSE() { return s_damageSE; }
+	static const int &DeadSE() { return s_deadSE; }
 
 	/*===== メンバ関数 =====*/
 
@@ -83,11 +88,15 @@ public:
 	virtual ~BaseEnemy() {};
 	void Init();
 	void Update(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos, const float& MapSize);
-	void Generate(ENEMY_INFO::ID ID, const Vec3<float> &PlayerPos, const Vec3<float> &Pos, const Vec3<float> ForwardVec);
+	void Generate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, const Vec3<float>& Pos, const Vec3<float> ForwardVec, const int& ShotTimer);
 	void Draw();
 	void Disappear();
 
+	void ShotBullet(std::weak_ptr<BulletMgr> BulletMgr, const Vec3<float>& PlayerPos);
+
 	void Damage(const int& Amount, std::weak_ptr<BulletMgr> BulletMgr);
+
+	void CheckHitMapEdge(const float& MapSize, std::weak_ptr<BulletMgr> BulletMgr);
 
 	// 指定の桁の数字を取得。
 	inline int GetDigits(int Value, int M, int N) {
@@ -130,13 +139,22 @@ public:
 		m_damageScale = KuroMath::Lerp(m_damageScale, m_lDamageScale, 0.6f);
 
 		m_prevHp = m_hp;
-		m_transform.SetScale(m_baseScale - m_damageScale);
+
+		//ダメージ受けすぎて小さくなりすぎない処理
+		Vec3<float>shrinkScale = m_baseScale - m_damageScale;
+		const float MIN_SCALE = 1.5f;
+		if(shrinkScale.x <= MIN_SCALE)
+		{
+			shrinkScale = { MIN_SCALE,MIN_SCALE,MIN_SCALE };
+		}
+
+		m_transform.SetScale(shrinkScale);
 		return m_hitFlag;
 	}
 
 	void CommonInit()
 	{
-		m_outline = std::make_unique<Outline>(m_model, &m_transform, ColorPalette::S_PINK_COLOR);
+		m_outline = std::make_unique<Outline>(m_model, &m_transform, m_outlineColor);
 		m_prevHp = m_hp;
 		m_hitTiemr = 0;
 		m_hitFlag = false;
@@ -148,12 +166,12 @@ public:
 	{
 		m_outline->Upadte();
 	};
-	void CommonDraw(Camera& CAMERA)
+	void CommonDraw(Camera &CAMERA)
 	{
-		m_outline->Draw(CAMERA, m_hitFlag);
+		m_outline->Draw(CAMERA);
 	};
 
-	const bool& IsDisappear()const { return m_disappear; }
+	const bool &IsDisappear()const { return m_disappear; }
 
 private:
 	int m_prevHp;

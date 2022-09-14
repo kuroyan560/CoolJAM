@@ -23,11 +23,8 @@ private:
 	const int HIT_EFFECT_TIMER = 10;
 	const float MAX_KNOCK_BACK_SPEED = 3.5f;
 	const float ADD_KNOCK_BACK_SPEED = 0.2f;
-	int m_returnDefTimer;
+	float m_returnDefTimer;
 	const int RETURN_DEF_TIMER = 120;
-
-	int m_shotTimer;
-	const int SHOT_TIMER = 300;
 
 	const float RETURN_DEFPOS_SPEED = 0.2f;
 

@@ -2,6 +2,7 @@
 #include"../engine/Common/KuroFunc.h"
 #include"KuroEngine.h"
 #include"Camera.h"
+#include "SlowMgr.h"
 
 std::shared_ptr<GraphicsPipeline>EnemyDeadEmitter::s_linePtGraphicsPipeline;
 std::shared_ptr<GraphicsPipeline>EnemyDeadEmitter::s_squarePtGraphicsPipeline;
