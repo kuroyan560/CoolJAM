@@ -55,7 +55,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     if(any(drawRate.y))
     {
         output.emissive = output.color;
-        output.emissive.w = drawRate.y;
+        output.emissive.w *= drawRate.y;
     }
         
     if(any(drawRate.z))
