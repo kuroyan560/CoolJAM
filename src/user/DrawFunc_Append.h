@@ -32,6 +32,9 @@ class DrawFunc_Append
 	static int s_drawModelCount;
 	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>s_drawModelPipeline;
 
+	static int s_drawPlaneCount;
+	static std::map<DXGI_FORMAT, std::array<std::shared_ptr<GraphicsPipeline>, AlphaBlendModeNum>>s_drawPlanePipeline;
+
 
 	static std::weak_ptr<Camera>s_nowCam;
 	static std::weak_ptr<LightManager>s_nowLigMgr;
@@ -94,4 +97,7 @@ public:
 		auto obj = ModelObject.lock();
 		DrawModel(obj->m_model, obj->m_transform, Switch, IsBillBoard, IsShading, obj->m_animator, BlendMode);
 	}
+
+	static void DrawPlane(Transform& Transform, const std::weak_ptr<TextureBuffer>Tex, 
+		const RenderTargetSwitch& Switch = RenderTargetSwitch(), AlphaBlendMode BlendMode = AlphaBlendMode_None);
 };
