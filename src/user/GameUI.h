@@ -23,8 +23,8 @@ public:
 	void DrawImGui();
 
 	void Start();
-	void Result();
-	void Finish();
+	bool IsResult();
+
 private:
 	std::unique_ptr<GameTimer>m_timer;
 	std::shared_ptr<WaveUI> m_waveUI;

@@ -10,11 +10,10 @@ GameStartTimerUI::GameStartTimerUI(std::array<std::shared_ptr<TextureBuffer>, 4>
 	m_countFinishSE = AudioApp::Instance()->LoadAudio("resource/user/sound/countFinish.wav");
 
 	// 各クラスを生成。
-	m_timer[0] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[3], false, m_countUpSE);
-	m_timer[1] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[2], false, m_countUpSE);
-	m_timer[2] = std::make_shared<GameStartTimer>(Font::Instance()->m_stripeFont[1], false, m_countUpSE);
-	m_timer[3] = std::make_shared<GameStartTimer>(D3D12App::Instance()->GenerateTextureBuffer("resource/user/go.png"),
-		true,m_countFinishSE);
+	m_timer[0] = std::make_shared<GameStartTimer>(TIME[0], false, m_countUpSE);
+	m_timer[1] = std::make_shared<GameStartTimer>(TIME[1], false, m_countUpSE);
+	m_timer[2] = std::make_shared<GameStartTimer>(TIME[2], false, m_countUpSE);
+	m_timer[3] = std::make_shared<GameStartTimer>(TIME[3], true,m_countFinishSE);
 
 	for (auto& index : m_timer) {
 

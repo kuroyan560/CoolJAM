@@ -200,7 +200,8 @@ void GameScene::OnUpdate()
 
 
 
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)) {
+	if (UsersInput::Instance()->KeyOnTrigger(DIK_SPACE)||m_gameUI->IsResult())
+	{
 
 		GameMode::Instance()->m_id = GameMode::ID::RESULT;
 
@@ -324,11 +325,6 @@ void GameScene::OnUpdate()
 	{
 		m_gameUI->Start();
 	}
-	if (UsersInput::Instance()->KeyOnTrigger(DIK_J))
-	{
-		m_gameUI->Result();
-	}
-
 
 	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 

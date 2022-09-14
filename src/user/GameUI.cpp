@@ -19,7 +19,7 @@ GameUI::GameUI()
 	timeTex[0] = Font::Instance()->m_stripeFont[3];
 	timeTex[1] = Font::Instance()->m_stripeFont[2];
 	timeTex[2] = Font::Instance()->m_stripeFont[1];
-	timeTex[3] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/go.png");
+	timeTex[3] = D3D12App::Instance()->GenerateTextureBuffer("resource/user/time_up.png");
 	m_gameEndTimerUI = std::make_unique<GameStartTimerUI>(timeTex);
 	m_waveNum = 0;
 }
@@ -103,14 +103,9 @@ void GameUI::Start()
 	m_gameStartTimerUI->Start();
 }
 
-void GameUI::Result()
+bool GameUI::IsResult()
 {
-
-}
-
-void GameUI::Finish()
-{
-	ScoreMgr::Instance()->Exit();
+	return m_gameEndTimerUI->IsStart();
 }
 
 void GameUI::SetVec2(std::string TAG, Vec2<float> *VEC3)
