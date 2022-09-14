@@ -3,13 +3,13 @@
 
 BonusEffect::BonusEffect() :LIMIT_MIN_LINE(-1000.0f), LIMIT_MAX_LINE(1580.0f), APPEAR_TIME(60)
 {
-	m_feverEffectTexBuffer = D3D12App::Instance()->GenerateTextureBuffer("resource/user/BonusStage/BonusEffect.png");
+	m_feverEffectTexBuffer = D3D12App::Instance()->GenerateTextureBuffer("resource/user/BonusStage/bonus_stage_gradation.png");
 	m_bonusStageTexBuffer = D3D12App::Instance()->GenerateTextureBuffer("resource/user/BonusStage/bonus_stage.png");
 	m_startFlag = false;
 	m_stopFlag = false;
 
-	m_size = { 100.0f,20.0f };
-	m_pos = { 500.0f,LIMIT_MIN_LINE };
+	m_size = { 1.0f,1.0f };
+	m_pos = { 200.0f,LIMIT_MIN_LINE };
 	m_vel.y = (LIMIT_MAX_LINE + abs(LIMIT_MIN_LINE)) / static_cast<float>(APPEAR_TIME);
 
 	appearDistance = -1200.0f;
@@ -83,8 +83,16 @@ void BonusEffect::Draw()
 	{
 		return;
 	}
-	DrawFunc2D::DrawRotaGraph2D(m_pos, m_size, 0.0f, m_feverEffectTexBuffer);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		Vec2<float>adjPos = Vec2<float>(512.0f * static_cast<float>(i), 0.0f);
+
+		DrawFunc2D::DrawRotaGraph2D(m_pos + adjPos, m_size, 0.0f, m_feverEffectTexBuffer);
+	}
+
 	DrawFunc2D::DrawRotaGraph2D(fontPos, m_fontSize, 0.0f, m_bonusStageTexBuffer);
+
 }
 
 void BonusEffect::Start()
