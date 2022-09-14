@@ -23,6 +23,7 @@ EnemyMgr::EnemyMgr()
 	m_model = Importer::Instance()->LoadModel("resource/user/", "enemy.glb");
 	m_modelHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit.glb");
 	m_elecMushi = Importer::Instance()->LoadModel("resource/user/", "enemy_elecMushi.glb");
+	m_elecMushiHit = Importer::Instance()->LoadModel("resource/user/", "enemy_hit_elecMushi.glb");
 
 	//for (auto& index : m_enemy) {
 
