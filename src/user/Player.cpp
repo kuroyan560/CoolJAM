@@ -574,7 +574,7 @@ void Player::Draw(Camera& Cam, const bool& IsTitle)
 
 	// マウスのカーソルを描画
 	m_mousePointer->m_transform.SetScale(m_mousePointerScale);
-	DrawFunc_Append::DrawModel(m_mousePointer);
+	//DrawFunc_Append::DrawModel(m_mousePointer);
 
 	// ドリフトパーティクルの描画処理
 	for (auto& index : m_driftParticle) {
