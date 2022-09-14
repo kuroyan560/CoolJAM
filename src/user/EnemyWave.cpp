@@ -28,8 +28,6 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& Play
 
 	if (SlowMgr::Instance()->m_slow <= 0.9f) return;
 
-	++m_nowWaveFrame;
-
 	for (auto& index : m_enemys) {
 
 		// ¶¬ƒtƒŒ[ƒ€‚ª‡‚Á‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ð”ò‚Î‚·B
@@ -47,6 +45,8 @@ void EnemyWave::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& Play
 		EnemyMgr.lock()->Generate(PlayerPos, index.m_pos, forwardVec, static_cast<int>(index.m_id), index.m_shotTimer, MapSize);
 		m_generateCount++;
 	}
+
+	++m_nowWaveFrame;
 
 }
 

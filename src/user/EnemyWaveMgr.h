@@ -1,4 +1,5 @@
 
+
 #pragma once
 #include "Vec.h"
 #include <vector>
@@ -10,8 +11,8 @@ class EnemyMgr;
 class EnemyWaveMgr {
 
 private:
-	friend class EnemyWaveEditor;
-	friend class EnemyWaveLoader;
+	//friend class EnemyWaveEditor;
+	//friend class EnemyWaveLoader;
 
 	/*===== ƒƒ“ƒo•Ï” =====*/
 

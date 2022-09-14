@@ -149,13 +149,11 @@ void Player::Init()
 
 	}
 
-	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, Importer::Instance()->LoadModel("resource/user/", "playerOutline.glb"));
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj);
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
-
 	m_modelObj->m_animator->Play("ToFloater", false, false);
-
 	m_firstInput = false;
 }
 
@@ -680,7 +678,7 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	m_isEdge = MapSize - m_pos.Length() < EdgeScope;
 
 	//レベルデザイン中
-	if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
+	//if (!EnemyWaveEditor::Instance()->CanWaveUpdate())return;
 
 	// ダメージエフェクト中は当たり判定を無効化する。
 	if (m_isDamageEffect) return;
