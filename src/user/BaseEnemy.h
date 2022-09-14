@@ -146,10 +146,10 @@ public:
 
 		//É_ÉÅÅ[ÉWéÛÇØÇ∑Ç¨Çƒè¨Ç≥Ç≠Ç»ÇËÇ∑Ç¨Ç»Ç¢èàóù
 		Vec3<float>shrinkScale = m_baseScale - m_damageScale;
-		const float MIN_SCALE = 1.5f;
+		const float MIN_SCALE = m_damageMinScale.x;
 		if(shrinkScale.x <= MIN_SCALE)
 		{
-			shrinkScale = { MIN_SCALE,MIN_SCALE,MIN_SCALE };
+			shrinkScale = m_damageMinScale;
 		}
 
 		m_transform.SetScale(shrinkScale);
@@ -165,6 +165,8 @@ public:
 		m_baseScale = m_transform.GetScale();
 		m_damageScale = {};
 		m_shrinkScale = 0.0f;
+
+		m_damageMinScale = m_baseScale - Vec3<float>(2.0f, 2.0f, 2.0f);
 	};
 	void CommonUpdate()
 	{
@@ -186,4 +188,5 @@ private:
 	Vec3<float>m_lDamageScale;
 	float m_shrinkScale;
 	Vec3<float>m_baseScale;
+	Vec3<float>m_damageMinScale;
 };

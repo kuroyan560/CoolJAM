@@ -149,12 +149,13 @@ void Player::Init()
 
 	}
 
-	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj);
+	m_outlineModel.Init(&m_pos, &m_rotation, 1.0f, 0.3f, m_modelObj->m_model);
 
 	//ダッシュ時のエフェクト
 	m_dashLight->Init(&m_pos);
 	m_modelObj->m_animator->Play("ToFloater", false, false);
 	m_firstInput = false;
+	m_mapHitFlag = false;
 }
 
 void Player::Update(Camera& Cam, std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr> EnemyMgr, const Vec2<float>& WindowSize, const float& MapSize, const float& EdgeScope, bool IsStopFeverTimer, bool IsNoInput)
@@ -534,7 +535,7 @@ void Player::UpdateEffect()
 	m_outlineModel.Update();
 
 	//ダッシュ時のエフェクト
-	m_dashLight->Update(dashFlag, m_isFever);
+	m_dashLight->Update(dashFlag && !m_mapHitFlag, m_isFever);
 
 	// ダメージエフェクトを更新。
 	m_damageEffect->Update();
@@ -687,12 +688,17 @@ void Player::CheckHit(std::weak_ptr<BulletMgr> BulletMgr, std::weak_ptr<EnemyMgr
 	if (MapSize - MAP_EDGE <= m_pos.Length()) {
 
 		//Damage();
+		m_mapHitFlag = true;
 
 		// ノックバックの移動量を設定。
 		m_knockBackVec = -m_pos.GetNormal();
 		m_knockBackSpeed = KNOCK_BACK_SPEED;
 		m_speed = 0.0f;
 
+	}
+	else
+	{
+		m_mapHitFlag = false;
 	}
 
 	// 敵弾との当たり判定。

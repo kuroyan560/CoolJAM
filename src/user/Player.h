@@ -41,6 +41,7 @@ private:
 	bool m_isEdge;				// 縁にいるか
 	float m_brakeBoostTimer;
 	const int MAX_BRAKE_BOOST_TIMER = 120.0f;
+	bool m_mapHitFlag;
 
 	// マウス座標に設置するモデル。
 	std::shared_ptr<ModelObject>m_mousePointer;

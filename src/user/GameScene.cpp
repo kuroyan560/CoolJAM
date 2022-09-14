@@ -341,7 +341,7 @@ void GameScene::OnUpdate()
 		m_gameUI->Init();
 	}
 
-
+	m_gameUI->m_waveNum = m_enemyWaveMgr->m_nowWaveIdx + 1;
 	m_gameUI->Update(m_enemyWaveMgr->GetNowWaveMaxTimer());
 
 

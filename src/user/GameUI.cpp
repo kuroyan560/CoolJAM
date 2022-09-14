@@ -120,8 +120,6 @@ void GameUI::Update(const int &NowWaveMaxTimer)
 	}
 
 
-
-
 	m_timer->Update(30);
 	m_waveUI->Update(m_waveNum, m_wavePos, m_waveCenterOffsetPos, 1.0f / 30.0f);
 	ScoreMgr::Instance()->Update(m_scorePos, m_scoreCenterOffsetPos, 1.0f / 30.0f);

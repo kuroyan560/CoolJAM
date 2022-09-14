@@ -3,6 +3,7 @@
 #include"EnemyMgr.h"
 #include "SlowMgr.h"
 #include"EnemyWaveLoader.h"
+#include"../engine/UsersInput.h"
 
 EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 {
@@ -90,8 +91,6 @@ EnemyWaveMgr::EnemyWaveMgr(const float& MapSize)
 			wave4->AddEnemy(Vec3<float>(KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100), KuroFunc::GetRand(-100, 100)), Vec3<float>(1, 0, 0), ENEMY_INFO::ID::PLAYER_STRAIGHT, 180 + 120 * index, 90000);
 
 		}
-
-
 	}
 
 	// WAVE4を追加。
@@ -253,7 +252,9 @@ void EnemyWaveMgr::Update(std::weak_ptr<EnemyMgr> EnemyMgr, const Vec3<float>& P
 	{
 		//次のウェーブの開始時間を見る
 		bool nextStart = (m_waves[nextWaveIdx]->WaveStartTime() <= m_frameTimer)	//時間経過
-			|| (m_waves[m_nowWaveIdx]->IsAllEnemyAppear() && EnemyMgr.lock()->GetAllEnemyDead());	//全ての敵を出し切った && 全員死亡している
+			|| (m_waves[m_nowWaveIdx]->IsAllEnemyAppear() && EnemyMgr.lock()->GetAllEnemyDead()||
+				UsersInput::Instance()->KeyOnTrigger(DIK_2));	//全ての敵を出し切った && 全員死亡している
+		
 		if (nextStart)
 		{
 			m_waves[m_nowWaveIdx]->Stop();
