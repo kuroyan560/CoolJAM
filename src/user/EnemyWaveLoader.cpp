@@ -52,7 +52,7 @@ std::vector<std::shared_ptr<EnemyWave>> EnemyWaveLoader::Load(const std::string&
 
     FILE* fp;
     fopen_s(&fp, (s_dir + FileName + s_extention).c_str(), "rb");
-    if (fp != nullptr)assert(0);
+    if (fp == nullptr)assert(0);
 
     //最後のウェーブの終了時間
     if (!KuroFunc::LoadData(fp, &FinalWaveTime, sizeof(FinalWaveTime), 1))assert(0);

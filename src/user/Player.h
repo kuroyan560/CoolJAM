@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include"Transform.h"
 #include"Vec.h"
 #include<memory>
@@ -13,6 +14,8 @@ class BulletMgr;
 class EnemyMgr;
 class DriftParticle;
 class PlayerHP;
+class PlayerDamageEffectMgr;
+class PlayerArrow;
 
 class Player
 {
@@ -44,6 +47,8 @@ private:
 	float m_mousePointerScale;
 	const float MOUSE_POINTER_SCALE = 5.0f;
 
+	Vec3<float> materialColor;
+
 	// 動いた総量
 	float m_movedLength;
 
@@ -57,6 +62,9 @@ private:
 	const int FEVER_TIME = 600;
 	const int FEVER_TIME_GAME_TIMER = 10;
 
+	// ダメージのエフェクトクラス
+	std::shared_ptr<PlayerDamageEffectMgr> m_damageEffect;
+
 	// HP関係
 	int m_hp;		// プレイヤーのHP
 	static const int MAX_HP = 10;
@@ -69,6 +77,8 @@ private:
 	bool m_isChangeGreen;	// 緑に変更するか。
 
 	std::array<std::shared_ptr<PlayerHP>, MAX_HP> m_hpUI;
+
+	std::shared_ptr<PlayerArrow> m_playerArrow;
 
 
 	// ダメージ時
@@ -112,6 +122,7 @@ private:
 	std::unique_ptr<PlayerDashLighting> m_dashLight;
 
 	int m_damageSE;
+	int m_dashSE;
 
 	bool m_firstInput = false;
 

@@ -60,8 +60,8 @@ void ShieldEnemy::OnGenerate(ENEMY_INFO::ID ID, const Vec3<float>& PlayerPos, co
 	m_isActive = true;
 	m_hitEffectTimer = 0;
 	m_scale = SCALE;
-	m_hp = HP;
 	m_transform.SetScale(m_scale);
+	m_hp = HP;
 
 	// “G‚ÌHP‚Ì”Âƒ|ƒŠ‚ð•`‰æ
 	for (auto& index : m_hpUI) {
@@ -180,9 +180,11 @@ void ShieldEnemy::CheckHitBullet(std::weak_ptr<BulletMgr> BulletMgr, const float
 	if (m_id == ENEMY_INFO::ID::SHIELD) {
 
 		// ƒvƒŒƒCƒ„[’e‚Æ‚Ì“–‚½‚è”»’èB
-		hitCount = BulletMgr.lock()->CheckHitPlayerBulletAngle(m_pos, m_scale, m_forwardVec, 0.0f);
+		hitCount = BulletMgr.lock()->CheckHitPlayerBullet(m_pos, m_scale, m_forwardVec);
 
-		if (hitCount)Damage(1, BulletMgr);
+		if (hitCount) {
+			Damage(1, BulletMgr);
+		}
 
 	}
 

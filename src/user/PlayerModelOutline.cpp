@@ -161,6 +161,13 @@ void PlayerModelOutline::Draw(Camera& CAMERA)
 	//DrawFunc_Append::DrawModel(m_waveModel, m_waveTransform, RenderTargetSwitch(m_waveAlpha, m_waveAlpha, 1.0f), false, false, nullptr, AlphaBlendMode_Trans);
 }
 
+void PlayerModelOutline::ChangeColor(Color CharaColor)
+{
+
+	m_modelColor = CharaColor;
+
+}
+
 void PlayerModelOutline::EnoughPowerEffect()
 {
 	m_enoughPowerFlag = true;
